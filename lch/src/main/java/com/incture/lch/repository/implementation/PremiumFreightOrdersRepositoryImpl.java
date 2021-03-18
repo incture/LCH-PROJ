@@ -13,6 +13,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,7 +138,9 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		{
 			criteria.add(Restrictions.eq("DestinationName", premiumRequestDto.getDestinationName()));
 		}
-		
+		criteria.addOrder(Order.asc("fwoNum"));
+		criteria.setFirstResult(premiumRequestDto.getStart());
+		criteria.setMaxResults(10);
 		List<AdhocOrders> adhocOrders = criteria.list();
 		System.out.println(adhocOrders.size());
 		for (AdhocOrders adOrders : adhocOrders) {

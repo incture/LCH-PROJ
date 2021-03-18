@@ -13,6 +13,7 @@ public class PremiumRequestDto
 	private String status;
 	private String OriginName;
 	private String DestinationName;
+	private int start;
 	
 	public String getAdhocOrderId() {
 		return adhocOrderId;
@@ -67,6 +68,12 @@ public class PremiumRequestDto
 	}
 	public void setDestinationName(String destinationName) {
 		DestinationName = destinationName;
+	}
+	public int getStart() {
+		return start;
+	}
+	public void setStart(int start) {
+		this.start = start;
 	}
 	
 	

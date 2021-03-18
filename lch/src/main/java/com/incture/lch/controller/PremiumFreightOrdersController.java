@@ -32,40 +32,32 @@ public class PremiumFreightOrdersController
 	
 	@Autowired
 	private PremiumFreightApprovalRuleDao premiumFreightApprovalRuleDao;
+
 	
-	@RequestMapping(value = "/getAllPremiumOrders", method = RequestMethod.POST, consumes = { "application/json" })
+	@RequestMapping(value = "/getAllPremiumOrders", method = RequestMethod.GET, consumes = { "application/json" })
 	@ResponseBody
 	public List<PremiumFreightOrderDto> getAllPremiumFreightOrders(@RequestBody PremiumRequestDto premiumRequestDto) {
-		System.out.println("HEY");
-		System.out.println(premiumRequestDto.getOriginName());
-		System.out.println(premiumRequestDto.getDestinationName());
-		return premiumFreightOrdersService.getAllPremiumFreightOrders(premiumRequestDto);
+			return premiumFreightOrdersService.getAllPremiumFreightOrders(premiumRequestDto);
 	}
 
-	@RequestMapping(value = "/getAllCarrierDetails", method = RequestMethod.POST, consumes = { "application/json" })
+	
+	@RequestMapping(value = "/getAllCarrierDetails", method = RequestMethod.GET, consumes = { "application/json" })
 	@ResponseBody
 	public List<CarrierDetailsDto> getAllCarrierDetails() {
 		return premiumFreightOrdersService.getAllCarrierDetails();
 	}
 
 	
-	/*public List<String> getModes(@RequestBody JSONObject bpNumber) 
-	{
-		String bpNo = (String) bpNumber.get("bpNumber");
-		System.out.println(bpNo);
-		return premiumFreightOrdersService.getMode(bpNo);
-	}*/
-	@RequestMapping(value = "/getMode", method = RequestMethod.POST, consumes = { "application/json" })
+	@RequestMapping(value = "/getMode", method = RequestMethod.GET, consumes = { "application/json" })
 	@ResponseBody
 	public List<HashMap<String,String>>getMode(@RequestBody  JSONObject bpNumber)
 	{
-		//int i=0;
+		
 		String bpNo = (String) bpNumber.get("bpNumber");
 		List<String> mode = premiumFreightOrdersService.getMode(bpNo);
 	
-	
 		List<HashMap<String,String>> listMode= new ArrayList<HashMap<String,String>>();
-		//modes.put("mode", mode);
+		
 		for(String s:mode)
 		{
 			HashMap<String,String> modes= new HashMap<String,String>();
@@ -82,10 +74,10 @@ public class PremiumFreightOrdersController
 	@RequestMapping(value = "/setCarrierDetails", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
 	public List<PremiumFreightOrderDto> setCarrierDetails(@RequestBody List<ChargeRequestDto> chargeRequestDto) {
-		/*@SuppressWarnings("unchecked")
-		List<String> adhocOrderIds = (List<String>) orderIdList.get("adhocOrderIds");*/
+		
 		return premiumFreightOrdersService.setCarrierDetails(chargeRequestDto);
 	}
+	
 	@RequestMapping(value = "/setCharge", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
 	public String setCharge(@RequestBody ChargeRequestDto dto) {
@@ -100,14 +92,14 @@ public class PremiumFreightOrdersController
 	}
 
 	
-	@RequestMapping(value = "/rejectPremiumOrder", method = RequestMethod.POST, consumes = { "application/json" })
+	@RequestMapping(value = "/rejectPremiumOrder", method = RequestMethod.DELETE, consumes = { "application/json" })
 	@ResponseBody
 	public String RejectPremiumOrder(@RequestBody JSONObject  adhocOrderId) {
 		String adid= (String) adhocOrderId.get("adhocOrderId");
 		return premiumFreightOrdersService.RejectPremiumOrder(adid);
 	}
 
-	@RequestMapping(value = "/getAllPremiumApprovalList", method = RequestMethod.POST, consumes = { "application/json" })
+	@RequestMapping(value = "/getAllPremiumApprovalList", method = RequestMethod.GET, consumes = { "application/json" })
 	@ResponseBody
 	public List<PremiumFreightApprovalRuleDTO> getAllPremiumApprovalList() 
 	{
