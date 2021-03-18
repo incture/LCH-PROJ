@@ -19,6 +19,7 @@ import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PremiumFreightApprovalRuleDTO;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
+import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.PremiumFreightChargeDetails;
 import com.incture.lch.service.PremiumFreightOrdersService;
 
@@ -94,9 +95,22 @@ public class PremiumFreightOrdersController
 	
 	@RequestMapping(value = "/rejectPremiumOrder", method = RequestMethod.DELETE, consumes = { "application/json" })
 	@ResponseBody
-	public String RejectPremiumOrder(@RequestBody JSONObject  adhocOrderId) {
+	public ResponseDto RejectPremiumOrder(@RequestBody JSONObject  adhocOrderId) {
 		String adid= (String) adhocOrderId.get("adhocOrderId");
-		return premiumFreightOrdersService.RejectPremiumOrder(adid);
+		int result =  premiumFreightOrdersService.RejectPremiumOrder(adid);
+		ResponseDto responseDto = new ResponseDto();
+
+		if (result == 1) {
+			responseDto.setMessage("delete success");
+			responseDto.setStatus("SUCCESS");
+			responseDto.setCode("00");
+			return responseDto;
+		} else {
+			responseDto.setMessage("delete failed");
+			responseDto.setStatus("FAIL");
+			responseDto.setCode("01");
+			return responseDto;
+		}
 	}
 
 	@RequestMapping(value = "/getAllPremiumApprovalList", method = RequestMethod.GET, consumes = { "application/json" })

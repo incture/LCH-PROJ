@@ -223,5 +223,14 @@ public class AdhocOrdersController {
 		logger1.error("ENTERING INTO updateApprovalWorkflowDetails CONTROLLER");
 		return adhocOrdersService.updateApprovalWorflowDetails(obj);
 	}
+	
+	@RequestMapping(value="/updateWorkflow", method=RequestMethod.GET)
+	@ResponseBody
+	public String updateWorkFlow(@RequestParam String taskId,@RequestParam String adhocOrderId )
+	{
+		logger1.error("Inside Update Workflow Method");
+		return taskId+" "+adhocOrderId;
+		
+	}
 
 }

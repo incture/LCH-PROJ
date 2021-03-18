@@ -426,7 +426,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 	}
 
 	@Override
-	public String RejectPremiumOrder(String adhocOrderId) {
+	public int RejectPremiumOrder(String adhocOrderId) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		String queryStr = "DELETE FROM AdhocOrders ad WHERE ad.fwoNum=:fwoNum";
@@ -443,7 +443,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		session.clear();
 		tx.commit();
 		session.close();
-		return "deleted";
+		return result2;
 
 	}
 	
