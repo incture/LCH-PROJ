@@ -1,0 +1,20 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="com.incture.lch.Adhoc.controller.History"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:ui="sap.ui.table" xmlns:l="sap.ui.layout">
+	<Page showHeader="false">
+		<content>
+			<Title text="Adhoc Order History" class="dynTitleHistory"/>
+			<l:Grid defaultSpan="XL3 L3 M3 S2">
+				<GenericTile sizeBehavior="Responsive" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+					header="{i18n>ALL_ORDERS} ({mCommon>/iLenAllOrders})" headerImage="sap-icon://sales-order-item" frameType="OneByHalf" press="onPressAllOrders">
+				</GenericTile>
+				<GenericTile sizeBehavior="Responsive" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+					header="{i18n>NEXT_24_HOURS} ({mCommon>/iLen24Hours})" headerImage="sap-icon://present" frameType="OneByHalf" press="onPressNext24Hours"></GenericTile>
+				<GenericTile sizeBehavior="Responsive" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+					header="{i18n>NEXT_72_HOURS} ({mCommon>/iLen72Hours})" headerImage="sap-icon://future" frameType="OneByHalf" press="onPressNext72Hours"></GenericTile>
+				<GenericTile sizeBehavior="Responsive" class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout"
+					header="{i18n>DRAFTS} ({mCommon>/iLenDrafts})" headerImage="sap-icon://notes" frameType="OneByHalf" press="onPressDrafts"></GenericTile>
+			</l:Grid>
+			<core:Fragment fragmentName="com.incture.lch.Adhoc.fragment.HistoryTable" type="XML"/>
+		</content>
+	</Page>
+</mvc:View>

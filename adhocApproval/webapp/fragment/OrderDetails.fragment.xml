@@ -1,0 +1,130 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:ui="sap.ui.table">
+	<l:Grid hSpacing="1" vSpacing="0" defaultSpan="XL6 L6 M12 S12" class="sapUiSmallMarginTopBottom">
+		<l:Grid hSpacing="0" vSpacing="0" defaultSpan="XL6 L6 M12 S12" class="sapUiSmallMarginTopBottom">
+			<Label text="{i18n>ORDER_DETAILS}:" design="Bold" class="sapMLblTitle sapUiSmallMarginBegin sapUiSmallMarginBottom">
+				<layoutData>
+					<l:GridData span="XL12 L12 M12 S12"/>
+				</layoutData>
+			</Label>
+			<Label design="Bold" text="{i18n>DIVISION}" required="true" class="sapUiSmallMarginBegin sapUiTinyMarginTop"/>
+			<Input value="{mCommon>/context/businessDivision}" enabled="{mCommon>/bIsEditable}"/>
+			<!--<HBox renderType="Bare">
+				<ComboBox class="sapUiMInputBoxBorderRadius" showSecondaryValues="true" selectedKey="{mCommon>/context/businessDivision}"
+					enabled="{mCommon>/bIsEditable}" valueState="{mCommon>/valState/businessDivision}" items="{path: 'mCommon>/aDestination'}"
+					change="onChangeCBox" width="100%" name="DETAIL_BUSINESS_DIVISION_ID">
+					<core:ListItem key="{mCommon>divisionName}" text="{mCommon>divisionName}" additionalText="{mCommon>dunsNumber}"/>
+				</ComboBox>
+			</HBox>-->
+			<Label design="Bold" text="{i18n>CUSTOMER_ORDER}" class="sapUiSmallMarginBegin sapUiTinyMarginTop"/>
+			<Input value="{mCommon>/context/customerOrderNo}" enabled="{mCommon>/bIsEditable}" name="DETAIL_CUSTOMER_ORDER_ID"/>
+			<Label design="Bold" text="{i18n>PO_NUMBER}" class="sapUiSmallMarginBegin sapUiTinyMarginTop"/>
+			<Input value="{mCommon>/context/podataNumber}" enabled="{mCommon>/bIsEditable}" name="DETAIL_PO_NO_ID"/>
+			<Label design="Bold" text="{i18n>PROJECT_NUMBER}" class="sapUiSmallMarginBegin sapUiTinyMarginTop"/>
+			<Input value="{mCommon>/context/projectNumber}" enabled="{mCommon>/bIsEditable}" name="DETAIL_PROJECT_NO_ID"/>
+			<Label design="Bold" text="{i18n>REFERENCE_NUMBER}" class="sapUiSmallMarginBegin sapUiTinyMarginTop"/>
+			<Input value="{mCommon>/context/referenceNumber}" enabled="{mCommon>/bIsEditable}" name="DETAIL_REFERENCE_NO_ID"/>
+		</l:Grid>
+		<l:Grid hSpacing="0" vSpacing="0" defaultSpan="XL6 L6 M12 S12" class="sapUiSmallMarginTopBottom">
+			<Label class="sapUiSmallMarginBegin sapMLblTitle sapUiSmallMarginBottom">
+				<layoutData>
+					<l:GridData span="XL12 L12 M12 S12"/>
+				</layoutData>
+			</Label>
+			<Label design="Bold" text="{i18n>PART_NUMBER}" required="false" class="sapUiSmallMarginBegin sapUiTinyMarginTop"/>
+			<Input value="{mCommon>/context/partNum}" enabled="{mCommon>/bIsEditable}"/>
+			<!--<HBox renderType="Bare">
+				<Input type="Text" selectedKey="{mCommon>/context/partNum}" value="{mCommon>/context/partNumText}" showSuggestion="true"
+				name="DETAIL_PART_NO_ID" enabled="{mCommon>/bIsEditable}" startSuggestion="1" suggest="onSuggestParts"  suggestionItems="{mCommon>/aParts}" change="onPartChange"
+				valueState="{mCommon>/valState/partNum}" placeholder="{i18n>SEARCH_PART}" busy="{mCommon>/bPartNumBusy}" busyIndicatorDelay="0">
+				<suggestionItems>
+					<core:ListItem key="{mCommon>partNum}" text="{mCommon>partNum}" additionalText="{mCommon>partDesc}"/>
+				</suggestionItems>
+			</Input>
+			</HBox>-->
+			<Label design="Bold" text="{i18n>PART_DESCRIPTION}" required="{mCommon>/enable/bPartDesc}" class="sapUiSmallMarginBegin sapUiTinyMarginTop"/>
+			<Input value="{mCommon>/context/partDescription}" valueState="{mCommon>/valState/partDescription}" liveChange="onInpChange"
+				enabled="{parts:['mCommon>/bIsEditable','mCommon>/enable/bPartDesc'],formatter:'.formatter.isBothNonEmpty'}" name="DETAIL_PART_DESC_ID"/>
+			<Label design="Bold" text="{i18n>QUALITY}" required="true" class="sapUiSmallMarginBegin sapUiTinyMarginTop"/>
+			<Input value="{mCommon>/context/quantity}" valueState="{mCommon>/valState/quantity}" liveChange="onLiveChange" maxLength="7"
+				enabled="{mCommon>/bIsEditable}" name="DETAIL_QUANTITY_ID"/>
+			<Label design="Bold" text="{i18n>UOM}" required="true" class="sapUiSmallMarginBegin sapUiTinyMarginTop"/>
+			<Input value="{mCommon>/context/uom}" enabled="{mCommon>/bIsEditable}"/>
+			<!--<HBox renderType="Bare">
+				<ComboBox width="100%" selectedKey="{mCommon>/context/uom}" placeholder="{i18n>UOM}" showSecondaryValues="true" change="onChangeOptnlCBox"
+					items="{path: 'mCommon>/aUomQty',sorter:{ path:'text'},templateShareable:'true'}" valueState="{mCommon>/valState/qtyUom}"
+					name="DETAIL_UOM_QTY_ID" enabled="{mCommon>/bIsEditable}">
+					<core:ListItem key="{mCommon>key}" text="{mCommon>key}" additionalText="{mCommon>text}"/>
+				</ComboBox>
+			</HBox>-->
+			<!--	<VBox class="sapUiSmallMarginBegin">
+				<Label design="Bold" text="{i18n>UOM}" required="true"/>
+				<ComboBox width="100%" selectedKey="{mCommon>/context/uom}" placeholder="{i18n>UOM}" showSecondaryValues="true" change="onChangeOptnlCBox"
+					items="{path: 'mCommon>/aUomQty',sorter:{ path:'text'},templateShareable:'true'}" valueState="{mCommon>/valState/qtyUom}"
+					name="DETAIL_UOM_QTY_ID" enabled="{mCommon>/bIsEditable}">
+					<core:ListItem key="{mCommon>key}" text="{mCommon>key}" additionalText="{mCommon>text}"/>
+				</ComboBox>
+				<layoutData>
+					<l:GridData span="XL2 L2 M6 S6"/>
+				</layoutData>
+			</VBox>-->
+			<Label design="Bold" text="{i18n>GL_CODE}" class="sapUiSmallMarginBegin sapUiTinyMarginTop"/>
+			<Input value="{mCommon>/context/glcode}" enabled="{mCommon>/bIsEditable}" name="DETAIL_GL_CODE_ID"/>
+		</l:Grid>
+		<Label design="Bold" text="{i18n>INTERNATIONAL}" class="sapUiSmallMarginBegin sapUiSmallMarginTop ">
+			<layoutData>
+				<l:GridData linebreak="true" span="XL3 L3 M6 S6"/>
+			</layoutData>
+		</Label>
+		<HBox class="switchContainer">
+			<Switch customTextOn="Yes" customTextOff="No" state="{mCommon>/context/isInternational}" class="sapMSwitch sapUiSmallMarginTop"
+				enabled="{mCommon>/bIsEditable}" name="DETAIL_IS_INTERNATIONAL_ID" change="onToggleInternational"/>
+		<!--	<Button type="Transparent" tooltip="{i18n>VIEW_DETAIL}" icon="sap-icon://detail-view" press="onViewInt"
+				enabled="{mCommon>/context/isInternational}" class="btnDetailView"/>-->
+			<layoutData>
+				<l:GridData span="XL3 L3 M6 S6"/>
+			</layoutData>
+		</HBox>
+		<Label design="Bold" text="{i18n>HAZMAT}" class="sapUiSmallMarginBegin sapUiSmallMarginTop">
+			<layoutData>
+				<l:GridData span="XL3 L3 M6 S6"/>
+			</layoutData>
+		</Label>
+		<HBox class="switchContainer">
+			<Switch customTextOn="Yes" customTextOff="No" state="{mCommon>/context/isHazmat}" change="onToggleHazmat"
+				class="sapMSwitch sapUiSmallMarginTop" enabled="{mCommon>/bIsEditable}" name="DETAIL_IS_HAZMAT_ID"/>
+		<!--	<Button type="Transparent" tooltip="{i18n>VIEW_DETAIL}" icon="sap-icon://detail-view" press="onViewHazmat"
+				enabled="{mCommon>/context/isHazmat}" class="btnDetailView"/>-->
+			<layoutData>
+				<l:GridData span="XL3 L3 M6 S6"/>
+			</layoutData>
+		</HBox>
+		<!--<Label design="Bold" text="{i18n>IS_THIS_A_TRUCK}" class="sapUiSmallMarginBegin sapUiSmallMarginTop">
+			<layoutData>
+				<l:GridData span="XL2 L2 M6 S6"/>
+			</layoutData>
+		</Label>
+		<HBox class="switchContainer">
+			<Switch customTextOn="Yes" customTextOff="No" state="{mCommon>/context/isTruck}" change="onToggleTruck" class="sapMSwitch sapUiSmallMarginTop"
+				enabled="{mCommon>/bIsEditable}" name="DETAIL_IS_TRUCK_ID"/>
+			<Button type="Transparent" tooltip="{i18n>VIEW_DETAIL}" icon="sap-icon://detail-view" press="onViewTruck" enabled="{mCommon>/context/isTruck}"
+				class="btnDetailView"/>
+			<layoutData>
+				<l:GridData span="XL1 L1 M6 S6"/>
+			</layoutData>
+		</HBox>-->
+		<!--<Label design="Bold" text="{i18n>CHARGEBACK}" class="sapUiSmallMarginBegin sapUiSmallMarginTop">
+			<layoutData>
+				<l:GridData span="XL2 L2 M6 S6"/>
+			</layoutData>
+		</Label>-->
+		<!--<HBox class="switchContainer">
+			<Switch customTextOn="Yes" customTextOff="No" state="{mCommon>/context/charge}" change="onToggleChargeBack"
+				class="sapMSwitch sapUiSmallMarginTop" enabled="{mCommon>/bIsEditable}" name="DETAIL_CHARGEBACK_ID"/>
+			<Button type="Transparent" tooltip="{i18n>VIEW_DETAIL}" icon="sap-icon://detail-view" press="onViewChargeBack"
+				enabled="{mCommon>/context/charge}" class="btnDetailView"/>
+			<layoutData>
+				<l:GridData span="XL1 L1 M6 S6"/>
+			</layoutData>
+		</HBox>-->
+	</l:Grid>
+</core:FragmentDefinition>

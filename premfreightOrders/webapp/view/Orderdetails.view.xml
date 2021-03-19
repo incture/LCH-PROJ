@@ -1,0 +1,91 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:fb="sap.ui.comp.filterbar"
+	xmlns:f="sap.f" controllerName="com.incture.lch.premfreightOrders.controller.Orderdetails" xmlns:html="http://www.w3.org/1999/xhtml"
+	displayBlock="false" xmlns:ui="sap.ui.table" xmlns:ExtPicker="com.incture.lch.premfreightOrders.control">
+	<Page showHeader="false" enableScrolling="false" class="sapUiSizeCompact">
+		<content>
+			<l:FixFlex>
+				<l:fixContent>
+					<Label text="{i18n>PREMIUM_FREIGHT_ORDERS}" design="Bold" class="customTitle sapUiTinyMarginTop sapUiMediumMarginBegin"/>
+					<fb:FilterBar reset="onReset" search="onSearch" id="lch_UnPlannedOrders_filterBar" class="sapFbfilterbar" showFilterConfiguration="false"
+						showClearOnFB="true" clear="onClearFilter">
+						<fb:filterGroupItems>
+							<fb:FilterGroupItem name="Ship_From" label="{i18n>SHIP_FROM}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
+								<fb:control>
+									<ComboBox selectedKey="{mCommon>/originFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
+										items="{path: 'mCommon>/aOrigin',sorter:{ path:'originName'}}" change="onChangeOrigin">
+										<core:ListItem key="{mCommon>originName}" text="{mCommon>originName}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="Ship_To" label="{i18n>SHIP_TO}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
+								<fb:control>
+									<ComboBox selectedKey="{mCommon>/destinationFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
+										items="{path: 'mCommon>/aOrigin',sorter:{ path:'originName'}, tooltip:{path:'originName'}}" change="onChangeDestination">
+										<core:ListItem key="{mCommon>originName}" text="{mCommon>originName}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="From_Date" label="{i18n>FROM_DATE}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
+								<fb:control>
+									<ExtPicker:ExtDatePicker class="sapUiMInputBoxBorderRadius" placeholder=" " dateValue="{mCommon>/fromDateFilter}"
+										displayFormat="dd MMM yyyy"/>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="To_Date" label="{i18n>TO_DATE}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
+								<fb:control>
+									<ExtPicker:ExtDatePicker class="sapUiMInputBoxBorderRadius" placeholder=" " dateValue="{mCommon>/toDateFilter}"
+										displayFormat="dd MMM yyyy"/>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="status" label="{i18n>STATUS}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
+								<fb:control>
+									<ComboBox selectedKey="{mCommon>/statusFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
+										items="{path: 'mCommon>/aStatus'}" change="onChangeCBox">
+										<core:ListItem key="{mCommon>status}" text="{mCommon>status}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="reasonCode" label="{i18n>REASON_CODE}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
+								<fb:control>
+									<ComboBox selectedKey="{mCommon>/reasonCodeFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
+										items="{path: 'mCommon>/aReasonCodes'}" change="onChangeCBox">
+										<core:ListItem key="{mCommon>key}" text="{mCommon>key}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>
+						</fb:filterGroupItems>
+					</fb:FilterBar>
+				</l:fixContent>
+				<l:flexContent>
+					<core:Fragment fragmentName="com.incture.lch.premfreightOrders.fragment.FrieghtUnitsTable" type="XML"/>
+				</l:flexContent>
+			</l:FixFlex>
+		</content>
+		<footer>
+			<OverflowToolbar class="customFooter">
+				<ToolbarSpacer width="2rem">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+				</ToolbarSpacer>
+			<!--	<Button class="sapMbtn" id="id_UnPlannedOrder_ClearAll" text="{i18n>CLEAR_ALL}" icon="sap-icon://sys-cancel" iconFirst="true"
+					enabled="{mCommon>/bIsEditable}" visible="{mCommon>/visible/bClearAll}" press="onClearAll"></Button>-->
+				<Button class="sapMbtn" text="{i18n>GET_COST}" press="onGetCost"/>
+				<layoutData>
+					<OverflowToolbarLayoutData priority="NeverOverflow"/>
+				</layoutData>
+				<ToolbarSpacer/>
+					<Button  text="{i18n>APPROVE}" type="Accept" press="onApprove"/>
+					<Button  text="{i18n>REJECT}" type="Reject" press="onReject"/>
+			<!--	<Button text="{i18n>NEXT}" type="Emphasized" enabled="{/nextButtonEnabled}" visible="{mCommon>/visible/bNext}" press="onDialogNextButton"/>-->
+			<!--	<Button text="{i18n>SUBMIT}" class="customIcon" type="Emphasized" icon="sap-icon://accept" iconFirst="true" enabled="{mCommon>/bIsEditable}"
+					visible="{mCommon>/visible/bSubmit}" press="onSubmit"></Button>-->
+				<ToolbarSpacer width="2rem">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+				</ToolbarSpacer>
+			</OverflowToolbar>
+		</footer>
+	</Page>
+</mvc:View>

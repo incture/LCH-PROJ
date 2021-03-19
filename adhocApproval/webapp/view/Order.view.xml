@@ -1,0 +1,19 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="com.incture.lch.adhocApproval.controller.Order"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" xmlns:f="sap.f" xmlns:form="sap.ui.layout.form" xmlns:u="sap.ui.unified">
+	<Page showHeader="false" class="sapUiSizeCompact">
+		<content>
+		<!--	<l:FixFlex>
+				<l:fixContent>
+					
+				</l:fixContent>
+				<l:flexContent>-->
+					<l:Grid defaultSpan="XL12 L12 M12 S12">
+						<core:Fragment fragmentName="com.incture.lch.adhocApproval.fragment.OriginDestination" type="XML"/>
+						<core:Fragment fragmentName="com.incture.lch.adhocApproval.fragment.OrderDetails" type="XML"/>
+						<core:Fragment fragmentName="com.incture.lch.adhocApproval.fragment.ShippingDetails" type="XML"/>
+					</l:Grid>
+				<!--</l:flexContent>
+			</l:FixFlex>-->
+		</content>
+	</Page>
+</mvc:View>

@@ -1,0 +1,97 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:ui="sap.ui.table">
+	<l:Grid hSpacing="1" vSpacing="0" defaultSpan="XL6 L6 M12 S12" class="sapUiSmallMarginTopBottom">
+		<l:Grid hSpacing="0" vSpacing="0" defaultSpan="XL6 L6 M12 S12" class="sapUiSmallMarginTopBottom">
+			<Label text="{i18n>ORIGIN}:" design="Bold" class="sapMLblTitle sapUiSmallMarginBegin sapUiSmallMarginBottom">
+				<layoutData>
+					<l:GridData span="XL12 L12 M12 S12"/>
+				</layoutData>
+			</Label>
+			<Label design="Bold" text="{i18n>ADHOC_TYPE}" required="true" class="sapUiTinyMarginTop sapUiSmallMarginBegin"/>
+			<ComboBox selectedKey="{mCommon>/newFU/adhocType}" change="onChangeCBox" width="100%" enabled="{mCommon>/bIsEditable}"
+				name="ADHOC_TYPE" valueState="{mCommon>/valState/adhocType}"
+				items="{path: 'mCommon>/aAdhocType'}">
+				<core:ListItem key="{mCommon>adhocName}" text="{mCommon>adhocName}"/>
+			</ComboBox>
+			<Label text="{i18n>ORIGIN_NAME}" design="Bold" class="sapUiSmallMarginBegin sapUiTinyMarginTop" required="true"></Label>
+			<HBox renderType="Bare">
+				<Input type="Text" selectedKey="{mCommon>/newFU/shipperName}" value="{mCommon>/newFU/shipperNameFreeText}" showSuggestion="true"
+					startSuggestion="3" suggest="onSuggestShipName" name="DEST_SHIPPER_NAME_ID" enabled="{mCommon>/bIsEditable}"
+					suggestionItems="{mCommon>/aLocShippers}" change="onChngShipLoc" valueState="{mCommon>/valState/shipperName}">
+					<suggestionItems>
+						<core:ListItem key="{mCommon>shipperName}" text="{mCommon>shipperName}" additionalText="{mCommon>bpNumber}"/>
+					</suggestionItems>
+				</Input>
+				<Button icon="{mCommon>/sIconShip}" press="onNewShipper" tooltip="{i18n>NEW_SHIPPER}" enabled="{mCommon>/bIsEditable}"/>
+			</HBox>
+			<Label text="" design="Bold" class="sapUiSmallMarginBegin sapUiTinyMarginTop" visible="{mCommon>/visible/bOriginFreeText}"></Label>
+			<Input value="{mCommon>/newFU/shipperNameFreeText}" visible="{mCommon>/visible/bOriginFreeText}" name="DEST_SHIPPER_NAME_FREE_TXT_ID"/>
+			<Label text="{i18n>ORIGIN_ADDRESS}" required="{mCommon>/newFU/bRequiredOrigni}" design="Bold"
+				class="sapUiSmallMarginBegin sapUiTinyMarginTop"></Label>
+			<Input value="{mCommon>/newFU/originAddress}" liveChange="onInpChange" valueState="{mCommon>/valState/sOriginAddress}"
+				enabled="{parts:['mCommon>/bIsEditable','mCommon>/bNewShip'],formatter:'.formatter.isBothNonEmpty'}" name="DEST_ORIGIN_ADDRESS_ID"/>
+			<Label text="{i18n>ORIGIN_CITY}" required="{mCommon>/newFU/bRequiredOrigni}" design="Bold" class="sapUiSmallMarginBegin sapUiTinyMarginTop"></Label>
+			<Input value="{mCommon>/newFU/originCity}" valueState="{mCommon>/valState/sOriginCity}" liveChange="onInpChange"
+				enabled="{parts:['mCommon>/bIsEditable','mCommon>/bNewShip'],formatter:'.formatter.isBothNonEmpty'}" name="DEST_ORIGIN_CITY_ID"/>
+			<Label text="{i18n>ORIGIN_STATE}" required="{mCommon>/newFU/bRequiredOrigni}" design="Bold" class="sapUiSmallMarginBegin sapUiTinyMarginTop"></Label>
+			<Input value="{mCommon>/newFU/originState}" valueState="{mCommon>/valState/sOriginState}" liveChange="onInpChange"
+				enabled="{parts:['mCommon>/bIsEditable','mCommon>/bNewShip'],formatter:'.formatter.isBothNonEmpty'}" name="DEST_ORIGIN_STATE_ID"/>
+			<Label text="{i18n>ORIGIN_ZIP}" required="{mCommon>/newFU/bRequiredOrigni}" design="Bold" class="sapUiSmallMarginBegin sapUiTinyMarginTop"></Label>
+			<Input value="{mCommon>/newFU/originZip}" valueState="{mCommon>/valState/sOriginZip}" liveChange="onInpChange"
+				enabled="{parts:['mCommon>/bIsEditable','mCommon>/bNewShip'],formatter:'.formatter.isBothNonEmpty'}" name="DEST_ORIGIN_ZIP_ID"/>
+			<Label design="Bold" text="{i18n>COUNTRY}" required="{mCommon>/newFU/bRequiredOrigni}" class="sapUiTinyMarginTop sapUiSmallMarginBegin"/>
+			<ComboBox selectedKey="{mCommon>/newFU/originCountry}" showSecondaryValues="true" change="onChangeCBox" width="100%"
+				name="DEST_ORIGIN_COUNTRY_ID" valueState="{mCommon>/valState/sOriginCountry}"
+				enabled="{parts:['mCommon>/bIsEditable','mCommon>/bNewShip'],formatter:'.formatter.isBothNonEmpty'}"
+				items="{path: 'mCommon>/aCountries',sorter:{ path:'countryName'},templateShareable:'true'}">
+				<core:ListItem key="{mCommon>countryId}" text="{mCommon>countryId}" additionalText="{mCommon>countryName}"/>
+			</ComboBox>
+			<Label text="{i18n>SHIPPING_CONTACT}" design="Bold" class="sapUiSmallMarginBegin sapUiTinyMarginTop"></Label>
+			<TextArea cols="100" value="{mCommon>/newFU/shippingContact}" enabled="{mCommon>/bIsEditable}" name="DEST_SHIPPING_CONTACT_ID"/>
+		</l:Grid>
+		<l:Grid hSpacing="0" vSpacing="0" defaultSpan="XL6 L6 M12 S12" class="sapUiSmallMarginTopBottom">
+			<Label text="{i18n>DESTINATION}:" class="sapMLblTitle sapUiSmallMarginBegin sapUiSmallMarginBottom" design="Bold">
+				<layoutData>
+					<l:GridData span="XL12 L12 M12 S12"/>
+				</layoutData>
+			</Label>
+			<Label text="{i18n>DESTINATION_NAME}" design="Bold" class="sapUiTinyMarginTop sapUiSmallMarginBegin" required="true"/>
+			<HBox renderType="Bare">
+				<Input type="Text" selectedKey="{mCommon>/newFU/destinationName}" value="{mCommon>/newFU/destinationNameFreeText}" showSuggestion="true"
+					startSuggestion="3" suggest="onSuggestDestName" name="DEST_DESTINATION_NAME_ID" enabled="{mCommon>/bIsEditable}"
+					suggestionItems="{mCommon>/aLocReceivers}" change="onChngDestLoc" valueState="{mCommon>/valState/destinationName}">
+					<suggestionItems>
+						<core:ListItem key="{mCommon>shipperName}" text="{mCommon>shipperName}" additionalText="{mCommon>bpNumber}"/>
+					</suggestionItems>
+				</Input>
+				<Button icon="{mCommon>/sIconDest}" press="onNewDestination" tooltip="{i18n>NEW_DESTINATION}" enabled="{mCommon>/bIsEditable}"/>
+			</HBox>
+			<Label text="" design="Bold" class="sapUiSmallMarginBegin sapUiTinyMarginTop" visible="{mCommon>/visible/bDestFreeText}"></Label>
+			<Input value="{mCommon>/newFU/destinationNameFreeText}" visible="{mCommon>/visible/bDestFreeText}" name="DEST_DESTINATION_NAME_FREE_TXT_ID"/>
+			<Label text="{i18n>DESTINATION_ADDRESS}" required="{mCommon>/newFU/bRequiredDest}" design="Bold"
+				class="sapUiTinyMarginTop sapUiSmallMarginBegin"/>
+			<Input value="{mCommon>/newFU/destinationAddress}" valueState="{mCommon>/valState/sDestinationAddress}" liveChange="onInpChange"
+				enabled="{parts:['mCommon>/bIsEditable','mCommon>/bNewDest'],formatter:'.formatter.isBothNonEmpty'}" name="DEST_DESTINATION_ADDRESS_ID"/>
+			<Label text="{i18n>DESTINATION_CITY}" required="{mCommon>/newFU/bRequiredDest}" design="Bold"
+				class="sapUiTinyMarginTop sapUiSmallMarginBegin"/>
+			<Input value="{mCommon>/newFU/destinationCity}" valueState="{mCommon>/valState/sDestinationCity}" liveChange="onInpChange"
+				enabled="{parts:['mCommon>/bIsEditable','mCommon>/bNewDest'],formatter:'.formatter.isBothNonEmpty'}" name="DEST_DESTINATION_CITY_ID"/>
+			<Label text="{i18n>DESTINATION_STATE}" required="{mCommon>/newFU/bRequiredDest}" design="Bold"
+				class="sapUiTinyMarginTop sapUiSmallMarginBegin"/>
+			<Input value="{mCommon>/newFU/destinationState}" valueState="{mCommon>/valState/sDestinationState}" liveChange="onInpChange"
+				enabled="{parts:['mCommon>/bIsEditable','mCommon>/bNewDest'],formatter:'.formatter.isBothNonEmpty'}" name="DEST_DESTINATION_STATE_ID"/>
+			<Label text="{i18n>DESTINATION_ZIP}" required="{mCommon>/newFU/bRequiredDest}" design="Bold"
+				class="sapUiTinyMarginTop sapUiSmallMarginBegin"/>
+			<Input value="{mCommon>/newFU/destinationZip}" valueState="{mCommon>/valState/sDestinationZip}" liveChange="onInpChange"
+				enabled="{parts:['mCommon>/bIsEditable','mCommon>/bNewDest'],formatter:'.formatter.isBothNonEmpty'}" name="DEST_DESTINATION_ZIP_ID"/>
+			<Label design="Bold" text="{i18n>COUNTRY}" required="{mCommon>/newFU/bRequiredDest}" class="sapUiTinyMarginTop sapUiSmallMarginBegin"/>
+			<ComboBox selectedKey="{mCommon>/newFU/destinationCountry}" showSecondaryValues="true" change="onChangeCBox" width="100%"
+				name="DEST_DESTINATION_COUNTRY_ID" valueState="{mCommon>/valState/sDestinationCountry}"
+				enabled="{parts:['mCommon>/bIsEditable','mCommon>/bNewDest'],formatter:'.formatter.isBothNonEmpty'}"
+				items="{path: 'mCommon>/aCountries',sorter:{ path:'countryName'},templateShareable:'true'}">
+				<core:ListItem key="{mCommon>countryId}" text="{mCommon>countryId}" additionalText="{mCommon>countryName}"/>
+			</ComboBox>
+			<Label text="{i18n>RECEIVING_CONTACT}" design="Bold" class="sapUiTinyMarginTop sapUiSmallMarginBegin"/>
+			<TextArea cols="100" value="{mCommon>/newFU/receivingContact}" enabled="{mCommon>/bIsEditable}" name="DEST_RECEIVING_CONTACT_ID"/>
+		</l:Grid>
+	</l:Grid>
+</core:FragmentDefinition>

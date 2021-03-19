@@ -1,0 +1,22 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:ui="sap.ui.table"
+	xmlns:ExtPicker="com.incture.lch.adhocApproval.control">
+	<Dialog title="{i18n>CHARGEBACK}" afterClose="onAfterCloseDlgChargeBack" verticalScrolling="false" escapeHandler="onEscDlgChargeBack"
+		horizontalScrolling="false">
+		<content>
+			<l:Grid hSpacing="1" vSpacing="0" defaultSpan="XL12 L12 M12 S12" class="sapUiSmallMarginTopBottom">
+				<VBox class="sapUiSmallMarginBegin">
+					<Label design="Bold" text="{i18n>REASON_CODE}"/>
+					
+					<ComboBox selectedKey="{mCommon>/context/reasonCode}" showSecondaryValues="true" change="onChangeCBox" width="100%"
+						enabled="{parts:['mCommon>/bIsEditable','mCommon>/context/charge'],formatter:'.formatter.isBothNonEmpty'}"
+						items="{path: 'mCommon>/aReasonCodes',sorter:{ path:'reasonCodeValue'},templateShareable:'true'}" name="DETAIL_REASON_CODE_ID">
+						<core:ListItem key="{mCommon>reasonCodeKey}" text="{mCommon>reasonCodeValue}" additionalText="{mCommon>reasonCodeKey}"/>
+					</ComboBox>
+				</VBox>
+			</l:Grid>
+		</content>
+		<endButton>
+			<Button text="{i18n>OK}" press="onCloseDlgChargeBack"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

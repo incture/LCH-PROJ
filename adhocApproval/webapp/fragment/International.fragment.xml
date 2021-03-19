@@ -1,0 +1,33 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:ui="sap.ui.table"
+	xmlns:ExtPicker="com.incture.lch.adhocApproval.control">
+	<Dialog title="{i18n>INTERNATIONAL}" afterClose="onAfterCloseDlgInt" verticalScrolling="false" horizontalScrolling="false">
+		<content>
+			<l:Grid hSpacing="1" vSpacing="0" defaultSpan="XL12 L12 M12 S12" class="sapUiSmallMarginTopBottom">
+				<VBox class="sapUiSmallMarginBegin">
+					<Label design="Bold" text="{i18n>VALUE}"/>
+					<Input value="{mCommon>/context/value}" liveChange="onLiveChange" name="DETAIL_VALUE_ID"
+						enabled="{parts:['mCommon>/bIsEditable','mCommon>/context/isInternational'],formatter:'.formatter.isBothNonEmpty'}"/>
+				</VBox>
+				<VBox class="sapUiSmallMarginBegin">
+					<Label design="Bold" text="{i18n>CURRENCY}"/>
+					<ComboBox selectedKey="{mCommon>/context/currency}" showSecondaryValues="true" change="onChangeCBox" width="100%" name="DETAIL_CURRENCY_ID"
+						enabled="{parts:['mCommon>/bIsEditable','mCommon>/context/isInternational'],formatter:'.formatter.isBothNonEmpty'}"
+						valueState="{mCommon>/valState/currency}" items="{path: 'mCommon>/aCurrency',sorter:{ path:'currency'},templateShareable:'true'}">
+						<core:ListItem key="{mCommon>key}" text="{mCommon>key}" additionalText="{mCommon>currency}"/>
+					</ComboBox>
+				</VBox>
+				<VBox class="sapUiSmallMarginBegin">
+					<Label design="Bold" text="{i18n>COUNTRY_OF_ORIGIN}" required="{mCommon>/context/isInternational}"/>
+					<ComboBox selectedKey="{mCommon>/context/countryOrigin}" showSecondaryValues="true" change="onChangeCBox" width="100%" name="DETAIL_COO_ID"
+						enabled="{parts:['mCommon>/bIsEditable','mCommon>/context/isInternational'],formatter:'.formatter.isBothNonEmpty'}"
+						valueState="{mCommon>/valState/countryOrigin}" items="{path: 'mCommon>/aCountries',sorter:{ path:'countryName'},templateShareable:'true'}">
+						<core:ListItem key="{mCommon>countryId}" text="{mCommon>countryId}" additionalText="{mCommon>countryName}"/>
+					</ComboBox>
+				</VBox>
+			</l:Grid>
+		</content>
+		<endButton>
+			<Button class="dialogButton" text="{i18n>OK}" press="onCloseDlgInt" />
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

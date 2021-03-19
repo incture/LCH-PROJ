@@ -1,0 +1,32 @@
+{
+    "id": "adhocform",
+    "schemaVersion": "1.1.0",
+    "name": "AdhocForm",
+    "revision": "1.0",
+    "type": "task",
+    "readOnly": false,
+    "content": [
+        {
+            "id": "adhocorderid",
+            "type": "string",
+            "label": "adhocOrderId",
+            "readOnly": false,
+            "value": "${context.adhocOrderId}",
+            "constraints": {
+                "required": false
+            }
+        }
+    ],
+    "decisions": [
+        {
+            "id": "approve",
+            "text": "Approve",
+            "decisionType": "positive"
+        },
+        {
+            "id": "rej",
+            "text": "Reject",
+            "decisionType": ""
+        }
+    ]
+}

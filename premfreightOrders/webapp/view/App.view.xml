@@ -1,0 +1,70 @@
+<mvc:View controllerName="com.incture.lch.premfreightOrders.controller.App" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m"
+	xmlns:tnt="sap.tnt" xmlns:core="sap.ui.core" xmlns:ExtListItem="com.incture.lch.premfreightOrders.control">
+	<tnt:ToolPage id="idPaccar_UnPlannedOrders_ToolPage" class=" sapUiSizeCompact" sideExpanded="false">
+		<tnt:header>
+			<tnt:ToolHeader class="sapTntToolHeader">
+			<!--	<Button class="sapCoreColor" icon="sap-icon://menu2" type="Transparent" press="onSideNavigation" id="sideNavigationToggleButton">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+				</Button>
+				<ToolbarSpacer width="2rem">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+				</ToolbarSpacer>
+				<Button class="sapMbtn" icon="sap-icon://delete" id="id_UnPlannedOrder_Delete" text="{i18n>DELETE_DRAFT}"
+					enabled="{mOrderModel>/enable/bDeleteDraft}" visible="{mOrderModel>/visible/bDeleteDraft}" press="onDeleteDrafts">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+				</Button>
+				<Button class="sapMbtn" icon="sap-icon://decision" id="id_UnPlannedOrder_confirm" text="{i18n>CONFIRM_ORDERS}"
+					visible="{parts:['mOrderModel>/visible/bConfirmOrder','mOrderModel>/oRoleConfig/bEditable'],formatter:'.formatter.isBothNonEmpty'}"
+					enabled="{mOrderModel>/enable/bConfirmOrder}" press="onConfirmOrders">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+					<customData>
+						<core:CustomData key="target" value="ConfirmButton"/>
+					</customData>
+				</Button>
+				<Button class="sapMbtn" icon="sap-icon://group-2" text="{i18n>GROUP_CONFIRM}"
+					enabled="{parts:['mOrderModel>/enable/bGroupConfirm','mOrderModel>/enable/bGrpCnfrm'],formatter:'.formatter.isBothNonEmpty'}"
+					visible="{parts:['mOrderModel>/visible/bGroupConfirm','mOrderModel>/oRoleConfig/bEditable'],formatter:'.formatter.isBothNonEmpty'}"
+					press="onGroupConfirm">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+					<customData>
+						<core:CustomData key="target" value="Button"/>
+					</customData>
+				</Button>
+				<Button class="sapMbtn" icon="sap-icon://activities" text="{i18n>APPLY_ALL}"
+					enabled="{parts:['mOrderModel>/enable/bApplyAll','mOrderModel>/enable/bGrpCnfrm'],formatter:'.formatter.isBothNonEmpty'}"
+					visible="{parts:['mOrderModel>/visible/bApplyAll','mOrderModel>/oRoleConfig/bEditable'],formatter:'.formatter.isBothNonEmpty'}"
+					press="onApplyAll">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+					<customData>
+						<core:CustomData key="target" value="Button"/>
+					</customData>
+				</Button>-->
+			</tnt:ToolHeader>
+		</tnt:header>
+	<!--	<tnt:sideContent >
+			<tnt:SideNavigation expanded="true" itemSelect="onItemSelect" class="sapTntToolBar" selectedKey="{mOrderModel>/selNavigationKey}">
+				<tnt:NavigationList class="sapTntToolBar">
+					<ExtListItem:ExtNavigationListItem text="{i18n>ORDERS}" count="{mOrderModel>/TotalFuCount}" icon="sap-icon://activity-items" key="Orders"
+						class="sapCustomNavListItemCount"/>
+					<ExtListItem:ExtNavigationListItem text="{i18n>DRAFTS}" count="{mPartModel>/draftsLength}" icon="sap-icon://document-text" key="Drafts"
+						class="sapCustomNavListItemCount" visible="{mOrderModel>/oRoleConfig/bEditable}"/>
+				</tnt:NavigationList>
+			</tnt:SideNavigation>
+		</tnt:sideContent>-->
+		<tnt:mainContents>
+			<NavContainer id="idlch_premfreightOrders_ToolPageContainer"></NavContainer>
+		</tnt:mainContents>
+	</tnt:ToolPage>
+</mvc:View>

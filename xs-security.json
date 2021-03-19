@@ -1,0 +1,25 @@
+{
+	"xsappname": "LCH",
+	"tenant-mode": "dedicated",
+	"description": "Security profile of called application",
+	"scopes": [{
+		"name": "uaa.user",
+		"description": "UAA"
+	}, {
+		"name": "$XSAPPNAME.Display",
+		"description": "display"
+	}],
+	"role-templates": [{
+		"name": "Token_Exchange",
+		"description": "UAA",
+		"scope-references": [
+			"uaa.user"
+		]
+	}, {
+		"name": "Viewer",
+		"description": "Required to view things in our solution",
+		"scope-references": [
+			"$XSAPPNAME.Display"
+		]
+	}]
+}

@@ -1,0 +1,643 @@
+{
+    "id": "adhocorderapprovalform",
+    "schemaVersion": "1.1.0",
+    "name": "adhocOrderApprovalForm",
+    "revision": "1.0",
+    "type": "task",
+    "readOnly": false,
+    "content": [
+        {
+            "id": "adhoc_order_details",
+            "type": "section",
+            "title": "ADHOC ORDER DETAILS",
+            "content": [
+                {
+                    "id": "user_details",
+                    "type": "subsection",
+                    "title": "USER DETAILS",
+                    "content": [
+                        {
+                            "id": "first_name",
+                            "type": "string",
+                            "label": "First Name",
+                            "readOnly": false,
+                            "value": "${context.firstName}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "last_name",
+                            "type": "string",
+                            "label": "Last Name",
+                            "readOnly": false,
+                            "value": "${context.lastName}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "created_date",
+                            "type": "string",
+                            "label": "Created Date",
+                            "readOnly": false,
+                            "value": "${context.createdDate}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "user_id",
+                            "type": "string",
+                            "label": "User Id",
+                            "readOnly": false,
+                            "value": "${context.userId}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "user_email",
+                            "type": "string",
+                            "label": "User Email",
+                            "readOnly": false,
+                            "value": "${context.userEmail}",
+                            "constraints": {
+                                "required": false
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": "adhoc_order_data",
+                    "type": "subsection",
+                    "title": "ADHOC ORDER DATA",
+                    "content": [
+                        {
+                            "id": "adhoc_order_id",
+                            "type": "string",
+                            "label": "Adhoc Order Id",
+                            "readOnly": false,
+                            "value": "${context.adhocOrderId}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "shipper_from",
+                            "type": "string",
+                            "label": "Shipping From",
+                            "readOnly": false,
+                            "value": "${context.shippingFrom}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "shipping_to",
+                            "type": "string",
+                            "label": "Shipping To",
+                            "readOnly": false,
+                            "value": "${context.shippingTo}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "business_division",
+                            "type": "string",
+                            "label": "Business Division",
+                            "readOnly": false,
+                            "value": "${context.businessDivision}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "charge",
+                            "type": "boolean",
+                            "label": "Charge",
+                            "readOnly": false,
+                            "value": "${context.charge}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "country_of_origin",
+                            "type": "string",
+                            "label": "Country of Origin",
+                            "readOnly": false,
+                            "value": "${context.countryOrigin}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "currency",
+                            "type": "string",
+                            "label": "Currency",
+                            "readOnly": false,
+                            "value": "${context.currency}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "customer_order_no_",
+                            "type": "string",
+                            "label": "Customer Order No.",
+                            "readOnly": false,
+                            "value": "${context.customerOrderNo}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "destination_name",
+                            "type": "string",
+                            "label": "Destination Name",
+                            "readOnly": false,
+                            "value": "${context.destinationName}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "destination_city",
+                            "type": "string",
+                            "label": "Destination City",
+                            "readOnly": false,
+                            "value": "${context.destinationCity}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "destination_state",
+                            "type": "string",
+                            "label": "Destination State",
+                            "readOnly": false,
+                            "value": "${context.destinationState}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "destination_address",
+                            "type": "string",
+                            "label": "Destination Address",
+                            "readOnly": false,
+                            "value": "${context.destinationAddress}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "destination_zip",
+                            "type": "string",
+                            "label": "Destination Zip",
+                            "readOnly": false,
+                            "value": "${context.destinationZip}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "dimension_l",
+                            "type": "string",
+                            "label": "Dimension L",
+                            "readOnly": false,
+                            "value": "${context.dimensionL}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "dimension_b",
+                            "type": "string",
+                            "label": "Dimension B",
+                            "readOnly": false,
+                            "value": "${context.dimensionB}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "dimension_h",
+                            "type": "string",
+                            "label": "Dimension H",
+                            "readOnly": false,
+                            "value": "${context.dimensionH}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "expected_delivery_date",
+                            "type": "string",
+                            "label": "Expected Delivery Date",
+                            "readOnly": false,
+                            "value": "${context.expectedDeliveryDate}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "gl_code",
+                            "type": "string",
+                            "label": "GL Code",
+                            "readOnly": false,
+                            "value": "${context.glcode}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "hazmat_number",
+                            "type": "string",
+                            "label": "Hazmat Number",
+                            "readOnly": false,
+                            "value": "${context.hazmatNumber}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "origin_address",
+                            "type": "string",
+                            "label": "Origin Address",
+                            "readOnly": false,
+                            "value": "${context.originAddress}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "origin_city",
+                            "type": "string",
+                            "label": "Origin City",
+                            "readOnly": false,
+                            "value": "${context.originCity}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "origin_state",
+                            "type": "string",
+                            "label": "Origin State",
+                            "readOnly": false,
+                            "value": "${context.originState}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "origin_zip",
+                            "type": "string",
+                            "label": "Origin Zip",
+                            "readOnly": false,
+                            "value": "${context.originZip}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "is_international",
+                            "type": "boolean",
+                            "label": "Is International",
+                            "readOnly": false,
+                            "value": "${context.isInternational}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "is_hazmat",
+                            "type": "boolean",
+                            "label": "Is Hazmat",
+                            "readOnly": false,
+                            "value": "${context.isHazmat}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "package_type",
+                            "type": "string",
+                            "label": "Package Type",
+                            "readOnly": false,
+                            "value": "${context.packageType}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "part_number",
+                            "type": "string",
+                            "label": "Part Number",
+                            "readOnly": false,
+                            "value": "${context.partNum}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "part_description",
+                            "type": "string",
+                            "label": "Part Description",
+                            "readOnly": false,
+                            "value": "${context.partDescription}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "po_data_number",
+                            "type": "string",
+                            "label": "PO Data Number",
+                            "readOnly": false,
+                            "value": "${context.PODataNumber}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "premiumfreight",
+                            "type": "boolean",
+                            "label": "Premium Freight",
+                            "readOnly": false,
+                            "value": "${context.premiumFreight}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "project_number",
+                            "type": "string",
+                            "label": "Project Number",
+                            "readOnly": false,
+                            "value": "${context.projectNumber}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "quantity",
+                            "type": "string",
+                            "label": "Quantity",
+                            "readOnly": false,
+                            "value": "${context.quantity}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "reason_code",
+                            "type": "string",
+                            "label": "Reason Code",
+                            "readOnly": false,
+                            "value": "${context.reasonCode}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "receiving_contact",
+                            "type": "string",
+                            "label": "Receiving Contact",
+                            "readOnly": false,
+                            "value": "${context.receivingContact}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "reference_number",
+                            "type": "string",
+                            "label": "Reference Number",
+                            "readOnly": false,
+                            "value": "${context.referenceNumber}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "ship_date",
+                            "type": "string",
+                            "label": "Ship Date",
+                            "readOnly": false,
+                            "value": "${context.shipDate}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "shipper_name",
+                            "type": "string",
+                            "label": "Shipper Name",
+                            "readOnly": false,
+                            "value": "${context.shipperName}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "shipping_contact_1",
+                            "type": "string",
+                            "label": "Shipping Contact",
+                            "readOnly": false,
+                            "value": "${context.shippingContact}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "terms",
+                            "type": "string",
+                            "label": "Terms",
+                            "readOnly": false,
+                            "value": "${context.terms}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "uom",
+                            "type": "string",
+                            "label": "UOM",
+                            "readOnly": false,
+                            "value": "${context.uom}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "value",
+                            "type": "string",
+                            "label": "Value",
+                            "readOnly": false,
+                            "value": "${context.value}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "weight",
+                            "type": "string",
+                            "label": "Weight",
+                            "readOnly": false,
+                            "value": "${context.weight}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "shipping_instruction",
+                            "type": "string",
+                            "label": "Shipping Instruction",
+                            "readOnly": false,
+                            "value": "${context.shippingInstruction}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "shipping_contact",
+                            "type": "string",
+                            "label": "Shipping Contact",
+                            "readOnly": false,
+                            "value": "${context.shippingContact}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "origin_country",
+                            "type": "string",
+                            "label": "Destination Country",
+                            "readOnly": false,
+                            "value": "${context.destinationCountry}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "shipper_name_free_textr",
+                            "type": "string",
+                            "label": "Shipper Name Free Text",
+                            "readOnly": false,
+                            "value": "${context.shipperNameFreeText}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "destination_name_free_text",
+                            "type": "string",
+                            "label": "Destination Name Free Text",
+                            "readOnly": false,
+                            "value": "${context.destinationNameFreeText}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "hazmat_un",
+                            "type": "string",
+                            "label": "Hazmat UN",
+                            "readOnly": false,
+                            "value": "${context.hazmatUn}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "weight_uom",
+                            "type": "string",
+                            "label": "Weight UOM",
+                            "readOnly": false,
+                            "value": "${context.weightUom}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "dimensions_uom",
+                            "type": "string",
+                            "label": "Dimensions UOM",
+                            "readOnly": false,
+                            "value": "${context.dimensionUom}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "shipper_name_description",
+                            "type": "string",
+                            "label": "Shipper Name Description",
+                            "readOnly": false,
+                            "value": "${context.shipperNameDesc}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "destination_name_description",
+                            "type": "string",
+                            "label": "Destination Name Description",
+                            "readOnly": false,
+                            "value": "${context.destinationNameDesc}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "premium_reason_code",
+                            "type": "string",
+                            "label": "Premium Reason Code",
+                            "readOnly": false,
+                            "value": "${context.premiumReasonCode}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "planner_email",
+                            "type": "string",
+                            "label": "Planner Email",
+                            "readOnly": false,
+                            "value": "${context.plannerEmail}",
+                            "constraints": {
+                                "required": false
+                            }
+                        },
+                        {
+                            "id": "adhoc_type",
+                            "type": "string",
+                            "label": "Adhoc Type",
+                            "readOnly": false,
+                            "value": "${context.adhocType}",
+                            "constraints": {
+                                "required": false
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "decisions": [
+        {
+            "id": "approve",
+            "text": "Approve",
+            "decisionType": "positive"
+        },
+        {
+            "id": "reject",
+            "text": "Reject",
+            "decisionType": "negative"
+        }
+    ]
+}

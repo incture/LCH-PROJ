@@ -1,0 +1,135 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:ui="sap.ui.table"
+	xmlns:ExtPicker="com.incture.lch.Adhoc.control">
+	<l:Grid hSpacing="1" vSpacing="0" defaultSpan="XL3 L3 M12 S12" class="sapUiSmallMarginTopBottom">
+		<Label text="{i18n>SHIPPING_DETAILS}:" design="Bold" class="sapMLblTitle sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
+			<layoutData>
+				<l:GridData span="XL12 L12 M12 S12"/>
+			</layoutData>
+		</Label>
+		<Label design="Bold" text="{i18n>WEIGHT}" required="true" class="sapUiTinyMarginTop sapUiSmallMarginBegin"/>
+		<Input value="{mCommon>/newFU/weight}" maxLength="7" liveChange="onLiveChange" enabled="{mCommon>/bIsEditable}"
+			valueState="{mCommon>/valState/weight}" name="SHIPPING_WEIGHT_ID">
+			<layoutData>
+				<l:GridData span="XL2 L2 M6 S6"/>
+			</layoutData>
+		</Input>
+		<ComboBox width="100%" selectedKey="{mCommon>/newFU/weightUom}" placeholder="{i18n>UOM}" showSecondaryValues="true"
+			change="onChangeOptnlCBox" items="{path: 'mCommon>/aUomWeight',sorter:{ path:'text'},templateShareable:'true'}"
+			valueState="{mCommon>/valState/weightUom}" name="SHIPPING_WEIGHT_UOM_ID" enabled="{mCommon>/bIsEditable}">
+			<core:ListItem key="{mCommon>key}" text="{mCommon>key}" additionalText="{mCommon>text}"/>
+			<layoutData>
+				<l:GridData span="XL1 L1 M6 S6"/>
+			</layoutData>
+		</ComboBox>
+		<Label design="Bold" text="{i18n>PACKAGE_TYPE}" required="true" class="sapUiTinyMarginTop sapUiSmallMarginBegin">
+			<layoutData>
+				<l:GridData span="XL2 L2 M6 S6"/>
+			</layoutData>
+		</Label>
+		<ComboBox width="100%" selectedKey="{mCommon>/newFU/packageType}" showSecondaryValues="true" name="SHIPPING_PACKAGE_TYPE_ID"
+			items="{path: 'mCommon>/aPackageType',sorter:{ path:'text'},templateShareable:'true'}" enabled="{mCommon>/bIsEditable}"
+			valueState="{mCommon>/valState/packageType}" change="onChangeOptnlCBox">
+			<core:ListItem key="{mCommon>key}" text="{mCommon>text}" additionalText="{mCommon>key}"/>
+			<layoutData>
+				<l:GridData span="XL4 L4 M6 S6"/>
+			</layoutData>
+		</ComboBox>
+		<Label design="Bold" text="{i18n>TERMS}" required="true" class="sapUiTinyMarginTop sapUiSmallMarginBegin"/>
+		<ComboBox width="100%" selectedKey="{mCommon>/newFU/terms}" showSecondaryValues="false" change="onChangeOptnlCBox" name="SHIPPING_TERMS_ID"
+			items="{path: 'mCommon>/aTerms',sorter:{ path:'text'},templateShareable:'true'}" enabled="{mCommon>/bIsEditable}"
+			valueState="{mCommon>/valState/terms}">
+			<core:ListItem key="{mCommon>key}" text="{mCommon>text}" additionalText="{mCommon>key}"/>
+		</ComboBox>
+		<Label design="Bold" text="{i18n>DIMENSIONS}" required="true" class="sapUiTinyMarginTop sapUiSmallMarginBegin">
+			<layoutData>
+				<l:GridData span="XL2 L2 M6 S6"/>
+			</layoutData>
+		</Label>
+		<ComboBox width="100%" selectedKey="{mCommon>/newFU/dimensionsUom}" placeholder="{i18n>UOM}" showSecondaryValues="true"
+			name="SHIPPING_DIMENSIONS_ID" items="{path: 'mCommon>/aUomDimensions',sorter:{ path:'text'},templateShareable:'true'}"
+			enabled="{mCommon>/bIsEditable}" valueState="{mCommon>/valState/dimensionsUom}" change="onChangeOptnlCBox">
+			<core:ListItem key="{mCommon>key}" text="{mCommon>key}" additionalText="{mCommon>text}"/>
+			<layoutData>
+				<l:GridData span="XL1 L1 M6 S6"/>
+			</layoutData>
+		</ComboBox>
+		<Input placeholder="{i18n>LENGTH}" value="{mCommon>/newFU/dimensionL}" maxLength="7" liveChange="onLiveChange"
+			enabled="{mCommon>/bIsEditable}" valueState="{mCommon>/valState/dimensionL}" name="SHIPPING_DIMENSION_LENGTH_ID">
+			<layoutData>
+				<l:GridData span="XL1 L1 M2 S2"/>
+			</layoutData>
+		</Input>
+		<Input placeholder="{i18n>WIDTH}" value="{mCommon>/newFU/dimensionB}" maxLength="7" liveChange="onLiveChange"
+			enabled="{mCommon>/bIsEditable}" valueState="{mCommon>/valState/dimensionB}" name="SHIPPING_DIMENSION_WIDTH_ID">
+			<layoutData>
+				<l:GridData span="XL1 L1 M2 S2"/>
+			</layoutData>
+		</Input>
+		<Input placeholder="{i18n>HEIGHT}" value="{mCommon>/newFU/dimensionH}" maxLength="7" liveChange="onLiveChange"
+			enabled="{mCommon>/bIsEditable}" valueState="{mCommon>/valState/dimensionH}" name="SHIPPING_DIMENSION_HEIGHT_ID">
+			<layoutData>
+				<l:GridData span="XL1 L1 M2 S2"/>
+			</layoutData>
+		</Input>
+		<Label design="Bold" text="{i18n>PREMIUM_FREIGHT}" class="sapUiSmallMarginTop sapUiSmallMarginBegin" visible="{mCommon>/bEditPremium}">
+			<layoutData>
+				<l:GridData span="XL3 L3 M6 S6"/>
+			</layoutData>
+		</Label>
+		<Switch customTextOn="Yes" customTextOff="No" state="{mCommon>/newFU/premiumFreight}" name="SHIPPING_PREMIUM_FREIGHT_ID"
+			change="onTogglePremiumFreight" class="sapMSwitch sapUiTinyMarginTopBottom" enabled="{mCommon>/bIsEditable}"
+			visible="{mCommon>/bEditPremium}">
+			<layoutData>
+				<l:GridData span="XL1 L1 M2 S2"/>
+			</layoutData>
+		</Switch>
+		<ComboBox selectedKey="{mCommon>/newFU/premiumReasonCode}" showSecondaryValues="true" change="onChangeCBox" width="100%"
+			enabled="{parts:['mCommon>/bIsEditable','mCommon>/newFU/premiumFreight'],formatter:'.formatter.isBothNonEmpty'}"
+			valueState="{mCommon>/valState/premiumReasonCode}"
+			items="{path: 'mCommon>/aReasonCodes',sorter:{ path:'reasonCodeValue'},templateShareable:'true'}" name="DETAIL_REASON_CODE_ID"
+			visible="{mCommon>/bEditPremium}" class="premFreightReasonCode">
+			<core:ListItem key="{mCommon>reasonCodeKey}" text="{mCommon>reasonCodeValue}" additionalText="{mCommon>reasonCodeKey}"/>
+			<layoutData>
+				<l:GridData span="XL2 L2 M4 S4"/>
+			</layoutData>
+		</ComboBox>
+		<Label design="Bold" text="{i18n>PLANNER_EMAIL}" required="{mCommon>/newFU/premiumFreight}" class="sapUiTinyMarginTop sapUiSmallMarginBegin">
+			<layoutData>
+				<l:GridData span="XL2 L2 M6 S6"/>
+			</layoutData>
+		</Label>
+		<Input type="Email" value="{mCommon>/newFU/plannerEmail}" valueState="{mCommon>/valState/plannerEmail}" liveChange="onLiveChangeEmail" visible="{mCommon>/bEditPremium}" 
+			editable="{parts: [ 'mCommon>/bIsEditable', 'mCommon>/newFU/premiumFreight', 'mCommon>/enable/bPlannerEmail' ], formatter: '.formatter.isAllThreeNonEmpty'}">
+			<layoutData>
+				<l:GridData span="XL4 L4 M6 S6"/>
+			</layoutData>
+		</Input>
+		<Label design="Bold" text="{i18n>SHIPDATE}" class="sapUiTinyMarginTop sapUiSmallMarginBegin" required="true">
+			<layoutData>
+				<l:GridData linebreak="true"/>
+			</layoutData>
+		</Label>
+		<ExtPicker:ExtDateTimePicker minDate="{mCommon>/today}" initialFocusedDateValue="{mCommon>shipDate}" placeholder=" "
+			name="SHIPPING_SHIPDATE_ID" minutesStep="15" valueState="{mCommon>/valState/shipDate}" enabled="{mCommon>/bIsEditable}"
+			dateValue="{mCommon>/newFU/shipDate}" displayFormat="dd MMM yyyy, HH:mm" change="onChangeDate"/>
+		<Label design="Bold" text="{i18n>EXPECTED_DELIVERYDATE}" class="sapUiTinyMarginTop sapUiSmallMarginBegin" required="true">
+			<layoutData>
+				<l:GridData span="XL2 L2 M6 S6"/>
+			</layoutData>
+		</Label>
+		<ExtPicker:ExtDateTimePicker minDate="{mCommon>/today}" initialFocusedDateValue="{mCommon>shipDate}" placeholder=" "
+			enabled="{mCommon>/bIsEditable}" minutesStep="15" valueState="{mCommon>/valState/expectedDeliveryDate}"
+			name="SHIPPING_EXPECTED_DELIVERYDATE_ID" dateValue="{mCommon>/newFU/expectedDeliveryDate}" displayFormat="dd MMM yyyy, HH:mm"
+			change="onChangeDate">
+			<ExtPicker:layoutData>
+				<l:GridData span="XL4 L4 M6 S6"/>
+			</ExtPicker:layoutData>
+		</ExtPicker:ExtDateTimePicker>
+		<Label design="Bold" text="{i18n>SHIPPING_INSTRUCTIONS}" class="sapUiSmallMarginTop sapUiSmallMarginBegin"/>
+		<TextArea class="sapUiSmallMarginTop" cols="150" value="{mCommon>/newFU/shippingInstruction}" enabled="{mCommon>/bIsEditable}" name="SHIPPING_INSTRUCTIONS_ID">
+			<layoutData>
+				<l:GridData span="XL9 L9 M12 S12"/>
+			</layoutData>
+		</TextArea>
+	</l:Grid>
+</core:FragmentDefinition>

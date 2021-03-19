@@ -1,0 +1,17 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:ui="sap.ui.table"
+	xmlns:ExtPicker="com.incture.lch.Adhoc.control">
+	<Dialog title="{i18n>TRUCK}" afterClose="onAfterCloseDlgTruck" verticalScrolling="false"
+		horizontalScrolling="false">
+		<content>
+			<l:Grid hSpacing="1" vSpacing="0" defaultSpan="XL12 L12 M12 S12" class="sapUiSmallMarginTopBottom">
+				<VBox class="sapUiSmallMarginBegin">
+					<Label design="Bold" text="{i18n>VIN_NUMBER}"/>
+					<Input value="{mCommon>/newFU/vinNumber}" enabled="{mCommon>/enable/bVINNumber}" name="DETAIL_VIN_NUMBER_ID"/>
+				</VBox>
+			</l:Grid>
+		</content>
+		<endButton>
+			<Button text="{i18n>OK}" press="onCloseDlgTruck"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,50 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:ui="sap.ui.table" xmlns:u="sap.ui.unified"
+	controllerName="com.incture.lch.Adhoc.controller.Approval" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page showHeader="false">
+		<content>
+			<ui:Table rows="{mCommon>/aApproval}" selectionMode="None" visibleRowCountMode="Fixed" alternateRowColors="true"
+				enableColumnReordering="false" class="sapUiMediumMarginBegin sapUiSmallMarginEnd sapUiTableNoColBorders">
+				<ui:extension>
+					<Toolbar class="sapMtoolBar">
+						<content>
+							<Label design="Bold" class="sapUiMBlue" text="{i18n>ADHOC_APPROVAL}"/>
+							<ToolbarSpacer/>
+							<u:FileUploader id="fileUploader" name="myFileUpload" buttonOnly="true" buttonText="{i18n>UPLOAD}" 
+								icon="sap-icon://upload" iconFirst="true" class="customIcon" style="Emphasized" sendXHR="true" change="onUpload"/>
+							<Button text="{i18n>EXTRACT_TABLE_DATE}" class="customIcon" type="Emphasized" icon="sap-icon://excel-attachment" iconFirst="true"
+								enabled="true" visible="true" press="onExtract"></Button>
+							<Button text="{i18n>DOWNLOAD_TEMPLATE}" class="customIcon" type="Emphasized" icon="sap-icon://download" iconFirst="true" enabled="true"
+								visible="true" press="onDownloadTemplate"></Button>
+						</content>
+					</Toolbar>
+				</ui:extension>
+				<ui:columns >
+					<ui:Column tooltip="{i18n>ADHOC_TYPE}">
+						<Label text="{i18n>ADHOC_TYPE}" design="Bold"/>
+						<ui:template>
+							<Text text="{mCommon>adhocType}"/>
+						</ui:template>
+					</ui:Column>
+					<ui:Column tooltip="{i18n>USER_GROUP}">
+						<Label text="{i18n>USER_GROUP}" design="Bold"/>
+						<ui:template>
+							<Text text="{mCommon>userGroup}"/>
+						</ui:template>
+					</ui:Column>
+					<ui:Column tooltip="{i18n>APPROVER_TYPE}">
+						<Label text="{i18n>APPROVER_TYPE}" design="Bold"/>
+						<ui:template>
+							<Text text="{mCommon>approverType}"/>
+						</ui:template>
+					</ui:Column>
+					<ui:Column tooltip="{i18n>APPROVER}">
+						<Label text="{i18n>APPROVER}" design="Bold"/>
+						<ui:template>
+							<Text text="{mCommon>approverEmail}"/>
+						</ui:template>
+					</ui:Column>
+				</ui:columns>
+			</ui:Table>
+		</content>
+	</Page>
+</mvc:View>

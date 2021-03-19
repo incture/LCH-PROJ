@@ -1,0 +1,108 @@
+{
+	"_version": "3.0.0",
+	"identification": {
+		"id": "54032806-1287-4ec6-81b3-4e6c2290c1e8-1614839748651",
+		"entityType": "bundle"
+	},
+	"payload": {
+		"catalogs": [{
+			"_version": "3.0.0",
+			"identification": {
+				"id": "defaultCatalogId",
+				"title": "{{title}}",
+				"entityType": "catalog",
+				"i18n": "i18n/defaultCatalogId.properties"
+			},
+			"payload": {
+				"viz": []
+			}
+		}],
+		"groups": [{
+			"_version": "3.0.0",
+			"identification": {
+				"id": "defaultGroupId",
+				"title": "{{title}}",
+				"entityType": "group",
+				"i18n": "i18n/defaultGroupId.properties"
+			},
+			"payload": {
+				"viz": [{
+					"id": "com.sap.bpm.monitorworkflow-0-1614840273474",
+					"appId": "com.sap.bpm.monitorworkflow",
+					"vizId": "bpmworkflowmonitor-DisplayInstances"
+				}, {
+					"id": "com.sap.bpm.monitorworkflow-1-1614840273474",
+					"appId": "com.sap.bpm.monitorworkflow",
+					"vizId": "bpmworkflowmonitor-DisplayDefinitions"
+				}, {
+					"id": "cross.fnd.fiori.inbox-2-1614840273474",
+					"appId": "cross.fnd.fiori.inbox",
+					"vizId": "WorkflowTask-DisplayMyInbox"
+				}]
+			}
+		}, {
+			"_version": "3.0.0",
+			"identification": {
+				"id": "adhoc",
+				"title": "{{title}}",
+				"entityType": "group",
+				"i18n": "i18n/adhoc.properties"
+			},
+			"payload": {
+				"viz": [{
+					"id": "com.incture.lch.Adhoc-0-1614840544717",
+					"appId": "com.incture.lch.Adhoc",
+					"vizId": "object1adhoc-display"
+				}]
+			}
+		}, {
+			"_version": "3.0.0",
+			"identification": {
+				"id": "premium-freights",
+				"title": "{{title}}",
+				"entityType": "group",
+				"i18n": "i18n/premium-freights.properties"
+			},
+			"payload": {
+				"viz": [{
+					"id": "com.incture.lch.premfreightOrders-0-1615877383059",
+					"appId": "com.incture.lch.premfreightOrders",
+					"vizId": "object1premfreightorders-display"
+				}]
+			}
+		}],
+		"sites": [{
+			"_version": "3.0.0",
+			"identification": {
+				"id": "6f184b5f-802e-4f19-8b84-2b7cce0fc5d9-1614839748651",
+				"entityType": "site",
+				"title": "SAP Fiori launchpad site on Cloud Foundry",
+				"description": "SAP Fiori launchpad site on Cloud Foundry, deployed from SAP Web IDE"
+			},
+			"payload": {
+				"config": {
+					"ushellConfig": {
+						"renderers": {
+							"fiori2": {
+								"componentData": {
+									"config": {
+										"applications": {
+											"Shell-home": {}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"groupsOrder": ["defaultGroupId", "adhoc", "premium-freights"],
+				"sap.cloud.portal": {
+					"config": {
+						"theme.id": "sap_fiori_3",
+						"theme.active": ["sap_fiori_3", "sap_fiori_3_dark", "sap_belize_hcb", "sap_belize_hcw"]
+					}
+				}
+			}
+		}]
+	}
+}

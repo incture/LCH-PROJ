@@ -1,0 +1,607 @@
+{
+	"bIsEditable": true,
+	"bEditPremium": true,
+	"sIconShip": "sap-icon://write-new",
+	"sIconDest": "sap-icon://write-new",
+	"enable": {
+		"bHazmatNumber": false,
+		"bVINNumber": false,
+		"bNewShip": false,
+		"bNewDest": false,
+		"bPartDesc": true,
+		"bPlannerEmail": true
+	},
+	"visible": {
+		"bClearAll": false,
+		"bSubmit": false,
+		"bOriginFreeText": false,
+		"bDestFreeText": false,
+		"bNext": false,
+		"bBack": false
+	},
+	"valState": {
+		"adhocType": "None",
+		"businessDivision": "None",
+		"countryOrigin": "None",
+		"shipperName": "None",
+		"destinationName": "None",
+		"shipDate": "None",
+		"partDescription": "None",
+		"partNum": "None",
+		"expectedDeliveryDate": "None",
+		"quantity": "None",
+		"qtyUom": "None",
+		"weight": "None",
+		"weightUom": "None",
+		"packageType": "None",
+		"terms": "None",
+		"dimensionsUom": "None",
+		"dimensionL": "None",
+		"dimensionB": "None",
+		"dimensionH": "None",
+		"sOriginAddress": "None",
+		"sOriginCity": "None",
+		"sOriginState": "None",
+		"sOriginZip": "None",
+		"sOriginCountry": "None",
+		"sDestinationAddress": "None",
+		"sDestinationCity": "None",
+		"sDestinationState": "None",
+		"sDestinationZip": "None",
+		"sDestinationCountry": "None",
+		"premiumReasonCode": "None",
+		"plannerEmail": "None"
+	},
+	"iLenHistory": 0,
+	"selNavKeyBckUp": "",
+	"selNavigationKey": "kOrder",
+	"aAdhocType": [{
+		"adhocName": "Returnable"
+	}, {
+		"adhocName": "Carryout"
+	},
+		{
+		"adhocName": "Inventory"
+	},
+		{
+		"adhocName": "AS IS"
+	}],
+	"aHistory": [],
+	"aCountries": [],
+	"aCurrency": [{
+			"key": "PLN",
+			"currency": "Polish zloty",
+			"country": "Poland"
+		}, {
+			"key": "DKK",
+			"currency": "Danish krone",
+			"country": "Denmark"
+		}, {
+			"key": "EUR",
+			"currency": "European euro",
+			"country": "France"
+		}, {
+			"key": "SEK",
+			"currency": "Swedish krona",
+			"country": "Sweden"
+		}, {
+			"key": "CHF",
+			"currency": "Swiss franc",
+			"country": "Switzerland"
+		}, {
+			"key": "GBP",
+			"currency": "Pound sterling",
+			"country": "United Kingdom"
+		},
+
+		{
+			"key": "AFN",
+			"currency": "Afghan afghani",
+			"country": "Afghanistan"
+		}, {
+			"key": "BTN",
+			"currency": "Bhutanese ngultrum",
+			"country": "Bhutan"
+		}, {
+			"key": "AUD",
+			"currency": "Australian dollar",
+			"country": "Christmas Island"
+		}, {
+			"key": "CNY",
+			"currency": "Chinese Yuan Renminbi",
+			"country": "China"
+		}, {
+			"key": "GEL",
+			"currency": "Georgian lari",
+			"country": "Georgia"
+		}, {
+			"key": "INR",
+			"currency": "Indian rupee",
+			"country": "India"
+		}, {
+			"key": "KGS",
+			"currency": "Kyrgyzstani som",
+			"country": "Kyrgyzstan "
+		}, {
+			"key": "RUB",
+			"currency": "Russian ruble",
+			"country": "Russia"
+		}, {
+			"key": "EUR",
+			"country": "Mexico",
+			"currency": "Mexican peso"
+		}, {
+			"key": "USD",
+			"country": "United States of America",
+			"currency": "United States dollar"
+		}, {
+			"key": "HNL",
+			"country": "Honduras",
+			"currency": "Honduran lempira"
+		}, {
+			"key": "USD",
+			"country": "Panama",
+			"currency": "United States dollar"
+		}, {
+			"key": "CUP",
+			"country": "Cuba",
+			"currency": "Cuban peso"
+		}, {
+			"key": "BZD",
+			"country": "Belize",
+			"currency": "Belize dollar"
+		}
+	],
+
+	"aDestination": [{
+		"Locno": "US01",
+		"LocDesc": "US01"
+	}, {
+		"Locno": "US02",
+		"LocDesc": "US02"
+	}],
+
+	"aPackageType": [{
+		"key": "ZSTR",
+		"text": "Steel Rack"
+	}, {
+		"key": "ZBIN",
+		"text": "Plastic Bin"
+	}, {
+		"key": "ZBUN",
+		"text": "Bundle"
+	}, {
+		"key": "ZCOP",
+		"text": "Carton on Pallet"
+	}, {
+		"key": "ZCRT",
+		"text": "Crate"
+	}, {
+		"key": "ZCTN",
+		"text": "Carton"
+	}, {
+		"key": "ZDRM",
+		"text": "Drum"
+	}, {
+		"key": "ZPPT",
+		"text": "Plastic Pallet"
+	}, {
+		"key": "ZREL",
+		"text": "Reel"
+	}, {
+		"key": "ZSRR",
+		"text": "Returnable Racks"
+	}, {
+		"key": "ZTOT",
+		"text": "Plastic Tote"
+	}, {
+		"key": "ZTRM",
+		"text": "Thermoform Tray"
+	}, {
+		"key": "ZWPT",
+		"text": "Wood Pallet"
+	}],
+	"aReasonCodes": [{
+		"key": "UNK",
+		"text": "UNKNOWN/Not yet determined"
+	}, {
+		"key": "PRM",
+		"text": "Production Mis-uses"
+	}, {
+		"key": "PVL",
+		"text": "Planning: Vendor Late"
+	}, {
+		"key": "RPR",
+		"text": "Reject: Production"
+	}, {
+		"key": "RVR-D",
+		"text": "Reject: Vendor Reject DEBIT"
+	}, {
+		"key": "RVR",
+		"text": "Reject: Vendor Reject"
+	}, {
+		"key": "SCN",
+		"text": "Scan: Bin not scanned"
+	}, {
+		"key": "SLT",
+		"text": "Short Lead Time"
+	}, {
+		"key": "AWP",
+		"text": "A&W Productions Issue: late, not in kit, etc."
+	}, {
+		"key": "CEV",
+		"text": "CEVA Issue: late, not in kit, etc."
+	}, {
+		"key": "BOH3",
+		"text": "Bad on Hand at 3rd party location"
+	}, {
+		"key": "BOH",
+		"text": "Bad on Hand"
+	}, {
+		"key": "CKT",
+		"text": "CK Tech Issue: late, not in kit, etc."
+	}, {
+		"key": "ECN",
+		"text": "Engineering Change Notice"
+	}, {
+		"key": "FAB",
+		"text": "Fuel Tank Weld"
+	}, {
+		"key": "FLT",
+		"text": "Fleet Issue: late, not in kit, etc."
+	}, {
+		"key": "MHL",
+		"text": "Material Handling related: here but late to line"
+	}, {
+		"key": "NEW",
+		"text": "New or Protoype parts"
+	}, {
+		"key": "GPT",
+		"text": "Gravel Pad Trailer"
+	}, {
+		"key": "PLE",
+		"text": "Planning Error"
+	}, {
+		"key": "TRL",
+		"text": "Traffic late"
+	}, {
+		"key": "NIC-D",
+		"text": "NIC Issue: late, not in kit, etc. DEBIT"
+	}, {
+		"key": "SYS",
+		"text": "System issue, EDI, etc."
+	}, {
+		"key": "AWP-D",
+		"text": "A&W Productions Issue: late, not in kit, etc. DEBIT"
+	}, {
+		"key": "CEV-D",
+		"text": "CEVA Issue: late, not in kit, etc. DEBIT"
+	}, {
+		"key": "CKT-D",
+		"text": "CK Tech Issue: late, not in kit, etc. DEBIT"
+	}, {
+		"key": "PVL-D",
+		"text": "Planning: Vendor Late DEBIT"
+	}, {
+		"key": "SLT-D",
+		"text": "Short Lead Time, DEBIT"
+	}, {
+		"key": "SYS-D",
+		"text": "System issue, EDI, etc. DEBIT SUPPLIER"
+	}, {
+		"key": "FLT-D",
+		"text": "Fleet Issue: late, not in kit, etc. DEBIT"
+	}, {
+		"key": "NIC",
+		"text": "NIC Issue: late, not in kit, etc."
+	}, {
+		"key": "BOH3D",
+		"text": "Bad on Hand at 3rd party location DEBIT  (specify vendor code to debit)"
+	}, {
+		"key": "TRL-W",
+		"text": "Transportation late - WEATHER"
+	}, {
+		"key": "NORM",
+		"text": "Normal Routing per material planner"
+	}, {
+		"key": "ELT-D",
+		"text": "ELITE Issue: late, not in kit, etc. DEBIT"
+	}],
+	"aLocReceivers": [],
+	"aLocShippers": [],
+	"aSupplier": [],
+	"aTerms": [{
+		"key": "CC",
+		"text": "Collect"
+	}, {
+		"key": "PP",
+		"text": "Prepaid"
+	}, {
+		"key": "TP",
+		"text": "Third Party"
+	}],
+
+	"aLineSequences": [],
+	"aUomQty": [{
+		"key": "EA",
+		"text": "Each"
+	}, {
+		"key": "BX",
+		"text": "Box"
+	}],
+	"aUomWeight": [{
+		"key": "KG",
+		"text": "Kilo Gram"
+	}, {
+		"key": "TN",
+		"text": "Ton"
+	}, {
+		"key": "LBS",
+		"text": "Pound"
+	}],
+	"aUomDimensions": [{
+		"key": "MM",
+		"text": "Millimeters"
+	}, {
+		"key": "CM",
+		"text": "Centimeters"
+	}, {
+		"key": "IN",
+		"text": "Inches"
+	}, {
+		"key": "FT",
+		"text": "Feet"
+	}],
+
+	"newFU": {
+		"adhocType": "",
+		"adhocOrderId": "",
+		"businessDivision": "",
+		"charge": false,
+		"countryOrigin": "US",
+		"createdBy": "",
+		"createdDate": null,
+		"currency": "USD",
+		"customerOrderNo": "",
+		"destinationAddress": "",
+		"destinationCity": "",
+		"destinationName": "",
+		"destinationNameFreeText": "",
+		"destinationState": "",
+		"destinationZip": "",
+		"dimensionL": "",
+		"dimensionH": "",
+		"dimensionB": "",
+		"dimensionsUom": "IN",
+		"expectedDeliveryDate": null,
+		"glcode": "",
+		"hazmatNumber": "",
+		"hazmatUn": "",
+		"originAddress": "",
+		"originCity": "",
+		"originState": "",
+		"originZip": "",
+		"isHazmat": false,
+		"isInternational": false,
+		"isTruck": false,
+		"packageType": "",
+		"partNum": "",
+		"partNumText": "",
+		"partDescription": "",
+		"podataNumber": "",
+		"premiumFreight": false,
+		"premiumReasonCode": "",
+		"plannerEmail": "",
+		"projectNumber": "",
+		"quantity": "",
+		"reasonCode": "",
+		"receivingContact": "",
+		"referenceNumber": "",
+		"shipDate": null,
+		"shipperName": "",
+		"shipperNameFreeText": "",
+		"shippingInstruction": "",
+		"shippingContact": "",
+		"terms": "",
+		"updatedBy": "",
+		"updatedDate": null,
+		"userId": "",
+		"userName": "",
+		"userEmail": "",
+		"uom": "EA",
+		"value": "",
+		"vinNumber": "",
+		"weight": "",
+		"weightUom": "LBS"
+	},
+
+	"aColumn": [],
+	"aApproval" : [],
+
+	"aFUColumnBackup": [{
+		"preferenceId": "",
+		"columnName": "adhocOrderId",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": false,
+		"sequenceHistory": 1,
+		"sequence": 1
+	}, {
+		"preferenceId": "",
+		"columnName": "businessDivision",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequenceHistory": 2,
+		"sequence": 2
+	}, {
+		"preferenceId": "",
+		"columnName": "countryOrigin",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequenceHistory": 3,
+		"sequence": 3
+	}, {
+		"preferenceId": "",
+		"columnName": "createdBy",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequenceHistory": 4,
+		"sequence": 4
+	}, {
+		"preferenceId": "",
+		"columnName": "createdDate",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequenceHistory": 5,
+		"sequence": 5
+	}, {
+		"preferenceId": "",
+		"columnName": "currency",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequenceHistory": 6,
+		"sequence": 6
+	}, {
+		"preferenceId": "",
+		"columnName": "destinationAddress",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequenceHistory": 7,
+		"sequence": 7
+	}, {
+		"preferenceId": "",
+		"columnName": "destinationCity",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequenceHistory": 8,
+		"sequence": 8
+	}, {
+		"preferenceId": "",
+		"columnName": "destinationName",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequenceHistory": 9,
+		"sequence": 9
+	}, {
+		"preferenceId": "",
+		"columnName": "destinationState",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequenceHistory": 10,
+		"sequence": 10
+	}, {
+		"preferenceId": "",
+		"columnName": "destinationZip",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequenceHistory": 11,
+		"sequence": 11
+	}, {
+		"preferenceId": "",
+		"columnName": "expectedDeliveryDate",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": false,
+		"sequenceHistory": 12,
+		"sequence": 12
+	}, {
+		"preferenceId": "",
+		"columnName": "originAddress",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequenceHistory": 13,
+		"sequence": 13
+	}, {
+		"preferenceId": "",
+		"columnName": "originCity",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequenceHistory": 14,
+		"sequence": 14
+	}, {
+		"preferenceId": "",
+		"columnName": "originState",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequenceHistory": 15,
+		"sequence": 15
+	}, {
+		"preferenceId": "",
+		"columnName": "originZip",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequenceHistory": 16,
+		"sequence": 16
+	}, {
+		"preferenceId": "",
+		"columnName": "packageType",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequenceHistory": 17,
+		"sequence": 17
+	}, {
+		"preferenceId": "",
+		"columnName": "partNum",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequenceHistory": 18,
+		"sequence": 18
+	}, {
+		"preferenceId": "",
+		"columnName": "partDescription",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequenceHistory": 19,
+		"sequence": 19
+	}, {
+		"preferenceId": "",
+		"columnName": "quantity",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": false,
+		"sequenceHistory": 20,
+		"sequence": 20
+	}, {
+		"preferenceId": "",
+		"columnName": "shipDate",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": false,
+		"sequenceHistory": 21,
+		"sequence": 21
+	}, {
+		"preferenceId": "",
+		"columnName": "weight",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": false,
+		"sequenceHistory": 22,
+		"sequence": 22
+	}, {
+		"preferenceId": "",
+		"columnName": "copy",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": false,
+		"sequenceHistory": 23,
+		"sequence": 23
+	}]
+
+}

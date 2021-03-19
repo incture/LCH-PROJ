@@ -1,0 +1,447 @@
+{
+	"today": null,
+
+	"bTotalFu": true,
+	"bNext24H": false,
+	"bNext72H": false,
+	"bNext7D": false,
+	"bPastFu": false,
+
+	"iFuLength": 0,
+
+	"TotalFuCount": 0,
+	"Next7d": 0,
+	"Next72h": 0,
+	"Next24h": 0,
+	"PastFu": 0,
+
+	"selNavigationKey": "Orders",
+
+	"oRoleConfig": {
+		"bEditable": true
+	},
+
+	"userDetails": {},
+	"valStFltrOriginID": "None",
+	"visible": {
+		"bBack": false,
+		"bEdit": false,
+		"bConfirmOrder": false,
+		"bDeleteDraft": false,
+		"bDeleteGroup": false,
+		"bGroupConfirm": false,
+		"bApplyAll": false,
+		"bInputFields": true,
+		"bLabelNonVisible": false,
+		"bSaveAsDraft": false,
+
+		"bDestination": false
+	},
+
+	"enable": {
+		"bBack": false,
+		"bConfirmOrder": false,
+		"bDeleteDraft": false,
+		"bDeleteGroup": false,
+		"bEdit": false,
+		"bGroupConfirm": false,
+		"bApplyAll": false,
+		"bGroupField": false,
+		"bLoadMore": false,
+		"bSaveAsDraft": false,
+		"bRmngShipDate": false,
+		"bGrpCnfrm": false,
+		"bOriginId": true,
+		"bPropShipDate": true,
+		"bPropQty": true,
+		"bCountry": true,
+		"bAddNewBtn": false,
+		"bupload": false
+	},
+
+	"rowcounts": [{
+		"key": "5",
+		"value": "5"
+	}, {
+		"key": "10",
+		"value": "10"
+	}, {
+		"key": "15",
+		"value": "15"
+	}, {
+		"key": "20",
+		"value": "20"
+	}],
+
+	"aSupplier": [{
+		"id": "14105AC"
+	}, {
+		"id": "14105AD"
+	}, {
+		"id": "20784MM"
+	}, {
+		"id": "00470GA"
+	}, {
+		"id": "00470MX"
+	}, {
+		"id": "10660AE"
+	}, {
+		"id": "04088CA"
+	}],
+
+	"aReasonCodes": [{
+		"key": "UNK",
+		"text": "UNKNOWN/Not yet determined"
+	}, {
+		"key": "PRM",
+		"text": "Production Mis-uses"
+	}, {
+		"key": "PVL",
+		"text": "Planning: Vendor Late"
+	}, {
+		"key": "RPR",
+		"text": "Reject: Production"
+	}, {
+		"key": "RVR-D",
+		"text": "Reject: Vendor Reject DEBIT"
+	}, {
+		"key": "RVR",
+		"text": "Reject: Vendor Reject"
+	}, {
+		"key": "SCN",
+		"text": "Scan: Bin not scanned"
+	}, {
+		"key": "SLT",
+		"text": "Short Lead Time"
+	}, {
+		"key": "AWP",
+		"text": "A&W Productions Issue: late, not in kit, etc."
+	}, {
+		"key": "CEV",
+		"text": "CEVA Issue: late, not in kit, etc."
+	}, {
+		"key": "BOH3",
+		"text": "Bad on Hand at 3rd party location"
+	}, {
+		"key": "BOH",
+		"text": "Bad on Hand"
+	}, {
+		"key": "CKT",
+		"text": "CK Tech Issue: late, not in kit, etc."
+	}, {
+		"key": "ECN",
+		"text": "Engineering Change Notice"
+	}, {
+		"key": "FAB",
+		"text": "Fuel Tank Weld"
+	}, {
+		"key": "FLT",
+		"text": "Fleet Issue: late, not in kit, etc."
+	}, {
+		"key": "MHL",
+		"text": "Material Handling related: here but late to line"
+	}, {
+		"key": "NEW",
+		"text": "New or Protoype parts"
+	}, {
+		"key": "GPT",
+		"text": "Gravel Pad Trailer"
+	}, {
+		"key": "PLE",
+		"text": "Planning Error"
+	}, {
+		"key": "TRL",
+		"text": "Traffic late"
+	}, {
+		"key": "NIC-D",
+		"text": "NIC Issue: late, not in kit, etc. DEBIT"
+	}, {
+		"key": "SYS",
+		"text": "System issue, EDI, etc."
+	}, {
+		"key": "AWP-D",
+		"text": "A&W Productions Issue: late, not in kit, etc. DEBIT"
+	}, {
+		"key": "CEV-D",
+		"text": "CEVA Issue: late, not in kit, etc. DEBIT"
+	}, {
+		"key": "CKT-D",
+		"text": "CK Tech Issue: late, not in kit, etc. DEBIT"
+	}, {
+		"key": "PVL-D",
+		"text": "Planning: Vendor Late DEBIT"
+	}, {
+		"key": "SLT-D",
+		"text": "Short Lead Time, DEBIT"
+	}, {
+		"key": "SYS-D",
+		"text": "System issue, EDI, etc. DEBIT SUPPLIER"
+	}, {
+		"key": "FLT-D",
+		"text": "Fleet Issue: late, not in kit, etc. DEBIT"
+	}, {
+		"key": "NIC",
+		"text": "NIC Issue: late, not in kit, etc."
+	}, {
+		"key": "BOH3D",
+		"text": "Bad on Hand at 3rd party location DEBIT  (specify vendor code to debit)"
+	}, {
+		"key": "TRL-W",
+		"text": "Transportation late - WEATHER"
+	}, {
+		"key": "NORM",
+		"text": "Normal Routing per material planner"
+	}, {
+		"key": "ELT-D",
+		"text": "ELITE Issue: late, not in kit, etc. DEBIT"
+	}],
+
+	"aOrigin": [{
+		"originName": "PORT-MELBOURNE"
+	}, {
+		"originName": "Eastern Michigan"
+	}, {
+		"originName": "Robert Kensworth"
+	}, {
+		"originName": "Key Trucking Inc."
+	}, {
+		"originName": "Weldon manufacturing"
+	}, {
+		"originName": "Lee Taylor and Company"
+	}, {
+		"originName": "F&P Manufacturing Inc."
+	}, {
+		"originName": "Fido Solutions"
+	}, {
+		"originName": "GuestLogix"
+	}, {
+		"originName": "Ballarpur Industries"
+	}, {
+		"originName": "Magna International"
+	}, {
+		"originName": "Potash Corporation of Saskatchewan"
+	}, {
+		"originName": "Division Distribution Circle"
+	}, {
+		"originName": "Pratt & Whitney Canada"
+	}, {
+		"originName": "Berkshire Hathaway"
+	}, {
+		"originName": "Walgreens Boots Alliance"
+	}, {
+		"originName": "Archer Daniels Midland"
+	}, {
+		"originName": "Penske Automotive Group"
+	}, {
+		"originName": "Lee Taylor"
+	}, {
+		"originName": "Thallasery Productions"
+	}, {
+		"originName": "Kapoors and Sons"
+	}, {
+		"originName": "Karthika Industries"
+	}, {
+		"originName": "Incture Technologies"
+	}],
+
+	"aStatus": [{
+		"status": "Approved"
+	}, {
+		"status": "Pending With Approver"
+	}, {
+		"status": "Pending with Carrier Admin"
+	}, {
+		"status": "COMPLETED"
+	}],
+
+	"aDestination": [{
+			"key": "KR00",
+			"value": "Kenworth Renton"
+		}, {
+			"key": "KR01",
+			"value": "Kenworth Renton"
+		}, {
+			"key": "KR02",
+			"value": "Kenworth Renton"
+		},
+
+		{
+			"key": "KC00",
+			"value": "Kenworth Chillicothe"
+		}, {
+			"key": "KC01",
+			"value": "Kenworth Chillicothe"
+		}, {
+			"key": "KC03",
+			"value": "Kenworth Chillicothe"
+		},
+
+		{
+			"key": "CM01",
+			"value": "PACCAR Ste. Therese"
+		}, {
+			"key": "CM04",
+			"value": "PACCAR Ste. Therese"
+		}, {
+			"key": "CM05",
+			"value": "PACCAR Ste. Therese"
+		},
+
+		{
+			"key": "PD01",
+			"value": "Peterbilt Denton"
+		}, {
+			"key": "PD02",
+			"value": "Peterbilt Denton"
+		}, {
+			"key": "PD03",
+			"value": "Peterbilt Denton"
+		},
+
+		{
+			"key": "CX YARD 1",
+			"value": "Kenworth Mexico"
+		}, {
+			"key": "CX01",
+			"value": "Kenworth Mexico"
+		}, {
+			"key": "CX02",
+			"value": "Kenworth Mexico"
+		}, {
+			"key": "CX05",
+			"value": "Kenworth Mexico"
+		}
+	],
+
+	"aPremfreightorders": [],
+
+	"aColumn": [],
+
+	"aFUColumnBackUp": [{
+		"preferenceId": "",
+		"columnName": "Sel",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": false,
+		"sequence": 1
+	}, {
+		"preferenceId": "",
+		"columnName": "FU",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequence": 2
+	}, {
+		"preferenceId": "",
+		"columnName": "PartNum",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequence": 4
+	}, {
+		"preferenceId": "",
+		"columnName": "LSeqNum",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequence": 5
+	}, {
+		"preferenceId": "",
+		"columnName": "OriginId",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequence": 3
+	}, {
+		"preferenceId": "",
+		"columnName": "ShipOn",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequence": 6
+	}, {
+		"preferenceId": "",
+		"columnName": "Qty",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequence": 7
+	}, {
+		"preferenceId": "",
+		"columnName": "NewShipOn",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequence": 8
+	}, {
+		"preferenceId": "",
+		"columnName": "NewQty",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequence": 9
+	}, {
+		"preferenceId": "",
+		"columnName": "RemShipOn",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequence": 10
+	}, {
+		"preferenceId": "",
+		"columnName": "RemQty",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequence": 11
+	}, {
+		"preferenceId": "",
+		"columnName": "DesId",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequence": 12
+	}, {
+		"preferenceId": "",
+		"columnName": "COO",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequence": 13
+	}, {
+		"preferenceId": "",
+		"columnName": "PO",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequence": 14
+	}, {
+		"preferenceId": "",
+		"columnName": "PartDesc",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": true,
+		"sequence": 15
+	}, {
+		"preferenceId": "",
+		"columnName": "SupPartNum",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequence": 16
+	}, {
+		"preferenceId": "",
+		"columnName": "CustOrdNum",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequence": 17
+	}, {
+		"preferenceId": "",
+		"columnName": "DraftStatus",
+		"isVisible": true,
+		"isMandatory": true,
+		"isEditable": false,
+		"sequence": 99
+	}]
+}

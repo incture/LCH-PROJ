@@ -1,0 +1,53 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:ui="sap.ui.table">
+	<Dialog showHeader="false" contentHeight="100%" contentWidth="50%" afterClose="onAfterCloseFuCustomize" verticalScrolling="false"
+		horizontalScrolling="false">
+		<content>
+			<ui:Table rows="{mCommon>/tabCust/columns}" selectionMode="None" visibleRowCountMode="Auto" alternateRowColors="true"
+				enableColumnReordering="false" class="sapUiSizeCompact sapUiMediumMarginBegin sapUiMediumMarginEnd sapUiTableNoColBorders">
+				<ui:extension>
+					<Toolbar>
+						<ToolbarSpacer/>
+						<Title text="{i18n>CUSTOMIZATION}" level="H2"/>
+						<ToolbarSpacer/>
+					</Toolbar>
+				</ui:extension>
+				<ui:columns>
+					<ui:Column width="12rem">
+						<Label text="{i18n>COLUM_DESC}" tooltip="{i18n>COLUMN_DESCRIPTION}" design="Bold"/>
+						<ui:template >
+						<Text text="{path:'mCommon>columnName',formatter:'.fnGetColDesc'}"/>
+					<!--	<Text text="{mCommon>columnName}"/>-->
+						</ui:template>
+					</ui:Column>
+					<ui:Column width="8rem">
+						<Label text="{i18n>VISIBLE}" tooltip="{i18n>VISIBLE_DESCRIPTION}" design="Bold"/>
+						<ui:template>
+							<Switch state="{mCommon>isVisible}" enabled="{= ${mCommon>isMandatory} ? false : true}" customTextOn="{i18n>YES}"
+								customTextOff="{i18n>NO}" class="sapMSwitch"/>
+						</ui:template>
+					</ui:Column>
+					<ui:Column width="8rem" sortProperty="sequenceHistory">
+						<Label text="{i18n>ORDER}" tooltip="{i18n>ORDER_DESCRIPTION}" design="Bold"/>
+						<ui:template >
+							<Input value="{mCommon>sequenceHistory}" name="CUST_ORDER_DESCRIPTION" editable="false" maxLength="2"/>
+						</ui:template>
+					</ui:Column>
+					<ui:Column width="8rem" sortProperty="sequence">
+						<Label text="{i18n>CURRENT_ORDER}" tooltip="{i18n>CURRENT_ORDER}" design="Bold"/>
+						<ui:template >
+							<Input value="{mCommon>sequence}" name="CUST_ORDER_DESCRIPTION" editable="{mCommon>isEditable}" maxLength="2"
+								change="fnNumberOnlyLiveChange"/>
+						</ui:template>
+					</ui:Column>
+				</ui:columns>
+			</ui:Table>
+		</content>
+		
+		<buttons class="sapUiSizeCompact">
+			<Button text="{i18n>CANCEL}" press="onCancelFuCutomize" type="Emphasized" class="sapUiMCancleBtn sapUiSizeCompact"/>
+			<Button icon="sap-icon://reset" text="{i18n>RESET_DEFAULT}" class="sapUiSizeCompact" type="Reject" visible="false"
+				press="onResetCustomization"/>
+			<Button icon="sap-icon://save" text="{i18n>SAVE_CHANGES}" class="sapUiSizeCompact" type="Emphasized" press="onSaveCustomization"/>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

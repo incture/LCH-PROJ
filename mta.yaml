@@ -1,0 +1,138 @@
+ID: LCH
+_schema-version: '2.1'
+parameters:
+  deploy_mode: html5-repo
+version: 0.0.1
+modules:
+  - name: lch-approuter
+    type: approuter.nodejs
+    path: lch-approuter
+    parameters:
+      disk-quota: 256M
+      memory: 256M
+    requires:
+      - name: LCH_html5_repo_runtime
+      - name: dest_LCH
+      - name: UserNode_api
+        group: destinations
+        properties:
+          name: UserNode_api
+          url: '~{url}'
+          forwardAuthToken: true
+      - name: lch_workflow
+      - name: portal_resources_LCH
+      - name: uaa_LCH
+  - name: LCH_ui_deployer
+    type: com.sap.html5.application-content
+    path: LCH_ui_deployer
+    requires:
+      - name: LCH_html5_repo_host
+    build-parameters:
+      requires:
+        - name: Adhoc
+          artifacts:
+            - './*'
+          target-path: resources/Adhoc
+        - name: adhocApproval
+          artifacts:
+            - './*'
+          target-path: resources/adhocApproval
+        - name: premfreightOrders
+          artifacts:
+            - './*'
+          target-path: resources/premfreightOrders
+  - name: Adhoc
+    type: html5
+    path: Adhoc
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist
+  - name: UserNode
+    type: nodejs
+    path: UserNode
+    parameters:
+      disk-quota: 256M
+      memory: 128M
+    provides:
+      - name: UserNode_api
+        properties:
+          url: '${default-url}'
+    properties:
+      UAA_SERVICE_NAME: uaa_LCH
+    requires:
+      - name: uaa_LCH
+  - name: workflow
+    type: com.sap.application.content
+    path: workflow
+    requires:
+      - name: lch_workflow
+        parameters:
+          content-target: true
+  - name: lch_fiori
+    type: com.sap.application.portal.content
+    path: lch_fiori
+    requires:
+      - name: portal_resources_LCH
+        parameters:
+          service-key:
+            name: content-deploy-key
+            config:
+              content-endpoint: developer
+          content-target: true
+      - name: uaa_LCH
+      - name: lch_workflow
+      - name: LCH_html5_repo_host
+      - name: LCH_ui_deployer
+  - name: adhocApproval
+    type: html5
+    path: adhocApproval
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist
+  - name: premfreightOrders
+    type: html5
+    path: premfreightOrders
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist
+resources:
+  - name: LCH_html5_repo_runtime
+    parameters:
+      service-plan: app-runtime
+      service: html5-apps-repo
+    type: org.cloudfoundry.managed-service
+  - name: LCH_html5_repo_host
+    parameters:
+      service-plan: app-host
+      service: html5-apps-repo
+    type: org.cloudfoundry.managed-service
+  - name: uaa_LCH
+    parameters:
+      path: ./xs-security.json
+      service-plan: application
+      service: xsuaa
+    type: org.cloudfoundry.managed-service
+  - name: dest_LCH
+    parameters:
+      service-plan: lite
+      service: destination
+    type: org.cloudfoundry.managed-service
+  - name: lch_workflow
+    type: org.cloudfoundry.existing-service
+  - name: portal_resources_LCH
+    parameters:
+      service-plan: standard
+      service: portal
+    type: org.cloudfoundry.managed-service

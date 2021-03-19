@@ -1,0 +1,56 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="com.incture.lch.Adhoc.controller.Order"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" xmlns:f="sap.f" xmlns:form="sap.ui.layout.form" xmlns:u="sap.ui.unified">
+	<Page showHeader="false" class="sapUiSizeCompact">
+		<content>
+			<f:DynamicPage stickySubheaderProvider="idOrder" toggleHeaderOnTitleClick="false" class="sapUiNoContentPadding" showFooter="true">
+				<f:title>
+					<f:DynamicPageTitle>
+						<f:heading>
+							<Title text="Adhoc Order" class="dynTitle"/>
+						</f:heading>
+					</f:DynamicPageTitle>
+				</f:title>
+				<f:content>
+					<l:Grid defaultSpan="XL12 L12 M12 S12">
+						<Wizard id="idOrder" class="sapUiResponsivePadding--header sapUiResponsivePadding--content" showNextButton="false" renderMode="Page">
+							<WizardStep icon="sap-icon://accelerated" id="idOriginDestination" title="Origin and Destination" validated="true">
+								<core:Fragment fragmentName="com.incture.lch.Adhoc.fragment.OriginDestination" type="XML"/>
+							</WizardStep>
+							<WizardStep icon="sap-icon://my-sales-order" id="idOrderDetails" validated="true" title="Order Details">
+								<core:Fragment fragmentName="com.incture.lch.Adhoc.fragment.OrderDetails" type="XML"/>
+							</WizardStep>
+							<WizardStep icon="sap-icon://shipping-status" id="idShippingDetails" validated="true" title="Shipping Details">
+								<core:Fragment fragmentName="com.incture.lch.Adhoc.fragment.ShippingDetails" type="XML"/>
+							</WizardStep>
+						</Wizard>
+					</l:Grid>
+				</f:content>
+				<f:footer>
+					<OverflowToolbar class="customFooter">
+						<ToolbarSpacer width="2rem">
+							<layoutData>
+								<OverflowToolbarLayoutData priority="NeverOverflow"/>
+							</layoutData>
+						</ToolbarSpacer>
+						<Button class="sapMbtn" id="id_UnPlannedOrder_ClearAll" text="{i18n>CLEAR_ALL}" icon="sap-icon://sys-cancel" iconFirst="true"
+							enabled="{mCommon>/bIsEditable}" visible="{mCommon>/visible/bClearAll}" press="onClearAll"></Button>
+						<Button class="sapMbtn" text="{i18n>BACK}" visible="{mCommon>/visible/bBack}" press="onDialogBackButton"/>
+						<layoutData>
+							<OverflowToolbarLayoutData priority="NeverOverflow"/>
+						</layoutData>
+						<ToolbarSpacer/>
+						<Button class="sapMbtn" text="{i18n>SAVE}" press="onSaveDraft"/>
+						<Button text="{i18n>NEXT}" type="Emphasized" enabled="{/nextButtonEnabled}" visible="{mCommon>/visible/bNext}" press="onDialogNextButton"/>
+						<Button text="{i18n>SUBMIT}" class="customIcon" type="Emphasized" icon="sap-icon://accept" iconFirst="true" enabled="{mCommon>/bIsEditable}"
+							visible="{mCommon>/visible/bSubmit}" press="onSubmit"></Button>
+						<ToolbarSpacer width="2rem">
+							<layoutData>
+								<OverflowToolbarLayoutData priority="NeverOverflow"/>
+							</layoutData>
+						</ToolbarSpacer>
+					</OverflowToolbar>
+				</f:footer>
+			</f:DynamicPage>
+		</content>
+	</Page>
+</mvc:View>
