@@ -39,15 +39,15 @@ sap.ui.define([
 				},
 				oPayload = {
 					"adhocOrderId": "",
-					"createdDate": "",
 					"fromDate": "",
 					"toDate": "",
-					"partNo": "",
 					"plannerEmail": "test@email.com",
 					"status": "",
 					"originName": "",
-					"destinationName": ""
-
+					"destinationName": "",
+					"pageNumber": "1",
+					"noOfEntry": "",
+					"reasonCode": ""
 				};
 			oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
 				try {
@@ -117,79 +117,81 @@ sap.ui.define([
 		},
 
 		onSearch: function () {
-			var oThisController = this;
-			var oMdlCommon = this.getModel("mCommon");
-			var originFilter = oMdlCommon.getProperty("/originFilter"),
-				destinationFilter = oMdlCommon.getProperty("/destinationFilter"),
-				statusFilter = oMdlCommon.getProperty("/statusFilter"),
-				fromDateFilter = oMdlCommon.getProperty("/fromDateFilter"),
-				toDateFilter = oMdlCommon.getProperty("/toDateFilter");
-			var sUrl = "/lch_services/premiumOrders/getAllPremiumOrders",
-				oHeader = {
-					"Content-Type": "application/json",
-					"Accept": "application/json"
-				},
-				oPayload = {
-					"adhocOrderId": "",
-					"createdDate": "",
-					"fromDate": fromDateFilter,
-					"toDate": toDateFilter,
-					"partNo": "",
-					"plannerEmail": "test@email.com",
-					"status": statusFilter,
-					"originName": originFilter,
-					"destinationName": destinationFilter
+				var oThisController = this;
+				var oMdlCommon = this.getModel("mCommon");
+				var originFilter = oMdlCommon.getProperty("/originFilter"),
+					destinationFilter = oMdlCommon.getProperty("/destinationFilter"),
+					statusFilter = oMdlCommon.getProperty("/statusFilter"),
+					fromDateFilter = oMdlCommon.getProperty("/fromDateFilter"),
+					toDateFilter = oMdlCommon.getProperty("/toDateFilter"),
+					reasoncodeFilter = oMdlCommon.getProperty("/reasoncodeFilter");
+				var sUrl = "/lch_services/premiumOrders/getAllPremiumOrders",
+					oHeader = {
+						"Content-Type": "application/json",
+						"Accept": "application/json"
+					},
+					oPayload = {
+						"adhocOrderId": "",
+						"fromDate": fromDateFilter,
+						"toDate": toDateFilter,
+						"plannerEmail": "test@email.com",
+						"status": statusFilter,
+						"originName": originFilter,
+						"destinationName": destinationFilter,
+						"reasonCode": reasoncodeFilter,
+						"pageNumber": "1",
+						"noOfEntry": ""
 
-				};
-			oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
-				try {
-					if (oXHR && oXHR.responseJSON) {
+					};
+				oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
+					try {
+						if (oXHR && oXHR.responseJSON) {
 
-						oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON);
+							oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON);
 
+						}
+
+						oMdlCommon.refresh();
+						console.log(oMdlCommon);
+					} catch (e) {
+						// console.log(e);
 					}
+				}, oPayload);
 
-					oMdlCommon.refresh();
-					console.log(oMdlCommon);
-				} catch (e) {
-					// console.log(e);
-				}
-			}, oPayload);
+			}
+			/*	onGetCost: function () {
+					var oThisController = this;
+					var oMdlCommon = this.getModel("mCommon");
+					var sUrl = "/lch_services/premiumOrders/getCharge",
+						oHeader = {
+							"Content-Type": "application/json",
+							"Accept": "application/json"
+						},
+						oPayload = {
+							"adhocOrderId":,
+							"bpNumber": ,
+							"carrierScac": ,
+							"carrierDetails": ,
+							"carrierMode": ,
+							"charge": ""
 
-		}
-	/*	onGetCost: function () {
-			var oThisController = this;
-			var oMdlCommon = this.getModel("mCommon");
-			var sUrl = "/lch_services/premiumOrders/getCharge",
-				oHeader = {
-					"Content-Type": "application/json",
-					"Accept": "application/json"
-				},
-				oPayload = {
-					"adhocOrderId":,
-					"bpNumber": ,
-					"carrierScac": ,
-					"carrierDetails": ,
-					"carrierMode": ,
-					"charge": ""
+						};
+					oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
+						try {
+							if (oXHR && oXHR.responseJSON) {
 
-				};
-			oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
-				try {
-					if (oXHR && oXHR.responseJSON) {
+								oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON);
 
-						oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON);
+							}
 
-					}
+							oMdlCommon.refresh();
+							console.log(oMdlCommon);
+						} catch (e) {
+							// console.log(e);
+						}
+					}, oPayload);
 
-					oMdlCommon.refresh();
-					console.log(oMdlCommon);
-				} catch (e) {
-					// console.log(e);
-				}
-			}, oPayload);
-
-		}*/
+				}*/
 
 	});
 });
