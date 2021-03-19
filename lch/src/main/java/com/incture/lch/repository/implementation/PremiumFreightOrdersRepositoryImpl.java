@@ -1,5 +1,7 @@
 package com.incture.lch.repository.implementation;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,8 @@ import com.incture.lch.entity.PremiumFreightChargeDetails;
 import com.incture.lch.repository.PremiumFreightOrdersRepository;
 import com.incture.lch.util.GetReferenceData;
 import com.incture.lch.util.ServiceUtil;
+
+import ch.qos.logback.classic.Logger;
 
 @Repository
 public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersRepository {
@@ -89,6 +93,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 
+		@SuppressWarnings("deprecation")
 		Criteria criteria = session.createCriteria(AdhocOrders.class);
 		// System.out.println(criteria.list().size());
 
@@ -100,9 +105,18 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 		}
 		if ((premiumRequestDto.getFromDate() != null && !(premiumRequestDto.getFromDate().equals("")))
-				&& (premiumRequestDto.getToDate() != null) && !(premiumRequestDto.getToDate().equals(""))) {
-			criteria.add(Restrictions.between("createdDate", premiumRequestDto.getFromDate(),
-					premiumRequestDto.getToDate()));
+				&& (premiumRequestDto.getToDate() != null) && !(premiumRequestDto.getToDate().equals(""))) 
+		{
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			try{
+			Date d1 = (Date)sdf.parse(premiumRequestDto.getFromDate());
+			Date d2 = (Date)sdf.parse(premiumRequestDto.getToDate());
+			criteria.add(Restrictions.between("createdDate",d1,d2));
+			}
+			catch(Exception e)
+			{
+				System.out.println("Error in date format");
+			}
 
 		}
 		if (premiumRequestDto.getPlannerEmail() != null && !(premiumRequestDto.getPlannerEmail().equals(""))) {

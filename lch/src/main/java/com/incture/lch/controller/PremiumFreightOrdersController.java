@@ -35,21 +35,21 @@ public class PremiumFreightOrdersController
 	private PremiumFreightApprovalRuleDao premiumFreightApprovalRuleDao;
 
 	
-	@RequestMapping(value = "/getAllPremiumOrders", method = RequestMethod.GET)
+	@RequestMapping(value = "/getAllPremiumOrders", method = RequestMethod.POST,consumes = { "application/json" })
 	@ResponseBody
 	public List<PremiumFreightOrderDto> getAllPremiumFreightOrders(@RequestBody PremiumRequestDto premiumRequestDto) {
 			return premiumFreightOrdersService.getAllPremiumFreightOrders(premiumRequestDto);
 	}
 
 	
-	@RequestMapping(value = "/getAllCarrierDetails", method = RequestMethod.GET, consumes = { "application/json" })
+	@RequestMapping(value = "/getAllCarrierDetails", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
 	public List<CarrierDetailsDto> getAllCarrierDetails() {
 		return premiumFreightOrdersService.getAllCarrierDetails();
 	}
 
 	
-	@RequestMapping(value = "/getMode", method = RequestMethod.GET, consumes = { "application/json" })
+	@RequestMapping(value = "/getMode", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
 	public List<HashMap<String,String>>getMode(@RequestBody  JSONObject bpNumber)
 	{
@@ -93,7 +93,7 @@ public class PremiumFreightOrdersController
 	}
 
 	
-	@RequestMapping(value = "/rejectPremiumOrder", method = RequestMethod.DELETE, consumes = { "application/json" })
+	@RequestMapping(value = "/rejectPremiumOrder", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
 	public ResponseDto RejectPremiumOrder(@RequestBody JSONObject  adhocOrderId) {
 		String adid= (String) adhocOrderId.get("adhocOrderId");
@@ -102,7 +102,7 @@ public class PremiumFreightOrdersController
 		
 	}
 
-	@RequestMapping(value = "/getAllPremiumApprovalList", method = RequestMethod.GET, consumes = { "application/json" })
+	@RequestMapping(value = "/getAllPremiumApprovalList", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
 	public List<PremiumFreightApprovalRuleDTO> getAllPremiumApprovalList() 
 	{
