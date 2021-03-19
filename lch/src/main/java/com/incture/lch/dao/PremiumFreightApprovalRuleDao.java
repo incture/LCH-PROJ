@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.incture.lch.dto.AdhocApprovalRuleDto;
 import com.incture.lch.dto.PremiumFreightApprovalRuleDTO;
+import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.AdhocApprovalRule;
 import com.incture.lch.entity.PremiumFreightAprrovalRule;
 
@@ -53,19 +54,25 @@ public class PremiumFreightApprovalRuleDao
 	}
 
 	// @SuppressWarnings("deprecation")
-	public Boolean saveApproval(List<PremiumFreightApprovalRuleDTO> ruleList) {
-		LOGGER.error("Enter into PremiunFreightApprovalRuleDTO saveApproval");
-	    Boolean isSaved = false;
-		// LOGGER.error("Enter into adhocApprovalRuleDao session check
-		// "+sessionFactory.);
+	public ResponseDto saveApproval(List<PremiumFreightApprovalRuleDTO> ruleList) {
+	    
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
+		ResponseDto responseDto = new ResponseDto();
 		for (PremiumFreightApprovalRuleDTO dto : ruleList) {
 			try {
 				LOGGER.error("Enter into PremiunFreightApprovalRuleDTO saveApproval end here " + dto.getShipTo() + " - "
 						+ dto.getCost_min() + "- " + dto.getCost_max() + " - " + dto.getApprover());
 				session.save(importApprovalRule(dto));
+				responseDto.setMessage("Save success");
+				responseDto.setStatus("SUCCESS");
+				responseDto.setCode("00");
+				
+				
 			} catch (Exception e) {
+				responseDto.setCode("02");
+				responseDto.setMessage("Save or Update Failed due to " + e.getMessage());
+				responseDto.setStatus("FAIL");
 				throw new RuntimeException("Error while saving data:: " + e.toString());
 			}
 		}
@@ -73,8 +80,7 @@ public class PremiumFreightApprovalRuleDao
 		session.clear();
 		tx.commit();
 		session.close();
-		LOGGER.error("Enter into adhocApprovalRuleDao saveApproval end here " + isSaved);
-		return isSaved;
+		return responseDto;
 
 	}
 

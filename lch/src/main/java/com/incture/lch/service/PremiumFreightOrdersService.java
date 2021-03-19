@@ -6,6 +6,7 @@ import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
+import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.PremiumFreightChargeDetails;
 
 public interface PremiumFreightOrdersService 
@@ -20,10 +21,10 @@ public interface PremiumFreightOrdersService
 	
 	public String setCharge(ChargeRequestDto dto);
 
-	public String forwardToApprover(List<PremiumRequestDto> premiumRequestDtos);
+	public ResponseDto forwardToApprover(List<PremiumRequestDto> premiumRequestDtos);
 	
-	public int RejectPremiumOrder (String adhocOrderId);
-	public String addCarrier(CarrierDetailsDto carrierdto);
+	public ResponseDto RejectPremiumOrder (String adhocOrderId);
+	public ResponseDto addCarrier(CarrierDetailsDto carrierdto);
 
 
 }

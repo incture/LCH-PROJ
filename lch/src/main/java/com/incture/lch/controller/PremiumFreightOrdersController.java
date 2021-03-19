@@ -35,7 +35,7 @@ public class PremiumFreightOrdersController
 	private PremiumFreightApprovalRuleDao premiumFreightApprovalRuleDao;
 
 	
-	@RequestMapping(value = "/getAllPremiumOrders", method = RequestMethod.GET, consumes = { "application/json" })
+	@RequestMapping(value = "/getAllPremiumOrders", method = RequestMethod.GET)
 	@ResponseBody
 	public List<PremiumFreightOrderDto> getAllPremiumFreightOrders(@RequestBody PremiumRequestDto premiumRequestDto) {
 			return premiumFreightOrdersService.getAllPremiumFreightOrders(premiumRequestDto);
@@ -88,7 +88,7 @@ public class PremiumFreightOrdersController
 	
 	@RequestMapping(value = "/forwardToApprover", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
-	public String forwardToApprover(@RequestBody List<PremiumRequestDto> premiumRequestDtos) {
+	public ResponseDto forwardToApprover(@RequestBody List<PremiumRequestDto> premiumRequestDtos) {
 		return premiumFreightOrdersService.forwardToApprover(premiumRequestDtos);
 	}
 
@@ -97,20 +97,9 @@ public class PremiumFreightOrdersController
 	@ResponseBody
 	public ResponseDto RejectPremiumOrder(@RequestBody JSONObject  adhocOrderId) {
 		String adid= (String) adhocOrderId.get("adhocOrderId");
-		int result =  premiumFreightOrdersService.RejectPremiumOrder(adid);
-		ResponseDto responseDto = new ResponseDto();
+		return premiumFreightOrdersService.RejectPremiumOrder(adid);
 
-		if (result == 1) {
-			responseDto.setMessage("delete success");
-			responseDto.setStatus("SUCCESS");
-			responseDto.setCode("00");
-			return responseDto;
-		} else {
-			responseDto.setMessage("delete failed");
-			responseDto.setStatus("FAIL");
-			responseDto.setCode("01");
-			return responseDto;
-		}
+		
 	}
 
 	@RequestMapping(value = "/getAllPremiumApprovalList", method = RequestMethod.GET, consumes = { "application/json" })
@@ -122,15 +111,14 @@ public class PremiumFreightOrdersController
 	
 	@RequestMapping(value = "/saveApproval", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody	
-	public Boolean saveApproval(List<PremiumFreightApprovalRuleDTO> ruleList) 
+	public ResponseDto saveApproval(List<PremiumFreightApprovalRuleDTO> ruleList) 
 	{
 		return premiumFreightApprovalRuleDao.saveApproval(ruleList);
 	}
 
 	@RequestMapping(value="/addCarrier", method = RequestMethod.POST, consumes={"application/json"})
-	public String addCarrier(@RequestBody CarrierDetailsDto carrierdto)
+	public ResponseDto addCarrier(@RequestBody CarrierDetailsDto carrierdto)
 	{
-		System.out.println(carrierdto.getBpNumber());
 		return premiumFreightOrdersService.addCarrier(carrierdto);
 	}
 

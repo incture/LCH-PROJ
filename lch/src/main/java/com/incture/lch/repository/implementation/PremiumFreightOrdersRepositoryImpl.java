@@ -1,14 +1,8 @@
 package com.incture.lch.repository.implementation;
 
-import java.nio.charset.Charset;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
-import org.apache.xmlbeans.impl.xb.xsdschema.RestrictionDocument.Restriction;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,11 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.incture.lch.dao.CarrierDetailsDao;
-import com.incture.lch.dto.AdhocApprovalRuleDto;
 import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
+import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.AdhocOrders;
 import com.incture.lch.entity.CarrierDetails;
 import com.incture.lch.entity.PremiumFreightChargeDetails;
@@ -95,13 +89,12 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 
-
 		Criteria criteria = session.createCriteria(AdhocOrders.class);
-		//System.out.println(criteria.list().size());
+		// System.out.println(criteria.list().size());
 
 		criteria.add(Restrictions.eq("premiumFreight", "true"));
 
-		//System.out.println(criteria.list().size());
+		// System.out.println(criteria.list().size());
 		if (premiumRequestDto.getAdhocOrderId() != null && !(premiumRequestDto.getAdhocOrderId().equals(""))) {
 			criteria.add(Restrictions.eq("adhocOrderId", premiumRequestDto.getAdhocOrderId()));
 
@@ -113,34 +106,36 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 		}
 		if (premiumRequestDto.getPlannerEmail() != null && !(premiumRequestDto.getPlannerEmail().equals(""))) {
-			
-			//System.out.println(premiumRequestDto.getPlannerEmail());
-			criteria.add(Restrictions.eq("plannerEmail", premiumRequestDto.getPlannerEmail()));
-			//System.out.println(premiumRequestDto.getOriginName());
 
+			// System.out.println(premiumRequestDto.getPlannerEmail());
+			criteria.add(Restrictions.eq("plannerEmail", premiumRequestDto.getPlannerEmail()));
+			// System.out.println(premiumRequestDto.getOriginName());
 
 		}
-		if (premiumRequestDto.getPartNo() != null && !(premiumRequestDto.getPartNo().equals(""))) {
-			criteria.add(Restrictions.eq("partNo", premiumRequestDto.getPartNo()));
+		if (premiumRequestDto.getReasonCode() != null && !(premiumRequestDto.getReasonCode().equals(""))) {
+			criteria.add(Restrictions.eq("premiumReasonCode", premiumRequestDto.getReasonCode()));
 
 		}
 		if (premiumRequestDto.getStatus() != null && !(premiumRequestDto.getStatus().equals(""))) {
 			criteria.add(Restrictions.eq("status", premiumRequestDto.getStatus()));
 		}
 
-		if(premiumRequestDto.getOriginName() != null && !(premiumRequestDto.getOriginName().equals("")))
-		{
-			//System.out.println(premiumRequestDto.getOriginName());
+		if (premiumRequestDto.getOriginName() != null && !(premiumRequestDto.getOriginName().equals(""))) {
+			// System.out.println(premiumRequestDto.getOriginName());
 			criteria.add(Restrictions.eq("shipperName", premiumRequestDto.getOriginName()));
 		}
-		
-		if(premiumRequestDto.getDestinationName() != null && !(premiumRequestDto.getDestinationName().equals("")))
-		{
+
+		if (premiumRequestDto.getDestinationName() != null && !(premiumRequestDto.getDestinationName().equals(""))) {
 			criteria.add(Restrictions.eq("DestinationName", premiumRequestDto.getDestinationName()));
 		}
 		criteria.addOrder(Order.asc("fwoNum"));
-		criteria.setFirstResult(premiumRequestDto.getStart());
-		criteria.setMaxResults(10);
+		int startNum = (premiumRequestDto.getPageNumber() - 1) * 10;
+		criteria.setFirstResult(startNum);
+		if (premiumRequestDto.getNoOfEntry() == 0) {
+			criteria.setMaxResults(10);
+		} else {
+			criteria.setMaxResults(premiumRequestDto.getNoOfEntry());
+		}
 		List<AdhocOrders> adhocOrders = criteria.list();
 		System.out.println(adhocOrders.size());
 		for (AdhocOrders adOrders : adhocOrders) {
@@ -198,12 +193,12 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 			 */
 			carrierDetails = criteria.list();
 
-			
 			for (CarrierDetails cdetails : carrierDetails) {
-				/*for(String s : cdetails.getCarrierMode())
-				{*/
-					modeList.add(cdetails.getCarrierMode());
-				//}
+				/*
+				 * for(String s : cdetails.getCarrierMode()) {
+				 */
+				modeList.add(cdetails.getCarrierMode());
+				// }
 			}
 		} catch (Exception e) {
 			// LOGGER.error("Exception in getReasonCode api" + e);
@@ -312,19 +307,18 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		Criteria criteria = session.createCriteria(AdhocOrders.class);
 		criteria.add(Restrictions.eq("fwoNum", dto.getAdhocOrderId()));
 		adhocOrders = criteria.list();
-        for(AdhocOrders a : adhocOrders)
-        {
-        	a.setStatus("In Progress");
+		for (AdhocOrders a : adhocOrders) {
+			a.setStatus("In Progress");
 			session.saveOrUpdate(a);
 			session.saveOrUpdate(a);
-        }
-		
+		}
+
 		Criteria criteria2 = session.createCriteria(PremiumFreightChargeDetails.class);
 		criteria2.add(Restrictions.eq("adhocOrderId", dto.getAdhocOrderId()));
 		premiumFreightChargeDetails = criteria2.list();
 		if (premiumFreightChargeDetails == null) {
 			for (AdhocOrders a : adhocOrders) {
-				
+
 				premiumFreightChargeDetail.setAdhocOrderId(a.getFwoNum());
 
 				System.out.println(premiumFreightChargeDetail.getAdhocOrderId());
@@ -369,101 +363,140 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 	}
 
 	@Override
-	public String forwardToApprover(List<PremiumRequestDto> premiumRequestDto) {
+	public ResponseDto forwardToApprover(List<PremiumRequestDto> premiumRequestDto) {
 		PremiumFreightChargeDetails chargeDetails = new PremiumFreightChargeDetails();
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
-		for (PremiumRequestDto p : premiumRequestDto) {
-			String adhocOrderId = p.getAdhocOrderId();
-			Criteria c1 = session.createCriteria(AdhocOrders.class);
-			Criteria c2 = session.createCriteria(PremiumFreightChargeDetails.class);
+		ResponseDto responseDto = new ResponseDto();
 
-			c1.add(Restrictions.eq("fwoNum", adhocOrderId));
-			c2.add(Restrictions.eq("adhocOrderId", adhocOrderId));
+		try {
+			for (PremiumRequestDto p : premiumRequestDto) {
+				String adhocOrderId = p.getAdhocOrderId();
+				Criteria c1 = session.createCriteria(AdhocOrders.class);
+				Criteria c2 = session.createCriteria(PremiumFreightChargeDetails.class);
 
-			List<AdhocOrders> adhocOrders = new ArrayList<AdhocOrders>();
-			List<PremiumFreightChargeDetails> premiumChargeDetails = new ArrayList<PremiumFreightChargeDetails>();
+				c1.add(Restrictions.eq("fwoNum", adhocOrderId));
+				c2.add(Restrictions.eq("adhocOrderId", adhocOrderId));
 
-			adhocOrders = c1.list();
-			premiumChargeDetails = c2.list();
+				List<AdhocOrders> adhocOrders = new ArrayList<AdhocOrders>();
+				List<PremiumFreightChargeDetails> premiumChargeDetails = new ArrayList<PremiumFreightChargeDetails>();
 
-			System.out.println(premiumChargeDetails.size());
+				adhocOrders = c1.list();
+				premiumChargeDetails = c2.list();
 
-			for (AdhocOrders a : adhocOrders) {
+				System.out.println(premiumChargeDetails.size());
 
-				System.out.println(a.getFwoNum());
-				System.out.println(a.getStatus());
+				for (AdhocOrders a : adhocOrders) {
 
-				a.setStatus("Pending With Approver");
-				session.saveOrUpdate(a);
-				session.saveOrUpdate(a);
-				// updating in AdhocTable
-				System.out.println(a.getStatus());
-				System.out.println("Updating in Adhoc Table ");
+					System.out.println(a.getFwoNum());
+					System.out.println(a.getStatus());
+
+					a.setStatus("Pending With Approver");
+					session.saveOrUpdate(a);
+					session.saveOrUpdate(a);
+					// updating in AdhocTable
+					System.out.println(a.getStatus());
+					System.out.println("Updating in Adhoc Table ");
+
+				}
+
+				for (PremiumFreightChargeDetails pdetail : premiumChargeDetails) {
+					System.out.println(pdetail.getStatus());
+
+					System.out.println(pdetail.getAdhocOrderId());
+					pdetail.setStatus("Pending with Approver");
+					session.saveOrUpdate(pdetail);
+					session.saveOrUpdate(pdetail);
+					System.out.println(pdetail.getStatus());
+					System.out.println("Updating in Charge Table");
+
+				}
 
 			}
+			responseDto.setMessage("Save success");
+			responseDto.setStatus("SUCCESS");
+			responseDto.setCode("00");
+		} catch (Exception e) {
+			responseDto.setCode("02");
+			responseDto.setMessage("Save or Update Failed due to " + e.getMessage());
+			responseDto.setStatus("FAIL");
+		} finally {
+			session.flush();
+			session.clear();
+			tx.commit();
+			session.close();
+		}
+		return responseDto;
+	}
 
-			for (PremiumFreightChargeDetails pdetail : premiumChargeDetails) {
-				System.out.println(pdetail.getStatus());
+	@SuppressWarnings("finally")
+	@Override
+	public ResponseDto RejectPremiumOrder(String adhocOrderId) {
+		ResponseDto responseDto = new ResponseDto();
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		try {
 
-				System.out.println(pdetail.getAdhocOrderId());
-				pdetail.setStatus("Pending with Approver");
-				session.saveOrUpdate(pdetail);
-				session.saveOrUpdate(pdetail);
-				System.out.println(pdetail.getStatus());
-				System.out.println("Updating in Charge Table");
+			String queryStr = "DELETE FROM AdhocOrders ad WHERE ad.fwoNum=:fwoNum";
+			Query query = session.createQuery(queryStr);
+			query.setParameter("fwoNum", adhocOrderId);
+			int result = query.executeUpdate();
 
+			String qstr = "DELETE FROM PremiumFreightChargeDetails p WHERE p.adhocOrderId=:adhocOrderId";
+			Query q2 = session.createQuery(qstr);
+			q2.setParameter("adhocOrderId", adhocOrderId);
+			int result2 = query.executeUpdate();
+			if (result == 1) {
+				responseDto.setMessage("delete success");
+				responseDto.setStatus("SUCCESS");
+				responseDto.setCode("00");
+				return responseDto;
+			} else {
+				responseDto.setMessage("delete failed: Query not Executed");
+				responseDto.setStatus("FAIL");
+				responseDto.setCode("01");
+				return responseDto;
 			}
+		} catch (Exception e) {
+			responseDto.setCode("02");
+			responseDto.setMessage("Save or Update Failed due to " + e.getMessage());
+			responseDto.setStatus("FAIL");
+
+		} finally {
+			session.flush();
+			session.clear();
+			tx.commit();
+			session.close();
 
 		}
-
-		
-		session.flush();
-		session.clear();
-		tx.commit();
-		session.close();
-		return "Pending with Approver";
+		return responseDto;
 	}
 
 	@Override
-	public int RejectPremiumOrder(String adhocOrderId) {
+	public ResponseDto addCarrier(CarrierDetailsDto carrierdto) {
+		ResponseDto responseDto = new ResponseDto();
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
-		String queryStr = "DELETE FROM AdhocOrders ad WHERE ad.fwoNum=:fwoNum";
-		Query query = session.createQuery(queryStr);
-		query.setParameter("fwoNum", adhocOrderId);
-		int result = query.executeUpdate();
-
-		String qstr = "DELETE FROM PremiumFreightChargeDetails p WHERE p.adhocOrderId=:adhocOrderId";
-		Query q2 = session.createQuery(qstr);
-		q2.setParameter("adhocOrderId", adhocOrderId);
-		int result2 = query.executeUpdate();
-
-		session.flush();
-		session.clear();
-		tx.commit();
-		session.close();
-		return result2;
-
-	}
-	
-	@Override
-	public String addCarrier(CarrierDetailsDto carrierdto)
-	{
-		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
-		CarrierDetails cdetails = new CarrierDetails();
-		System.out.println(carrierdto.getBpNumber());
-		cdetails=carrierDetailsDao.importCarrierDetails(carrierdto);
-		System.out.println(cdetails.getBpNumber());
-		session.saveOrUpdate(cdetails);
-		session.flush();
-		session.clear();
-		tx.commit();
-		session.close();
-		return "saved carrier";
+		try {
+			CarrierDetails cdetails = new CarrierDetails();
+			System.out.println(carrierdto.getBpNumber());
+			cdetails = carrierDetailsDao.importCarrierDetails(carrierdto);
+			System.out.println(cdetails.getBpNumber());
+			session.saveOrUpdate(cdetails);
+			responseDto.setMessage("Save success");
+			responseDto.setStatus("SUCCESS");
+			responseDto.setCode("00");
+		} catch (Exception e) {
+			responseDto.setCode("02");
+			responseDto.setMessage("Save or Update Failed due to " + e.getMessage());
+			responseDto.setStatus("FAIL");
+		} finally {
+			session.flush();
+			session.clear();
+			tx.commit();
+			session.close();
+		}
+		return responseDto;
 	}
 
 }
-
-

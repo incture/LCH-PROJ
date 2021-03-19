@@ -60,6 +60,7 @@ import org.json.JSONObject;
 public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	@Autowired
+
 	// @Qualifier("sessionDb")
 	private SessionFactory sessionFactory;
 
@@ -453,6 +454,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 	}
 
 	//////////////////////////////////////////////////////////////////
+	@SuppressWarnings("unchecked")
 	public List<AdhocOrderDto> getKpi(int days, AdhocRequestDto adhocRequestDto) {
 		List<AdhocOrderDto> AdhocOrderDtos = new ArrayList<>();
 		List<AdhocOrders> adhocOrders = new ArrayList<>();
@@ -479,27 +481,19 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		else
 			crit.add(Restrictions.between("shipDate", t3, t2));
 
-		// crit.add(Restrictions.eq("isSaved", false));
-		// queryString.append("SELECT ao FROM AdhocOrders ao WHERE ao.fwoNum =
-		// ao.fwoNum");
-
+		
 		if (adhocRequestDto.getAdhocOrderId() != null && !(adhocRequestDto.getAdhocOrderId().equals(""))) {
-			// queryString.append(" AND ao.fwoNum=:fwoNum");
 			crit.add(Restrictions.eq("adhocOrderId", adhocRequestDto.getAdhocOrderId()));
 
 		}
 		if ((adhocRequestDto.getFromDate() != null && !(adhocRequestDto.getFromDate().equals("")))
 				&& (adhocRequestDto.getToDate() != null) && !(adhocRequestDto.getToDate().equals(""))) {
-			// queryString.append(" AND ao.createdDate BETWEEN :fromDate AND
-			// :toDate");
 			crit.add(Restrictions.between("createdDate", adhocRequestDto.getFromDate(), adhocRequestDto.getToDate()));
 		}
 		if (adhocRequestDto.getCreatedBy() != null && !(adhocRequestDto.getCreatedBy().equals(""))) {
-			// queryString.append(" AND ao.userId=:userId");
 			crit.add(Restrictions.eq("userId", adhocRequestDto.getCreatedBy()));
 		}
 		if (adhocRequestDto.getPartNo() != null && !(adhocRequestDto.getPartNo().equals(""))) {
-			// queryString.append(" AND ao.partNum=:partNum");
 			crit.add(Restrictions.eq("partNo", adhocRequestDto.getPartNo()));
 		}
 		crit.addOrder(Order.asc("shipDate"));
@@ -523,7 +517,6 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		ResponseDto responseDto = new ResponseDto();
 		AdhocOrders adhocOrders = new AdhocOrders();
 		adhocOrders = importAdhocOrdersDto(AdhocOrderDto);
-		// adhocOrders.setCreatedBy("LCH");
 		adhocOrders.setIsSaved(false);
 		LkShipperDetailsDto shipDetDto = new LkShipperDetailsDto();
 		Session session = sessionFactory.openSession();
@@ -534,8 +527,6 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		Criteria crit2 = session.createCriteria(LkShipperDetails.class);
 		crit2.add(Restrictions.eq("shipperName", AdhocOrderDto.getDestinationName()));
 
-		// crit.add(Restrictions.like("shipperName", "'" +
-		// AdhocOrderDto.getShipperName() + "'", MatchMode.EXACT));
 		List<LkShipperDetailsDto> listOfShipper = crit.list();
 		List<LkShipperDetailsDto> listOfDestinations = crit2.list();
 		if (ServiceUtil.isEmpty(listOfShipper)) {
