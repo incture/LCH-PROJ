@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeRequestDto;
+import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
@@ -33,7 +34,7 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 	
 	
 	@Override
-	public List<PremiumFreightOrderDto> getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto) {
+	public PaginationDto getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto) {
 		return premiumFreightOrdersRepo.getAllPremiumFreightOrders(premiumRequestDto);
 	}
 

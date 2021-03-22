@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import com.incture.lch.dao.CarrierDetailsDao;
 import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeRequestDto;
+import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
@@ -88,8 +89,9 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 	// date filters
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List<PremiumFreightOrderDto> getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto) {
+	public PaginationDto getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto) {
 		List<PremiumFreightOrderDto> premiumFreightOrderDtos = new ArrayList<>();
+		PaginationDto paginationDto = new PaginationDto();
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 
@@ -105,16 +107,13 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 		}
 		if ((premiumRequestDto.getFromDate() != null && !(premiumRequestDto.getFromDate().equals("")))
-				&& (premiumRequestDto.getToDate() != null) && !(premiumRequestDto.getToDate().equals(""))) 
-		{
+				&& (premiumRequestDto.getToDate() != null) && !(premiumRequestDto.getToDate().equals(""))) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			try{
-			Date d1 = (Date)sdf.parse(premiumRequestDto.getFromDate());
-			Date d2 = (Date)sdf.parse(premiumRequestDto.getToDate());
-			criteria.add(Restrictions.between("createdDate",d1,d2));
-			}
-			catch(Exception e)
-			{
+			try {
+				Date d1 = (Date) sdf.parse(premiumRequestDto.getFromDate());
+				Date d2 = (Date) sdf.parse(premiumRequestDto.getToDate());
+				criteria.add(Restrictions.between("createdDate", d1, d2));
+			} catch (Exception e) {
 				System.out.println("Error in date format");
 			}
 
@@ -143,7 +142,9 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 			criteria.add(Restrictions.eq("DestinationName", premiumRequestDto.getDestinationName()));
 		}
 		criteria.addOrder(Order.asc("fwoNum"));
+		int total_entries = criteria.list().size();
 		int startNum = (premiumRequestDto.getPageNumber() - 1) * 10;
+
 		criteria.setFirstResult(startNum);
 		if (premiumRequestDto.getNoOfEntry() == 0) {
 			criteria.setMaxResults(10);
@@ -151,15 +152,18 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 			criteria.setMaxResults(premiumRequestDto.getNoOfEntry());
 		}
 		List<AdhocOrders> adhocOrders = criteria.list();
-		System.out.println(adhocOrders.size());
+
 		for (AdhocOrders adOrders : adhocOrders) {
 			premiumFreightOrderDtos.add(exportPremiumFreightOrders(adOrders));
 		}
+		paginationDto.setPremiumFreightOrderDtos(premiumFreightOrderDtos);
+		paginationDto.setCount(total_entries);
+
 		session.flush();
 		session.clear();
 		tx.commit();
 		session.close();
-		return premiumFreightOrderDtos;
+		return paginationDto;
 	}
 
 	@Override

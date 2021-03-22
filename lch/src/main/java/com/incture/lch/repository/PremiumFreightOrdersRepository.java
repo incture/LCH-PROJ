@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeRequestDto;
+import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
@@ -15,7 +16,7 @@ public interface PremiumFreightOrdersRepository
 
 	public PremiumFreightOrderDto exportPremiumFreightOrders(AdhocOrders adhocOrders);
 		
-	public List<PremiumFreightOrderDto> getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto);
+	public PaginationDto getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto);
 
 	public List<CarrierDetailsDto> getAllCarrierDetails();
 	
