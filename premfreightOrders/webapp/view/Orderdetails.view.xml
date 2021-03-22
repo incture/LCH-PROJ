@@ -47,7 +47,7 @@
 							</fb:FilterGroupItem>
 							<fb:FilterGroupItem name="reasonCode" label="{i18n>REASON_CODE}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
 								<fb:control>
-									<ComboBox selectedKey="{mCommon>/reasonCodeFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
+									<ComboBox selectedKey="{mCommon>/reasoncodeFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
 										items="{path: 'mCommon>/aReasonCodes'}" change="onChangeCBox">
 										<core:ListItem key="{mCommon>key}" text="{mCommon>key}" tooltip="{mCommon>key}"/>
 									</ComboBox>

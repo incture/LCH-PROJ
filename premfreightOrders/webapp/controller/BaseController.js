@@ -35,7 +35,7 @@ sap.ui.define([
 			oMdlCommon.attachRequestCompleted(function (oEvent) {
 				oMdlCommon.setProperty("/today", new Date());
 				oMdlCommon.refresh();
-				oThisController.fnManageSrvCall();
+			/*	oThisController.fnManageSrvCall();*/
 
 			});
 			oMdlCommon.loadData(sRootPath + "/model/Property.json", null, false);
@@ -332,7 +332,6 @@ sap.ui.define([
 		},
 
 		/*
-		 * @author Mohammed Saleem Bani
 		 * @purpose Delayed execution
 		 * @param1 callback -- callback function to be executed
 		 * @param2 delayMicroSeconds -- delay in micro seconds
@@ -343,7 +342,6 @@ sap.ui.define([
 		},
 
 		/*
-		 * @author Mohammed Saleem Bani
 		 * @purpose Handle Service Request 
 		 * @param1 sUrl -- String
 		 * @param2 sReqType -- String-(GET/POST/PUT/DELETE)
@@ -450,7 +448,7 @@ sap.ui.define([
 				} else {
 					oMdlCommon.setProperty("/cockpitRoles", []);
 					oMdlCommon.refresh();
-					//TODO unable to fetch roles.
+					
 				}
 			});
 		},
@@ -477,177 +475,13 @@ sap.ui.define([
 							oThisController.fnGetLaunchPadRoles(callback);
 							// callback(oXHR, status);
 						}
-
-						// var sUrl = "/idp_auth_base/service/scim/Users/" + oXHR.responseJSON.name;
-						// oThisController.fnProcessDataRequest(sUrl, "GET", {"Content-Type":"application/vnd.sap-id-service.sp-user-id+xml"}, false, function (oXHR1, status1) {
-						// }, null);
-
 					}
 				}, null);
 			}
 		}
 
 		
-	/*	fnAddODataFUnitPage: function (bOpenBusyDialog, bCloseBusyDialog) {
-			var oThisController = this;
-			var oMdlPart = this.getModel("mPartModel");
-			var oDataPart = $.extend(true, {}, oMdlPart.getData());
-			var oMdlOrder = this.getModel("mOrderModel");
-			var oDataCommon = $.extend(true, {}, oMdlOrder.getData());
-			var sFromDate = oThisController.dateHelper.getSAPGwDateTime(oDataPart.fromDateFilter);
-			var sToDate = oThisController.dateHelper.getSAPGwDateTime(oDataPart.toDateFilter);
 
-			if (oDataPart.fromDateFilter && oDataPart.toDateFilter) {
-				if (oDataPart.fromDateFilter.getTime() > oDataPart.toDateFilter.getTime()) {
-					oThisController.showMessage(oThisController.getMessage("INVALID_DATE_RANGE"), "E", function () {
-						oThisController.closeBusyDialog();
-					});
-					return;
-				}
-			}
-
-			sToDate = (sToDate && sToDate.length === 19) ? sToDate.replace("00:00:00", "23:59:59") : "";
-
-			var sUrl = "",
-				oHeader = {
-					"Content-Type": "application/json",
-					"Accept": "application/json"
-				};
-
-			try {
-				if (!oThisController.oLoadmore.iPageSize) {
-					oThisController.oLoadmore.iPageSize = 50;
-				}
-				if (!oThisController.oLoadmore.iFULoaded) {
-					oThisController.fnUnselectAll();
-					oThisController.fnGetSelectedFU();
-					oThisController.oLoadmore.iFULoaded = 0;
-					oMdlPart.setProperty("/iFuLength", 0);
-					oMdlPart.setProperty("/ordersLoaded", 0);
-					oMdlPart.setProperty("/TotalLength", 0);
-					oMdlPart.setProperty("/aFreightUnits", []);
-					// oMdlPart.setProperty("/oSelectedData", []);
-				}
-
-				if (oDataCommon.bNext24H) {
-					// sUrl = "/ODATA_SW1_160/ZPORTAL_FU_COUNT_SRV/FU_DetailsSet";
-					// sUrl = sUrl + "?$filter=Detail_type eq '24H'";
-					sUrl = "/ODATA_DW0_DEV/ZTM_UNPLANNED_FO_SRV/unplannedOrdersSet";
-					sUrl = sUrl + "?$filter=IDetailType eq '24H'";
-				} else if (oDataCommon.bNext72H) {
-					// sUrl = "/ODATA_SW1_160/ZPORTAL_FU_COUNT_SRV/FU_DetailsSet";
-					// sUrl = sUrl + "?$filter=Detail_type eq '72H'";
-					sUrl = "/ODATA_DW0_DEV/ZTM_UNPLANNED_FO_SRV/unplannedOrdersSet";
-					sUrl = sUrl + "?$filter=IDetailType eq '72H'";
-				} else if (oDataCommon.bNext7D) {
-					// sUrl = "/ODATA_SW1_160/ZPORTAL_FU_COUNT_SRV/FU_DetailsSet";
-					// sUrl = sUrl + "?$filter=Detail_type eq '7D'";
-					sUrl = "/ODATA_DW0_DEV/ZTM_UNPLANNED_FO_SRV/unplannedOrdersSet";
-					sUrl = sUrl + "?$filter=IDetailType eq '7DY'";
-				} else if (oDataCommon.bPastFu) {
-					// sUrl = "/ODATA_SW1_160/ZPORTAL_FU_COUNT_SRV/FU_DetailsSet";
-					// sUrl = sUrl + "?$filter=Detail_type eq '7D'";
-					sUrl = "/ODATA_DW0_DEV/ZTM_UNPLANNED_FO_SRV/unplannedOrdersSet";
-					sUrl = sUrl + "?$filter=IDetailType eq '24P'";
-				} else {
-					// sUrl = "/ODATA_SW1_160/ZPORTAL_FU_SEARCH_SRV_01/FrieghtOrderSearchSet";
-					sUrl = "/ODATA_DW0_DEV/ZTM_UNPLANNED_FO_SRV/unplannedOrdersSet";
-				}
-
-				//Applying Filter start here
-
-				if (oDataPart.originFilter) {
-					if (sUrl.indexOf("?$filter=") === -1) {
-						sUrl = sUrl + "?$filter=SupplierId eq '" + oDataPart.originFilter + "'";
-					} else {
-						sUrl = sUrl + " and SupplierId eq '" + oDataPart.originFilter + "'";
-					}
-				}
-
-				if (oDataPart.destFilter) {
-					if (sUrl.indexOf("?$filter=") === -1) {
-						sUrl = sUrl + "?$filter=DestinationId eq '" + oDataPart.destFilter + "'";
-					} else {
-						sUrl = sUrl + " and DestinationId eq '" + oDataPart.destFilter + "'";
-					}
-				}
-
-				if (sFromDate && sToDate) {
-					if (sUrl.indexOf("?$filter=") === -1) {
-						sUrl = sUrl + "?$filter=DateFilter ge (datetime'" + sFromDate + "') and DateFilter le (datetime'" + sToDate +
-							"')";
-					} else {
-						sUrl = sUrl + " and DateFilter ge (datetime'" + sFromDate + "') and DateFilter le (datetime'" + sToDate +
-							"')";
-					}
-				} else if (sFromDate) {
-					if (sUrl.indexOf("?$filter=") === -1) {
-						sUrl = sUrl + "?$filter=DateFilter ge (datetime'" + sFromDate + "')"; //2019-08-15T00:00:00"
-					} else {
-						sUrl = sUrl + " and DateFilter ge (datetime'" + sFromDate + "')"; //2019-08-15T00:00:00"
-					}
-				} else if (sToDate) {
-					if (sUrl.indexOf("?$filter=") === -1) {
-						sUrl = sUrl + "?$filter=DateFilter le (datetime'" + sToDate + "')"; //2019-08-15T00:00:00"
-					} else {
-						sUrl = sUrl + " and DateFilter le (datetime'" + sToDate + "')"; //2019-08-15T00:00:00"
-					}
-				}
-
-				if (oDataPart.aLineSeqFilter instanceof Array && oDataPart.aLineSeqFilter.length) {
-					var sTokens = "";
-					if (oDataPart.aLineSeqFilter.length === 1) {
-						sTokens = "LineSequence eq '" + oDataPart.aLineSeqFilter[0] + "'";
-					} else {
-						sTokens = "(LineSequence eq '" + oDataPart.aLineSeqFilter[0] + "'";
-						for (var i = 1; i < oDataPart.aLineSeqFilter.length; i++) {
-							sTokens = sTokens + " or LineSequence eq '" + oDataPart.aLineSeqFilter[i] + "'";
-						}
-						sTokens = sTokens + ")";
-					}
-
-					if (sUrl.indexOf("?$filter=") === -1) {
-						sUrl = sUrl + "?$filter=" + sTokens;
-					} else {
-						sUrl = sUrl + " and " + sTokens;
-					}
-				}
-
-				//Applying Filter end here
-
-				if (sUrl.indexOf("?$filter=") === -1) {
-					sUrl = sUrl + ("?$inlinecount=allpages&$skip=" + oThisController.oLoadmore.iFULoaded + "&$top=" + oThisController.oLoadmore.iPageSize);
-				} else {
-					sUrl = sUrl + (" &$inlinecount=allpages&$skip=" + oThisController.oLoadmore.iFULoaded + "&$top=" + oThisController.oLoadmore.iPageSize);
-				}
-
-				if (bOpenBusyDialog) {
-					oThisController.openBusyDialog();
-				}
-			} catch (e) {
-				oThisController.showMessage(oThisController.getMessage("EXCEPTION"), "E");
-				oThisController.closeBusyDialog();
-			}
-
-			oThisController.fnProcessDataRequest(sUrl, "GET", oHeader, false, function (oXHR, status) {
-				if (status === "success") {
-					if (oXHR.responseJSON && oXHR.responseJSON.d && oXHR.responseJSON.d.results) {
-						oMdlPart.setProperty("/TotalLength", oXHR.responseJSON.d.__count);
-						oThisController.fnSetFUnitsComparingDrafts(oXHR.responseJSON.d.results);
-					} else {
-						oThisController.showMessage(oThisController.getMessage("NO_DATA"));
-					}
-				} else {
-					oThisController.showMessage(oThisController.getMessage("REQUEST_OPERATION_FAILED"), "E");
-				}
-				if (bCloseBusyDialog) {
-					oThisController.closeBusyDialog();
-				}
-				oMdlPart.refresh();
-			});
-		},*/
-
-	
 
 	/*	fnSetUserInterFace: function (sAction) {
 			var oOrderModel = this.getModel("mOrderModel");
