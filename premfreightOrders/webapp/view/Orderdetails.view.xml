@@ -47,7 +47,7 @@
 							</fb:FilterGroupItem>
 							<fb:FilterGroupItem name="reasonCode" label="{i18n>REASON_CODE}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
 								<fb:control>
-									<ComboBox selectedKey="{mCommon>/reasoncodeFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
+									<ComboBox selectedKey="{mCommon>/reasonCodeFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
 										items="{path: 'mCommon>/aReasonCodes'}" change="onChangeCBox">
 										<core:ListItem key="{mCommon>key}" text="{mCommon>key}" tooltip="{mCommon>key}"/>
 									</ComboBox>
@@ -70,7 +70,7 @@
 				</ToolbarSpacer>
 			<!--	<Button class="sapMbtn" id="id_UnPlannedOrder_ClearAll" text="{i18n>CLEAR_ALL}" icon="sap-icon://sys-cancel" iconFirst="true"
 					enabled="{mCommon>/bIsEditable}" visible="{mCommon>/visible/bClearAll}" press="onClearAll"></Button>-->
-				<Button text="{i18n>GET_COST}" type="Emphasized" icon="sap-icon://lead" iconFirst="true" press="onGetCost"/>
+				<Button class="sapMbtn" text="{i18n>GET_COST}" press="onGetCost"/>
 				<layoutData>
 					<OverflowToolbarLayoutData priority="NeverOverflow"/>
 				</layoutData>
@@ -95,7 +95,7 @@
         <!--</HBox>-->
 				</HBox>
 				<ToolbarSpacer/>
-					<Button  text="{i18n>Approve}" type="Accept" press="onApprove"/>
+					<Button  text="{i18n>APPROVE}" type="Accept" press="onApprove"/>
 					<Button  text="{i18n>REJECT}" type="Reject" press="onReject"/>
 			<!--	<Button text="{i18n>NEXT}" type="Emphasized" enabled="{/nextButtonEnabled}" visible="{mCommon>/visible/bNext}" press="onDialogNextButton"/>-->
 			<!--	<Button text="{i18n>SUBMIT}" class="customIcon" type="Emphasized" icon="sap-icon://accept" iconFirst="true" enabled="{mCommon>/bIsEditable}"
