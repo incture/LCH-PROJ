@@ -51,12 +51,8 @@
 				<ui:template>
 					<ComboBox selectedKey="{mCommon>selectedCarrier}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="true" filterSecondaryValues="true"
 						items="{path: 'mCommon>/aCarrierdetails'}" change="onChangeCarrier">
-<<<<<<< HEAD
 						<core:ListItem key="{mCommon>bpNumber}" text="{mCommon>bpNumber}" additionalText="{mCommon>carrierDetails}"
 							tooltip="{mCommon>carrierDetails}"/>
-=======
-						<core:ListItem key="{mCommon>bpNumber}" text="{mCommon>bpNumber}" additionalText="{mCommon>carrierDetails}" tooltip="{mCommon>carrierDetails}"/>
->>>>>>> refs/remotes/origin/LCH_DEV_UI5
 					</ComboBox>
 				</ui:template>
 			</ui:Column>
@@ -64,13 +60,8 @@
 				<Label text="{i18n>CARRIER_MODE}" design="Bold"/>
 				<ui:template>
 					<ComboBox selectedKey="{mCommon>selectedCarriermode}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
-<<<<<<< HEAD
 						items="{path: 'mCommon>/aCarriermodes'}" change="onChangeCBox" enabled="{mCommon>/enable/carrierMode}">
-						<core:ListItem key="{mCommon>mode}" text="{mCommon>mode}"/>
-=======
-						items="{path: 'mCommon>/aCarriermodes'}" change="onChangeCBox">
-						<core:ListItem key="{mCommon>mode}" text="{mCommon>mode}" tooltip="{mCommon>mode}"/>
->>>>>>> refs/remotes/origin/LCH_DEV_UI5
+						<core:ListItem key="{mCommon>mode}" text="{mCommon>mode}"  tooltip="{mCommon>mode}"/>
 					</ComboBox>
 				</ui:template>
 			</ui:Column>
