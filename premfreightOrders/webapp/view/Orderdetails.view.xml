@@ -13,7 +13,7 @@
 								<fb:control>
 									<ComboBox selectedKey="{mCommon>/originFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
 										items="{path: 'mCommon>/aOrigin',sorter:{ path:'originName'}}" change="onChangeOrigin">
-										<core:ListItem key="{mCommon>originName}" text="{mCommon>originName}"/>
+										<core:ListItem key="{mCommon>originName}" text="{mCommon>originName}" tooltip="{mCommon>originName}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterGroupItem>
@@ -21,7 +21,7 @@
 								<fb:control>
 									<ComboBox selectedKey="{mCommon>/destinationFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
 										items="{path: 'mCommon>/aOrigin',sorter:{ path:'originName'}, tooltip:{path:'originName'}}" change="onChangeDestination">
-										<core:ListItem key="{mCommon>originName}" text="{mCommon>originName}"/>
+										<core:ListItem key="{mCommon>originName}" text="{mCommon>originName}" tooltip="{mCommon>originName}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterGroupItem>
@@ -41,7 +41,7 @@
 								<fb:control>
 									<ComboBox selectedKey="{mCommon>/statusFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
 										items="{path: 'mCommon>/aStatus'}" change="onChangeCBox">
-										<core:ListItem key="{mCommon>status}" text="{mCommon>status}"/>
+										<core:ListItem key="{mCommon>status}" text="{mCommon>status}" tooltip="{mCommon>status}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterGroupItem>
@@ -49,7 +49,7 @@
 								<fb:control>
 									<ComboBox selectedKey="{mCommon>/reasoncodeFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
 										items="{path: 'mCommon>/aReasonCodes'}" change="onChangeCBox">
-										<core:ListItem key="{mCommon>key}" text="{mCommon>key}"/>
+										<core:ListItem key="{mCommon>key}" text="{mCommon>key}" tooltip="{mCommon>key}"/>
 									</ComboBox>
 								</fb:control>
 							</fb:FilterGroupItem>
@@ -74,6 +74,26 @@
 				<layoutData>
 					<OverflowToolbarLayoutData priority="NeverOverflow"/>
 				</layoutData>
+				<ToolbarSpacer/>
+				<HBox>
+					<Button enabled="false" id="first" press="onFirst" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>
+					<Button enabled="false" id="previous" class="btnPrev" press="onPrevious" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>
+					<Input value="" enabled="true"/>
+					<Button enabled="false" id="jump" class="btnPrev" press="onJump" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>
+					<Button enabled="false" id="next" class="btnPrev" press="onNext" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>
+					<Button enabled="false" id="last" class="btnPrev" press="onLast" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>
+        
+        <!--<Button enabled="false" id="previous" class="btnPrev" press="onPrevious" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>-->
+        <!--<TextArea id="footerText" class="pageNumber" value="1 of 10" rows="1"-->
+        <!--    textAlign="Center" editable="false" visible="true"/>-->
+        <!--<Button enabled="true" id="next" class="btnNext" press="onNext" type="Emphasized" icon="sap-icon://slim-arrow-right" visible="true"></Button>-->
+        <!--<ToolbarSpacer/>-->
+        <!--<HBox class="footerHbox" id="footerHbox2" visible="true">-->
+        <!--    <Label text="Go to Page:" class="goto"/>-->
+        <!--    <Input id="footerGoto" value="{oEditGlobalModel>/gotoPage}" submit="onGoto" fieldWidth="80%" class="gotoPage" width="100%" textAlign="Center"/>-->
+        <!--    <Button text="Go" type="Ghost" press="onGoto"/>-->
+        <!--</HBox>-->
+				</HBox>
 				<ToolbarSpacer/>
 					<Button  text="{i18n>Approve}" type="Accept" press="onApprove"/>
 					<Button  text="{i18n>REJECT}" type="Reject" press="onReject"/>
