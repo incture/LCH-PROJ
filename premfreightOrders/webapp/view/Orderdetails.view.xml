@@ -68,9 +68,7 @@
 						<OverflowToolbarLayoutData priority="NeverOverflow"/>
 					</layoutData>
 				</ToolbarSpacer>
-			<!--	<Button class="sapMbtn" id="id_UnPlannedOrder_ClearAll" text="{i18n>CLEAR_ALL}" icon="sap-icon://sys-cancel" iconFirst="true"
-					enabled="{mCommon>/bIsEditable}" visible="{mCommon>/visible/bClearAll}" press="onClearAll"></Button>-->
-				<Button class="sapMbtn" text="{i18n>GET_COST}" press="onGetCost"/>
+				<Button text="{i18n>GET_COST}" type="Emphasized" icon="sap-icon://lead" iconFirst="true" press="onGetCost"/>
 				<layoutData>
 					<OverflowToolbarLayoutData priority="NeverOverflow"/>
 				</layoutData>
@@ -83,23 +81,10 @@
 					<Button enabled="false" id="next" class="btnPrev" press="onNext" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>
 					<Button enabled="false" id="last" class="btnPrev" press="onLast" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>
         
-        <!--<Button enabled="false" id="previous" class="btnPrev" press="onPrevious" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>-->
-        <!--<TextArea id="footerText" class="pageNumber" value="1 of 10" rows="1"-->
-        <!--    textAlign="Center" editable="false" visible="true"/>-->
-        <!--<Button enabled="true" id="next" class="btnNext" press="onNext" type="Emphasized" icon="sap-icon://slim-arrow-right" visible="true"></Button>-->
-        <!--<ToolbarSpacer/>-->
-        <!--<HBox class="footerHbox" id="footerHbox2" visible="true">-->
-        <!--    <Label text="Go to Page:" class="goto"/>-->
-        <!--    <Input id="footerGoto" value="{oEditGlobalModel>/gotoPage}" submit="onGoto" fieldWidth="80%" class="gotoPage" width="100%" textAlign="Center"/>-->
-        <!--    <Button text="Go" type="Ghost" press="onGoto"/>-->
-        <!--</HBox>-->
 				</HBox>
 				<ToolbarSpacer/>
 					<Button  text="{i18n>APPROVE}" type="Accept" press="onApprove"/>
 					<Button  text="{i18n>REJECT}" type="Reject" press="onReject"/>
-			<!--	<Button text="{i18n>NEXT}" type="Emphasized" enabled="{/nextButtonEnabled}" visible="{mCommon>/visible/bNext}" press="onDialogNextButton"/>-->
-			<!--	<Button text="{i18n>SUBMIT}" class="customIcon" type="Emphasized" icon="sap-icon://accept" iconFirst="true" enabled="{mCommon>/bIsEditable}"
-					visible="{mCommon>/visible/bSubmit}" press="onSubmit"></Button>-->
 				<ToolbarSpacer width="2rem">
 					<layoutData>
 						<OverflowToolbarLayoutData priority="NeverOverflow"/>
