@@ -48,15 +48,9 @@
 		"bApplyAll": false,
 		"bGroupField": false,
 		"bLoadMore": false,
-		"bSaveAsDraft": false,
-		"bRmngShipDate": false,
-		"bGrpCnfrm": false,
-		"bOriginId": true,
-		"bPropShipDate": true,
-		"bPropQty": true,
-		"bCountry": true,
-		"bAddNewBtn": false,
-		"bupload": false
+		"carrier" : true,
+		"carrierMode" : false
+		
 	},
 
 	"rowcounts": [{

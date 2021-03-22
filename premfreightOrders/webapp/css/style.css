@@ -190,17 +190,17 @@
     color: #0052c6 !important;
 }
 
-.sapMbtn .sapMBtnInner {
-    /*font-color:black;*/
+/*.sapMbtn .sapMBtnInner {
+    /*font-color:black;
     background-image: none;
     background-color: #eff0f2 !important;
     color: #191818 !important;
     box-shadow: 0.6px 0.6px #a9a6a6;
     text-shadow: 0.5px 0.5px #dcdcdc;
     border: 1.4px solid #a5a0a0;
-}
+}*/
 
-.sapMbtn.sapContrast.sapMBtnIcon,
+/*.sapMbtn.sapContrast.sapMBtnIcon,
 .sapContrast .sapMBtnIcon {
     color: black !important;
 }
@@ -209,7 +209,7 @@
 .sapContrast .sapMBtnIcon {
     color: #b3afaf;
 }
-
+*/
 
 /*.sapContrast.sapMBtnInner,*/
 
@@ -407,22 +407,53 @@
 	height : 3rem !important;
     border : none !important;
 	margin : 0px !important;
-    background : #00366c !important;
+    background : #ecebea !important;
     box-shadow: inset 0 0.0625rem 0 0 #bac4ce !important;
   
 }
 
-.sapMbtn.sapContrast.sapMBtnIcon,
+.sapMBtnEmphasized{
+	background-color :  #00366c !important;
+}
+/*.sapMbtn.sapContrast.sapMBtnIcon,
 .sapContrast .sapMBtnIcon {
     color: #00366c;
 }
 
 .sapMbtn .sapMBtnInner {
-    /*font-color:black;*/
+    /*font-color:black;
     background-image: none;
     background-color: #eff0f2 !important;
     color: #00366c !important;
     box-shadow: 0.6px 0.6px #a9a6a6;
     text-shadow: 0.5px 0.5px #dcdcdc;
     border: 1.4px solid  #00366c ;
+}*/
+
+.sapMBtnInner.sapMBtnAccept{
+	background-image: none;
+    background-color: #f7f7f7 !important;
+    border-color: #2b7c2b !important;
+    color: #2b7c2b !important;
 }
+
+.sapMBtnInner.sapMBtnReject{
+	background-image: none;
+    background-color: #f7f7f7 !important;
+    border-color: #b00 !important;
+    color: #b00 !important;
+}
+
+.sapContrast.sapMBtnInner, .sapContrast .sapMBtnInner{
+	text-shadow: none;
+}
+
+.sapMInputBaseContentWrapper{
+	border: none !important;
+    border-bottom: 1px solid #dddbda !important;
+    box-shadow: 0 0.1rem #dddbda  !important;
+}
+.sapMInputBaseIcon {
+    color: grey;
+}
+	

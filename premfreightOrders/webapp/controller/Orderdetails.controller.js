@@ -66,7 +66,7 @@ sap.ui.define([
 
 		fnGetcarrierdetails: function () {
 			var oThisController = this;
-			var oMdlCommon = this.getModel("mCommon");
+			var oMdlCommon = oThisController.getModel("mCommon");
 			var sUrl = "/lch_services/premiumOrders/getAllCarrierDetails",
 				oHeader = {
 					"Content-Type": "application/json",
@@ -88,37 +88,41 @@ sap.ui.define([
 		},
 
 		onChangeCarrier: function (oEvent) {
+			debugger;
 			var oThisController = this;
-			var oMdlCommon = this.getModel("mCommon");
+			var oMdlCommon = oThisController.getModel("mCommon");
+			oMdlCommon.setProperty("/aCarriermodes", []);
+			oMdlCommon.setProperty("/enable/carrierMode", false);
+			oMdlCommon.refresh();
 			var bpNumber = oEvent.getSource().getSelectedItem().getText();
-			var sUrl = "/lch_services/premiumOrders/getMode",
-				oHeader = {
-					"Content-Type": "application/json",
-					"Accept": "application/json"
-				},
-				oPayload = {
-					"bpNumber": bpNumber
-				};
+			if (bpNumber) {
+				var sUrl = "/lch_services/premiumOrders/getMode",
+					oHeader = {
+						"Content-Type": "application/json",
+						"Accept": "application/json"
+					},
+					oPayload = {
+						"bpNumber": bpNumber
+					};
 
-			oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
-				try {
-					if (oXHR && oXHR.responseJSON) {
-
-						oMdlCommon.setProperty("/aCarriermodes", oXHR.responseJSON);
-
+				oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
+					try {
+						if (oXHR && oXHR.responseJSON) {
+							oMdlCommon.setProperty("/aCarriermodes", oXHR.responseJSON);
+							oMdlCommon.setProperty("/enable/carrierMode", true);
+						}
+						oMdlCommon.refresh();
+						console.log(oMdlCommon);
+					} catch (e) {
+						// console.log(e);
 					}
-					oMdlCommon.refresh();
-					console.log(oMdlCommon);
-				} catch (e) {
-					// console.log(e);
-				}
-			}, oPayload);
-
+				}, oPayload);
+			} 
 		},
 
 		onSearch: function () {
 				var oThisController = this;
-				var oMdlCommon = this.getModel("mCommon");
+				var oMdlCommon = oThisController.getModel("mCommon");
 				var originFilter = oMdlCommon.getProperty("/originFilter"),
 					destinationFilter = oMdlCommon.getProperty("/destinationFilter"),
 					statusFilter = oMdlCommon.getProperty("/statusFilter"),
