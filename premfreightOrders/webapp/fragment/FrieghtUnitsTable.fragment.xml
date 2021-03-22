@@ -51,7 +51,7 @@
 				<ui:template>
 					<ComboBox selectedKey="{mCommon>selectedCarrier}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="true" filterSecondaryValues="true"
 						items="{path: 'mCommon>/aCarrierdetails'}" change="onChangeCarrier">
-						<core:ListItem key="{mCommon>bpNumber}" text="{mCommon>bpNumber}" additionalText="{mCommon>carrierDetails}"/>
+						<core:ListItem key="{mCommon>bpNumber}" text="{mCommon>bpNumber}" additionalText="{mCommon>carrierDetails}" tooltip="{mCommon>carrierDetails}"/>
 					</ComboBox>
 				</ui:template>
 			</ui:Column>
@@ -60,7 +60,7 @@
 				<ui:template>
 					<ComboBox selectedKey="{mCommon>selectedCarriermode}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
 						items="{path: 'mCommon>/aCarriermodes'}" change="onChangeCBox">
-						<core:ListItem key="{mCommon>mode}" text="{mCommon>mode}"/>
+						<core:ListItem key="{mCommon>mode}" text="{mCommon>mode}" tooltip="{mCommon>mode}"/>
 					</ComboBox>
 				</ui:template>
 			</ui:Column>
