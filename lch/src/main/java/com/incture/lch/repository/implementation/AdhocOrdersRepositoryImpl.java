@@ -98,7 +98,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		AdhocOrderDto AdhocOrderDto = new AdhocOrderDto();
 
 		// System.out.println("Inside DTO CLass");
-		AdhocOrderDto.setAdhocOrderId(adhocOrders.getFwoNum());
+		AdhocOrderDto.setorderId(adhocOrders.getFwoNum());
 		AdhocOrderDto.setBusinessDivision(adhocOrders.getBusinessDivision());
 		if (adhocOrders.getCharge() != null) {
 			AdhocOrderDto.setCharge(ServiceUtil.convertStringToBoolean(adhocOrders.getCharge()));
@@ -222,7 +222,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 	public AdhocOrders importAdhocOrdersDto(AdhocOrderDto AdhocOrderDto) {
 		AdhocOrders adhocOrders = new AdhocOrders();
 
-		adhocOrders.setFwoNum(AdhocOrderDto.getAdhocOrderId());
+		adhocOrders.setFwoNum(AdhocOrderDto.getorderId());
 		adhocOrders.setPartNum(AdhocOrderDto.getPartNum());
 		adhocOrders.setUserId(AdhocOrderDto.getUserId());
 		adhocOrders.setCreatedBy(AdhocOrderDto.getCreatedBy());
@@ -391,9 +391,9 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		crit.add(Restrictions.like("fwoNum", "TEM%", MatchMode.ANYWHERE));
 		// queryStr.append("");
 
-		if (adhocRequestDto.getAdhocOrderId() != null && !(adhocRequestDto.getAdhocOrderId().equals(""))) {
+		if (adhocRequestDto.getorderId() != null && !(adhocRequestDto.getorderId().equals(""))) {
 			// queryStr.append(" AND ao.fwoNum=:fwoNum");
-			crit.add(Restrictions.eq("adhocOrderId", adhocRequestDto.getAdhocOrderId()));
+			crit.add(Restrictions.eq("adhocOrderId", adhocRequestDto.getorderId()));
 
 		}
 		if ((adhocRequestDto.getFromDate() != null && !(adhocRequestDto.getFromDate().equals("")))
@@ -482,8 +482,8 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			crit.add(Restrictions.between("shipDate", t3, t2));
 
 		
-		if (adhocRequestDto.getAdhocOrderId() != null && !(adhocRequestDto.getAdhocOrderId().equals(""))) {
-			crit.add(Restrictions.eq("adhocOrderId", adhocRequestDto.getAdhocOrderId()));
+		if (adhocRequestDto.getorderId() != null && !(adhocRequestDto.getorderId().equals(""))) {
+			crit.add(Restrictions.eq("adhocOrderId", adhocRequestDto.getorderId()));
 
 		}
 		if ((adhocRequestDto.getFromDate() != null && !(adhocRequestDto.getFromDate().equals("")))
@@ -724,8 +724,8 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			session.save(lkShipperDetailsDao.importShipperDetails(shipDetDto2));
 		}
 
-		if (!ServiceUtil.isEmpty(AdhocOrderDto.getAdhocOrderId())) {
-			if (AdhocOrderDto.getAdhocOrderId().startsWith("TEM")) {
+		if (!ServiceUtil.isEmpty(AdhocOrderDto.getorderId())) {
+			if (AdhocOrderDto.getorderId().startsWith("TEM")) {
 				// adhocOrders.setFwoNum(AdhocOrderDto.getAdhocOrderId().replace("TEM",
 				// "ADH"));
 				// NO ACTION NEEDED
@@ -783,7 +783,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		Transaction tx = session.beginTransaction();
 		queryString.append("SELECT ao FROM AdhocOrders ao WHERE ao.fwoNum = ao.fwoNum AND ao.fwoNum like 'ADH%'");
 
-		if (adhocRequestDto.getAdhocOrderId() != null && !(adhocRequestDto.getAdhocOrderId().equals(""))) {
+		if (adhocRequestDto.getorderId() != null && !(adhocRequestDto.getorderId().equals(""))) {
 			queryString.append(" AND ao.fwoNum=:fwoNum");
 		}
 		if ((adhocRequestDto.getFromDate() != null && !(adhocRequestDto.getFromDate().equals("")))
@@ -805,8 +805,8 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		queryString.append(" ORDER BY ao.createdDate DESC");
 		Query query = session.createQuery(queryString.toString());
 
-		if (adhocRequestDto.getAdhocOrderId() != null && !(adhocRequestDto.getAdhocOrderId().equals(""))) {
-			query.setParameter("fwoNum", adhocRequestDto.getAdhocOrderId());
+		if (adhocRequestDto.getorderId() != null && !(adhocRequestDto.getorderId().equals(""))) {
+			query.setParameter("fwoNum", adhocRequestDto.getorderId());
 		}
 		if ((adhocRequestDto.getFromDate() != null && !(adhocRequestDto.getFromDate().equals("")))
 				&& (adhocRequestDto.getToDate() != null) && !(adhocRequestDto.getToDate().equals(""))) {
@@ -1028,13 +1028,13 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public String updateWorflowDetails(AdhocOrderWorkflowDto workflowDto) {
-		System.out.println("Yuhooo" + workflowDto.getAdhocOrderId());
+		System.out.println("Yuhooo" + workflowDto.getorderId());
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		List<AdhocOrders> adhocOrder = new ArrayList<AdhocOrders>();
 		Criteria criteria = session.createCriteria(AdhocOrders.class);
-		criteria.add(Restrictions.eq("fwoNum", workflowDto.getAdhocOrderId()));
+		criteria.add(Restrictions.eq("fwoNum", workflowDto.getorderId()));
 		adhocOrder = criteria.list();
 
 		System.out.println(adhocOrder.size());
@@ -1056,21 +1056,21 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		tx.commit();
 		session.close();
 
-		System.out.println(workflowDto.getAdhocOrderId());
-		return workflowDto.getAdhocOrderId();
+		System.out.println(workflowDto.getorderId());
+		return workflowDto.getorderId();
 	}
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public String updateApprovalWorflowDetails(JSONObject obj) throws JSONException {
 		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
 		workflowDto = prepareAdhocApprovalWorkflowDto(obj);
-		System.out.println("Yuhooo" + workflowDto.getAdhocOrderId());
+		System.out.println("Yuhooo" + workflowDto.getorderId());
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		List<AdhocOrders> adhocOrder = new ArrayList<AdhocOrders>();
 		Criteria criteria = session.createCriteria(AdhocOrders.class);
-		criteria.add(Restrictions.eq("fwoNum", workflowDto.getAdhocOrderId()));
+		criteria.add(Restrictions.eq("fwoNum", workflowDto.getorderId()));
 		adhocOrder = criteria.list();
 
 		System.out.println(adhocOrder.size());
@@ -1092,14 +1092,14 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		tx.commit();
 		session.close();
 
-		System.out.println(workflowDto.getAdhocOrderId());
-		return workflowDto.getAdhocOrderId();
+		System.out.println(workflowDto.getorderId());
+		return workflowDto.getorderId();
 	}
 
 	public AdhocOrderWorkflowDto prepareAdhocApprovalWorkflowDto(JSONObject data) throws JSONException {
 		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
 		JSONObject obj = data.getJSONObject("workflowInfo");
-		workflowDto.setAdhocOrderId(data.getString("adhocOrderId"));
+		workflowDto.setorderId(data.getString("adhocOrderId"));
 		workflowDto.setDescription(obj.getString("description"));
 		workflowDto.setInstanceId(obj.getString("id"));
 		workflowDto.setPendingWith(null);

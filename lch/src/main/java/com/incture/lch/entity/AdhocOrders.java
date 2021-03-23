@@ -18,7 +18,7 @@ public class AdhocOrders implements Serializable {
 	private static final long serialVersionUID = -6619380688974543624L;
 
 	@Id
-	@Column(name = "adhocOrderId")
+	@Column(name = "orderId")
 	private String fwoNum;
 
 	@Column(name = "userId")

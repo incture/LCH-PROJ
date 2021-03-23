@@ -5,7 +5,7 @@ public class ChargeRequestDto
 	//private Long id;
 	
 	
-	private String adhocOrderId;
+	private String orderId;
 	
 	
 	private String bpNumber;
@@ -21,12 +21,12 @@ public class ChargeRequestDto
 	
 	private int charge;
 	
-	public String getAdhocOrderId() {
-		return adhocOrderId;
+	public String getorderId() {
+		return orderId;
 	}
 
-	public void setAdhocOrderId(String adhocOrderId) {
-		this.adhocOrderId = adhocOrderId;
+	public void setorderId(String orderId) {
+		this.orderId = orderId;
 	}
 
 	/*public Long getId() {

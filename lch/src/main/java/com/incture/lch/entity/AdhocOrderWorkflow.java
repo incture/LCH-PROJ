@@ -20,8 +20,8 @@ public class AdhocOrderWorkflow {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(name = "ADHOC_ORDER_ID")
-	private String adhocOrderId;
+	@Column(name = "ORDER_ID")
+	private String orderId;
 
 	@Column(name = "REQUESTED_BY")
 	private String requestedBy;
@@ -71,12 +71,12 @@ public class AdhocOrderWorkflow {
 		this.id = id;
 	}
 
-	public String getAdhocOrderId() {
-		return adhocOrderId;
+	public String getorderId() {
+		return orderId;
 	}
 
-	public void setAdhocOrderId(String adhocOrderId) {
-		this.adhocOrderId = adhocOrderId;
+	public void setorderId(String orderId) {
+		this.orderId = orderId;
 	}
 
 	public String getRequestedBy() {

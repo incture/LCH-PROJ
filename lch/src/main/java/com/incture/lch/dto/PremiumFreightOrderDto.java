@@ -1,7 +1,7 @@
 package com.incture.lch.dto;
 
 public class PremiumFreightOrderDto {
-	private String adhocOrderId;
+	private String orderId;
 
 	private String createdBy;
 
@@ -39,12 +39,12 @@ public class PremiumFreightOrderDto {
 
 	private String status;
 
-	public String getAdhocOrderId() {
-		return adhocOrderId;
+	public String getorderId() {
+		return orderId;
 	}
 
-	public void setAdhocOrderId(String adhocOrderId) {
-		this.adhocOrderId = adhocOrderId;
+	public void setorderId(String orderId) {
+		this.orderId = orderId;
 	}
 
 	public String getCreatedBy() {

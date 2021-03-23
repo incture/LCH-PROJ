@@ -212,7 +212,7 @@ public class AdhocOrdersController {
 
 	@RequestMapping(value = "/updateWorkflowDetails", method = RequestMethod.POST)
 	public String updateWorflowDetails(@RequestBody AdhocOrderWorkflowDto workflowDto) {
-		System.out.println(workflowDto.getAdhocOrderId());
+		System.out.println(workflowDto.getorderId());
 		return adhocOrdersService.updateWorflowDetails(workflowDto);
 	}
 

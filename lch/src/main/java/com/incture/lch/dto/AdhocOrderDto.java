@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class AdhocOrderDto {
 
-	private String adhocOrderId;
+	private String orderId;
 
 	private String businessDivision;
 
@@ -155,12 +155,12 @@ public class AdhocOrderDto {
 
 	private Boolean isSaved;
 
-	public String getAdhocOrderId() {
-		return adhocOrderId;
+	public String getorderId() {
+		return orderId;
 	}
 
-	public void setAdhocOrderId(String adhocOrderId) {
-		this.adhocOrderId = adhocOrderId;
+	public void setorderId(String orderId) {
+		this.orderId = orderId;
 	}
 
 	public String getBusinessDivision() {
@@ -713,6 +713,11 @@ public class AdhocOrderDto {
 
 	public void setIsSaved(Boolean isSaved) {
 		this.isSaved = isSaved;
+	}
+
+	public void setOrderId(String fwoNum) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

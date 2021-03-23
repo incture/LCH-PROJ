@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "T_ADHOC_APPROVAL_RULE")
+@Table(name = "T_LCH_APPROVAL_RULE")
 public class AdhocApprovalRule implements Serializable {
 
 	private static final long serialVersionUID = -2976518896903069885L;
@@ -36,6 +36,17 @@ public class AdhocApprovalRule implements Serializable {
 	@Column(name = "USER_ID", columnDefinition = "NVARCHAR(200)")
 	private String userId;
 	
+	@Column(name = "STATUS")
+	private String status;
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public String getAdhocType() {
 		return adhocType;
 	}

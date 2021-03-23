@@ -5,7 +5,7 @@ import java.util.Date;
 public class AdhocOrderWorkflowDto {
 
 	private Long id;
-	private String adhocOrderId;
+	private String orderId;
 	private String workflowName;
 	private String requestedBy;
 	private Date requestedDate;
@@ -27,12 +27,12 @@ public class AdhocOrderWorkflowDto {
 		this.id = id;
 	}
 
-	public String getAdhocOrderId() {
-		return adhocOrderId;
+	public String getorderId() {
+		return orderId;
 	}
 
-	public void setAdhocOrderId(String adhocOrderId) {
-		this.adhocOrderId = adhocOrderId;
+	public void setorderId(String orderId) {
+		this.orderId = orderId;
 	}
 
 	public String getRequestedBy() {
@@ -133,7 +133,7 @@ public class AdhocOrderWorkflowDto {
 
 	@Override
 	public String toString() {
-		return "AdhocOrderWorkflowDto [id=" + id + ", adhocOrderId=" + adhocOrderId + ", workflowName=" + workflowName
+		return "AdhocOrderWorkflowDto [id=" + id + ", orderId=" + orderId + ", workflowName=" + workflowName
 				+ ", requestedBy=" + requestedBy + ", requestedDate=" + requestedDate + ", instanceId=" + instanceId
 				+ ", definitionId=" + definitionId + ", subject=" + subject + ", updatedBy=" + updatedBy
 				+ ", updatedDate=" + updatedDate + ", status=" + status + ", pendingWith=" + pendingWith

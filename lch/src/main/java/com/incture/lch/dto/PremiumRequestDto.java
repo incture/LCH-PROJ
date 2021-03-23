@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class PremiumRequestDto
 {
-	private String adhocOrderId;
+	private String orderId;
 	private String fromDate;
 	private String toDate;
 	private String plannerEmail;
@@ -16,11 +16,11 @@ public class PremiumRequestDto
 	private String reasonCode;
 	
 	
-	public String getAdhocOrderId() {
-		return adhocOrderId;
+	public String getorderId() {
+		return orderId;
 	}
-	public void setAdhocOrderId(String adhocOrderId) {
-		this.adhocOrderId = adhocOrderId;
+	public void setorderId(String orderId) {
+		this.orderId = orderId;
 	}
 	/*public Date getCreatedDate() {
 		return createdDate;

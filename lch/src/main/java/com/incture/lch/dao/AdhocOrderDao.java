@@ -28,7 +28,7 @@ public class AdhocOrderDao {
 		AdhocOrderDto AdhocOrderDto = new AdhocOrderDto();
 
 		// System.out.println("Inside DTO CLass");
-		AdhocOrderDto.setAdhocOrderId(adhocOrders.getFwoNum());
+		AdhocOrderDto.setorderId(adhocOrders.getFwoNum());
 		AdhocOrderDto.setBusinessDivision(adhocOrders.getBusinessDivision());
 		if (adhocOrders.getCharge() != null) {
 			AdhocOrderDto.setCharge(ServiceUtil.convertStringToBoolean(adhocOrders.getCharge()));
@@ -151,7 +151,7 @@ public class AdhocOrderDao {
 	public AdhocOrders importAdhocOrdersDto(AdhocOrderDto AdhocOrderDto) {
 		AdhocOrders adhocOrders = new AdhocOrders();
 
-		adhocOrders.setFwoNum(AdhocOrderDto.getAdhocOrderId());
+		adhocOrders.setFwoNum(AdhocOrderDto.getorderId());
 		adhocOrders.setPartNum(AdhocOrderDto.getPartNum());
 		adhocOrders.setUserId(AdhocOrderDto.getUserId());
 		adhocOrders.setCreatedBy(AdhocOrderDto.getCreatedBy());

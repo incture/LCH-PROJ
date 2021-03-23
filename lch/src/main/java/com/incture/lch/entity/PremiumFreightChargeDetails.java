@@ -20,8 +20,8 @@ public class PremiumFreightChargeDetails
 	@GenericGenerator(name="system-uuid", strategy = "uuid")
 	private String premiumId;
 	
-	@Column(name="ADHOC_ORDER_ID")
-	private String adhocOrderId;
+	@Column(name="ORDER_ID")
+	private String orderId;
 	
 	//ORIGIN DETAILS
 	@Column(name="ORIGIN_NAME")
@@ -92,8 +92,8 @@ public class PremiumFreightChargeDetails
 	@Column(name="PLANNER_EMAIL")
 	private String plannerEmail;
 
-	public String getAdhocOrderId() {
-		return adhocOrderId;
+	public String getorderId() {
+		return orderId;
 	}
 
 	public String getPremiumId() {
@@ -104,8 +104,8 @@ public class PremiumFreightChargeDetails
 		this.premiumId = premiumId;
 	}
 
-	public void setAdhocOrderId(String adhocOrderId) {
-		this.adhocOrderId = adhocOrderId;
+	public void setorderId(String orderId) {
+		this.orderId = orderId;
 	}
 
 	public String getOriginName() {

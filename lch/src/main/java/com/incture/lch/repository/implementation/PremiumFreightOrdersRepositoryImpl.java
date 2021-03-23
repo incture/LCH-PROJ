@@ -53,7 +53,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 		PremiumFreightOrderDto premiumFreightOrderDto = new PremiumFreightOrderDto();
 
-		premiumFreightOrderDto.setAdhocOrderId(adhocOrders.getFwoNum());
+		premiumFreightOrderDto.setorderId(adhocOrders.getFwoNum());
 		premiumFreightOrderDto.setCreatedBy(adhocOrders.getCreatedBy());
 
 		if (adhocOrders.getCreatedDate() != null && !(adhocOrders.getCreatedDate().equals(""))) {
@@ -102,8 +102,8 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		criteria.add(Restrictions.eq("premiumFreight", "true"));
 
 		// System.out.println(criteria.list().size());
-		if (premiumRequestDto.getAdhocOrderId() != null && !(premiumRequestDto.getAdhocOrderId().equals(""))) {
-			criteria.add(Restrictions.eq("adhocOrderId", premiumRequestDto.getAdhocOrderId()));
+		if (premiumRequestDto.getorderId() != null && !(premiumRequestDto.getorderId().equals(""))) {
+			criteria.add(Restrictions.eq("adhocOrderId", premiumRequestDto.getorderId()));
 
 		}
 		if ((premiumRequestDto.getFromDate() != null && !(premiumRequestDto.getFromDate().equals("")))
@@ -248,7 +248,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 			 * adhocOrderIds.add(c.getAdhocOrderId()); } for(String
 			 * adid:adhocOrderIds) {
 			 */
-			String adid = c.getAdhocOrderId();
+			String adid = c.getorderId();
 			try {
 				String queryStr = "SELECT ao FROM AdhocOrders ao WHERE ao.fwoNum = ao.fwoNum AND ao.fwoNum=:fwoNum";
 				Query query = session.createQuery(queryStr);
@@ -266,7 +266,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					Criteria criteria = session.createCriteria(PremiumFreightChargeDetails.class);
 					criteria.add(Restrictions.eq("adhocOrderId", adid));
 
-					premiumFreightChargeDetails.setAdhocOrderId(adid);
+					premiumFreightChargeDetails.setorderId(adid);
 
 					premiumFreightChargeDetails.setBpNumber(c.getBpNumber());
 					premiumFreightChargeDetails.setCarrierDetails(c.getCarrierDetails());
@@ -323,7 +323,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		List<PremiumFreightChargeDetails> premiumFreightChargeDetails = new ArrayList<PremiumFreightChargeDetails>();
 		@SuppressWarnings("deprecation")
 		Criteria criteria = session.createCriteria(AdhocOrders.class);
-		criteria.add(Restrictions.eq("fwoNum", dto.getAdhocOrderId()));
+		criteria.add(Restrictions.eq("fwoNum", dto.getorderId()));
 		adhocOrders = criteria.list();
 		for (AdhocOrders a : adhocOrders) {
 			a.setStatus("In Progress");
@@ -332,14 +332,14 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		}
 
 		Criteria criteria2 = session.createCriteria(PremiumFreightChargeDetails.class);
-		criteria2.add(Restrictions.eq("adhocOrderId", dto.getAdhocOrderId()));
+		criteria2.add(Restrictions.eq("adhocOrderId", dto.getorderId()));
 		premiumFreightChargeDetails = criteria2.list();
 		if (premiumFreightChargeDetails == null) {
 			for (AdhocOrders a : adhocOrders) {
 
-				premiumFreightChargeDetail.setAdhocOrderId(a.getFwoNum());
+				premiumFreightChargeDetail.setorderId(a.getFwoNum());
 
-				System.out.println(premiumFreightChargeDetail.getAdhocOrderId());
+				System.out.println(premiumFreightChargeDetail.getorderId());
 				premiumFreightChargeDetail.setOriginName(a.getShipperName());
 				premiumFreightChargeDetail.setOriginAddress(a.getOriginAddress());
 				premiumFreightChargeDetail.setOriginCity(a.getOriginCity());
@@ -389,7 +389,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 		try {
 			for (PremiumRequestDto p : premiumRequestDto) {
-				String adhocOrderId = p.getAdhocOrderId();
+				String adhocOrderId = p.getorderId();
 				Criteria c1 = session.createCriteria(AdhocOrders.class);
 				Criteria c2 = session.createCriteria(PremiumFreightChargeDetails.class);
 
@@ -421,7 +421,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 				for (PremiumFreightChargeDetails pdetail : premiumChargeDetails) {
 					System.out.println(pdetail.getStatus());
 
-					System.out.println(pdetail.getAdhocOrderId());
+					System.out.println(pdetail.getorderId());
 					pdetail.setStatus("Pending with Approver");
 					session.saveOrUpdate(pdetail);
 					session.saveOrUpdate(pdetail);

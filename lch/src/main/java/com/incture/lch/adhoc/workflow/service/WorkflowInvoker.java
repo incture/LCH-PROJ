@@ -44,31 +44,31 @@ public class WorkflowInvoker implements WorkflowInvokerLocal {
 	private String clientid;
 	private String clientsecret;
 
-	public WorkflowInvoker() {
-		try {
-			JSONObject jsonObj = new JSONObject(System.getenv("VCAP_SERVICES"));
-			System.err.println("[WorkflowInvoker:VCAP_SERVICES] : " + jsonObj.toString());
-
-			JSONArray jsonArr = jsonObj.getJSONArray("workflow");
-			JSONObject credentials = jsonArr.getJSONObject(0).getJSONObject("credentials");
-			JSONObject endpoints = credentials.getJSONObject("endpoints");
-
-			// endpoint url
-			workflow_rest_url = endpoints.getString("workflow_rest_url");
-
-			// client credentials
-			JSONObject uaa = credentials.getJSONObject("uaa");
-
-			url = uaa.getString("url");
-			clientid = uaa.getString("clientid");
-			clientsecret = uaa.getString("clientsecret");
-
-			System.err.println("[WorkflowInvoker] : " + jsonArr.toString());
-
-		} catch (JSONException e) {
-			MYLOGGER.error("[WorkflowInvoker] reading environmental variables failed:" + e.getMessage());
-		}
-	}
+//	public WorkflowInvoker() {
+//		try {
+//			JSONObject jsonObj = new JSONObject(System.getenv("VCAP_SERVICES"));
+//			System.err.println("[WorkflowInvoker:VCAP_SERVICES] : " + jsonObj.toString());
+//
+//			JSONArray jsonArr = jsonObj.getJSONArray("workflow");
+//			JSONObject credentials = jsonArr.getJSONObject(0).getJSONObject("credentials");
+//			JSONObject endpoints = credentials.getJSONObject("endpoints");
+//
+//			// endpoint url
+//			workflow_rest_url = endpoints.getString("workflow_rest_url");
+//
+//			// client credentials
+//			JSONObject uaa = credentials.getJSONObject("uaa");
+//
+//			url = uaa.getString("url");
+//			clientid = uaa.getString("clientid");
+//			clientsecret = uaa.getString("clientsecret");
+//
+//			System.err.println("[WorkflowInvoker] : " + jsonArr.toString());
+//
+//		} catch (JSONException e) {
+//			MYLOGGER.error("[WorkflowInvoker] reading environmental variables failed:" + e.getMessage());
+//		}
+//	}
 
 	@Override
 	public JSONObject triggerWorkflow(String input) throws ClientProtocolException, IOException, JSONException {
