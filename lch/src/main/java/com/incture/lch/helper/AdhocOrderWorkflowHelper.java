@@ -11,9 +11,12 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.incture.lch.adhoc.workflow.constant.WorkflowConstants;
 import com.incture.lch.dao.AdhocOrderWorkflowDao;
+import com.incture.lch.dto.AdhocApprovalRuleDto;
 import com.incture.lch.dto.AdhocOrderWorkflowDto;
 import com.incture.lch.entity.AdhocOrders;
+import com.incture.lch.util.ServiceUtil;
 
 @Repository
 public class AdhocOrderWorkflowHelper {
@@ -62,4 +65,36 @@ public class AdhocOrderWorkflowHelper {
 		return workflowDto.getorderId();
 	}
 
+	public String getManagerDetails(List<AdhocApprovalRuleDto> ruleDtoList)
+	{
+		StringBuilder managerBuilder = new StringBuilder();
+		if (!ServiceUtil.isEmpty(ruleDtoList)) {
+			for (AdhocApprovalRuleDto dto : ruleDtoList) {
+				if (dto.getApproverType().equals(WorkflowConstants.MANAGER)) {
+					managerBuilder.append(dto.getUserId());
+					managerBuilder.append(",");
+				}
+				
+			}
+		}
+		String manager = managerBuilder.substring(0, managerBuilder.length() - 2).toString();
+		return manager;
+	}
+	
+	public String getPlannerDetails(List<AdhocApprovalRuleDto> ruleDtoList)
+	
+	{
+		StringBuilder plannerBuilder = new StringBuilder();
+		if (!ServiceUtil.isEmpty(ruleDtoList)) {
+			for (AdhocApprovalRuleDto dto : ruleDtoList) {
+				
+				if (dto.getApproverType().equals(WorkflowConstants.PLANNER)) {
+					plannerBuilder.append(dto.getUserId());
+					plannerBuilder.append(",");
+				}
+			}
+		}
+		String planner = plannerBuilder.substring(0, plannerBuilder.length() - 2).toString();
+		return planner;
+	}
 }

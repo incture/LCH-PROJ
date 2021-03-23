@@ -49,6 +49,7 @@ import com.incture.lch.entity.LkCountries;
 import com.incture.lch.entity.LkDivisions;
 import com.incture.lch.entity.LkShipperDetails;
 import com.incture.lch.entity.ReasonCode;
+import com.incture.lch.helper.AdhocOrderWorkflowHelper;
 import com.incture.lch.repository.AdhocOrdersRepository;
 import com.incture.lch.util.GetReferenceData;
 import com.incture.lch.util.ServiceUtil;
@@ -91,6 +92,9 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	@Autowired
 	private AdhocApprovalRuleDao adhocApprovalRuleDao;
+	
+	@Autowired
+	private AdhocOrderWorkflowHelper adhocOrderWorkflowHelper;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdhocOrdersRepositoryImpl.class);
 
@@ -354,7 +358,81 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		reasonCode.setReasonCodeValue(reasonCodeDto.getReasonCodeValue());
 		return reasonCode;
 	}
+	public WorkflowApprovalTaskDto exportAdhocWorkflowDto(AdhocOrders adhocOrders)
+	{
+		WorkflowApprovalTaskDto workflowDto = new WorkflowApprovalTaskDto();
+		workflowDto.setAdhocOrderId(adhocOrders.getFwoNum());
+		workflowDto.setAdhocType(adhocOrders.getAdhocType());
+		workflowDto.setAdhocOrderInfo(exportAdhocOrdersDto(adhocOrders));
 
+		// workflowDto.setManager(manager);
+
+		workflowDto.setBusinessDivision(adhocOrders.getBusinessDivision());
+		workflowDto.setCharge(ServiceUtil.convertStringToBoolean(adhocOrders.getCharge()));
+		workflowDto.setCountryOrigin(adhocOrders.getCountryOrigin());
+		workflowDto.setCreatedDate(ServiceUtil.convertDateToString(adhocOrders.getCreatedDate()));
+		workflowDto.setCreatedBy(adhocOrders.getCreatedBy());
+		workflowDto.setCurrency(adhocOrders.getCurrency());
+		workflowDto.setCustomerOrderNo(adhocOrders.getCustomerOrderNo());
+		workflowDto.setDestinationAddress(adhocOrders.getDestinationAddress());
+		workflowDto.setDestinationCity(adhocOrders.getDestinationCity());
+		workflowDto.setDestinationName(adhocOrders.getDestinationName());
+		workflowDto.setDestinationNameDesc(adhocOrders.getDestinationNameDesc());
+		workflowDto.setDestinationNameFreeText(adhocOrders.getDestinationNameFreeText());
+		workflowDto.setDestinationState(adhocOrders.getDestinationState());
+		workflowDto.setDestinationZip(adhocOrders.getDestinationZip());
+		workflowDto.setDimensionB(adhocOrders.getDimensionB() != null ? adhocOrders.getDimensionB().toString() : null);
+		workflowDto.setDimensionH(adhocOrders.getDimensionH() != null ? adhocOrders.getDimensionH().toString() : null);
+		workflowDto.setDimensionL(adhocOrders.getDimensionL() != null ? adhocOrders.getDimensionL().toString() : null);
+		workflowDto.setDimensionsUom(adhocOrders.getDimensionsUom());
+		workflowDto.setExpectedDeliveryDate(ServiceUtil.convertDateToString(adhocOrders.getExpectedDeliveryDate()));
+		workflowDto.setGlcode(adhocOrders.getGlCode());
+		workflowDto.setHazmatNumber(adhocOrders.getHazmatNumber());
+		workflowDto.setIsHazmat(adhocOrders.getIsHazmat());
+		workflowDto.setIsInternational(adhocOrders.getIsInternational());
+		workflowDto.setIsTruck(adhocOrders.getIsTruck());
+		workflowDto.setOriginAddress(adhocOrders.getOriginAddress());
+		workflowDto.setOriginCity(adhocOrders.getOriginCity());
+		workflowDto.setOriginCountry(adhocOrders.getOriginCountry());
+		workflowDto.setOriginState(adhocOrders.getOriginState());
+		workflowDto.setOriginZip(adhocOrders.getOriginZip());
+		workflowDto.setPackageType(adhocOrders.getPackageType());
+		workflowDto.setPartDescription(adhocOrders.getPartDescription());
+		workflowDto.setPartNum(adhocOrders.getPartNum());
+
+		// workflowDto.setPlanner(adhocOrd);
+
+		workflowDto.setPlannerEmail(adhocOrders.getPlannerEmail());
+		workflowDto.setPODataNumber(adhocOrders.getPODataNumber());
+		workflowDto.setPremiumFreight(ServiceUtil.convertStringToBoolean(adhocOrders.getPremiumFreight()));
+		workflowDto.setPremiumReasonCode(adhocOrders.getPremiumReasonCode());
+		workflowDto.setPremiumReasonCode(adhocOrders.getPremiumReasonCode());
+		workflowDto.setProjectNumber(adhocOrders.getProjectNumber());
+		workflowDto.setQuantity(String.valueOf(adhocOrders.getQuantity()));
+		workflowDto.setReasonCode(adhocOrders.getReasonCode());
+		workflowDto.setReceivingContact(adhocOrders.getReceivingContact());
+		workflowDto.setReferenceNumber(adhocOrders.getReferenceNumber());
+		workflowDto.setShipDate(ServiceUtil.convertDateToString(adhocOrders.getShipDate()));
+		workflowDto.setShipperName(adhocOrders.getShipperName());
+		workflowDto.setShipperNameDesc(adhocOrders.getShipperNameDesc());
+		workflowDto.setShipperNameFreeText(adhocOrders.getShipperNameFreeText());
+		workflowDto.setShippingContact(adhocOrders.getShippingContact());
+		workflowDto.setShippingInstruction(adhocOrders.getShippingInstruction());
+		workflowDto.setTerms(adhocOrders.getTerms());
+		workflowDto.setUom(adhocOrders.getUom());
+		workflowDto.setUserEmail(adhocOrders.getUserEmail());
+
+		// workflowDto.setUserGroup(adhocOrders.get);
+
+		workflowDto.setUserId(adhocOrders.getUserId());
+		workflowDto.setUserName(adhocOrders.getUserName());
+		workflowDto.setValue(adhocOrders.getValue());
+		workflowDto.setVinNumber(adhocOrders.getVinNumber());
+		workflowDto.setWeight(String.valueOf(adhocOrders.getWeight()));
+		workflowDto.setWeightUom(adhocOrders.getWeightUom());
+		return workflowDto;
+		
+	}
 	@SuppressWarnings("unchecked")
 	public List<AdhocOrderDto> getAllAdhocOrders() {
 		List<AdhocOrderDto> AdhocOrderDtos = new ArrayList<>();
@@ -573,6 +651,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 		LOGGER.info("Starting Workflow");
 		WorkflowApprovalTaskDto workflowDto = new WorkflowApprovalTaskDto();
+		workflowDto= exportAdhocWorkflowDto(adhocOrders);/*
 		workflowDto.setAdhocOrderId(adhocOrders.getFwoNum());
 		workflowDto.setAdhocType(adhocOrders.getAdhocType());
 		workflowDto.setAdhocOrderInfo(exportAdhocOrdersDto(adhocOrders));
@@ -642,10 +721,10 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		workflowDto.setVinNumber(adhocOrders.getVinNumber());
 		workflowDto.setWeight(String.valueOf(adhocOrders.getWeight()));
 		workflowDto.setWeightUom(adhocOrders.getWeightUom());
-
+*/
 		List<AdhocApprovalRuleDto> ruleDtoList = adhocApprovalRuleDao
 				.getAdhocApprovalsByAdhocTypeAndApprovalType(adhocOrders.getAdhocType());
-		StringBuilder managerBuilder = new StringBuilder();
+		/*StringBuilder managerBuilder = new StringBuilder();
 		StringBuilder plannerBuilder = new StringBuilder();
 		if (!ServiceUtil.isEmpty(ruleDtoList)) {
 			for (AdhocApprovalRuleDto dto : ruleDtoList) {
@@ -662,9 +741,11 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 		String manager = managerBuilder.substring(0, managerBuilder.length() - 2).toString();
 		String planner = plannerBuilder.substring(0, plannerBuilder.length() - 2).toString();
-
-		workflowDto.setManager(manager);
-		workflowDto.setPlanner(planner);
+*/
+		/*workflowDto.setManager(manager);
+		workflowDto.setPlanner(planner);*/
+		workflowDto.setManager(adhocOrderWorkflowHelper.getManagerDetails(ruleDtoList));
+		workflowDto.setPlanner(adhocOrderWorkflowHelper.getPlannerDetails(ruleDtoList));
 		LOGGER.info("Workflow inputs........" + workflowDto.toString());
 		wfService.triggerWorkflow(workflowDto);
 
