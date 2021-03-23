@@ -60,7 +60,7 @@
 				<Label text="{i18n>CARRIER_MODE}" design="Bold"/>
 				<ui:template>
 					<ComboBox selectedKey="{mCommon>selectedCarriermode}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
-						items="{path: 'mCommon>/aCarriermodes'}" change="onChangeCBox" enabled="{mCommon>/enable/carrierMode}">
+						items="{path: 'mCommon>/aCarriermodes'}" change="onChangeCBox" enabled="{mCommon>enablecarriermode}">
 						<core:ListItem key="{mCommon>mode}" text="{mCommon>mode}"  tooltip="{mCommon>mode}"/>
 					</ComboBox>
 				</ui:template>

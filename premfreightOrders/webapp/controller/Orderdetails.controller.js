@@ -10,30 +10,21 @@ sap.ui.define([
 	return BaseController.extend("com.incture.lch.premfreightOrders.controller.Orderdetails", {
 
 		onInit: function () {
-			/*	this.bFirst = true;
-				this._oRouter = this.getRouter();*/
+
 			var oThisController = this;
 			var oMdlCommon = this.getModel("mCommon");
+			oMdlCommon.setProperty("/bFilter", false);
 			oThisController.fnPremfreightstable(1);
 			oThisController.fnGetcarrierdetails();
-			/*this._oRouter.attachRoutePatternMatched(function (oEvent) {
-				if (oEvent.getParameter("name") === "Orderdetails") {
-					oMdlCommon.setProperty("/selNavigationKey", "Orders");
-					/*oThisController.fnSetAvailableActions("Orderdetails", "E");
-					if (!oThisController.bFirst) {
-						oThisController.fnManageSrvCall();
-					}
-					oThisController.bFirst = false;
-				}
-			}, this);
-*/
+
 		},
 
 		fnPremfreightstable: function (pgNo) {
 			var oThisController = this;
 			var oMdlCommon = this.getModel("mCommon");
-			oMdlCommon.setProperty("/pageNo",pgNo);
-			
+			oMdlCommon.setProperty("/pageNo", pgNo);
+			oMdlCommon.setProperty("/bFilter", false);
+
 			var sUrl = "/lch_services/premiumOrders/getAllPremiumOrders",
 				oHeader = {
 					"Content-Type": "application/json",
@@ -47,7 +38,7 @@ sap.ui.define([
 					"status": "",
 					"originName": "",
 					"destinationName": "",
-					"pageNumber":pgNo,
+					"pageNumber": pgNo,
 					"noOfEntry": "",
 					"reasonCode": ""
 				};
@@ -57,9 +48,10 @@ sap.ui.define([
 
 						oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON.premiumFreightOrderDtos);
 						oMdlCommon.setProperty("/countOfRecords", oXHR.responseJSON.count);
-					
-						console.log(oMdlCommon);
-
+						var aPremfreightorders = oMdlCommon.getProperty("/aPremfreightorders");
+						for (var i = 0; i < aPremfreightorders.length; i++) {
+							aPremfreightorders[i].enablecarriermode = false;
+						}
 					}
 					oMdlCommon.refresh();
 				} catch (e) {
@@ -69,78 +61,89 @@ sap.ui.define([
 			oThisController.fnButtonVisibility();
 
 		},
-		
+
 		fnButtonVisibility: function () {
-            var oThisController = this;
-            var oMdlCommon = this.getModel("mCommon");
-            var pageNo = oMdlCommon.getProperty("/pageNo");
-            pageNo = Number(pageNo);
-            
-            var count = oMdlCommon.getProperty("/countOfRecords"),
-            lastPageNo = Math.ceil(count/10);// [(totalEntries)/perPageEntries]+1 if lastPage isn't an integer Number.isInteger()
-			oMdlCommon.setProperty("/lastPageNo",lastPageNo);
-            if(pageNo<=lastPageNo){
-            if(pageNo===1){
-                oThisController.byId("firstPage").setEnabled(false);
-                oThisController.byId("previousPage").setEnabled(false);
-                oThisController.byId("nextPage").setEnabled(true);
-                oThisController.byId("lastPage").setEnabled(true);
-            }else if(pageNo===lastPageNo){
-                oThisController.byId("firstPage").setEnabled(true);
-                oThisController.byId("previousPage").setEnabled(true);
-                oThisController.byId("nextPage").setEnabled(false);
-                oThisController.byId("lastPage").setEnabled(false);
-            }else{
-            	oThisController.byId("firstPage").setEnabled(true);
-                oThisController.byId("previousPage").setEnabled(true);
-                oThisController.byId("nextPage").setEnabled(true);
-                oThisController.byId("lastPage").setEnabled(true);
-            }
-            }
-        },
-       
-        fnPagination: function (select) {
-            var oThisController = this;
-            var oMdlCommon = this.getModel("mCommon");
-             var count = oMdlCommon.getProperty("/countOfRecords");
-            var pageNo = oMdlCommon.getProperty("/pageNo"),
-             lastPageNo = Math.ceil(count/10);//fetch from model
-             	oMdlCommon.setProperty("/lastPageNo",lastPageNo);
-            pageNo = Number(pageNo);
-        
-           if(pageNo<=lastPageNo){
-            switch (select) {
-            case 1:
-                //first
-                pageNo = 1;
-                break;
-            case 2:
-                //prev
-                pageNo = pageNo - 1;
-                break;
-            case 3:
-                //next
-                pageNo = pageNo + 1;
-                break;
-            case 4:
-                //last
-                pageNo = lastPageNo;
-                break;
-            case 5:
-                //jump
-                pageNo = pageNo;//get input value from the input box
-                
-                break;
-            }
-           
-            oThisController.fnPremfreightstable(pageNo);
-         
-           }else{
-           	pageNo = lastPageNo;
-           	oMdlCommon.refresh();
-           	oThisController.fnPremfreightstable(pageNo);
-           }
-        },
+			var oThisController = this;
+			var oMdlCommon = this.getModel("mCommon");
+			var pageNo = oMdlCommon.getProperty("/pageNo");
+			pageNo = Number(pageNo);
+
+			var count = oMdlCommon.getProperty("/countOfRecords"),
+				lastPageNo = Math.ceil(count / 10); // [(totalEntries)/perPageEntries]+1 if lastPage isn't an integer Number.isInteger()
+			oMdlCommon.setProperty("/lastPageNo", lastPageNo);
+			if (pageNo <= lastPageNo) {
+				if (pageNo === 1) {
+					oThisController.byId("firstPage").setEnabled(false);
+					oThisController.byId("previousPage").setEnabled(false);
+					oThisController.byId("nextPage").setEnabled(true);
+					oThisController.byId("lastPage").setEnabled(true);
+				} else if (pageNo === lastPageNo) {
+					oThisController.byId("firstPage").setEnabled(true);
+					oThisController.byId("previousPage").setEnabled(true);
+					oThisController.byId("nextPage").setEnabled(false);
+					oThisController.byId("lastPage").setEnabled(false);
+				} else {
+					oThisController.byId("firstPage").setEnabled(true);
+					oThisController.byId("previousPage").setEnabled(true);
+					oThisController.byId("nextPage").setEnabled(true);
+					oThisController.byId("lastPage").setEnabled(true);
+				}
+			}
+		},
+
+		fnPagination: function (select) {
+			var oThisController = this;
+			var oMdlCommon = this.getModel("mCommon");
+			var count = oMdlCommon.getProperty("/countOfRecords");
+			var pageNo = oMdlCommon.getProperty("/pageNo"),
+				lastPageNo = Math.ceil(count / 10);
+			oMdlCommon.setProperty("/lastPageNo", lastPageNo);
+			pageNo = Number(pageNo);
+			var bFilter = oMdlCommon.getProperty("/bFilter");
+
+			if (pageNo <= lastPageNo) {
+				switch (select) {
+				case 1:
+					//first
+					pageNo = 1;
+					break;
+				case 2:
+					//prev
+					pageNo = pageNo - 1;
+					break;
+				case 3:
+					//next
+					pageNo = pageNo + 1;
+					break;
+				case 4:
+					//last
+					pageNo = lastPageNo;
+					break;
+				case 5:
+					//jump
+					pageNo = pageNo;
+
+					break;
+				}
+
+				if (bFilter === false) {
+					oThisController.fnPremfreightstable(pageNo);
+				} else if (bFilter === true) {
+					oThisController.onSearch(pageNo);
+				}
+
+			} else {
+				if (bFilter === false) {
+					pageNo = lastPageNo;
+					oMdlCommon.refresh();
+					oThisController.fnPremfreightstable(pageNo);
+				} else if (bFilter === true) {
+					pageNo = lastPageNo;
+					oMdlCommon.refresh();
+					oThisController.onSearch(pageNo);
+				}
+			}
+		},
 
 		fnGetcarrierdetails: function () {
 			var oThisController = this;
@@ -170,9 +173,15 @@ sap.ui.define([
 			var oThisController = this;
 			var oMdlCommon = oThisController.getModel("mCommon");
 			oMdlCommon.setProperty("/aCarriermodes", []);
-			oMdlCommon.setProperty("/enable/carrierMode", false);
 			oMdlCommon.refresh();
-			var bpNumber = oEvent.getSource().getSelectedItem().getText();
+			if (oEvent.getSource().getSelectedItem()) {
+				var bpNumber = oEvent.getSource().getSelectedItem().getText();
+			} else {
+				bpNumber = "";
+			}
+			var aPremfreightorders = oMdlCommon.getProperty("/aPremfreightorders");
+			var carrierselected = parseInt(oEvent.getSource().getParent().getId().split("__table0-rows-row")[1]);
+
 			if (bpNumber) {
 				var sUrl = "/lch_services/premiumOrders/getMode",
 					oHeader = {
@@ -187,20 +196,32 @@ sap.ui.define([
 					try {
 						if (oXHR && oXHR.responseJSON) {
 							oMdlCommon.setProperty("/aCarriermodes", oXHR.responseJSON);
-							oMdlCommon.setProperty("/enable/carrierMode", true);
+							aPremfreightorders[carrierselected].enablecarriermode = true;
+
 						}
 						oMdlCommon.refresh();
-						console.log(oMdlCommon);
+
 					} catch (e) {
 						// console.log(e);
 					}
 				}, oPayload);
-			} 
+			} else {
+				aPremfreightorders[carrierselected].enablecarriermode = false;
+				oMdlCommon.refresh();
+			}
 		},
 
-		onSearch: function () {
+		onClearFilter: function () {
+			var oThisController = this;
+			var oMdlCommon = oThisController.getModel("mCommon");
+			oMdlCommon.setProperty("/bFilter", false);
+			oThisController.fnPremfreightstable(1);
+		},
+
+		onSearch: function (pgNo) {
 				var oThisController = this;
 				var oMdlCommon = oThisController.getModel("mCommon");
+				oMdlCommon.setProperty("/bFilter", true);
 				var originFilter = oMdlCommon.getProperty("/originFilter"),
 					destinationFilter = oMdlCommon.getProperty("/destinationFilter"),
 					statusFilter = oMdlCommon.getProperty("/statusFilter"),
@@ -221,7 +242,7 @@ sap.ui.define([
 						"originName": originFilter,
 						"destinationName": destinationFilter,
 						"reasonCode": reasoncodeFilter,
-						"pageNumber": "1",
+						"pageNumber": pgNo,
 						"noOfEntry": ""
 
 					};
@@ -229,7 +250,7 @@ sap.ui.define([
 					try {
 						if (oXHR && oXHR.responseJSON) {
 
-							oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON);
+							oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON.premiumFreightOrderDtos);
 
 						}
 
