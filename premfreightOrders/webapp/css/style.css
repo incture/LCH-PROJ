@@ -456,4 +456,20 @@
 .sapMInputBaseIcon {
     color: grey;
 }
-	
+
+.sapMBtn:hover>.sapMBtnHoverable.sapMBtnEmphasized:not(.sapMBtnActive):not(.sapMToggleBtnPressed) .sapMBtnIcon {
+    color: #f7f7f7;
+}
+.sapContrast.sapMBtnIcon, .sapContrast .sapMBtnIcon {
+    color: #00366c;
+}
+
+.sapContrast.sapMInputBaseInner, .sapContrast .sapMInputBaseInner {
+    background-color: #f7f7f7;
+    color: #00366c !important;
+    font-weight: bold !important;
+}
+.paginationText.sapMInputBaseInner {
+    color: #00366c !important;
+    font-weight: bold !important;
+}

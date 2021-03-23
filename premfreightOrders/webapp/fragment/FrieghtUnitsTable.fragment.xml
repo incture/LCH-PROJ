@@ -3,7 +3,7 @@
 	<ui:Table rows="{mCommon>/aPremfreightorders}" visibleRowCountMode="Fixed" alternateRowColors="true" enableColumnReordering="false"
 		class="sapUiMediumMarginBegin sapUiSmallMarginEnd sapUiTableNoColBorders" selectionMode="MultiToggle">
 		<ui:columns >
-			<ui:Column tooltip="{i18n>ORDER_ID}" width="10rem" sorted = "true" sortOrder="Ascending" sortProperty="{mCommon>adhocOrderId}">
+			<ui:Column tooltip="{i18n>ORDER_ID}" width="10rem" sorted = "true" sortProperty="{mCommon>adhocOrderId}">
 				<Label text="{i18n>ORDER_ID}" design="Bold"/>
 				<ui:template>
 					<Text maxLines="1" text="{mCommon>adhocOrderId}" tooltip="{mCommon>adhocOrderId}"/>

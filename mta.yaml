@@ -20,8 +20,10 @@ modules:
           url: '~{url}'
           forwardAuthToken: true
       - name: lch_workflow
-      - name: portal_resources_LCH
       - name: uaa_LCH
+      - name: portal_resources_LCH
+    properties:
+      SEND_XFRAMEOPTIONS: false
   - name: LCH_ui_deployer
     type: com.sap.html5.application-content
     path: LCH_ui_deployer
@@ -72,21 +74,6 @@ modules:
       - name: lch_workflow
         parameters:
           content-target: true
-  - name: lch_fiori
-    type: com.sap.application.portal.content
-    path: lch_fiori
-    requires:
-      - name: portal_resources_LCH
-        parameters:
-          service-key:
-            name: content-deploy-key
-            config:
-              content-endpoint: developer
-          content-target: true
-      - name: uaa_LCH
-      - name: lch_workflow
-      - name: LCH_html5_repo_host
-      - name: LCH_ui_deployer
   - name: adhocApproval
     type: html5
     path: adhocApproval
@@ -107,6 +94,21 @@ modules:
         - npm run build
       supported-platforms: []
       build-result: dist
+  - name: lch_fiori
+    type: com.sap.application.portal.content
+    path: lch_fiori
+    requires:
+      - name: portal_resources_LCH
+        parameters:
+          service-key:
+            name: content-deploy-key
+            config:
+              content-endpoint: developer
+          content-target: true
+      - name: uaa_LCH
+      - name: lch_workflow
+      - name: LCH_html5_repo_host
+      - name: LCH_ui_deployer
 resources:
   - name: LCH_html5_repo_runtime
     parameters:
@@ -136,3 +138,5 @@ resources:
       service-plan: standard
       service: portal
     type: org.cloudfoundry.managed-service
+    properties:
+      SEND_XFRAMEOPTIONS: false

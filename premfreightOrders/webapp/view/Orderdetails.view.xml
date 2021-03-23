@@ -33,8 +33,7 @@
 							</fb:FilterGroupItem>
 							<fb:FilterGroupItem name="To_Date" label="{i18n>TO_DATE}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
 								<fb:control>
-									<ExtPicker:ExtDatePicker class="sapUiMInputBoxBorderRadius" placeholder=" " dateValue="{mCommon>/toDateFilter}"
-										displayFormat="dd MMM yyyy"/>
+									<ExtPicker:ExtDatePicker class="sapUiMInputBoxBorderRadius" placeholder=" " dateValue="{mCommon>/toDateFilter}" displayFormat="dd MMM yyyy"/>
 								</fb:control>
 							</fb:FilterGroupItem>
 							<fb:FilterGroupItem name="status" label="{i18n>STATUS}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
@@ -47,7 +46,7 @@
 							</fb:FilterGroupItem>
 							<fb:FilterGroupItem name="reasonCode" label="{i18n>REASON_CODE}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
 								<fb:control>
-									<ComboBox selectedKey="{mCommon>/reasoncodeFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
+									<ComboBox selectedKey="{mCommon>/reasonCodeFilter}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
 										items="{path: 'mCommon>/aReasonCodes'}" change="onChangeCBox">
 										<core:ListItem key="{mCommon>key}" text="{mCommon>key}" tooltip="{mCommon>key}"/>
 									</ComboBox>
@@ -74,17 +73,22 @@
 				</layoutData>
 				<ToolbarSpacer/>
 				<HBox>
-					<Button enabled="false" id="first" press="onFirst" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>
-					<Button enabled="false" id="previous" class="btnPrev" press="onPrevious" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>
-					<Input value="" enabled="true"/>
-					<Button enabled="false" id="jump" class="btnPrev" press="onJump" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>
-					<Button enabled="false" id="next" class="btnPrev" press="onNext" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>
-					<Button enabled="false" id="last" class="btnPrev" press="onLast" type="Emphasized" icon="sap-icon://slim-arrow-left" visible="true"></Button>
-        
+					<Button enabled="true" id="firstPage" press="fnPagination(1)" icon="sap-icon://close-command-field" visible="true"></Button>
+					<Button enabled="true" id="previousPage" class="btnPrev" press="fnPagination(2)" icon="sap-icon://navigation-left-arrow" visible="true"></Button>
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+					<Input textAlign="Center" width="3rem" value="{mCommon>/pageNo}" enabled="true" class="paginationText"/>
+					<Button enabled="true" id="jumpPage" class="btnMargin" press="fnPagination(5)" icon="sap-icon://forward" visible="true"></Button>
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+					<Button enabled="true" id="nextPage" class="btnPrev" press="fnPagination(3)" icon="sap-icon://navigation-right-arrow" visible="true"></Button>
+					<Button enabled="true" id="lastPage" class="btnPrev" press="fnPagination(4)" icon="sap-icon://open-command-field" visible="true"></Button>
 				</HBox>
 				<ToolbarSpacer/>
-					<Button  text="{i18n>Approve}" type="Accept" press="onApprove"/>
-					<Button  text="{i18n>REJECT}" type="Reject" press="onReject"/>
+				<Button text="{i18n>Approve}" type="Accept" press="onApprove"/>
+				<Button text="{i18n>REJECT}" type="Reject" press="onReject"/>
 				<ToolbarSpacer width="2rem">
 					<layoutData>
 						<OverflowToolbarLayoutData priority="NeverOverflow"/>

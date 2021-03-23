@@ -40,36 +40,6 @@
 					"vizId": "WorkflowTask-DisplayMyInbox"
 				}]
 			}
-		}, {
-			"_version": "3.0.0",
-			"identification": {
-				"id": "adhoc",
-				"title": "{{title}}",
-				"entityType": "group",
-				"i18n": "i18n/adhoc.properties"
-			},
-			"payload": {
-				"viz": [{
-					"id": "com.incture.lch.Adhoc-0-1614840544717",
-					"appId": "com.incture.lch.Adhoc",
-					"vizId": "object1adhoc-display"
-				}]
-			}
-		}, {
-			"_version": "3.0.0",
-			"identification": {
-				"id": "premium-freights",
-				"title": "{{title}}",
-				"entityType": "group",
-				"i18n": "i18n/premium-freights.properties"
-			},
-			"payload": {
-				"viz": [{
-					"id": "com.incture.lch.premfreightOrders-0-1615877383059",
-					"appId": "com.incture.lch.premfreightOrders",
-					"vizId": "object1premfreightorders-display"
-				}]
-			}
 		}],
 		"sites": [{
 			"_version": "3.0.0",
@@ -95,7 +65,7 @@
 						}
 					}
 				},
-				"groupsOrder": ["defaultGroupId", "adhoc", "premium-freights"],
+				"groupsOrder": ["defaultGroupId"],
 				"sap.cloud.portal": {
 					"config": {
 						"theme.id": "sap_fiori_3",

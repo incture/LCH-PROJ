@@ -20,8 +20,8 @@
 						"parameters": {},
 						"additionalParameters": "allowed"
 					},
-					"semanticObject": "object1adhoc",
-					"action": "display"
+					"semanticObject": "",
+					"action": ""
 				}
 			}
 		}
@@ -71,11 +71,9 @@
 			}
 		},
 		"resources": {
-			"css": [
-				{
-					"uri": "css/style.css"
-				}
-			]
+			"css": [{
+				"uri": "css/style.css"
+			}]
 		},
 		"routing": {
 			"config": {
@@ -87,36 +85,23 @@
 				"controlId": "idLch_Adhoc_ToolPageContainer",
 				"clearControlAggregation": false
 			},
-			"routes": [
-				{
-					"name": "App",
-					"pattern": "App",
-					"target": [
-						"Order"
-					]
-				},
-				{
-					"name": "History",
-					"pattern": "history",
-					"target": [
-						"History"
-					]
-				},
-				{
-					"name": "Order",
-					"pattern": "Order/{accessMode}",
-					"target": [
-						"Order"
-					]
-				},
-				{
-					"name": "Approval",
-					"pattern": "Approval",
-					"target": [
-						"Approval"
-					]
-				}
-			],
+			"routes": [{
+				"name": "App",
+				"pattern": "App",
+				"target": ["Order"]
+			}, {
+				"name": "History",
+				"pattern": "history",
+				"target": ["History"]
+			}, {
+				"name": "Order",
+				"pattern": "Order/{accessMode}",
+				"target": ["Order"]
+			}, {
+				"name": "Approval",
+				"pattern": "Approval",
+				"target": ["Approval"]
+			}],
 			"targets": {
 				"App": {
 					"viewName": "App"

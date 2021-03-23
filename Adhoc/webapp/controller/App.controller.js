@@ -5,6 +5,8 @@ sap.ui.define([
 
 	return BaseController.extend("com.incture.lch.Adhoc.controller.App", {
 		onInit: function () {
+			/*var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("Order");*/
 			this.fnInitializeApp();
 			this.fnGetLookUpCountry();
 		},
