@@ -73,7 +73,7 @@ sap.ui.define([
 		fnButtonVisibility: function () {
             var oThisController = this;
             var oMdlCommon = this.getModel("mCommon");
-            var pageNo = oMdlCommon.getProperty("/pageNo"), temp = pageNo;
+            var pageNo = oMdlCommon.getProperty("/pageNo");
             pageNo = Number(pageNo);
             
             var count = oMdlCommon.getProperty("/countOfRecords"),
