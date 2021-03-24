@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.incture.lch.adhoc.custom.dto.AdhocWorkflowCustomDto;
 import com.incture.lch.adhoc.custom.dto.ResponseMessage;
+import com.incture.lch.adhoc.custom.dto.WorkflowCustomDto;
 import com.incture.lch.dao.AdhocApprovalRuleDao;
 import com.incture.lch.dto.AdhocApprovalRuleDto;
 import com.incture.lch.dto.AdhocOrderDto;
@@ -216,21 +217,32 @@ public class AdhocOrdersController {
 		return adhocOrdersService.updateWorflowDetails(workflowDto);
 	}
 
+	/*
+	 * @RequestMapping(value = "/updateApprovalWorkflowDetails", method =
+	 * RequestMethod.POST)
+	 * 
+	 * @ResponseBody public String updateApprovalWorkflowDetails(@RequestBody
+	 * JSONObject obj) throws ClientProtocolException, IOException,
+	 * JSONException {
+	 * logger1.error("ENTERING INTO updateApprovalWorkflowDetails CONTROLLER");
+	 * return adhocOrdersService.updateApprovalWorflowDetails(obj); }
+	 */
+
 	@RequestMapping(value = "/updateApprovalWorkflowDetails", method = RequestMethod.POST)
 	@ResponseBody
-	public String updateApprovalWorkflowDetails(@RequestBody JSONObject obj)
+	public String updateApprovalWorkflowDetails(@RequestBody WorkflowCustomDto dto)
 			throws ClientProtocolException, IOException, JSONException {
 		logger1.error("ENTERING INTO updateApprovalWorkflowDetails CONTROLLER");
-		return adhocOrdersService.updateApprovalWorflowDetails(obj);
+		return adhocOrdersService.updateApprovalWorflowDetails(dto);
 	}
-	
-	@RequestMapping(value="/updateWorkflow", method=RequestMethod.GET)
+
+	@RequestMapping(value = "/updateApprovalWorkflowDetailsForType4", method = RequestMethod.POST)
 	@ResponseBody
-	public String updateWorkFlow(@RequestParam String taskId,@RequestParam String adhocOrderId )
-	{
-		logger1.error("Inside Update Workflow Method");
-		return taskId+" "+adhocOrderId;
-		
+	public String updateApprovalWorkflowDetailsForType4(@RequestBody AdhocWorkflowCustomDto dto)
+			throws ClientProtocolException, IOException, JSONException {
+		logger1.error("ENTERING INTO updateApprovalWorkflowDetails CONTROLLER");
+		return adhocOrdersService.updateApprovalWorflowDetailsForType4(dto);
 	}
+
 
 }

@@ -6,7 +6,7 @@ public class AdhocApprovalRuleDto {
 	private String adhocType;
 	private String userGroup;
 	private String approverType;
-	//private String approverEmail;
+	private String approverEmail;
 	private String userId;
 	private String status;
 
@@ -43,13 +43,13 @@ public class AdhocApprovalRuleDto {
 		this.approverType = approverType;
 	}
 
-	/*public String getApproverEmail() {
+	public String getApproverEmail() {
 		return approverEmail;
 	}
 
 	public void setApproverEmail(String approverEmail) {
 		this.approverEmail = approverEmail;
-	}*/
+	}
 	
 
 	public Long getId() {

@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.oauth2.jwt.Jwt;
 
+import com.incture.lch.adhoc.custom.dto.AdhocWorkflowCustomDto;
+import com.incture.lch.adhoc.custom.dto.WorkflowCustomDto;
 import com.incture.lch.dto.AdhocOrderDto;
 import com.incture.lch.dto.AdhocOrderWorkflowDto;
 import com.incture.lch.dto.AdhocRequestDto;
@@ -67,9 +69,12 @@ public interface AdhocOrdersService {
 	
 	public String updateApprovalWorflowDetails(JSONObject obj) throws JSONException;
 
+	public String updateApprovalWorflowDetails(WorkflowCustomDto dto)
+			throws JSONException, ClientProtocolException, IOException;
 
 	public HttpResponse approveTask(String taskId) throws ClientProtocolException, IOException, JSONException;
-	
-	
+
+	public String updateApprovalWorflowDetailsForType4(AdhocWorkflowCustomDto dto)
+			throws JSONException, ClientProtocolException, IOException;
 
 }

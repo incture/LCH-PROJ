@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
+import com.incture.lch.adhoc.custom.dto.AdhocWorkflowCustomDto;
+import com.incture.lch.adhoc.custom.dto.WorkflowCustomDto;
 import com.incture.lch.adhoc.workflow.service.WorkflowInvoker;
 import com.incture.lch.dto.AdhocOrderDto;
 import com.incture.lch.dto.AdhocOrderWorkflowDto;
@@ -211,7 +213,11 @@ public class AdhocOrdersServiceImplementation implements AdhocOrdersService {
 	
 		
 	}
-	
+	public String updateApprovalWorflowDetails(WorkflowCustomDto dto)
+			throws JSONException, ClientProtocolException, IOException {
+		return adhocOrdersRepository.updateApprovalWorflowDetails(dto);
+	}
+
 	
 	@Override
 	public HttpResponse approveTask(String taskId) throws ClientProtocolException, IOException, JSONException{
@@ -219,6 +225,10 @@ public class AdhocOrdersServiceImplementation implements AdhocOrdersService {
 	}
 	
 	
+	public String updateApprovalWorflowDetailsForType4(AdhocWorkflowCustomDto dto) throws JSONException, ClientProtocolException, IOException{
+		return adhocOrdersRepository.updateApprovalWorflowDetailsForType4(dto);
+	}
+
 
 
 }

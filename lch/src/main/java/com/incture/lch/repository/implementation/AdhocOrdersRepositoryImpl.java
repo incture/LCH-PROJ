@@ -1,5 +1,6 @@
 package com.incture.lch.repository.implementation;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.client.ClientProtocolException;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,7 +25,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
+import org.json.JSONException;
+	
+import com.incture.lch.adhoc.custom.dto.AdhocWorkflowCustomDto;
 
+import com.incture.lch.dao.AdhocApprovalRuleDao;
+import com.incture.lch.adhoc.workflow.service.WorkflowInvokerLocal;
+
+import com.incture.lch.dao.AdhocApprovalRuleDao;
+import com.incture.lch.adhoc.custom.dto.WorkflowCustomDto;
+import org.json.JSONObject;
 import com.incture.lch.dao.AdhocApprovalRuleDao;
 import com.incture.lch.adhoc.workflow.constant.WorkflowConstants;
 import com.incture.lch.adhoc.workflow.dto.WorkflowApprovalTaskDto;
@@ -89,7 +100,11 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	@Autowired
 	private WorkFlowServiceLocal wfService;
-
+    
+	
+    @Autowired
+    private WorkflowInvokerLocal wfInvokerLocal;
+    
 	@Autowired
 	private AdhocApprovalRuleDao adhocApprovalRuleDao;
 	
@@ -1123,7 +1138,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 			System.out.println(a.getFwoNum());
 			a.setUpdatedBy(workflowDto.getUpdatedBy());
-			a.setUpdatedDate((workflowDto.getUpdatedDate()));
+			a.setUpdatedDate(new Date());
 			a.setStatus(workflowDto.getStatus());
 			a.setPendingWith(workflowDto.getPendingWith());
 			session.saveOrUpdate(a);
@@ -1159,7 +1174,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 			System.out.println(a.getFwoNum());
 			a.setUpdatedBy(workflowDto.getUpdatedBy());
-			a.setUpdatedDate((workflowDto.getUpdatedDate()));
+			a.setUpdatedDate(new Date());
 			a.setStatus(workflowDto.getStatus());
 			a.setPendingWith(workflowDto.getPendingWith());
 			session.saveOrUpdate(a);
@@ -1187,6 +1202,109 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		workflowDto.setRequestedBy(obj.getString("createdBy"));
 		workflowDto.setRequestedDate(ServiceUtil.convertStringToDate(obj.getString("createdAt")));
 		workflowDto.setUpdatedDate(ServiceUtil.convertStringToDate(obj.getString("completedAt")));
+		workflowDto.setSubject(obj.getString("subject"));
+		workflowDto.setUpdatedBy(obj.getString("processor"));
+		workflowDto.setStatus(obj.getString("status"));
+		return workflowDto;
+
+	}
+
+	public String updateApprovalWorflowDetails(WorkflowCustomDto obj)
+			throws JSONException, ClientProtocolException, IOException {
+		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
+		workflowDto = prepareAdhocApprovalWorkflowDto(obj);
+		System.out.println("Yuhooo" + workflowDto.getorderId());
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		List<AdhocOrders> adhocOrder = new ArrayList<AdhocOrders>();
+		Criteria criteria = session.createCriteria(AdhocOrders.class);
+		criteria.add(Restrictions.eq("fwoNum", workflowDto.getorderId()));
+		adhocOrder = criteria.list();
+
+		System.out.println(adhocOrder.size());
+		for (AdhocOrders a : adhocOrder) {
+
+			System.out.println(a.getFwoNum());
+			a.setUpdatedBy(workflowDto.getUpdatedBy());
+			a.setUpdatedDate(new Date());
+			a.setStatus(workflowDto.getStatus());
+			a.setPendingWith(workflowDto.getPendingWith());
+			session.saveOrUpdate(a);
+		}
+
+		session.save(adhocOrderWorkflowDao.importAdhocWorkflow(workflowDto));
+
+		session.flush();
+		session.clear();
+		tx.commit();
+		session.close();
+
+		System.out.println(workflowDto.getorderId());
+		return workflowDto.getorderId();
+	}
+	
+	public String updateApprovalWorflowDetailsForType4(AdhocWorkflowCustomDto dto)
+			throws JSONException, ClientProtocolException, IOException {
+		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
+		workflowDto.setorderId(dto.getAdhocOrderId());
+		workflowDto.setBusinessKey(dto.getCreatedBy());
+		workflowDto.setWorkflowName("Adhoc Workflow");
+		workflowDto.setDescription("Adhoc Type IS AS");
+		workflowDto.setBusinessKey("NA");
+		workflowDto.setStatus(WorkflowConstants.COMPLETED);
+		workflowDto.setUpdatedBy(dto.getCreatedBy());
+		workflowDto.setSubject("NA");
+		workflowDto.setUpdatedDate(new Date());
+		workflowDto.setPendingWith(null);
+		System.out.println("Yuhooo" + workflowDto.getorderId());
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		List<AdhocOrders> adhocOrder = new ArrayList<AdhocOrders>();
+		Criteria criteria = session.createCriteria(AdhocOrders.class);
+		criteria.add(Restrictions.eq("fwoNum", dto.getAdhocOrderId()));
+		adhocOrder = criteria.list();
+
+		System.out.println(adhocOrder.size());
+		for (AdhocOrders a : adhocOrder) {
+
+			System.out.println(a.getFwoNum());
+			a.setUpdatedBy(dto.getCreatedBy());
+			a.setUpdatedDate(new Date());
+			a.setStatus(WorkflowConstants.COMPLETED);
+			a.setPendingWith(null);
+			session.saveOrUpdate(a);
+		}
+
+		session.save(adhocOrderWorkflowDao.importAdhocWorkflow(workflowDto));
+
+		session.flush();
+		session.clear();
+		tx.commit();
+		session.close();
+
+		System.out.println(workflowDto.getorderId());
+		return workflowDto.getorderId();
+	}
+
+	public AdhocOrderWorkflowDto prepareAdhocApprovalWorkflowDto(WorkflowCustomDto data)
+			throws JSONException, ClientProtocolException, IOException {
+		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
+		System.err.println("[prepareAdhocApprovalWorkflowDto WorkflowCustomDto] : " + data.toString() + "---"
+				+ data.getTaskIdDetails());
+
+		workflowDto.setorderId(data.getOrderIdDetails());
+		JSONObject obj = wfInvokerLocal.getWorkflowApprovalTaskInstanceId(data.getTaskIdDetails());
+		System.err.println("[prepareAdhocApprovalWorkflowDto objectData] : " + obj.toString());
+		LOGGER.info("objectData:: " + obj.toString());
+		LOGGER.info("objectData Array:: " + obj.toString());
+		workflowDto.setDescription(obj.getString("description"));
+		workflowDto.setInstanceId(obj.getString("id"));
+		workflowDto.setPendingWith(null);
+		workflowDto.setRequestedBy(obj.getString("createdBy"));
+		workflowDto.setRequestedDate(ServiceUtil.convertStringToDate(obj.getString("createdAt")));
+		workflowDto.setUpdatedDate(new Date());
 		workflowDto.setSubject(obj.getString("subject"));
 		workflowDto.setUpdatedBy(obj.getString("processor"));
 		workflowDto.setStatus(obj.getString("status"));
