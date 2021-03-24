@@ -20,8 +20,8 @@
 						"parameters": {},
 						"additionalParameters": "allowed"
 					},
-					"semanticObject": "object1premfreightorders",
-					"action": "display"
+					"semanticObject": "",
+					"action": ""
 				}
 			}
 		}

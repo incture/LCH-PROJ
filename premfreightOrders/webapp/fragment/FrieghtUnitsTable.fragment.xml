@@ -1,8 +1,8 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ExtPicker="com.incture.lch.premfreightOrders.control"
 	xmlns:core="sap.ui.core" xmlns:ui="sap.ui.table">
-	<ui:Table rows="{mCommon>/aPremfreightorders}" visibleRowCountMode="Fixed" alternateRowColors="true" enableColumnReordering="false"
+	<ui:Table id="premfreightstable" rows="{mCommon>/aPremfreightorders}" visibleRowCountMode="Fixed" alternateRowColors="true" enableColumnReordering="false"
 		class="sapUiMediumMarginBegin sapUiSmallMarginEnd sapUiTableNoColBorders" selectionMode="MultiToggle">
-		<ui:columns >
+		<ui:columns>
 			<ui:Column tooltip="{i18n>ORDER_ID}" width="10rem" sorted = "true" sortProperty="{mCommon>adhocOrderId}">
 				<Label text="{i18n>ORDER_ID}" design="Bold"/>
 				<ui:template>
@@ -60,7 +60,7 @@
 				<Label text="{i18n>CARRIER_MODE}" design="Bold"/>
 				<ui:template>
 					<ComboBox selectedKey="{mCommon>selectedCarriermode}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
-						items="{path: 'mCommon>/aCarriermodes'}" change="onChangeCBox" enabled="{mCommon>/enable/carrierMode}">
+						items="{path: 'mCommon>/aCarriermodes'}" change="onChangeCBox" enabled="{mCommon>enablecarriermode}">
 						<core:ListItem key="{mCommon>mode}" text="{mCommon>mode}"  tooltip="{mCommon>mode}"/>
 					</ComboBox>
 				</ui:template>

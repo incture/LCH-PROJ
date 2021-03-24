@@ -7,7 +7,8 @@ sap.ui.define([
 
 	return BaseController.extend("com.incture.lch.premfreightOrders.controller.App", {
 		onInit: function () {
-			this.oLoadmore.oAppController = this;
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("Orderdetails");
 			// global model for handling local data
 			var oMdlCommon = this.getModel("mCommon");
 			var oDate = new Date();

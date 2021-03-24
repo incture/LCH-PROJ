@@ -6,7 +6,7 @@
 			<l:FixFlex>
 				<l:fixContent>
 					<Label text="{i18n>PREMIUM_FREIGHT_ORDERS}" design="Bold" class="customTitle sapUiTinyMarginTop sapUiMediumMarginBegin"/>
-					<fb:FilterBar reset="onReset" search="onSearch" id="lch_UnPlannedOrders_filterBar" class="sapFbfilterbar" showFilterConfiguration="false"
+					<fb:FilterBar reset="onReset" search="onSearch(1)" id="lch_UnPlannedOrders_filterBar" class="sapFbfilterbar" showFilterConfiguration="false"
 						showClearOnFB="true" clear="onClearFilter">
 						<fb:filterGroupItems>
 							<fb:FilterGroupItem name="Ship_From" label="{i18n>SHIP_FROM}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
@@ -73,18 +73,18 @@
 				</layoutData>
 				<ToolbarSpacer/>
 				<HBox>
-					<Button enabled="true" id="firstPage" press="fnPagination(1)" icon="sap-icon://close-command-field" tooltip="First Page" visible="true"></Button>
-					<Button enabled="true" id="previousPage" class="btnPrev" press="fnPagination(2)" icon="sap-icon://navigation-left-arrow" tooltip="Previous Page" visible="true"></Button>
+					<Button enabled="true" id="firstPage" press="fnPagination(1)" tooltip="{i18n>FIRST_PAGE}" icon="sap-icon://close-command-field" visible="true"></Button>
+					<Button enabled="true" id="previousPage" class="btnPrev" press="fnPagination(2)"  tooltip="{i18n>PREV_PAGE}" icon="sap-icon://navigation-left-arrow" visible="true"></Button>
 					<layoutData>
 						<OverflowToolbarLayoutData priority="NeverOverflow"/>
 					</layoutData>
 					<Input textAlign="Center" width="3rem" value="{mCommon>/pageNo}" enabled="true" class="paginationText"/>
-					<Button enabled="true" id="jumpPage" class="btnMargin" press="fnPagination(5)" icon="sap-icon://forward" tooltip="Jump To" visible="true"></Button>
+					<Button enabled="true" id="jumpPage" class="btnMargin" press="fnPagination(5)" tooltip="{i18n>GO_TO}" icon="sap-icon://forward" visible="true"></Button>
 					<layoutData>
 						<OverflowToolbarLayoutData priority="NeverOverflow"/>
 					</layoutData>
-					<Button enabled="true" id="nextPage" class="btnPrev" press="fnPagination(3)" icon="sap-icon://navigation-right-arrow" tooltip="Next Page" visible="true"></Button>
-					<Button enabled="true" id="lastPage" class="btnPrev" press="fnPagination(4)" icon="sap-icon://open-command-field" tooltip="Last Page" visible="true"></Button>
+					<Button enabled="true" id="nextPage" class="btnPrev" press="fnPagination(3)" tooltip="{i18n>NEXT_PAGE}" icon="sap-icon://navigation-right-arrow" visible="true"></Button>
+					<Button enabled="true" id="lastPage" class="btnPrev" press="fnPagination(4)" tooltip="{i18n>LAST_PAGE}" icon="sap-icon://open-command-field" visible="true"></Button>
 				</HBox>
 				<ToolbarSpacer/>
 				<Button text="{i18n>Approve}" type="Accept" press="onApprove"/>
