@@ -27,25 +27,20 @@ $.context.product = product;
 
 var orderId = $.context.adhocOrderId;
 var taskId = $.context.taskId;
-var tokenInfo = $.context.responseMessage;
-var token = tokenInfo.access_token;
 var response = null;
+var createdBy=$.context.createdBy;
+var createdDate=$.context.createdDate;
 var workflowInfo = {
 	orderIdDetails: orderId,
-	taskIdDetails: taskId
-};
-var workflowTokenInfo = {
-	orderIdDetails: orderId,
 	taskIdDetails: taskId,
-	tokenDetails: token
+	createdBy : createdBy,
+    createdDate : createdDate
 };
 
+
 $.context.workflowInfo = workflowInfo;
-$.context.workflowTokenInfo = workflowTokenInfo;
-$.context.taskId = taskId;
 $.context.adhocOrderId = orderId;
-$.context.workflowInfo.response = response;
-$.context.token = token;
+$.context.response = response;
 
 
 

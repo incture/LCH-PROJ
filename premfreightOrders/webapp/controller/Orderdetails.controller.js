@@ -207,6 +207,7 @@ sap.ui.define([
 				}, oPayload);
 			} else {
 				aPremfreightorders[carrierselected].enablecarriermode = false;
+				aPremfreightorders[carrierselected].selectedCarriermode = "";
 				oMdlCommon.refresh();
 			}
 		},
@@ -219,47 +220,59 @@ sap.ui.define([
 		},
 
 		onSearch: function (pgNo) {
-				var oThisController = this;
-				var oMdlCommon = oThisController.getModel("mCommon");
-				oMdlCommon.setProperty("/bFilter", true);
-				var originFilter = oMdlCommon.getProperty("/originFilter"),
-					destinationFilter = oMdlCommon.getProperty("/destinationFilter"),
-					statusFilter = oMdlCommon.getProperty("/statusFilter"),
-					fromDateFilter = oMdlCommon.getProperty("/fromDateFilter"),
-					toDateFilter = oMdlCommon.getProperty("/toDateFilter"),
-					reasoncodeFilter = oMdlCommon.getProperty("/reasoncodeFilter");
-				var sUrl = "/lch_services/premiumOrders/getAllPremiumOrders",
-					oHeader = {
-						"Content-Type": "application/json",
-						"Accept": "application/json"
-					},
-					oPayload = {
-						"adhocOrderId": "",
-						"fromDate": fromDateFilter,
-						"toDate": toDateFilter,
-						"plannerEmail": "test@email.com",
-						"status": statusFilter,
-						"originName": originFilter,
-						"destinationName": destinationFilter,
-						"reasonCode": reasoncodeFilter,
-						"pageNumber": pgNo,
-						"noOfEntry": ""
+			var oThisController = this;
+			var oMdlCommon = oThisController.getModel("mCommon");
+			oMdlCommon.setProperty("/bFilter", true);
+			var originFilter = oMdlCommon.getProperty("/originFilter"),
+				destinationFilter = oMdlCommon.getProperty("/destinationFilter"),
+				statusFilter = oMdlCommon.getProperty("/statusFilter"),
+				fromDateFilter = oMdlCommon.getProperty("/fromDateFilter"),
+				toDateFilter = oMdlCommon.getProperty("/toDateFilter"),
+				reasoncodeFilter = oMdlCommon.getProperty("/reasoncodeFilter");
+			var sUrl = "/lch_services/premiumOrders/getAllPremiumOrders",
+				oHeader = {
+					"Content-Type": "application/json",
+					"Accept": "application/json"
+				},
+				oPayload = {
+					"adhocOrderId": "",
+					"fromDate": fromDateFilter,
+					"toDate": toDateFilter,
+					"plannerEmail": "test@email.com",
+					"status": statusFilter,
+					"originName": originFilter,
+					"destinationName": destinationFilter,
+					"reasonCode": reasoncodeFilter,
+					"pageNumber": pgNo,
+					"noOfEntry": ""
 
-					};
-				oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
-					try {
-						if (oXHR && oXHR.responseJSON) {
+				};
+			oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
+				try {
+					if (oXHR && oXHR.responseJSON) {
 
-							oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON.premiumFreightOrderDtos);
+						oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON.premiumFreightOrderDtos);
 
-						}
-
-						oMdlCommon.refresh();
-						console.log(oMdlCommon);
-					} catch (e) {
-						// console.log(e);
 					}
-				}, oPayload);
+
+					oMdlCommon.refresh();
+					console.log(oMdlCommon);
+				} catch (e) {
+					// console.log(e);
+				}
+			}, oPayload);
+			oThisController.fnButtonVisibility();
+
+		},
+		onReject: function () {
+				var aIndices = this.byId("premfreightstable").getSelectedIndices();
+				var oThisController = this;
+				var oMdlCommon = oThisController.getModel("mCommon"),
+					arr = [];
+				var apremfreights = oMdlCommon.getProperty("/aPremfreightorders");
+				for (var i = 0; i < aIndices.length; i++) {
+					arr.push(apremfreights[oThisController.aindices[i]].adhocOrderId);
+				}
 
 			}
 			/*	onGetCost: function () {
