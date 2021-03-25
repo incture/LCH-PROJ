@@ -467,20 +467,20 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 	}
 
 	@Override
-	public ResponseDto RejectPremiumOrder(String adhocOrderId) {
+	public ResponseDto RejectPremiumOrder(List<String> adhocOrderIds) {
 		ResponseDto responseDto = new ResponseDto();
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		try {
 
-			String queryStr = "DELETE FROM AdhocOrders ad WHERE ad.fwoNum=:fwoNum";
+			String queryStr = "DELETE FROM AdhocOrders ad WHERE ad.fwoNum in(:fwoNum)";
 			Query query = session.createQuery(queryStr);
-			query.setParameter("fwoNum", adhocOrderId);
+			query.setParameterList("fwoNum", adhocOrderIds);
 			int result = query.executeUpdate();
 
-			String qstr = "DELETE FROM PremiumFreightChargeDetails p WHERE p.adhocOrderId=:adhocOrderId";
+			String qstr = "DELETE FROM PremiumFreightChargeDetails p WHERE p.adhocOrderId in(:adhocOrderId)";
 			Query q2 = session.createQuery(qstr);
-			q2.setParameter("adhocOrderId", adhocOrderId);
+			q2.setParameterList("adhocOrderId", adhocOrderIds);
 			int result2 = query.executeUpdate();
 			if (result == 1) {
 				responseDto.setMessage("delete success");

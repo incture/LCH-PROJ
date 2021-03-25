@@ -93,12 +93,12 @@ public class PremiumFreightOrdersController
 		return premiumFreightOrdersService.forwardToApprover(premiumRequestDtos);
 	}
 
-	
+
 	@RequestMapping(value = "/rejectPremiumOrder", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
-	public ResponseDto RejectPremiumOrder(@RequestBody JSONObject  adhocOrderId) {
-		String adid= (String) adhocOrderId.get("adhocOrderId");
-		return premiumFreightOrdersService.RejectPremiumOrder(adid);
+	public ResponseDto RejectPremiumOrder(@RequestBody List<String>  adhocOrderIds) {
+		//String adid= (String) adhocOrderId.get("adhocOrderId");
+		return premiumFreightOrdersService.RejectPremiumOrder(adhocOrderIds);
 
 		
 	}

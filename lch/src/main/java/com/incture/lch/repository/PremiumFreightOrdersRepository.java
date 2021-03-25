@@ -28,7 +28,7 @@ public interface PremiumFreightOrdersRepository
 
 	public ResponseDto forwardToApprover(List<PremiumRequestDto> premiumRequestDtos);
 	
-	public ResponseDto RejectPremiumOrder (String adhocOrderId);
+	public ResponseDto RejectPremiumOrder (List<String> adhocOrderIds);
 	
 	public ResponseDto addCarrier(CarrierDetailsDto carrierdto);
 
