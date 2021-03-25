@@ -445,6 +445,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		workflowDto.setVinNumber(adhocOrders.getVinNumber());
 		workflowDto.setWeight(String.valueOf(adhocOrders.getWeight()));
 		workflowDto.setWeightUom(adhocOrders.getWeightUom());
+		
 		return workflowDto;
 		
 	}

@@ -35,6 +35,7 @@ public class AdhocApprovalRuleDao {
 		ruleDo.setUserGroup(dto.getUserGroup());
 		ruleDo.setApproverType(dto.getApproverType());
 		ruleDo.setUserId(dto.getUserId());
+		ruleDo.setType(dto.getType());
 		return ruleDo;
 
 	}
@@ -46,6 +47,7 @@ public class AdhocApprovalRuleDao {
 		ruleDto.setUserGroup(ruledo.getUserGroup());
 		ruleDto.setApproverType(ruledo.getApproverType());
 		ruleDto.setUserId(ruledo.getUserId());
+		ruleDto.setType(ruledo.getType());
 		return ruleDto;
 
 	}

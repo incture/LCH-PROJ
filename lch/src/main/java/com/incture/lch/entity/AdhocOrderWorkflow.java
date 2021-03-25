@@ -12,7 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "T_ADHOC_WORKFLOW")
+@Table(name = "T_WORKFLOW_LOG")
 public class AdhocOrderWorkflow {
 
 	@Id
@@ -63,6 +63,9 @@ public class AdhocOrderWorkflow {
 	@Column(name = "BUSINESS_KEY")
 	private String businessKey;
 
+	@Column(name = "TYPE")
+	private String type;
+	
 	public Long getId() {
 		return id;
 	}
@@ -174,6 +177,23 @@ public class AdhocOrderWorkflow {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	
 	
 	
 

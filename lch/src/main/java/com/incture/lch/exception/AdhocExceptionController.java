@@ -14,7 +14,7 @@ public class AdhocExceptionController
 		  ResponseDto responseDto=new ResponseDto();
 		  responseDto.setStatus(HttpStatus.NOT_FOUND.getReasonPhrase());
 		  responseDto.setCode(HttpStatus.NOT_FOUND.name());
-		  responseDto.setMessage("Invalid Filter Value"+ exception.getFilter_feild());
+		  responseDto.setMessage("Invalid Filter Value "+ exception.getFilter_feild());
 		  
 		  return responseDto;
 		  
@@ -24,7 +24,7 @@ public class AdhocExceptionController
 		  ResponseDto responseDto=new ResponseDto();
 		  responseDto.setStatus(HttpStatus.NOT_FOUND.getReasonPhrase());
 		  responseDto.setCode(HttpStatus.NOT_FOUND.name());
-		  responseDto.setMessage("Number of Entries Should be Less than"+ exception.getTotal_entries());
+		  responseDto.setMessage("Number of Entries Should be Less than "+ exception.getTotal_entries());
 		  
 		  return responseDto;
 		  
@@ -34,7 +34,7 @@ public class AdhocExceptionController
 		  ResponseDto responseDto=new ResponseDto();
 		  responseDto.setStatus(HttpStatus.NOT_FOUND.getReasonPhrase());
 		  responseDto.setCode(HttpStatus.NOT_FOUND.name());
-		  responseDto.setMessage("Carrier doesnt exist with BPNumber"+ exception.getBpNumber());
+		  responseDto.setMessage("Carrier doesnt exist with BPNumber "+ exception.getBpNumber());
 		  
 		  return responseDto;
 		  

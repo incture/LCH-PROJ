@@ -19,6 +19,8 @@ public class AdhocOrderWorkflowDto {
 	private String businessKey;
 	private String description;
 
+	private String type;
+	
 	public Long getId() {
 		return id;
 	}
@@ -138,6 +140,14 @@ public class AdhocOrderWorkflowDto {
 				+ ", definitionId=" + definitionId + ", subject=" + subject + ", updatedBy=" + updatedBy
 				+ ", updatedDate=" + updatedDate + ", status=" + status + ", pendingWith=" + pendingWith
 				+ ", businessKey=" + businessKey + ", description=" + description + "]";
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

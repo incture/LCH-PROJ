@@ -28,23 +28,19 @@ public class AdhocApprovalRule implements Serializable {
 
 	@Column(name = "APPROVER_TYP", columnDefinition = "NVARCHAR(200)")
 	private String approverType;
-
-	//@Column(name = "APPROVER", columnDefinition = "NVARCHAR(200)")
-	//private String approverEmail;
-
 	
 	@Column(name = "USER_ID", columnDefinition = "NVARCHAR(200)")
 	private String userId;
 	
-	@Column(name = "STATUS")
-	private String status;
+	@Column(name = "TYPE")
+	private String type;
 	
-	public String getStatus() {
-		return status;
+	public String getType() {
+		return type;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getAdhocType() {
@@ -71,14 +67,7 @@ public class AdhocApprovalRule implements Serializable {
 		this.approverType = approverType;
 	}
 
-	/*public String getApproverEmail() {
-		return approverEmail;
-	}
-
-	public void setApproverEmail(String approverEmail) {
-		this.approverEmail = approverEmail;
-	}*/
-
+	
 	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
