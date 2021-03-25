@@ -473,14 +473,20 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		Transaction tx = session.beginTransaction();
 		try {
 
-			String queryStr = "DELETE FROM AdhocOrders ad WHERE ad.fwoNum in(:fwoNum)";
+			String queryStr = "UPDATE AdhocOrders ad set ad.Status='Reject' where ad.fwoNum in(:fwoNum);";
 			Query query = session.createQuery(queryStr);
 			query.setParameterList("fwoNum", adhocOrderIds);
 			int result = query.executeUpdate();
+			//get the details from the adhoc TAble for the given adhocOrderId
+			//setthe status of details as REJECTED
+			//DOnt delete from DB
 
-			String qstr = "DELETE FROM PremiumFreightChargeDetails p WHERE p.adhocOrderId in(:adhocOrderId)";
+			String qstr = " UPDATE PremiumFreightChargeDetails p set p.Status='Reject' where p.adhocOrderId in(:adhocOrderId);";
 			Query q2 = session.createQuery(qstr);
 			q2.setParameterList("adhocOrderId", adhocOrderIds);
+			//get the details from the adhoc TAble for the given adhocOrderId
+			//setthe status of details as REJECTED
+			//DOnt delete from DB
 			int result2 = query.executeUpdate();
 			if (result == 1) {
 				responseDto.setMessage("delete success");
