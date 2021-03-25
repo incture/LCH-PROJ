@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/updateApprovalWorkflowDetails").permitAll()
         .antMatchers("/LCH/**").permitAll()
-        .antMatchers("/swagger-ui.html/**").permitAll()
+        .antMatchers("/swagger-ui.html").permitAll()
         .antMatchers("/lch/**").permitAll();
 		//http.csrf().disable();
 
