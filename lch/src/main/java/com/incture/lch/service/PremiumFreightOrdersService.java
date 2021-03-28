@@ -20,7 +20,7 @@ public interface PremiumFreightOrdersService
 
 	public List<PremiumFreightOrderDto> setCarrierDetails(List<ChargeRequestDto> chargeRequestDto);
 	
-	public String setCharge(ChargeRequestDto dto);
+	public String setCharge(List<ChargeRequestDto> dto);
 
 	public ResponseDto forwardToApprover(List<PremiumRequestDto> premiumRequestDtos);
 	

@@ -54,7 +54,7 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 	}
 
 	@Override
-	public String setCharge(ChargeRequestDto dto) {
+	public String setCharge(List<ChargeRequestDto> dto) {
 		return premiumFreightOrdersRepo.setCharge(dto);
 	}
 

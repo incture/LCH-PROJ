@@ -82,7 +82,7 @@ public class PremiumFreightOrdersController
 	
 	@RequestMapping(value = "/setCharge", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
-	public String setCharge(@RequestBody ChargeRequestDto dto) {
+	public String setCharge(@RequestBody List<ChargeRequestDto> dto) {
 		return premiumFreightOrdersService.setCharge(dto);
 	}
 

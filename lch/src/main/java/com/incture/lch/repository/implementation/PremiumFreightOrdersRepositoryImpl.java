@@ -344,23 +344,25 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		Transaction tx = session.beginTransaction();
 		PremiumFreightChargeDetails premiumFreightChargeDetail = new PremiumFreightChargeDetails();
 		List<PremiumFreightChargeDetails> premiumFreightChargeDetails = new ArrayList<PremiumFreightChargeDetails>();
-		for (ChargeRequestDto c : dto) {
+		for (ChargeRequestDto c : dto) 
+		{
 			Criteria criteria = session.createCriteria(AdhocOrders.class);
 			criteria.add(Restrictions.eq("fwoNum", c.getorderId()));
 			List<AdhocOrders> adhocOrders = new ArrayList<AdhocOrders>();
 
 			adhocOrders = criteria.list();
-			for (AdhocOrders a : adhocOrders) {
-				a.setStatus("IN PROGRESS");
-				session.saveOrUpdate(a);
+			for (AdhocOrders a : adhocOrders)
+			{
+				a.setStatus("IN PROGRESS"); 
 				session.saveOrUpdate(a);
 			}
 
 			Criteria criteria2 = session.createCriteria(PremiumFreightChargeDetails.class);
-			criteria2.add(Restrictions.eq("adhocOrderId", c.getorderId()));
+			criteria2.add(Restrictions.eq("orderId", c.getorderId()));
 			premiumFreightChargeDetails = criteria2.list();
 			if (premiumFreightChargeDetails == null) 
 			{
+				//If the details aren't there
 				for (AdhocOrders a : adhocOrders) {
 
 					premiumFreightChargeDetail.setorderId(a.getFwoNum());
@@ -386,17 +388,30 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 				}
 
-				premiumFreightChargeDetail.setBpNumber(c.getBpNumber());
-				premiumFreightChargeDetail.setCarrierScac(c.getCarrierScac());
-				premiumFreightChargeDetail.setCarrierDetails(c.getCarrierDetails());
-				premiumFreightChargeDetail.setCarrierMode(c.getCarrierMode());
+				List<CarrierDetails> carrierDetails = new ArrayList<CarrierDetails>();
+				Criteria criteria3 = session.createCriteria(CarrierDetails.class);
+				criteria3.add(Restrictions.eq("bpNumber", c.getBpNumber()));
+				criteria3.add(Restrictions.eq("carrierMode", c.getCarrierMode()));
+				carrierDetails = criteria3.list();
+				for (CarrierDetails cdets : carrierDetails)
+				{
+					premiumFreightChargeDetail.setBpNumber(cdets.getBpNumber());
+					premiumFreightChargeDetail.setCarrierScac(cdets.getCarrierScac());
+					premiumFreightChargeDetail.setCarrierDetails(cdets.getCarrierDetails());
+					premiumFreightChargeDetail.setCarrierMode(cdets.getCarrierMode());
+					session.saveOrUpdate(premiumFreightChargeDetail);;
+
+				}
 				premiumFreightChargeDetail.setCharge(c.getCharge());
-				session.saveOrUpdate(premiumFreightChargeDetail);
+
+				
+				
 			}
 			else 
 			{
 				for (PremiumFreightChargeDetails p : premiumFreightChargeDetails)
 				{
+					System.out.println("This is where it is alreday present");
 					p.setCharge(c.getCharge());
 					p.setStatus("In Progress");
 					session.saveOrUpdate(p);
