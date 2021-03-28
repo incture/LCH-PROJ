@@ -101,6 +101,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		Criteria criteria = session.createCriteria(AdhocOrders.class);
 
 		criteria.add(Restrictions.eq("premiumFreight", "true"));
+		criteria.add(Restrictions.ne("status", "REJECTED"));
 
 		String filter_field = null;
 		try {
@@ -261,20 +262,18 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		List<PremiumFreightOrderDto> premiumFreightOrderDtos = new ArrayList<PremiumFreightOrderDto>();
 		List<AdhocOrders> adhocOrders = new ArrayList<AdhocOrders>();
 		PremiumFreightOrderDto premiumdto = new PremiumFreightOrderDto();
-		List<String> adhocOrderIds = new ArrayList<String>();
 		for (ChargeRequestDto c : chargeRequestDto) {
-			/*
-			 * adhocOrderIds.add(c.getAdhocOrderId()); } for(String
-			 * adid:adhocOrderIds) {
-			 */
+
 			String adid = c.getorderId();
+			System.out.println(adid);
 			try {
 				String queryStr = "SELECT ao FROM AdhocOrders ao WHERE ao.fwoNum = ao.fwoNum AND ao.fwoNum=:fwoNum";
 				Query query = session.createQuery(queryStr);
 				query.setParameter("fwoNum", adid);
 				adhocOrders = query.list();
-
+				System.out.println(adhocOrders.size());
 				for (AdhocOrders aorders : adhocOrders) {
+					System.out.println("aorders");
 					PremiumFreightChargeDetails premiumFreightChargeDetails = new PremiumFreightChargeDetails();
 
 					aorders.setStatus("Pending with Carrier Admin");
@@ -283,15 +282,22 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					premiumdto.setStatus("Pending with Carrier Admin");
 					premiumFreightOrderDtos.add(premiumdto);
 					Criteria criteria = session.createCriteria(PremiumFreightChargeDetails.class);
-					criteria.add(Restrictions.eq("adhocOrderId", adid));
+					criteria.add(Restrictions.eq("orderId", adid));
 
 					premiumFreightChargeDetails.setorderId(adid);
 
-					premiumFreightChargeDetails.setBpNumber(c.getBpNumber());
-					premiumFreightChargeDetails.setCarrierDetails(c.getCarrierDetails());
-					premiumFreightChargeDetails.setCarrierMode(c.getCarrierMode());
-					premiumFreightChargeDetails.setCarrierScac(c.getCarrierScac());
+					List<CarrierDetails> carrierDetails = new ArrayList<CarrierDetails>();
+					Criteria criteria3 = session.createCriteria(CarrierDetails.class);
+					criteria3.add(Restrictions.eq("bpNumber", c.getBpNumber()));
+					criteria3.add(Restrictions.eq("carrierMode", c.getCarrierMode()));
+					carrierDetails = criteria3.list();
+					for (CarrierDetails cdets : carrierDetails) {
+						premiumFreightChargeDetails.setBpNumber(cdets.getBpNumber());
+						premiumFreightChargeDetails.setCarrierDetails(cdets.getCarrierDetails());
+						premiumFreightChargeDetails.setCarrierMode(cdets.getCarrierMode());
+						premiumFreightChargeDetails.setCarrierScac(cdets.getCarrierScac());
 
+					}
 					premiumFreightChargeDetails.setOriginName(aorders.getShipperName());
 					premiumFreightChargeDetails.setOriginAddress(aorders.getOriginAddress());
 					premiumFreightChargeDetails.setOriginCity(aorders.getOriginCity());
@@ -313,7 +319,6 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					premiumFreightChargeDetails.setPlannerEmail(aorders.getPlannerEmail());
 
 					session.saveOrUpdate(premiumFreightChargeDetails);
-					;
 
 				}
 			} catch (Exception e) {
@@ -334,62 +339,68 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public String setCharge(ChargeRequestDto dto) {
+	public String setCharge(List<ChargeRequestDto> dto) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
-		List<AdhocOrders> adhocOrders = new ArrayList<AdhocOrders>();
 		PremiumFreightChargeDetails premiumFreightChargeDetail = new PremiumFreightChargeDetails();
 		List<PremiumFreightChargeDetails> premiumFreightChargeDetails = new ArrayList<PremiumFreightChargeDetails>();
-		@SuppressWarnings("deprecation")
-		Criteria criteria = session.createCriteria(AdhocOrders.class);
-		criteria.add(Restrictions.eq("fwoNum", dto.getorderId()));
-		adhocOrders = criteria.list();
-		for (AdhocOrders a : adhocOrders) {
-			a.setStatus("In Progress");
-			session.saveOrUpdate(a);
-			session.saveOrUpdate(a);
-		}
+		for (ChargeRequestDto c : dto) {
+			Criteria criteria = session.createCriteria(AdhocOrders.class);
+			criteria.add(Restrictions.eq("fwoNum", c.getorderId()));
+			List<AdhocOrders> adhocOrders = new ArrayList<AdhocOrders>();
 
-		Criteria criteria2 = session.createCriteria(PremiumFreightChargeDetails.class);
-		criteria2.add(Restrictions.eq("adhocOrderId", dto.getorderId()));
-		premiumFreightChargeDetails = criteria2.list();
-		if (premiumFreightChargeDetails == null) {
+			adhocOrders = criteria.list();
 			for (AdhocOrders a : adhocOrders) {
-
-				premiumFreightChargeDetail.setorderId(a.getFwoNum());
-
-				System.out.println(premiumFreightChargeDetail.getorderId());
-				premiumFreightChargeDetail.setOriginName(a.getShipperName());
-				premiumFreightChargeDetail.setOriginAddress(a.getOriginAddress());
-				premiumFreightChargeDetail.setOriginCity(a.getOriginCity());
-				premiumFreightChargeDetail.setOriginState(a.getOriginState());
-				premiumFreightChargeDetail.setOriginCountry(a.getOriginCountry());
-				premiumFreightChargeDetail.setOriginZip(a.getOriginZip());
-
-				premiumFreightChargeDetail.setDestinationAdress(a.getDestinationAddress());
-				premiumFreightChargeDetail.setDestinationCity(a.getDestinationCity());
-				premiumFreightChargeDetail.setDestinationState(a.getDestinationState());
-				premiumFreightChargeDetail.setDestinationCountry(a.getDestinationCountry());
-				premiumFreightChargeDetail.setDestinationZip(a.getDestinationZip());
-
-				premiumFreightChargeDetail.setReasonCode(a.getPremiumReasonCode());
-				premiumFreightChargeDetail.setPlannerEmail(a.getPlannerEmail());
-				// premiumFreightChargeDetail.setStatus(a.getStatus());
-				premiumFreightChargeDetail.setStatus("In Progress");
-
+				a.setStatus("IN PROGRESS");
+				session.saveOrUpdate(a);
+				session.saveOrUpdate(a);
 			}
 
-			premiumFreightChargeDetail.setBpNumber(dto.getBpNumber());
-			premiumFreightChargeDetail.setCarrierScac(dto.getCarrierScac());
-			premiumFreightChargeDetail.setCarrierDetails(dto.getCarrierDetails());
-			premiumFreightChargeDetail.setCarrierMode(dto.getCarrierMode());
-			premiumFreightChargeDetail.setCharge(dto.getCharge());
-			session.saveOrUpdate(premiumFreightChargeDetail);
-		} else {
-			for (PremiumFreightChargeDetails p : premiumFreightChargeDetails) {
-				p.setCharge(dto.getCharge());
-				p.setStatus("In Progress");
-				session.saveOrUpdate(p);
+			Criteria criteria2 = session.createCriteria(PremiumFreightChargeDetails.class);
+			criteria2.add(Restrictions.eq("adhocOrderId", c.getorderId()));
+			premiumFreightChargeDetails = criteria2.list();
+			if (premiumFreightChargeDetails == null) 
+			{
+				for (AdhocOrders a : adhocOrders) {
+
+					premiumFreightChargeDetail.setorderId(a.getFwoNum());
+
+					System.out.println(premiumFreightChargeDetail.getorderId());
+					premiumFreightChargeDetail.setOriginName(a.getShipperName());
+					premiumFreightChargeDetail.setOriginAddress(a.getOriginAddress());
+					premiumFreightChargeDetail.setOriginCity(a.getOriginCity());
+					premiumFreightChargeDetail.setOriginState(a.getOriginState());
+					premiumFreightChargeDetail.setOriginCountry(a.getOriginCountry());
+					premiumFreightChargeDetail.setOriginZip(a.getOriginZip());
+
+					premiumFreightChargeDetail.setDestinationAdress(a.getDestinationAddress());
+					premiumFreightChargeDetail.setDestinationCity(a.getDestinationCity());
+					premiumFreightChargeDetail.setDestinationState(a.getDestinationState());
+					premiumFreightChargeDetail.setDestinationCountry(a.getDestinationCountry());
+					premiumFreightChargeDetail.setDestinationZip(a.getDestinationZip());
+
+					premiumFreightChargeDetail.setReasonCode(a.getPremiumReasonCode());
+					premiumFreightChargeDetail.setPlannerEmail(a.getPlannerEmail());
+					// premiumFreightChargeDetail.setStatus(a.getStatus());
+					premiumFreightChargeDetail.setStatus("In Progress");
+
+				}
+
+				premiumFreightChargeDetail.setBpNumber(c.getBpNumber());
+				premiumFreightChargeDetail.setCarrierScac(c.getCarrierScac());
+				premiumFreightChargeDetail.setCarrierDetails(c.getCarrierDetails());
+				premiumFreightChargeDetail.setCarrierMode(c.getCarrierMode());
+				premiumFreightChargeDetail.setCharge(c.getCharge());
+				session.saveOrUpdate(premiumFreightChargeDetail);
+			}
+			else 
+			{
+				for (PremiumFreightChargeDetails p : premiumFreightChargeDetails)
+				{
+					p.setCharge(c.getCharge());
+					p.setStatus("In Progress");
+					session.saveOrUpdate(p);
+				}
 			}
 		}
 		session.flush();
@@ -473,32 +484,62 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		Transaction tx = session.beginTransaction();
 		try {
 
-			String queryStr = "UPDATE AdhocOrders ad set ad.Status='Reject' where ad.fwoNum in(:fwoNum);";
-			Query query = session.createQuery(queryStr);
-			query.setParameterList("fwoNum", adhocOrderIds);
-			int result = query.executeUpdate();
-			//get the details from the adhoc TAble for the given adhocOrderId
-			//setthe status of details as REJECTED
-			//DOnt delete from DB
+			for (String s : adhocOrderIds) {
+				System.out.println(s);
+				// AdhocOrders ad = new AdhocOrders();
 
-			String qstr = " UPDATE PremiumFreightChargeDetails p set p.Status='Reject' where p.adhocOrderId in(:adhocOrderId);";
-			Query q2 = session.createQuery(qstr);
-			q2.setParameterList("adhocOrderId", adhocOrderIds);
-			//get the details from the adhoc TAble for the given adhocOrderId
-			//setthe status of details as REJECTED
-			//DOnt delete from DB
-			int result2 = query.executeUpdate();
-			if (result == 1) {
-				responseDto.setMessage("delete success");
-				responseDto.setStatus("SUCCESS");
-				responseDto.setCode("00");
-				return responseDto;
-			} else {
-				responseDto.setMessage("delete failed: Query not Executed");
-				responseDto.setStatus("FAIL");
-				responseDto.setCode("01");
-				return responseDto;
+				List<AdhocOrders> adlist = new ArrayList<AdhocOrders>();
+				Criteria criteria = session.createCriteria(AdhocOrders.class);
+				criteria.add(Restrictions.eq("fwoNum", s));
+				adlist = criteria.list();
+				System.out.println(adlist.size() + "  " + criteria.list().size());
+				for (AdhocOrders a : adlist) {
+					System.out.println("ADHOCSTATUS" + a.getStatus());
+					a.setStatus("REJECTED");
+					session.saveOrUpdate(a);
+					System.out.println("ADHOCSTATUS" + a.getStatus());
+
+				}
+
+				List<PremiumFreightChargeDetails> plist = new ArrayList<PremiumFreightChargeDetails>();
+				Criteria criteria2 = session.createCriteria(PremiumFreightChargeDetails.class);
+				criteria2.add(Restrictions.eq("orderId", s));
+				plist = criteria2.list();
+				for (PremiumFreightChargeDetails p : plist) {
+
+					System.out.println("ADHOCSTATUS" + p.getStatus());
+					p.setStatus("REJECTED");
+					session.saveOrUpdate(p);
+					System.out.println("ADHOCSTATUS" + p.getStatus());
+
+				}
 			}
+			responseDto.setMessage("delete success");
+			responseDto.setStatus("SUCCESS");
+			responseDto.setCode("00");
+			// return responseDto;
+			/*
+			 * String queryStr =
+			 * "UPDATE AdhocOrders ad set ad.status='REJECTED' where ad.fwoNum in(:fwoNum)"
+			 * ; Query query = session.createQuery(queryStr);
+			 * 
+			 * query.setParameterList("fwoNum", adhocOrderIds); int result =
+			 * query.executeUpdate();
+			 * 
+			 * String qstr =
+			 * " UPDATE PremiumFreightChargeDetails p set p.Status='REJECTED' where p.orderId in(:adhocOrderId)"
+			 * ; Query q2 = session.createQuery(qstr);
+			 * q2.setParameterList("adhocOrderId", adhocOrderIds); int result2 =
+			 * query.executeUpdate();
+			 */
+			/*
+			 * if (result == 1) { responseDto.setMessage("delete success");
+			 * responseDto.setStatus("SUCCESS"); responseDto.setCode("00");
+			 * return responseDto; } else {
+			 * responseDto.setMessage("delete failed: Query not Executed");
+			 * responseDto.setStatus("FAIL"); responseDto.setCode("01"); return
+			 * responseDto; }
+			 */
 		} catch (Exception e) {
 			responseDto.setCode("02");
 			responseDto.setMessage("Save or Update Failed due to " + e.getMessage());
