@@ -66,6 +66,17 @@ public class AdhocOrderWorkflow {
 	@Column(name = "TYPE")
 	private String type;
 	
+	@Column(name = "REQUEST_ID")
+	private String requestId;
+	
+	public String getRequestId() {
+		return requestId;
+	}
+
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
+	}
+
 	public Long getId() {
 		return id;
 	}
