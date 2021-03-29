@@ -88,7 +88,7 @@ public class PremiumFreightChargeDetails
 	@Column(name="REASON_CODE")
 	private String reasonCode;
 	@Column(name="STATUS")
-	private String Status;
+	private String status;
 	@Column(name="PLANNER_EMAIL")
 	private String plannerEmail;
 
@@ -237,11 +237,11 @@ public class PremiumFreightChargeDetails
 	}
 
 	public String getStatus() {
-		return Status;
+		return status;
 	}
 
 	public void setStatus(String status) {
-		Status = status;
+		this.status = status;
 	}
 
 	public String getCarrierScac() {

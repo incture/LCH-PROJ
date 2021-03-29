@@ -1056,13 +1056,13 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public String updateWorflowDetails(AdhocOrderWorkflowDto workflowDto) {
-		System.out.println("Yuhooo" + workflowDto.getorderId());
+		System.out.println("Yuhooo" + workflowDto.getOrderId());
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		List<AdhocOrders> adhocOrder = new ArrayList<AdhocOrders>();
 		Criteria criteria = session.createCriteria(AdhocOrders.class);
-		criteria.add(Restrictions.eq("fwoNum", workflowDto.getorderId()));
+		criteria.add(Restrictions.eq("fwoNum", workflowDto.getOrderId()));
 		adhocOrder = criteria.list();
 
 		System.out.println(adhocOrder.size());
@@ -1084,21 +1084,21 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		tx.commit();
 		session.close();
 
-		System.out.println(workflowDto.getorderId());
-		return workflowDto.getorderId();
+		System.out.println(workflowDto.getOrderId());
+		return workflowDto.getOrderId();
 	}
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public String updateApprovalWorflowDetails(JSONObject obj) throws JSONException {
 		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
 		workflowDto = prepareAdhocApprovalWorkflowDto(obj);
-		System.out.println("Yuhooo" + workflowDto.getorderId());
+		System.out.println("Yuhooo" + workflowDto.getOrderId());
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		List<AdhocOrders> adhocOrder = new ArrayList<AdhocOrders>();
 		Criteria criteria = session.createCriteria(AdhocOrders.class);
-		criteria.add(Restrictions.eq("fwoNum", workflowDto.getorderId()));
+		criteria.add(Restrictions.eq("fwoNum", workflowDto.getOrderId()));
 		adhocOrder = criteria.list();
 
 		System.out.println(adhocOrder.size());
@@ -1120,14 +1120,14 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		tx.commit();
 		session.close();
 
-		System.out.println(workflowDto.getorderId());
-		return workflowDto.getorderId();
+		System.out.println(workflowDto.getOrderId());
+		return workflowDto.getOrderId();
 	}
 
 	public AdhocOrderWorkflowDto prepareAdhocApprovalWorkflowDto(JSONObject data) throws JSONException {
 		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
 		JSONObject obj = data.getJSONObject("workflowInfo");
-		workflowDto.setorderId(data.getString("adhocOrderId"));
+		workflowDto.setOrderId(data.getString("adhocOrderId"));
 		workflowDto.setDescription(obj.getString("description"));
 		workflowDto.setInstanceId(obj.getString("id"));
 		workflowDto.setPendingWith(null);
@@ -1145,13 +1145,13 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			throws JSONException, ClientProtocolException, IOException {
 		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
 		workflowDto = prepareAdhocApprovalWorkflowDto(obj);
-		System.out.println("Yuhooo" + workflowDto.getorderId());
+		System.out.println("Yuhooo" + workflowDto.getOrderId());
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		List<AdhocOrders> adhocOrder = new ArrayList<AdhocOrders>();
 		Criteria criteria = session.createCriteria(AdhocOrders.class);
-		criteria.add(Restrictions.eq("fwoNum", workflowDto.getorderId()));
+		criteria.add(Restrictions.eq("fwoNum", workflowDto.getOrderId()));
 		adhocOrder = criteria.list();
 
 		System.out.println(adhocOrder.size());
@@ -1172,14 +1172,14 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		tx.commit();
 		session.close();
 
-		System.out.println(workflowDto.getorderId());
-		return workflowDto.getorderId();
+		System.out.println(workflowDto.getOrderId());
+		return workflowDto.getOrderId();
 	}
 
 	public String updateApprovalWorflowDetailsForType4(AdhocWorkflowCustomDto dto)
 			throws JSONException, ClientProtocolException, IOException {
 		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
-		workflowDto.setorderId(dto.getAdhocOrderId());
+		workflowDto.setOrderId(dto.getAdhocOrderId());
 		workflowDto.setBusinessKey(dto.getCreatedBy());
 		workflowDto.setWorkflowName("Adhoc Workflow");
 		workflowDto.setDescription("Adhoc Type IS AS");
@@ -1189,7 +1189,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		workflowDto.setSubject("NA");
 		workflowDto.setUpdatedDate(new Date());
 		workflowDto.setPendingWith(null);
-		System.out.println("Yuhooo" + workflowDto.getorderId());
+		System.out.println("Yuhooo" + workflowDto.getOrderId());
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
@@ -1216,8 +1216,8 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		tx.commit();
 		session.close();
 
-		System.out.println(workflowDto.getorderId());
-		return workflowDto.getorderId();
+		System.out.println(workflowDto.getOrderId());
+		return workflowDto.getOrderId();
 	}
 
 	public AdhocOrderWorkflowDto prepareAdhocApprovalWorkflowDto(WorkflowCustomDto data)
@@ -1226,7 +1226,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		System.err.println("[prepareAdhocApprovalWorkflowDto WorkflowCustomDto] : " + data.toString() + "---"
 				+ data.getTaskIdDetails());
 
-		workflowDto.setorderId(data.getOrderIdDetails());
+		workflowDto.setOrderId(data.getOrderIdDetails());
 		JSONObject obj = wfInvokerLocal.getWorkflowApprovalTaskInstanceId(data.getTaskIdDetails());
 		System.err.println("[prepareAdhocApprovalWorkflowDto objectData] : " + obj.toString());
 		LOGGER.info("objectData:: " + obj.toString());

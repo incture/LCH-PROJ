@@ -29,11 +29,11 @@ public class AdhocOrderWorkflowDto {
 		this.id = id;
 	}
 
-	public String getorderId() {
+	public String getOrderId() {
 		return orderId;
 	}
 
-	public void setorderId(String orderId) {
+	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
 

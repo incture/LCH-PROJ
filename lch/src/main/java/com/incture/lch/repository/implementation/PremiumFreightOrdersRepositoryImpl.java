@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import com.incture.lch.dao.CarrierDetailsDao;
 import com.incture.lch.dto.CarrierDetailsDto;
+import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
@@ -108,7 +109,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		String filter_field = null;
 		try {
 			if (premiumRequestDto.getorderId() != null && !(premiumRequestDto.getorderId().equals(""))) {
-				criteria.add(Restrictions.eq("adhocOrderId", premiumRequestDto.getorderId()));
+				criteria.add(Restrictions.eq("orderId", premiumRequestDto.getorderId()));
 				filter_field = "adhocOrderId";
 
 			}
@@ -183,6 +184,88 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		tx.commit();
 		session.close();
 		return paginationDto;
+	}
+
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public ChargeDetailsPaginated getAllCarrierOrders(PremiumRequestDto premiumRequestDto) {
+		
+		List<PremiumFreightChargeDetails> premiumFreightChargeDetails = new ArrayList<PremiumFreightChargeDetails>();
+		ChargeDetailsPaginated chargeDetailsPaginated =new ChargeDetailsPaginated();
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+
+		@SuppressWarnings("deprecation")
+		Criteria criteria = session.createCriteria(PremiumFreightChargeDetails.class);
+
+		criteria.add(Restrictions.eq("status", "Pending with Carrier Admin"));
+
+		
+			if (premiumRequestDto.getorderId() != null && !(premiumRequestDto.getorderId().equals(""))) {
+				criteria.add(Restrictions.eq("orderId", premiumRequestDto.getorderId()));
+
+			}
+			if ((premiumRequestDto.getFromDate() != null && !(premiumRequestDto.getFromDate().equals("")))
+					&& (premiumRequestDto.getToDate() != null) && !(premiumRequestDto.getToDate().equals(""))) {
+				@SuppressWarnings("deprecation")
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				try {
+					Date d1 = (Date) sdf.parse(premiumRequestDto.getFromDate());
+					Date d2 = (Date) sdf.parse(premiumRequestDto.getToDate());
+					criteria.add(Restrictions.between("createdDate", d1, d2));
+				} catch (Exception e) {
+					System.out.println("Error in date format");
+				}
+
+			}
+			if (premiumRequestDto.getPlannerEmail() != null && !(premiumRequestDto.getPlannerEmail().equals(""))) {
+
+				criteria.add(Restrictions.eq("plannerEmail", premiumRequestDto.getPlannerEmail()));
+
+			}
+			if (premiumRequestDto.getReasonCode() != null && !(premiumRequestDto.getReasonCode().equals(""))) {
+				criteria.add(Restrictions.eq("premiumReasonCode", premiumRequestDto.getReasonCode()));
+
+			}
+			if (premiumRequestDto.getStatus() != null && !(premiumRequestDto.getStatus().equals(""))) {
+				criteria.add(Restrictions.eq("status", premiumRequestDto.getStatus()));
+			}
+
+			if (premiumRequestDto.getOriginName() != null && !(premiumRequestDto.getOriginName().equals(""))) {
+				criteria.add(Restrictions.eq("shipperName", premiumRequestDto.getOriginName()));
+			}
+
+			if (premiumRequestDto.getDestinationName() != null
+					&& !(premiumRequestDto.getDestinationName().equals(""))) {
+				criteria.add(Restrictions.eq("destinationName", premiumRequestDto.getDestinationName()));
+			}
+		
+		criteria.addOrder(Order.asc("orderId"));
+		int total_entries = criteria.list().size();
+		int startNum = (premiumRequestDto.getPageNumber() - 1) * 10;
+
+		if (premiumRequestDto.getNoOfEntry() > total_entries) {
+			throw new PageNumberNotFoundException(total_entries);
+		}
+
+		criteria.setFirstResult(startNum);
+		if (premiumRequestDto.getNoOfEntry() == 0) {
+			criteria.setMaxResults(10);
+		} else {
+			criteria.setMaxResults(premiumRequestDto.getNoOfEntry());
+		}
+
+		premiumFreightChargeDetails=criteria.list();
+		
+		chargeDetailsPaginated.setPremiumFreightChargeDetails(premiumFreightChargeDetails);
+		chargeDetailsPaginated.setCount(total_entries);
+		
+		session.flush();
+		session.clear();
+		tx.commit();
+		session.close();
+		return chargeDetailsPaginated;
 	}
 
 	@Override

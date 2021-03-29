@@ -26,7 +26,7 @@ public class AdhocOrderWorkflowDao {
 	public AdhocOrderWorkflow importAdhocWorkflow(AdhocOrderWorkflowDto dto) {
 		AdhocOrderWorkflow ruleDo = new AdhocOrderWorkflow();
 		ruleDo.setId(dto.getId());
-		ruleDo.setorderId(dto.getorderId());
+		ruleDo.setorderId(dto.getOrderId());
 		ruleDo.setDefinitionId(dto.getDefinitionId());
 		ruleDo.setInstanceId(dto.getInstanceId());
 		ruleDo.setPendingWith(dto.getPendingWith());
@@ -47,7 +47,7 @@ public class AdhocOrderWorkflowDao {
 	public AdhocOrderWorkflowDto exportAdhocWorkflow(AdhocOrderWorkflow ruledo) {
 		AdhocOrderWorkflowDto ruleDto = new AdhocOrderWorkflowDto();
 		ruleDto.setId(ruledo.getId());
-		ruleDto.setorderId(ruledo.getorderId());
+		ruleDto.setOrderId(ruledo.getorderId());
 		ruleDto.setDefinitionId(ruledo.getDefinitionId());
 		ruleDto.setInstanceId(ruledo.getInstanceId());
 		ruleDto.setPendingWith(ruledo.getPendingWith());

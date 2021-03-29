@@ -3,6 +3,7 @@ package com.incture.lch.repository;
 import java.util.List;
 
 import com.incture.lch.dto.CarrierDetailsDto;
+import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
@@ -19,6 +20,9 @@ public interface PremiumFreightOrdersRepository
 	public PaginationDto getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto);
 
 	public List<CarrierDetailsDto> getAllCarrierDetails();
+
+	public ChargeDetailsPaginated getAllCarrierOrders(PremiumRequestDto premiumRequestDto) ;
+
 	
 	public List<String> getMode(String bpNumber);
 

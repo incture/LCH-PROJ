@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.incture.lch.dao.PremiumFreightApprovalRuleDao;
 import com.incture.lch.dto.CarrierDetailsDto;
+import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PremiumFreightApprovalRuleDTO;
@@ -49,6 +50,11 @@ public class PremiumFreightOrdersController
 		return premiumFreightOrdersService.getAllCarrierDetails();
 	}
 
+	@RequestMapping(value = "/getAllCarrierOrders", method = RequestMethod.POST, consumes = { "application/json" })
+	@ResponseBody
+	public ChargeDetailsPaginated getAllCarrierOrders(@RequestBody PremiumRequestDto premiumRequestDto) {
+		return premiumFreightOrdersService.getAllCarrierOrders(premiumRequestDto);
+	}
 	
 	@RequestMapping(value = "/getMode", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody

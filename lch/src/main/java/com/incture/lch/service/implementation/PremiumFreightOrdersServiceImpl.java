@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.incture.lch.dto.CarrierDetailsDto;
+import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
@@ -72,6 +73,12 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 	public ResponseDto addCarrier(CarrierDetailsDto carrierdto)
 	{
 		return premiumFreightOrdersRepo.addCarrier(carrierdto); 
+	}
+
+	@Override
+	public ChargeDetailsPaginated getAllCarrierOrders(PremiumRequestDto premiumRequestDto) 
+	{
+		return  premiumFreightOrdersRepo.getAllCarrierOrders(premiumRequestDto);
 	}
 
 }

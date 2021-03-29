@@ -34,13 +34,13 @@ public class AdhocOrderWorkflowHelper {
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public String updateWorflowDetails(AdhocOrderWorkflowDto workflowDto) {
-		System.out.println("Yuhooo" + workflowDto.getorderId());
+		System.out.println("Yuhooo" + workflowDto.getOrderId());
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		List<AdhocOrders> adhocOrder = new ArrayList<AdhocOrders>();
 		Criteria criteria = session.createCriteria(AdhocOrders.class);
-		criteria.add(Restrictions.eq("fwoNum", workflowDto.getorderId()));
+		criteria.add(Restrictions.eq("fwoNum", workflowDto.getOrderId()));
 		adhocOrder = criteria.list();
 
 		System.out.println(adhocOrder.size());
@@ -61,8 +61,8 @@ public class AdhocOrderWorkflowHelper {
 		tx.commit();
 		session.close();
 
-		System.out.println(workflowDto.getorderId());
-		return workflowDto.getorderId();
+		System.out.println(workflowDto.getOrderId());
+		return workflowDto.getOrderId();
 	}
 
 	public String getManagerDetails(List<AdhocApprovalRuleDto> ruleDtoList)
