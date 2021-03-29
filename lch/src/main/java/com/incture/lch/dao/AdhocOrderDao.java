@@ -261,7 +261,9 @@ public class AdhocOrderDao {
 		adhocOrders.setPremiumReasonCode(AdhocOrderDto.getPremiumReasonCode());
 		adhocOrders.setPlannerEmail(AdhocOrderDto.getPlannerEmail());
 		adhocOrders.setAdhocType(AdhocOrderDto.getAdhocType());
-		adhocOrders.setStatus(AdhocOrderDto.getStatus());
+		//adhocOrders.setStatus(AdhocOrderDto.getStatus());
+		adhocOrders.setStatus("Pending At Planner");
+
 		adhocOrders.setPendingWith(AdhocOrderDto.getPendingWith());
 		adhocOrders.setManagerEmail(AdhocOrderDto.getManagerEmail());
 		adhocOrders.setIsSaved(AdhocOrderDto.getIsSaved());

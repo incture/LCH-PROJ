@@ -402,8 +402,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 	// Charge is set by the carrier admin here. Once the Charge is set it
 	// updates the charge table
-	// and update the Status as in progress
-
+	// and update the Status as Pending  At Planner
 	@SuppressWarnings("unchecked")
 	@Override
 	public String setCharge(List<ChargeRequestDto> dto) {
@@ -418,7 +417,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 			adhocOrders = criteria.list();
 			for (AdhocOrders a : adhocOrders) {
-				a.setStatus("IN PROGRESS");
+				a.setStatus("Pending At Planner");
 				session.saveOrUpdate(a);
 				
 			}
@@ -449,7 +448,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					premiumFreightChargeDetail.setReasonCode(a.getPremiumReasonCode());
 					premiumFreightChargeDetail.setPlannerEmail(a.getPlannerEmail());
 					// premiumFreightChargeDetail.setStatus(a.getStatus());
-					premiumFreightChargeDetail.setStatus("In Progress");
+					premiumFreightChargeDetail.setStatus("Pending At Planner");
 
 				}
 
@@ -473,7 +472,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 				for (PremiumFreightChargeDetails p : premiumFreightChargeDetails) {
 					System.out.println("This is where it is alreday present");
 					p.setCharge(c.getCharge());
-					p.setStatus("In Progress");
+					p.setStatus("Pending At Planner");
 					session.saveOrUpdate(p);
 				}
 			}

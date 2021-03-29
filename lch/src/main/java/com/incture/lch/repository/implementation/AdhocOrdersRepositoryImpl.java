@@ -56,6 +56,7 @@ import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.dto.WorkflowInputDto;
 import com.incture.lch.entity.AdhocOrderWorkflow;
 import com.incture.lch.entity.AdhocOrders;
+import com.incture.lch.entity.LchRole;
 import com.incture.lch.entity.LkCountries;
 import com.incture.lch.entity.LkDivisions;
 import com.incture.lch.entity.LkShipperDetails;
@@ -352,7 +353,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		adhocOrders.setPlannerEmail(AdhocOrderDto.getPlannerEmail());
 		adhocOrders.setAdhocType(AdhocOrderDto.getAdhocType());
 		// adhocOrders.setStatus(AdhocOrderDto.getStatus());
-		adhocOrders.setStatus("In_Progress");
+		adhocOrders.setStatus("Pending At Planner");
 		adhocOrders.setPendingWith(AdhocOrderDto.getPendingWith());
 		adhocOrders.setManagerEmail(AdhocOrderDto.getManagerEmail());
 		adhocOrders.setIsSaved(AdhocOrderDto.getIsSaved());
@@ -604,7 +605,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	}
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SuppressWarnings({ "unchecked", "deprecation", "null" })
 	public ResponseDto addAdhocOrders(AdhocOrderDto AdhocOrderDto) {
 		ResponseDto responseDto = new ResponseDto();
 		AdhocOrders adhocOrders = new AdhocOrders();
@@ -665,10 +666,8 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 		LOGGER.info("Starting Workflow");
 		WorkflowApprovalTaskDto workflowDto = new WorkflowApprovalTaskDto();
-		workflowDto = exportAdhocWorkflowDto(
-				adhocOrders);
-		List<AdhocApprovalRuleDto> ruleDtoList = adhocApprovalRuleDao
-				.getAdhocApprovalsByAdhocTypeAndApprovalType(adhocOrders.getAdhocType());
+		workflowDto = exportAdhocWorkflowDto(adhocOrders);
+		List<AdhocApprovalRuleDto> ruleDtoList = adhocApprovalRuleDao.getAdhocApprovalsByAdhocTypeAndApprovalType(adhocOrders.getAdhocType());
 		
 
 		workflowDto.setManager(adhocOrderWorkflowHelper.getManagerDetails(ruleDtoList));
@@ -681,10 +680,21 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		}
 		else
 		{
+			List<LchRole> roles =  new ArrayList<LchRole>();
+			Criteria criteria = session.createCriteria(LchRole.class);
+			criteria.add(Restrictions.eq("role","LCH_Planner"));
+			roles=criteria.list();
+			String pendingWith=null;
 			
+			for(LchRole l:roles)
+			{
+				pendingWith.concat(l.getUserId()+",");
+			}
+			adhocOrders.setPendingWith(pendingWith.substring(0,pendingWith.length()-2));
+			session.saveOrUpdate(adhocOrders); 
 			//PremiumFreight Premium Order here
 			//Update the Master Table with Status as Pending at Planner
-			//Pending with : Rule Table Planner details
+			//Pending with : Role Table Planner details
 			//Not in the workflow table update
 			
 		}
