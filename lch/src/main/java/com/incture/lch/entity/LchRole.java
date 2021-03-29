@@ -18,7 +18,7 @@ public class LchRole {
 	@Column(name="USER ID")
 	private String userId;
 	@Column(name="USER EMAIL")
-	private String UserEmail;
+	private String userEmail;
 	@Column(name="USER ROLE")
 	private String role;
 	public String getId() {
@@ -34,10 +34,10 @@ public class LchRole {
 		this.userId = userId;
 	}
 	public String getUserEmail() {
-		return UserEmail;
+		return userEmail;
 	}
 	public void setUserEmail(String userEmail) {
-		UserEmail = userEmail;
+		userEmail = userEmail;
 	}
 	public String getRole() {
 		return role;

@@ -37,6 +37,20 @@ public class GetReferenceData {
 		return type + year.substring(2, 4) + month + day;
 	}
 
+	public String executePremiumRequestId(String type) {
+		/*Calendar now = Calendar.getInstance();
+		String year = now.get(Calendar.YEAR) + "";
+		String month = String.valueOf(now.get(Calendar.MONTH) + 1);
+		String day = String.valueOf(now.get(Calendar.DATE));
+		if (month.length() != 2) {
+			month = "0" + month;
+		}
+		if (day.length() != 2) {
+			day = "0" + day;
+		}
+		return type + year.substring(2, 4) + month + day;*/
+		return type+"1000";
+	}
 	public String executeDmfrt(String type) {
 		// Calendar now = Calendar.getInstance();
 		// String year = now.get(Calendar.YEAR) + "";
@@ -76,6 +90,11 @@ public class GetReferenceData {
 
 	public String getNextSeqNumberAdhoc(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
 		return SequenceNumberGenAdhoc.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
+				sessionFactory.getCurrentSession());
+	}
+	
+	public String getNextSeqNumberRequestId(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
+		return SequenceNumberGenRequestId.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
 				sessionFactory.getCurrentSession());
 	}
 

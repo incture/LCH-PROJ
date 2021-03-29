@@ -24,6 +24,8 @@ import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.AdhocOrders;
 import com.incture.lch.entity.CarrierDetails;
+import com.incture.lch.entity.LchRole;
+import com.incture.lch.entity.OrderIdMapping;
 import com.incture.lch.entity.PremiumFreightChargeDetails;
 import com.incture.lch.exception.CarrierNotExistException;
 import com.incture.lch.exception.FilterInvalidEntryException;
@@ -255,28 +257,51 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 	// On getting the Charge respond the Same DTO Premium one for the CA
 	// The status changes to Pending with Carrier admin
 	@Override
-	public List<PremiumFreightOrderDto> setCarrierDetails(List<ChargeRequestDto> chargeRequestDto) {
+	public List<PremiumFreightOrderDto> setCarrierDetails(List<ChargeRequestDto> chargeRequestDto) 
+	{
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		List<PremiumFreightOrderDto> premiumFreightOrderDtos = new ArrayList<PremiumFreightOrderDto>();
 		List<AdhocOrders> adhocOrders = new ArrayList<AdhocOrders>();
-		PremiumFreightOrderDto premiumdto = new PremiumFreightOrderDto();
-		for (ChargeRequestDto c : chargeRequestDto) {
+		List<String> adhocOrdersList = new ArrayList<String>();
+		
+		String createdBy = null;
 
-			String adid = c.getorderId();
-			System.out.println(adid);
-			try {
+
+		PremiumFreightOrderDto premiumdto = new PremiumFreightOrderDto();
+		try {
+			for (ChargeRequestDto c : chargeRequestDto) {
+				String adid = c.getorderId();
+				adhocOrdersList.add(adid);
+				System.out.println(adid);
+
 				String queryStr = "SELECT ao FROM AdhocOrders ao WHERE ao.fwoNum = ao.fwoNum AND ao.fwoNum=:fwoNum";
 				Query query = session.createQuery(queryStr);
 				query.setParameter("fwoNum", adid);
 				adhocOrders = query.list();
 				System.out.println(adhocOrders.size());
 				for (AdhocOrders aorders : adhocOrders) {
-					System.out.println("aorders");
+					System.out.println(aorders);
+					createdBy=aorders.getPlannerEmail();
 					PremiumFreightChargeDetails premiumFreightChargeDetails = new PremiumFreightChargeDetails();
 
 					aorders.setStatus("Pending with Carrier Admin");
+					Criteria criteria_role= session.createCriteria(LchRole.class);
+					String pendingWith=null;
+					List<LchRole> role = new ArrayList<LchRole>();
+					
+					criteria_role.add(Restrictions.eq("role", "LCH_Carrier_Admin"));
+					
+					role=criteria_role.list();
+					
+					String createdByList=null;
+					for(LchRole l:role)
+					{
+						pendingWith.concat(l.getUserId()+",");
+					}
+					aorders.setPendingWith(pendingWith.substring(0,pendingWith.length()-2));
+
 					session.saveOrUpdate(aorders);
 					premiumdto = exportPremiumFreightOrders(aorders);
 					premiumdto.setStatus("Pending with Carrier Admin");
@@ -291,7 +316,8 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					criteria3.add(Restrictions.eq("bpNumber", c.getBpNumber()));
 					criteria3.add(Restrictions.eq("carrierMode", c.getCarrierMode()));
 					carrierDetails = criteria3.list();
-					for (CarrierDetails cdets : carrierDetails) {
+					for (CarrierDetails cdets : carrierDetails)
+					{
 						premiumFreightChargeDetails.setBpNumber(cdets.getBpNumber());
 						premiumFreightChargeDetails.setCarrierDetails(cdets.getCarrierDetails());
 						premiumFreightChargeDetails.setCarrierMode(cdets.getCarrierMode());
@@ -319,17 +345,58 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					premiumFreightChargeDetails.setPlannerEmail(aorders.getPlannerEmail());
 
 					session.saveOrUpdate(premiumFreightChargeDetails);
+					
 
 				}
-			} catch (Exception e) {
-				throw new SetCarrierDetailsException();
-			} finally {
-				session.flush();
-				session.clear();
-				tx.commit();
-				session.close();
+				
+				OrderIdMapping orderIdMapping = new OrderIdMapping();
+				
+				String requestId = getReferenceData.getNextSeqNumberRequestId(getReferenceData.executePremiumRequestId("REQ"),4,sessionFactory);
+				String orderids=null;
+				for(String adString:adhocOrdersList)
+				{
+					orderids.concat(adString+",");
+				}
+				orderIdMapping.setRequestId(requestId);
+				orderIdMapping.setOrderIds(orderids.substring(0, orderids.length()-2));
+				orderIdMapping.setCreatedDate(java.time.LocalDate.now());
+				Criteria criteriaRole= session.createCriteria(LchRole.class);
+				criteriaRole.add(Restrictions.eq("userEmail", createdBy));
+				
+				List<LchRole> roles = new ArrayList<LchRole>();
+				roles=criteriaRole.list();
+				String createdByList=null;
+				for(LchRole l:roles)
+				{
+					createdByList.concat(l.getUserId()+",");
+				}
+
+				orderIdMapping.setCreatedBy(createdByList.substring(0, createdByList.length()-2));
+				session.saveOrUpdate(orderIdMapping);
+				
+				//Planner open: List of order pending at planner : records 
+				//send to carrier - list of adhocorderDto
+				//mapping table 
+				//master table pending with CARRIER ADMIN
+				//Pending user id -  Carrier details rule table , P0030,P0031
+				
+				//LOGGER.info("Starting Workflow");
+
+				//Trigger the workflow
+				//Parallel in workflow - request id generated 
+				//Workflow response will give in the details
+				//refer to the trigger workflow
+				
 			}
+		} catch (Exception e) {
+			throw new SetCarrierDetailsException();
+		} finally {
+			session.flush();
+			session.clear();
+			tx.commit();
+			session.close();
 		}
+
 		return premiumFreightOrderDtos;
 	}
 
@@ -344,25 +411,23 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		Transaction tx = session.beginTransaction();
 		PremiumFreightChargeDetails premiumFreightChargeDetail = new PremiumFreightChargeDetails();
 		List<PremiumFreightChargeDetails> premiumFreightChargeDetails = new ArrayList<PremiumFreightChargeDetails>();
-		for (ChargeRequestDto c : dto) 
-		{
+		for (ChargeRequestDto c : dto) {
 			Criteria criteria = session.createCriteria(AdhocOrders.class);
 			criteria.add(Restrictions.eq("fwoNum", c.getorderId()));
 			List<AdhocOrders> adhocOrders = new ArrayList<AdhocOrders>();
 
 			adhocOrders = criteria.list();
-			for (AdhocOrders a : adhocOrders)
-			{
-				a.setStatus("IN PROGRESS"); 
+			for (AdhocOrders a : adhocOrders) {
+				a.setStatus("IN PROGRESS");
 				session.saveOrUpdate(a);
+				
 			}
 
 			Criteria criteria2 = session.createCriteria(PremiumFreightChargeDetails.class);
 			criteria2.add(Restrictions.eq("orderId", c.getorderId()));
 			premiumFreightChargeDetails = criteria2.list();
-			if (premiumFreightChargeDetails == null) 
-			{
-				//If the details aren't there
+			if (premiumFreightChargeDetails == null) {
+				// If the details aren't there
 				for (AdhocOrders a : adhocOrders) {
 
 					premiumFreightChargeDetail.setorderId(a.getFwoNum());
@@ -393,24 +458,19 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 				criteria3.add(Restrictions.eq("bpNumber", c.getBpNumber()));
 				criteria3.add(Restrictions.eq("carrierMode", c.getCarrierMode()));
 				carrierDetails = criteria3.list();
-				for (CarrierDetails cdets : carrierDetails)
-				{
+				for (CarrierDetails cdets : carrierDetails) {
 					premiumFreightChargeDetail.setBpNumber(cdets.getBpNumber());
 					premiumFreightChargeDetail.setCarrierScac(cdets.getCarrierScac());
 					premiumFreightChargeDetail.setCarrierDetails(cdets.getCarrierDetails());
 					premiumFreightChargeDetail.setCarrierMode(cdets.getCarrierMode());
-					session.saveOrUpdate(premiumFreightChargeDetail);;
+					session.saveOrUpdate(premiumFreightChargeDetail);
+					;
 
 				}
 				premiumFreightChargeDetail.setCharge(c.getCharge());
 
-				
-				
-			}
-			else 
-			{
-				for (PremiumFreightChargeDetails p : premiumFreightChargeDetails)
-				{
+			} else {
+				for (PremiumFreightChargeDetails p : premiumFreightChargeDetails) {
 					System.out.println("This is where it is alreday present");
 					p.setCharge(c.getCharge());
 					p.setStatus("In Progress");
@@ -418,11 +478,15 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 				}
 			}
 		}
+
 		session.flush();
 		session.clear();
 		tx.commit();
 		session.close();
 		return "Charge Set";
+		//Same as above
+		//Pending at planner
+		
 	}
 
 	@Override

@@ -9,6 +9,10 @@ public class AdhocOrderDto {
 
 	private String orderId;
 
+	public String getOrderId() {
+		return orderId;
+	}
+
 	private String businessDivision;
 
 	private Boolean charge;
@@ -155,13 +159,7 @@ public class AdhocOrderDto {
 
 	private Boolean isSaved;
 
-	public String getorderId() {
-		return orderId;
-	}
 
-	public void setorderId(String orderId) {
-		this.orderId = orderId;
-	}
 
 	public String getBusinessDivision() {
 		return businessDivision;
@@ -715,9 +713,10 @@ public class AdhocOrderDto {
 		this.isSaved = isSaved;
 	}
 
-	public void setOrderId(String fwoNum) {
-		// TODO Auto-generated method stub
-		
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
+
+	
 
 }

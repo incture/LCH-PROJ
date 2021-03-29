@@ -1,6 +1,7 @@
 package com.incture.lch.entity;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +20,7 @@ public class OrderIdMapping
 	private String orderIds;
 	
 	@Column(name="CREATED DATE")
-	private Date createdDate;
+	private LocalDate createdDate;
 	
 	@Column(name="CREATED BY")
 	private String createdBy;
@@ -40,11 +41,11 @@ public class OrderIdMapping
 		this.orderIds = orderIds;
 	}
 
-	public Date getCreatedDate() {
+	public LocalDate getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(Date createdDate) {
+	public void setCreatedDate(LocalDate createdDate) {
 		this.createdDate = createdDate;
 	}
 
