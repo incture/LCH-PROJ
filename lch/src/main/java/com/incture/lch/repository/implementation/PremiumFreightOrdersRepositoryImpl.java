@@ -82,7 +82,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		premiumFreightOrderDto.setOriginCountry(adhocOrders.getCountryOrigin());
 		premiumFreightOrderDto.setOriginZip(adhocOrders.getOriginZip());
 
-		premiumFreightOrderDto.setPremiumReasonCode(adhocOrders.getPremiumReasonCode());
+		premiumFreightOrderDto.setReasonCode(adhocOrders.getPremiumReasonCode());
 		premiumFreightOrderDto.setPlannerEmail(adhocOrders.getPlannerEmail());
 		premiumFreightOrderDto.setStatus(adhocOrders.getStatus());
 		// premiumFreightOrderDto.setStatus(status);

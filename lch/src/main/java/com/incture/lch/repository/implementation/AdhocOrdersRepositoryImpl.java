@@ -605,7 +605,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	}
 
-	@SuppressWarnings({ "unchecked", "deprecation", "null" })
+	@SuppressWarnings({ "unchecked", "deprecation"})
 	public ResponseDto addAdhocOrders(AdhocOrderDto AdhocOrderDto) {
 		ResponseDto responseDto = new ResponseDto();
 		AdhocOrders adhocOrders = new AdhocOrders();
@@ -684,11 +684,19 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			Criteria criteria = session.createCriteria(LchRole.class);
 			criteria.add(Restrictions.eq("role","LCH_Planner"));
 			roles=criteria.list();
-			String pendingWith=null;
-			
+			System.out.println("Size"+ roles.size());
+			//System.out.println("Roles " + roles.get(0));
+			StringBuilder pendingWith=new StringBuilder();
+			//String pendingWith="";
+			if (!ServiceUtil.isEmpty(roles)) {
 			for(LchRole l:roles)
 			{
-				pendingWith.concat(l.getUserId()+",");
+				System.out.println(l.getUserId());
+			//	pendingWith.concat(l.getUserId()+",");
+				pendingWith.append(l.getUserId());
+				pendingWith.append(",");
+				
+			}
 			}
 			adhocOrders.setPendingWith(pendingWith.substring(0,pendingWith.length()-2));
 			session.saveOrUpdate(adhocOrders); 

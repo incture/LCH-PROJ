@@ -33,8 +33,9 @@ public class PremiumFreightOrderDto {
 
 	private String originCountry;
 
-	private String premiumReasonCode;
+//	private String premiumReasonCode;
 
+	private String reasonCode;
 	private String plannerEmail;
 
 	private String status;
@@ -167,13 +168,12 @@ public class PremiumFreightOrderDto {
 		this.destinationCountry = destinationCountry;
 	}
 
-	public String getPremiumReasonCode() {
-		return premiumReasonCode;
-	}
-
-	public void setPremiumReasonCode(String premiumReasonCode) {
-		this.premiumReasonCode = premiumReasonCode;
-	}
+	/*
+	 * public String getPremiumReasonCode() { return premiumReasonCode; }
+	 * 
+	 * public void setPremiumReasonCode(String premiumReasonCode) {
+	 * this.premiumReasonCode = premiumReasonCode; }
+	 */
 
 	public String getPlannerEmail() {
 		return plannerEmail;
@@ -197,6 +197,14 @@ public class PremiumFreightOrderDto {
 
 	public void setOriginName(String originName) {
 		this.originName = originName;
+	}
+
+	public String getReasonCode() {
+		return reasonCode;
+	}
+
+	public void setReasonCode(String reasonCode) {
+		this.reasonCode = reasonCode;
 	}
 
 }
