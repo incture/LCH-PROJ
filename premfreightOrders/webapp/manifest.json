@@ -112,8 +112,9 @@
 			}
 		}
 	},
-	"sap.platform.hcp": {
-		"uri": "webapp",
-		"_version": "1.1.0"
+	"sap.platform.cf": {
+		"oAuthScopes": [
+			"$XSAPPNAME.display"
+		]
 	}
 }

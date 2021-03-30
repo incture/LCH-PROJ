@@ -32,10 +32,13 @@ sap.ui.define([
 			var oThisController = this;
 			var oMdlCommon = this.getModel("mCommon");
 			var sRootPath = jQuery.sap.getModulePath("com.incture.lch.premfreightOrders");
+			oThisController.fnGetLaunchPadRoles();
+			/*	oThisController.fnSetCurrentUser();*/
 			oMdlCommon.attachRequestCompleted(function (oEvent) {
 				oMdlCommon.setProperty("/today", new Date());
 				oMdlCommon.refresh();
-			/*	oThisController.fnManageSrvCall();*/
+
+				/*	oThisController.fnManageSrvCall();*/
 
 			});
 			oMdlCommon.loadData(sRootPath + "/model/Property.json", null, false);
@@ -421,78 +424,112 @@ sap.ui.define([
 
 		//Function to get Fiori launchpad roles
 		fnGetLaunchPadRoles: function (callback) {
+			debugger;
 			var oThisController = this;
-			var	oMdlCommon = this.getModel("mOrderModel");
-			var sUrl = "/paccar_rest/freightunits/getRoles/";
+			var oMdlCommon = this.getModel("mCommon");
+			var sUrl = "/lch_services/lchRole/getRole/";
 			var oHeader = {
 				"Content-Type": "application/json",
 				"Accept": "application/json",
-				"role": "",
+				/*	"role": "",*/
 				"user": ""
 			};
 
-			oHeader.user = oThisController._oCommon.userDetails.name;
-			oHeader.role = oThisController._oCommon.userDetails.name;
-
+			/*	oHeader.user = oThisController._oCommon.userDetails.id;*/
+			/*	oHeader.role = oThisController._oCommon.userDetails.name;*/
+			oHeader.user = "P000330";
 			sUrl += oHeader.user;
 
 			oThisController.fnProcessDataRequest(sUrl, "GET", oHeader, false, function (oXHR, status) {
-				if (status === "success") {
-					if (oXHR && oXHR.responseJSON && oXHR.responseJSON.roles) {
-						oThisController._oCommon.userDetails["sRoles"] = oXHR.responseJSON.roles.toString();
-						oMdlCommon.setProperty("/aCockpitRoles", oXHR.responseJSON.roles);
-						oMdlCommon.refresh();
 
-						oThisController.fnGetAuthRules(callback);
+				if (oXHR && oXHR.responseJSON) {
+					/*	oThisController._oCommon.userDetails["sRoles"] = oXHR.responseJSON.toString();*/
+					oMdlCommon.setProperty("/aCockpitRoles", oXHR.responseJSON);
+					oMdlCommon.refresh();
+					var role = oMdlCommon.getProperty("/aCockpitRoles");
+					console.log(role);
+					for (var i = 0; i < role.length; i++) {
+						if (role[i] === "LCH_Planner") {
+							oMdlCommon.setProperty("/visible/bApprove", true);
+							oMdlCommon.setProperty("/visible/bReject", true);
+							oMdlCommon.setProperty("/visible/bGetcost", true);
+							oMdlCommon.setProperty("/visible/bSetcost", false);
+							oMdlCommon.setProperty("/visible/createdDate", true);
+							oMdlCommon.setProperty("/enable/costInput", false);
+							oMdlCommon.setProperty("/visible/carrierText", false);
+							oMdlCommon.setProperty("/visible/carrierCombo", true);
+							oMdlCommon.setProperty("/visible/carrierScac", false);
+							oMdlCommon.setProperty("/visible/carrierDetails", false);
+							oMdlCommon.setProperty("/currRole", "Planner");
+							oMdlCommon.refresh();
+						} else if (role[i] === "LCH_Carrier_Admin") {
+							oMdlCommon.setProperty("/visible/bApprove", false);
+							oMdlCommon.setProperty("/visible/bReject", false);
+							oMdlCommon.setProperty("/visible/bGetcost", false);
+							oMdlCommon.setProperty("/visible/createdDate", false);
+							oMdlCommon.setProperty("/visible/bSetcost", true);
+							oMdlCommon.setProperty("/visible/carrierText", true);
+							oMdlCommon.setProperty("/visible/carrierCombo", false);
+							oMdlCommon.setProperty("/enable/costInput", true);
+							oMdlCommon.setProperty("/visible/carrierScac", true);
+							oMdlCommon.setProperty("/visible/carrierDetails", true);
+							oMdlCommon.setProperty("/currRole", "Carrier_admin");
+							oMdlCommon.refresh();
+						}
+						/*else if (role[i] === "LCH_Manager") {
+							oMdlCommon.setProperty("/visible/bApprove", false);
+							oMdlCommon.setProperty("/visible/bReject", false);
+							oMdlCommon.setProperty("/visible/bGetcost", false);
+							oMdlCommon.setProperty("/visible/bSetcost", false);
+							oMdlCommon.setProperty("/enable/bApprove", false);
+							oMdlCommon.setProperty("/enable/bReject", false);
+							oMdlCommon.setProperty("/enable/bGetcost", false);
+							oMdlCommon.setProperty("/enable/bSetcost", false);
+							oMdlCommon.setProperty("/enable/costInput", false);
+								oMdlCommon.setProperty("/currRole","Manager");
+							oMdlCommon.refresh();
+						}*/
 					}
+					console.log(oMdlCommon);
+					/*	oThisController.fnGetAuthRules(callback);*/
 				} else {
 					oMdlCommon.setProperty("/cockpitRoles", []);
 					oMdlCommon.refresh();
-					
+
 				}
+
 			});
 		},
 
 		//All Generic Functions that are not specific to the App will be above this line
 
-		fnSetCurrentUser: function (callback) {
-			var oThisController = this;
-			var oMdlCommon = this.getModel("mOrderModel");
-
-			if (oThisController._oCommon && oThisController._oCommon.userDetails && oThisController._oCommon.userDetails.name) {
-				if (callback) {
-					// callback(oThisController._oCommon.userDetails, "success");
-					oThisController.fnGetLaunchPadRoles(callback);
-				}
-			} else {
+		/*	fnSetCurrentUser: function (callback) {
+				var oThisController = this;
+				var oMdlCommon = this.getModel("mCommon");
 				oThisController.fnProcessDataRequest("../user", "GET", null, false, function (oXHR, status) {
 					if (oXHR && oXHR.responseJSON) {
 						oThisController._oCommon.userDetails = oXHR.responseJSON;
+						if (!oXHR.responseJSON.emails) {
+							oXHR.responseJSON.emails = "testing@email.com";
+						}
 						oMdlCommon.setProperty("/userDetails", oXHR.responseJSON);
 						oMdlCommon.refresh();
-
-						if (callback) {
-							oThisController.fnGetLaunchPadRoles(callback);
-							// callback(oXHR, status);
-						}
+						oThisController.fnGetLaunchPadRoles();
 					}
 				}, null);
-			}
-		}
 
-		
+			}*/
 
-
-	/*	fnSetUserInterFace: function (sAction) {
-			var oOrderModel = this.getModel("mOrderModel");
-			if (sAction === "Display") {
-				oMdlCommon.setProperty("/oRoleConfig/bEditable", false);
-			} else if (sAction === "Edit") {
-				oMdlCommon.setProperty("/oRoleConfig/bEditable", true);
-			} else {
-				oMdlCommon.setProperty("/oRoleConfig/bEditable", true);
-			}
-		}*/
+		/*	fnSetUserInterFace: function (sAction) {
+				var oOrderModel = this.getModel("mOrderModel");
+				if (sAction === "Display") {
+					oMdlCommon.setProperty("/oRoleConfig/bEditable", false);
+				} else if (sAction === "Edit") {
+					oMdlCommon.setProperty("/oRoleConfig/bEditable", true);
+				} else {
+					oMdlCommon.setProperty("/oRoleConfig/bEditable", true);
+				}
+			}*/
 
 	});
 

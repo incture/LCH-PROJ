@@ -34,8 +34,12 @@
 		"bInputFields": true,
 		"bLabelNonVisible": false,
 		"bSaveAsDraft": false,
-
-		"bDestination": false
+		"bDestination": false,
+		"bApprove" : true,
+		"bReject" : true,
+		"bGetcost" : true,
+		"bSetcost" : true,
+		"createdDate" : true
 	},
 
 	"enable": {
@@ -49,9 +53,16 @@
 		"bGroupField": false,
 		"bLoadMore": false,
 		"carrier" : true,
-		"carrierMode" : false
+		"carrierMode" : false,
+		"bApprove" : true,
+		"bReject" : true,
+		"bGetcost" : true,
+		"bSetcost" : true,
+		"costInput" : false
 		
 	},
+	
+	"countOfRecords" : "",
 
 	"rowcounts": [{
 		"key": "5",
@@ -241,11 +252,13 @@
 	"aStatus": [{
 		"status": "Approved"
 	}, {
+		"status": "Pending At Planner"
+	},{
 		"status": "Pending With Approver"
 	}, {
 		"status": "Pending with Carrier Admin"
 	}, {
-		"status": "COMPLETED"
+		"status": "Completed"
 	}],
 
 	"aDestination": [{

@@ -1,18 +1,18 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ExtPicker="com.incture.lch.premfreightOrders.control"
 	xmlns:core="sap.ui.core" xmlns:ui="sap.ui.table">
-	<ui:Table id="premfreightstable" rows="{mCommon>/aPremfreightorders}" visibleRowCountMode="Fixed" alternateRowColors="true" enableColumnReordering="false"
-		class="sapUiMediumMarginBegin sapUiSmallMarginEnd sapUiTableNoColBorders" selectionMode="MultiToggle">
+	<ui:Table id="premfreightstable" rows="{mCommon>/aPremfreightorders}" visibleRowCountMode="Fixed" alternateRowColors="true"
+		enableColumnReordering="false" class="sapUiMediumMarginBegin sapUiSmallMarginEnd sapUiTableNoColBorders" selectionMode="MultiToggle">
 		<ui:columns>
-			<ui:Column tooltip="{i18n>ORDER_ID}" width="10rem" sorted = "true" sortProperty="{mCommon>adhocOrderId}">
+			<ui:Column tooltip="{i18n>ORDER_ID}" width="10rem" sorted="true" sortProperty="{mCommon>adhocOrderId}">
 				<Label text="{i18n>ORDER_ID}" design="Bold"/>
 				<ui:template>
-					<Text maxLines="1" text="{mCommon>adhocOrderId}" tooltip="{mCommon>adhocOrderId}"/>
+					<Text maxLines="1" text="{mCommon>orderId}" tooltip="{mCommon>orderId}"/>
 				</ui:template>
 			</ui:Column>
 			<ui:Column tooltip="{i18n>REASON_CODE}">
 				<Label text="{i18n>REASON_CODE}" design="Bold"/>
 				<ui:template>
-					<Text maxLines="1" text="{mCommon>premiumReasonCode}" tooltip="{mCommon>premiumReasonCode}"/>
+					<Text maxLines="1" text="{mCommon>reasonCode}" tooltip="{mCommon>reasonCode}"/>
 				</ui:template>
 			</ui:Column>
 			<ui:Column tooltip="{i18n>ORIGIN_NAME}">
@@ -27,48 +27,66 @@
 					<Text maxLines="1" text="{mCommon>destinationName}" tooltip="{mCommon>destinationName}"/>
 				</ui:template>
 			</ui:Column>
-			<ui:Column tooltip="{i18n>CREATED_DATE}">
+			<ui:Column tooltip="{i18n>CREATED_DATE}" visible="{mCommon>/visible/createdDate}">
 				<Label text="{i18n>CREATED_DATE}" design="Bold"/>
 				<ui:template>
 					<Text maxLines="1"
 						text="{path:'mCommon>createdDate', type:'sap.ui.model.type.DateTime', formatOptions: {source: { pattern: 'yyyy-MM-dd HH:mm:ss' },pattern: 'dd MMM yyyy', strictParsing: true}}"/>
 				</ui:template>
 			</ui:Column>
-			<!--	<ui:Column tooltip="{i18n>EXP_DEL_DATE}">
-				<Label text="{i18n>EXP_DEL_DATE}" design="Bold"/>
-				<ui:template>
-					<Text text="{mCommon>approverEmail}"/>
-				</ui:template>
-			</ui:Column>-->
 			<ui:Column tooltip="{i18n>STATUS}">
 				<Label text="{i18n>STATUS}" design="Bold"/>
 				<ui:template>
 					<Text maxLines="1" text="{mCommon>status}"/>
 				</ui:template>
 			</ui:Column>
-			<ui:Column tooltip="{i18n>CARRIER}" hAlign="Begin">
+			<ui:Column tooltip="{i18n>CARRIER}" hAlign="Begin" visible="{mCommon>/visible/carrierCombo}">
 				<Label text="{i18n>CARRIER}" design="Bold"/>
 				<ui:template>
 					<ComboBox selectedKey="{mCommon>selectedCarrier}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="true" filterSecondaryValues="true"
-						items="{path: 'mCommon>/aCarrierdetails'}" change="onChangeCarrier">
+						items="{path: 'mCommon>/aCarrierdetails'}" change="onChangeCarrier" valueState="{mCommon>/valstate/carrier}">
 						<core:ListItem key="{mCommon>bpNumber}" text="{mCommon>bpNumber}" additionalText="{mCommon>carrierDetails}"
 							tooltip="{mCommon>carrierDetails}"/>
 					</ComboBox>
 				</ui:template>
 			</ui:Column>
-			<ui:Column tooltip="{i18n>CARRIER_MODE}" hAlign="Begin">
+			<ui:Column tooltip="{i18n>CARRIER}" hAlign="Begin" visible="{mCommon>/visible/carrierText}">
+				<Label text="{i18n>CARRIER}" design="Bold"/>
+				<ui:template>
+					<Text maxLines="1" text="{mCommon>bpNumber}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column tooltip="{i18n>CARRIER_MODE}" hAlign="Begin" visible="{mCommon>/visible/carrierCombo}">
 				<Label text="{i18n>CARRIER_MODE}" design="Bold"/>
 				<ui:template>
 					<ComboBox selectedKey="{mCommon>selectedCarriermode}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
 						items="{path: 'mCommon>/aCarriermodes'}" change="onChangeCBox" enabled="{mCommon>enablecarriermode}">
-						<core:ListItem key="{mCommon>mode}" text="{mCommon>mode}"  tooltip="{mCommon>mode}"/>
+						<core:ListItem key="{mCommon>mode}" text="{mCommon>mode}" tooltip="{mCommon>mode}"/>
 					</ComboBox>
+				</ui:template>
+			</ui:Column>
+			<ui:Column tooltip="{i18n>CARRIER_MODE}" hAlign="Begin" visible="{mCommon>/visible/carrierText}">
+				<Label text="{i18n>CARRIER_MODE}" design="Bold"/>
+				<ui:template>
+					<Text maxLines="1" text="{mCommon>carrierMode}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column tooltip="{i18n>CARRIER_SCAC}" visible="{mCommon>/visible/carrierScac}">
+				<Label text="{i18n>CARRIER_SCAC}" design="Bold"/>
+				<ui:template>
+					<Text maxLines="1" text="{mCommon>carrierScac}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column tooltip="{i18n>CARRIER_DETAILS}" visible="{mCommon>/visible/carrierDetails}">
+				<Label text="{i18n>CARRIER_DETAILS}" design="Bold"/>
+				<ui:template>
+					<Text maxLines="1" text="{mCommon>carrierDetails}"/>
 				</ui:template>
 			</ui:Column>
 			<ui:Column tooltip="{i18n>COST}">
 				<Label text="{i18n>COST}" design="Bold"/>
 				<ui:template>
-					<Input value="" enabled="false"></Input>
+					<Input value="{mCommon>charge}" enabled="{mCommon>/enable/costInput}"></Input>
 				</ui:template>
 			</ui:Column>
 		</ui:columns>

@@ -1,6 +1,7 @@
 {
 	"xsappname": "LCH",
 	"tenant-mode": "dedicated",
+	"identityzone": "infra",
 	"description": "Security profile of called application",
 	"scopes": [{
 		"name": "uaa.user",
@@ -8,6 +9,12 @@
 	}, {
 		"name": "$XSAPPNAME.Display",
 		"description": "display"
+	}, {
+		"name": "$XSAPPNAME.view",
+		"description": "View data"
+	}, {
+		"name": "$XSAPPNAME.create",
+		"description": "Create data"
 	}],
 	"role-templates": [{
 		"name": "Token_Exchange",
@@ -16,8 +23,38 @@
 			"uaa.user"
 		]
 	}, {
-		"name": "Viewer",
+		"name": "LCH_Viewer",
 		"description": "Required to view things in our solution",
+		"scope-references": [
+			"$XSAPPNAME.Display"
+		]
+	},  {
+		"name": "LCH_Planner",
+		"description": "Required to set the carrier details",
+		"scope-references": [
+			"$XSAPPNAME.Display"
+		]
+	},  {
+		"name": "LCH_Carrier_Admin",
+		"description": "Required to set the cost details of premium orders",
+		"scope-references": [
+			"$XSAPPNAME.Display"
+		]
+	},  {
+		"name": "LCH_Manager",
+		"description": "Required to approve the premium orders",
+		"scope-references": [
+			"$XSAPPNAME.Display"
+		]
+	},  {
+		"name": "LCH_Admin",
+		"description": "Required to create Adhoc orders",
+		"scope-references": [
+			"$XSAPPNAME.Display"
+		]
+	},  {
+		"name": "LCH_Accountant",
+		"description": "Required to update the cost details",
 		"scope-references": [
 			"$XSAPPNAME.Display"
 		]

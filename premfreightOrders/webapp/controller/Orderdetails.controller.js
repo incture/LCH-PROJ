@@ -12,74 +12,105 @@ sap.ui.define([
 		onInit: function () {
 
 			var oThisController = this;
-			var oMdlCommon = this.getModel("mCommon");
+			var oMdlCommon = oThisController.getModel("mCommon");
 			oMdlCommon.setProperty("/bFilter", false);
 			oThisController.fnPremfreightstable(1);
 			oThisController.fnGetcarrierdetails();
+			oThisController.fnFilterTest();
 
 		},
 
-		fnPremfreightstable: function (pgNo) {
+		fnPremfreightstable: function (pageNo) {
+			debugger;
 			var oThisController = this;
-			var oMdlCommon = this.getModel("mCommon");
-			oMdlCommon.setProperty("/pageNo", pgNo);
+			var oMdlCommon = this.getModel("mCommon"),
+				sUrl;
+			oMdlCommon.setProperty("/pageNo", pageNo);
 			oMdlCommon.setProperty("/bFilter", false);
-
-			var sUrl = "/lch_services/premiumOrders/getAllPremiumOrders",
-				oHeader = {
+			/*	pgNo=Number(pgNo);
+			
+			 */
+			if (oMdlCommon.getProperty("/currRole") === "Planner") {
+				sUrl = "/lch_services/premiumOrders/getAllPremiumOrders";
+			} else if (oMdlCommon.getProperty("/currRole") === "Carrier_admin") {
+				sUrl = "/lch_services/premiumOrders/getAllCarrierOrders";
+			}
+			var oHeader = {
 					"Content-Type": "application/json",
 					"Accept": "application/json"
 				},
 				oPayload = {
-					"adhocOrderId": "",
+					"orderId": "",
 					"fromDate": "",
 					"toDate": "",
 					"plannerEmail": "test@email.com",
 					"status": "",
 					"originName": "",
 					"destinationName": "",
-					"pageNumber": pgNo,
+					"pageNumber": pageNo,
 					"noOfEntry": "",
 					"reasonCode": ""
 				};
 			oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
 				try {
 					if (oXHR && oXHR.responseJSON) {
-
-						oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON.premiumFreightOrderDtos);
+						if (oXHR.responseJSON.premiumFreightOrderDtos) {
+							oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON.premiumFreightOrderDtos);
+						} else {
+							oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON.premiumFreightChargeDetails);
+						}
 						oMdlCommon.setProperty("/countOfRecords", oXHR.responseJSON.count);
 						var aPremfreightorders = oMdlCommon.getProperty("/aPremfreightorders");
 						for (var i = 0; i < aPremfreightorders.length; i++) {
 							aPremfreightorders[i].enablecarriermode = false;
+							aPremfreightorders[i].selectedCarrier = "";
+							aPremfreightorders[i].selectedCarriermode = "";
 						}
+						oMdlCommon.refresh();
+						oThisController.fnButtonVisibility();
 					}
-					oMdlCommon.refresh();
+
 				} catch (e) {
 					// console.log(e);
 				}
 			}, oPayload);
-			oThisController.fnButtonVisibility();
 
 		},
 
+		fnFilterTest: function () {
+			var oThisController = this;
+			var oMdlCommon = this.getModel("mCommon");
+			oMdlCommon.setProperty("/originFilter", "");
+			oMdlCommon.setProperty("/destinationFilter", "");
+			oMdlCommon.setProperty("/statusFilter", "");
+			oMdlCommon.setProperty("/fromDateFilter", null);
+			oMdlCommon.setProperty("/toDateFilter", null);
+			oMdlCommon.setProperty("/reasoncodeFilter", "");
+		},
+
 		fnButtonVisibility: function () {
+			debugger;
 			var oThisController = this;
 			var oMdlCommon = this.getModel("mCommon");
 			var pageNo = oMdlCommon.getProperty("/pageNo");
 			pageNo = Number(pageNo);
-
 			var count = oMdlCommon.getProperty("/countOfRecords"),
-				lastPageNo = Math.ceil(count / 10); // [(totalEntries)/perPageEntries]+1 if lastPage isn't an integer Number.isInteger()
+				lastPageNo = Number(Math.ceil(count / 10)); // [(totalEntries)/perPageEntries]+1 if lastPage isn't an integer Number.isInteger()
 			oMdlCommon.setProperty("/lastPageNo", lastPageNo);
 			if (pageNo <= lastPageNo) {
-				if (pageNo === 1) {
+				if (pageNo === 1 && pageNo !== lastPageNo) {
 					oThisController.byId("firstPage").setEnabled(false);
 					oThisController.byId("previousPage").setEnabled(false);
 					oThisController.byId("nextPage").setEnabled(true);
 					oThisController.byId("lastPage").setEnabled(true);
-				} else if (pageNo === lastPageNo) {
+				} else if (pageNo !== 1 && pageNo === lastPageNo) {
 					oThisController.byId("firstPage").setEnabled(true);
 					oThisController.byId("previousPage").setEnabled(true);
+					oThisController.byId("nextPage").setEnabled(false);
+					oThisController.byId("lastPage").setEnabled(false);
+				} else if (pageNo === 1 && pageNo === lastPageNo) {
+					oThisController.byId("firstPage").setEnabled(false);
+					oThisController.byId("previousPage").setEnabled(false);
 					oThisController.byId("nextPage").setEnabled(false);
 					oThisController.byId("lastPage").setEnabled(false);
 				} else {
@@ -92,11 +123,12 @@ sap.ui.define([
 		},
 
 		fnPagination: function (select) {
+			debugger;
 			var oThisController = this;
 			var oMdlCommon = this.getModel("mCommon");
 			var count = oMdlCommon.getProperty("/countOfRecords");
 			var pageNo = oMdlCommon.getProperty("/pageNo"),
-				lastPageNo = Math.ceil(count / 10);
+				lastPageNo = Number(Math.ceil(count / 10));
 			oMdlCommon.setProperty("/lastPageNo", lastPageNo);
 			pageNo = Number(pageNo);
 			var bFilter = oMdlCommon.getProperty("/bFilter");
@@ -109,11 +141,15 @@ sap.ui.define([
 					break;
 				case 2:
 					//prev
-					pageNo = pageNo - 1;
+					if (pageNo !== 1) {
+						pageNo = pageNo - 1;
+					}
 					break;
 				case 3:
 					//next
-					pageNo = pageNo + 1;
+					if (pageNo !== lastPageNo) {
+						pageNo = pageNo + 1;
+					}
 					break;
 				case 4:
 					//last
@@ -125,23 +161,23 @@ sap.ui.define([
 
 					break;
 				}
-
+				oMdlCommon.setProperty("/pageNo", pageNo);
+				oMdlCommon.refresh();
 				if (bFilter === false) {
 					oThisController.fnPremfreightstable(pageNo);
 				} else if (bFilter === true) {
 					oThisController.onSearch(pageNo);
 				}
-
 			} else {
+				pageNo = lastPageNo;
+				oMdlCommon.setProperty("/pageNo", pageNo);
+				oMdlCommon.refresh();
 				if (bFilter === false) {
-					pageNo = lastPageNo;
-					oMdlCommon.refresh();
 					oThisController.fnPremfreightstable(pageNo);
 				} else if (bFilter === true) {
-					pageNo = lastPageNo;
-					oMdlCommon.refresh();
 					oThisController.onSearch(pageNo);
 				}
+
 			}
 		},
 
@@ -180,7 +216,7 @@ sap.ui.define([
 				bpNumber = "";
 			}
 			var aPremfreightorders = oMdlCommon.getProperty("/aPremfreightorders");
-			var carrierselected = parseInt(oEvent.getSource().getParent().getId().split("__table0-rows-row")[1]);
+			var carrierselected = parseInt(oEvent.getSource().getParent().getId().split("__xmlview0--premfreightstable-rows-row")[1]);
 
 			if (bpNumber) {
 				var sUrl = "/lch_services/premiumOrders/getMode",
@@ -217,12 +253,16 @@ sap.ui.define([
 			var oMdlCommon = oThisController.getModel("mCommon");
 			oMdlCommon.setProperty("/bFilter", false);
 			oThisController.fnPremfreightstable(1);
+			oThisController.fnFilterTest();
 		},
 
-		onSearch: function (pgNo) {
+		onSearch: function () {
+			debugger;
 			var oThisController = this;
-			var oMdlCommon = oThisController.getModel("mCommon");
+			var oMdlCommon = oThisController.getModel("mCommon"),
+				pageNo = oMdlCommon.getProperty("/pageNo");
 			oMdlCommon.setProperty("/bFilter", true);
+
 			var originFilter = oMdlCommon.getProperty("/originFilter"),
 				destinationFilter = oMdlCommon.getProperty("/destinationFilter"),
 				statusFilter = oMdlCommon.getProperty("/statusFilter"),
@@ -235,7 +275,7 @@ sap.ui.define([
 					"Accept": "application/json"
 				},
 				oPayload = {
-					"adhocOrderId": "",
+					"orderId": "",
 					"fromDate": fromDateFilter,
 					"toDate": toDateFilter,
 					"plannerEmail": "test@email.com",
@@ -243,7 +283,7 @@ sap.ui.define([
 					"originName": originFilter,
 					"destinationName": destinationFilter,
 					"reasonCode": reasoncodeFilter,
-					"pageNumber": pgNo,
+					"pageNumber": pageNo,
 					"noOfEntry": ""
 
 				};
@@ -252,6 +292,8 @@ sap.ui.define([
 					if (oXHR && oXHR.responseJSON) {
 
 						oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON.premiumFreightOrderDtos);
+						oMdlCommon.refresh();
+						oThisController.fnButtonVisibility();
 
 					}
 
@@ -261,53 +303,169 @@ sap.ui.define([
 					// console.log(e);
 				}
 			}, oPayload);
-			oThisController.fnButtonVisibility();
-
+			/*	oThisController.fnButtonVisibility();*/
 		},
 		onReject: function () {
-				var aIndices = this.byId("premfreightstable").getSelectedIndices();
-				var oThisController = this;
-				var oMdlCommon = oThisController.getModel("mCommon"),
-					arr = [];
-				var apremfreights = oMdlCommon.getProperty("/aPremfreightorders");
-				for (var i = 0; i < aIndices.length; i++) {
-					arr.push(apremfreights[oThisController.aindices[i]].adhocOrderId);
+			debugger;
+			var oThisController = this;
+			var oMdlCommon = oThisController.getModel("mCommon"),
+				pageNo = oMdlCommon.getProperty("/pageNo");
+			var aIndices = oThisController.byId("premfreightstable").getSelectedIndices(),
+				selectedRecords = [];
+			var apremfreights = oMdlCommon.getProperty("/aPremfreightorders");
+			for (var i = 0; i < aIndices.length; i++) {
+				selectedRecords.push(apremfreights[aIndices[i]].orderId);
+			}
+			console.log(selectedRecords);
+			if (selectedRecords.length === 0) {
+				oThisController.showMessage("Please select the records to perform this action", "E", function () {
+					console.log("error");
+				});
+			} else {
+				oThisController.confirmUserAction("Do you want to reject the selected orders?", "W", function (sAction) {
+					if (sAction === "YES") {
+
+						var sUrl = "/lch_services/premiumOrders/rejectPremiumOrder",
+							oHeader = {
+								"Content-Type": "application/json",
+								"Accept": "application/json"
+							},
+							oPayload = selectedRecords;
+						oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
+							try {
+								if (oXHR && oXHR.responseJSON) {
+
+									console.log(oXHR);
+									oThisController.byId("premfreightstable").clearSelection();
+									oThisController.fnPremfreightstable(pageNo);
+
+								}
+
+								oMdlCommon.refresh();
+								console.log(oMdlCommon);
+							} catch (e) {
+								// console.log(e);
+							}
+						}, oPayload);
+
+					} else {
+						console.log("cancel");
+					}
+
+				});
+			}
+		},
+		onGetCost: function () {
+			debugger;
+			var oThisController = this;
+			var oMdlCommon = this.getModel("mCommon"),
+				pageNo = oMdlCommon.getProperty("/pageNo");
+			oMdlCommon.setProperty("/flag", false);
+			var flag = oMdlCommon.getProperty("/flag");
+			var aIndices = oThisController.byId("premfreightstable").getSelectedIndices(),
+				selectedRecords = [];
+			var apremfreights = oMdlCommon.getProperty("/aPremfreightorders");
+			for (var i = 0; i < aIndices.length; i++) {
+				/*selectedRecords[i]*/
+				selectedRecords.push({
+					"orderId": apremfreights[aIndices[i]].orderId,
+					"bpNumber": apremfreights[aIndices[i]].selectedCarrier,
+					"carrierMode": apremfreights[aIndices[i]].selectedCarriermode,
+					"carrierDetails": "",
+					"carrierScac": "",
+					"charge": ""
+
+				});
+				if (selectedRecords[i].bpNumber === "" && selectedRecords[i].carrierMode === "") {
+					oThisController.showMessage("Please choose the carrier details of the selected fields", "E", function () {
+						console.log("error");
+					});
+					oMdlCommon.setProperty("/flag", true);
+					flag = oMdlCommon.getProperty("/flag");
+					break;
 				}
+			}
+
+			if (selectedRecords.length === 0) {
+				oThisController.showMessage("Please select the records to perform this action", "E", function () {
+					console.log("error");
+				});
+			} else if (flag === false) {
+				var sUrl = "/lch_services/premiumOrders/setCarrierDetails",
+					oHeader = {
+						"Content-Type": "application/json",
+						"Accept": "application/json"
+					},
+					oPayload = selectedRecords;
+				oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
+					try {
+						if (oXHR && oXHR.responseJSON) {
+							console.log(oXHR);
+							oThisController.byId("premfreightstable").clearSelection();
+							oThisController.fnPremfreightstable(pageNo);
+							oThisController.showMessage("Successfuly forwarded to Carrier Admin", "I", function () {
+							//success
+							});
+
+							/*oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON);*/
+
+						}
+
+						oMdlCommon.refresh();
+						console.log(oMdlCommon);
+					} catch (e) {
+						// console.log(e);
+					}
+				}, oPayload);
 
 			}
-			/*	onGetCost: function () {
-					var oThisController = this;
-					var oMdlCommon = this.getModel("mCommon");
-					var sUrl = "/lch_services/premiumOrders/getCharge",
-						oHeader = {
-							"Content-Type": "application/json",
-							"Accept": "application/json"
-						},
-						oPayload = {
-							"adhocOrderId":,
-							"bpNumber": ,
-							"carrierScac": ,
-							"carrierDetails": ,
-							"carrierMode": ,
-							"charge": ""
+		},
+		onSetCost: function () {
+			debugger;
+			var oThisController = this;
+			var oMdlCommon = this.getModel("mCommon"),
+				pageNo = oMdlCommon.getProperty("/pageNo");
+			var aIndices = oThisController.byId("premfreightstable").getSelectedIndices(),
+				selectedRecords = [];
+			var apremfreights = oMdlCommon.getProperty("/aPremfreightorders");
+			for (var i = 0; i < aIndices.length; i++) {
+				selectedRecords.push({
+					"orderId": apremfreights[aIndices[i]].orderId,
+					"bpNumber": apremfreights[aIndices[i]].bpNumber,
+					"carrierMode": apremfreights[aIndices[i]].carrierMode,
+					"carrierDetails": apremfreights[aIndices[i]].carrierDetails,
+					"carrierScac": apremfreights[aIndices[i]].carrierScac,
+					"charge": apremfreights[aIndices[i]].charge
 
-						};
-					oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
-						try {
-							if (oXHR && oXHR.responseJSON) {
+				});
+			}
 
-								oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON);
+			console.log(selectedRecords);
+			var sUrl = "/lch_services/premiumOrders/setCharge",
+				oHeader = {
+					"Content-Type": "application/json",
+					"Accept": "application/json"
+				},
+				oPayload = selectedRecords;
+			oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
+				try {
+					if (oXHR && oXHR.responseJSON) {
+						console.log(oXHR);
+						oThisController.fnPremfreightstable(pageNo);
 
-							}
+						/*oMdlCommon.setProperty("/aPremfreightorders", oXHR.responseJSON);*/
 
-							oMdlCommon.refresh();
-							console.log(oMdlCommon);
-						} catch (e) {
-							// console.log(e);
-						}
-					}, oPayload);
+					}
 
-				}*/
+					oMdlCommon.refresh();
+					console.log(oMdlCommon);
+				} catch (e) {
+					// console.log(e);
+				}
+			}, oPayload);
+			oThisController.byId("premfreightstable").clearSelection();
+
+		}
 
 	});
 });
