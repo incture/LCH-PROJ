@@ -83,10 +83,7 @@ public class GetReferenceData {
 		return type + year.substring(2, 4) + month + day + hour;
 	}
 
-/*	public String getNextSeqNumber(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
-		return SequenceNumberGen.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
-				sessionFactory.getCurrentSession());
-	}*/
+
 
 	public String getNextSeqNumberAdhoc(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
 		return SequenceNumberGenAdhoc.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
@@ -98,48 +95,5 @@ public class GetReferenceData {
 				sessionFactory.getCurrentSession());
 	}
 
-	/*public String getNextSeqNumberAttachment(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
-		return SequenceNumberGenAttachment.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
-				sessionFactory.getCurrentSession());
-	}
 
-	public String getNextSeqNumberCompliance(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
-		return SequenceNumberGenCompliance.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
-				sessionFactory.getCurrentSession());
-	}*/
-
-/*	public String getNextSeqNumberCrossDock(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
-		return SequenceNumberGenCrossDock.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
-				sessionFactory.getCurrentSession());
-	}
-
-	public String getNextSeqNumberGroup(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
-		return SequenceNumberGenGroup.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
-				sessionFactory.getCurrentSession());
-	}
-
-	public String getNextSeqNumberPackaging(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
-		return SequenceNumberGenPackaging.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
-				sessionFactory.getCurrentSession());
-	}
-*/
-	/*public String getNextSeqNumberPremiumFo(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
-		return SequenceNumberGenPremiumFo.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
-				sessionFactory.getCurrentSession());
-	}
-
-	public String getNextSeqNumberSrm(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
-		return SequenceNumberGenSrm.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
-				sessionFactory.getCurrentSession());
-	}
-
-	public String getNextSeqNumberCassAttachment(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
-		return SequenceNumberGenAttachment.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
-				sessionFactory.getCurrentSession());
-	}
-
-	public String getNextSeqNumberPremiumFoDmfrt(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
-		return SequenceNumberGenDmfrt.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
-				sessionFactory.getCurrentSession());
-	}*/
 }

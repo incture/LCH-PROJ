@@ -435,9 +435,9 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 				orderids.append(adString);
 				orderids.append(",");
 			}
-			System.out.println("OrderIds: "+orderids);
+			System.out.println("OrderIds: "+orderids+"   "+orderids.substring(0, orderids.length() - 1));
 			orderIdMapping.setRequestId(requestId);
-			orderIdMapping.setOrderIds(orderids.substring(0, orderids.length() - 2));
+			orderIdMapping.setOrderIds(orderids.substring(0, orderids.length() - 1));
 			
 			orderIdMapping.setCreatedDate(java.time.LocalDate.now());
 			/*Criteria criteriaRole = session.createCriteria(LchRole.class);

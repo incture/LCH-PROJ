@@ -20,6 +20,10 @@ public class SequenceNumberRequestId
 
 	
 
+	public SequenceNumberRequestId()
+	{
+		
+	}
 	public SequenceNumberRequestId(String referenceCode, Integer runningNumber) 
 	{
 		this.referenceCode = referenceCode;
