@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -186,13 +187,12 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		return paginationDto;
 	}
 
-	
 	@SuppressWarnings("deprecation")
 	@Override
 	public ChargeDetailsPaginated getAllCarrierOrders(PremiumRequestDto premiumRequestDto) {
-		
+
 		List<PremiumFreightChargeDetails> premiumFreightChargeDetails = new ArrayList<PremiumFreightChargeDetails>();
-		ChargeDetailsPaginated chargeDetailsPaginated =new ChargeDetailsPaginated();
+		ChargeDetailsPaginated chargeDetailsPaginated = new ChargeDetailsPaginated();
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 
@@ -201,46 +201,44 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 		criteria.add(Restrictions.eq("status", "Pending with Carrier Admin"));
 
-		
-			if (premiumRequestDto.getorderId() != null && !(premiumRequestDto.getorderId().equals(""))) {
-				criteria.add(Restrictions.eq("orderId", premiumRequestDto.getorderId()));
+		if (premiumRequestDto.getorderId() != null && !(premiumRequestDto.getorderId().equals(""))) {
+			criteria.add(Restrictions.eq("orderId", premiumRequestDto.getorderId()));
 
-			}
-			if ((premiumRequestDto.getFromDate() != null && !(premiumRequestDto.getFromDate().equals("")))
-					&& (premiumRequestDto.getToDate() != null) && !(premiumRequestDto.getToDate().equals(""))) {
-				@SuppressWarnings("deprecation")
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				try {
-					Date d1 = (Date) sdf.parse(premiumRequestDto.getFromDate());
-					Date d2 = (Date) sdf.parse(premiumRequestDto.getToDate());
-					criteria.add(Restrictions.between("createdDate", d1, d2));
-				} catch (Exception e) {
-					System.out.println("Error in date format");
-				}
-
-			}
-			if (premiumRequestDto.getPlannerEmail() != null && !(premiumRequestDto.getPlannerEmail().equals(""))) {
-
-				criteria.add(Restrictions.eq("plannerEmail", premiumRequestDto.getPlannerEmail()));
-
-			}
-			if (premiumRequestDto.getReasonCode() != null && !(premiumRequestDto.getReasonCode().equals(""))) {
-				criteria.add(Restrictions.eq("premiumReasonCode", premiumRequestDto.getReasonCode()));
-
-			}
-			if (premiumRequestDto.getStatus() != null && !(premiumRequestDto.getStatus().equals(""))) {
-				criteria.add(Restrictions.eq("status", premiumRequestDto.getStatus()));
+		}
+		if ((premiumRequestDto.getFromDate() != null && !(premiumRequestDto.getFromDate().equals("")))
+				&& (premiumRequestDto.getToDate() != null) && !(premiumRequestDto.getToDate().equals(""))) {
+			@SuppressWarnings("deprecation")
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			try {
+				Date d1 = (Date) sdf.parse(premiumRequestDto.getFromDate());
+				Date d2 = (Date) sdf.parse(premiumRequestDto.getToDate());
+				criteria.add(Restrictions.between("createdDate", d1, d2));
+			} catch (Exception e) {
+				System.out.println("Error in date format");
 			}
 
-			if (premiumRequestDto.getOriginName() != null && !(premiumRequestDto.getOriginName().equals(""))) {
-				criteria.add(Restrictions.eq("shipperName", premiumRequestDto.getOriginName()));
-			}
+		}
+		if (premiumRequestDto.getPlannerEmail() != null && !(premiumRequestDto.getPlannerEmail().equals(""))) {
 
-			if (premiumRequestDto.getDestinationName() != null
-					&& !(premiumRequestDto.getDestinationName().equals(""))) {
-				criteria.add(Restrictions.eq("destinationName", premiumRequestDto.getDestinationName()));
-			}
-		
+			criteria.add(Restrictions.eq("plannerEmail", premiumRequestDto.getPlannerEmail()));
+
+		}
+		if (premiumRequestDto.getReasonCode() != null && !(premiumRequestDto.getReasonCode().equals(""))) {
+			criteria.add(Restrictions.eq("premiumReasonCode", premiumRequestDto.getReasonCode()));
+
+		}
+		if (premiumRequestDto.getStatus() != null && !(premiumRequestDto.getStatus().equals(""))) {
+			criteria.add(Restrictions.eq("status", premiumRequestDto.getStatus()));
+		}
+
+		if (premiumRequestDto.getOriginName() != null && !(premiumRequestDto.getOriginName().equals(""))) {
+			criteria.add(Restrictions.eq("shipperName", premiumRequestDto.getOriginName()));
+		}
+
+		if (premiumRequestDto.getDestinationName() != null && !(premiumRequestDto.getDestinationName().equals(""))) {
+			criteria.add(Restrictions.eq("destinationName", premiumRequestDto.getDestinationName()));
+		}
+
 		criteria.addOrder(Order.asc("orderId"));
 		int total_entries = criteria.list().size();
 		int startNum = (premiumRequestDto.getPageNumber() - 1) * 10;
@@ -256,11 +254,11 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 			criteria.setMaxResults(premiumRequestDto.getNoOfEntry());
 		}
 
-		premiumFreightChargeDetails=criteria.list();
-		
+		premiumFreightChargeDetails = criteria.list();
+
 		chargeDetailsPaginated.setPremiumFreightChargeDetails(premiumFreightChargeDetails);
 		chargeDetailsPaginated.setCount(total_entries);
-		
+
 		session.flush();
 		session.clear();
 		tx.commit();
@@ -339,51 +337,46 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 	// the CA to calculate
 	// On getting the Charge respond the Same DTO Premium one for the CA
 	// The status changes to Pending with Carrier admin
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<PremiumFreightOrderDto> setCarrierDetails(List<ChargeRequestDto> chargeRequestDto) 
-	{
+	public List<PremiumFreightOrderDto> setCarrierDetails(List<ChargeRequestDto> chargeRequestDto) {
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		List<PremiumFreightOrderDto> premiumFreightOrderDtos = new ArrayList<PremiumFreightOrderDto>();
 		List<AdhocOrders> adhocOrders = new ArrayList<AdhocOrders>();
 		List<String> adhocOrdersList = new ArrayList<String>();
-		
-		String createdBy = null;
 
+		String createdBy = null;
 
 		PremiumFreightOrderDto premiumdto = new PremiumFreightOrderDto();
 		try {
 			for (ChargeRequestDto c : chargeRequestDto) {
 				String adid = c.getorderId();
 				adhocOrdersList.add(adid);
-				System.out.println(adid);
 
 				String queryStr = "SELECT ao FROM AdhocOrders ao WHERE ao.fwoNum = ao.fwoNum AND ao.fwoNum=:fwoNum";
 				Query query = session.createQuery(queryStr);
 				query.setParameter("fwoNum", adid);
 				adhocOrders = query.list();
-				System.out.println(adhocOrders.size());
 				for (AdhocOrders aorders : adhocOrders) {
-					System.out.println(aorders);
-					createdBy=aorders.getPlannerEmail();
+					createdBy = aorders.getPlannerEmail();
 					PremiumFreightChargeDetails premiumFreightChargeDetails = new PremiumFreightChargeDetails();
-
 					aorders.setStatus("Pending with Carrier Admin");
-					Criteria criteria_role= session.createCriteria(LchRole.class);
-					String pendingWith=null;
+					Criteria criteria_role = session.createCriteria(LchRole.class);
+					StringBuilder pendingWith = new StringBuilder();
 					List<LchRole> role = new ArrayList<LchRole>();
-					
+
 					criteria_role.add(Restrictions.eq("role", "LCH_Carrier_Admin"));
-					
-					role=criteria_role.list();
-					
-					String createdByList=null;
-					for(LchRole l:role)
-					{
-						pendingWith.concat(l.getUserId()+",");
+
+					role = criteria_role.list();
+
+					String createdByList = null;
+					for (LchRole l : role) {
+						pendingWith.append(l.getUserId());
+						pendingWith.append(",");
 					}
-					aorders.setPendingWith(pendingWith.substring(0,pendingWith.length()-2));
+					aorders.setPendingWith(pendingWith.substring(0, pendingWith.length() - 2));
 
 					session.saveOrUpdate(aorders);
 					premiumdto = exportPremiumFreightOrders(aorders);
@@ -428,50 +421,42 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					premiumFreightChargeDetails.setPlannerEmail(aorders.getPlannerEmail());
 
 					session.saveOrUpdate(premiumFreightChargeDetails);
-					
 
 				}
-				
-				OrderIdMapping orderIdMapping = new OrderIdMapping();
-				
-				String requestId = getReferenceData.getNextSeqNumberRequestId(getReferenceData.executePremiumRequestId("REQ"),4,sessionFactory);
-				String orderids=null;
-				for(String adString:adhocOrdersList)
-				{
-					orderids.concat(adString+",");
-				}
-				orderIdMapping.setRequestId(requestId);
-				orderIdMapping.setOrderIds(orderids.substring(0, orderids.length()-2));
-				orderIdMapping.setCreatedDate(java.time.LocalDate.now());
-				Criteria criteriaRole= session.createCriteria(LchRole.class);
-				criteriaRole.add(Restrictions.eq("userEmail", createdBy));
-				
-				List<LchRole> roles = new ArrayList<LchRole>();
-				roles=criteriaRole.list();
-				String createdByList=null;
-				for(LchRole l:roles)
-				{
-					createdByList.concat(l.getUserId()+",");
-				}
-
-				orderIdMapping.setCreatedBy(createdByList.substring(0, createdByList.length()-2));
-				session.saveOrUpdate(orderIdMapping);
-				
-				//Planner open: List of order pending at planner : records 
-				//send to carrier - list of adhocorderDto
-				//mapping table 
-				//master table pending with CARRIER ADMIN
-				//Pending user id -  Carrier details rule table , P0030,P0031
-				
-				//LOGGER.info("Starting Workflow");
-
-				//Trigger the workflow
-				//Parallel in workflow - request id generated 
-				//Workflow response will give in the details
-				//refer to the trigger workflow
-				
 			}
+			OrderIdMapping orderIdMapping = new OrderIdMapping();
+
+			String requestId = getReferenceData
+					.getNextSeqNumberRequestId(getReferenceData.executePremiumRequestId("REQ"), 4, sessionFactory);
+			System.out.println("Request Id: "+ requestId);
+			
+			StringBuilder orderids = new StringBuilder();
+			for (String adString : adhocOrdersList) {
+				orderids.append(adString);
+				orderids.append(",");
+			}
+			System.out.println("OrderIds: "+orderids);
+			orderIdMapping.setRequestId(requestId);
+			orderIdMapping.setOrderIds(orderids.substring(0, orderids.length() - 2));
+			
+			orderIdMapping.setCreatedDate(java.time.LocalDate.now());
+			/*Criteria criteriaRole = session.createCriteria(LchRole.class);
+			criteriaRole.add(Restrictions.eq("userEmail", createdBy));
+			List<LchRole> roles = new ArrayList<LchRole>();
+			roles = criteriaRole.list();
+			StringBuilder createdByList = new StringBuilder();
+			for (LchRole l : roles) {
+				createdByList.append(l.getUserId());
+				createdByList.append(",");
+			}
+
+			String createdby2 = createdByList.substring(0, createdByList.length() - 2);
+		System.out.println(createdby2);*/
+			orderIdMapping.setCreatedBy("");
+			session.saveOrUpdate(orderIdMapping);
+
 		} catch (Exception e) {
+			System.out.print(e);
 			throw new SetCarrierDetailsException();
 		} finally {
 			session.flush();
@@ -485,7 +470,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 	// Charge is set by the carrier admin here. Once the Charge is set it
 	// updates the charge table
-	// and update the Status as Pending  At Planner
+	// and update the Status as Pending At Planner
 	@SuppressWarnings("unchecked")
 	@Override
 	public String setCharge(List<ChargeRequestDto> dto) {
@@ -502,7 +487,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 			for (AdhocOrders a : adhocOrders) {
 				a.setStatus("Pending At Planner");
 				session.saveOrUpdate(a);
-				
+
 			}
 
 			Criteria criteria2 = session.createCriteria(PremiumFreightChargeDetails.class);
@@ -566,9 +551,9 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		tx.commit();
 		session.close();
 		return "Charge Set";
-		//Same as above
-		//Pending at planner
-		
+		// Same as above
+		// Pending at planner
+
 	}
 
 	@Override
