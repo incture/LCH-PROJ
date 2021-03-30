@@ -106,6 +106,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 		criteria.add(Restrictions.eq("premiumFreight", "true"));
 		criteria.add(Restrictions.ne("status", "REJECTED"));
+		criteria.add(Restrictions.eq("status", "Pending with Carrier Admin"));
 
 		String filter_field = null;
 		try {
@@ -347,7 +348,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		List<AdhocOrders> adhocOrders = new ArrayList<AdhocOrders>();
 		List<String> adhocOrdersList = new ArrayList<String>();
 
-		String createdBy = null;
+		// String createdBy = null;
 
 		PremiumFreightOrderDto premiumdto = new PremiumFreightOrderDto();
 		try {
@@ -360,40 +361,54 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 				query.setParameter("fwoNum", adid);
 				adhocOrders = query.list();
 				for (AdhocOrders aorders : adhocOrders) {
-					createdBy = aorders.getPlannerEmail();
+					// createdBy = aorders.getPlannerEmail();
 					PremiumFreightChargeDetails premiumFreightChargeDetails = new PremiumFreightChargeDetails();
+					// Updating Status in Master Table
 					aorders.setStatus("Pending with Carrier Admin");
 					Criteria criteria_role = session.createCriteria(LchRole.class);
 					StringBuilder pendingWith = new StringBuilder();
 					List<LchRole> role = new ArrayList<LchRole>();
 
+					// Since the order is send to the Carrier Admin , It is
+					// pending at id referring to Carrier Admin
 					criteria_role.add(Restrictions.eq("role", "LCH_Carrier_Admin"));
 
 					role = criteria_role.list();
 
-					String createdByList = null;
+					// Creating the Comma Seperated list of all the Carrier
+					// Admin
 					for (LchRole l : role) {
 						pendingWith.append(l.getUserId());
 						pendingWith.append(",");
 					}
-					aorders.setPendingWith(pendingWith.substring(0, pendingWith.length() - 2));
+					// Updating in Master Table
+					aorders.setPendingWith(pendingWith.substring(0, pendingWith.length() - 1));
 
 					session.saveOrUpdate(aorders);
+					// Converting AdhocOrders to Premium Format DTO
 					premiumdto = exportPremiumFreightOrders(aorders);
+					// Updating the Premium status
 					premiumdto.setStatus("Pending with Carrier Admin");
+					// adding in premium List
 					premiumFreightOrderDtos.add(premiumdto);
 					Criteria criteria = session.createCriteria(PremiumFreightChargeDetails.class);
+					// Getting the charge details from the same id
 					criteria.add(Restrictions.eq("orderId", adid));
 
+					List<PremiumFreightChargeDetails> premiumFreightChargeDetails2= new ArrayList<PremiumFreightChargeDetails>();
+					premiumFreightChargeDetails2=criteria.list();
+					
+					
+					// Setting the new object for PremiumCharge Details
 					premiumFreightChargeDetails.setorderId(adid);
 
+					// Fetching the Carrier Details to set in charge table
 					List<CarrierDetails> carrierDetails = new ArrayList<CarrierDetails>();
 					Criteria criteria3 = session.createCriteria(CarrierDetails.class);
 					criteria3.add(Restrictions.eq("bpNumber", c.getBpNumber()));
 					criteria3.add(Restrictions.eq("carrierMode", c.getCarrierMode()));
 					carrierDetails = criteria3.list();
-					for (CarrierDetails cdets : carrierDetails)
-					{
+					for (CarrierDetails cdets : carrierDetails) {
 						premiumFreightChargeDetails.setBpNumber(cdets.getBpNumber());
 						premiumFreightChargeDetails.setCarrierDetails(cdets.getCarrierDetails());
 						premiumFreightChargeDetails.setCarrierMode(cdets.getCarrierMode());
@@ -420,39 +435,29 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					premiumFreightChargeDetails.setStatus("Pending with Carrier Admin");
 					premiumFreightChargeDetails.setPlannerEmail(aorders.getPlannerEmail());
 
-					session.saveOrUpdate(premiumFreightChargeDetails);
-
+						session.saveOrUpdate(premiumFreightChargeDetails);
+					
+					
 				}
+
 			}
 			OrderIdMapping orderIdMapping = new OrderIdMapping();
 
 			String requestId = getReferenceData
 					.getNextSeqNumberRequestId(getReferenceData.executePremiumRequestId("REQ"), 4, sessionFactory);
-			System.out.println("Request Id: "+ requestId);
-			
+			System.out.println("Request Id: " + requestId);
+
 			StringBuilder orderids = new StringBuilder();
 			for (String adString : adhocOrdersList) {
 				orderids.append(adString);
 				orderids.append(",");
 			}
-			System.out.println("OrderIds: "+orderids+"   "+orderids.substring(0, orderids.length() - 1));
+			System.out.println("OrderIds: " + orderids + "   " + orderids.substring(0, orderids.length() - 1));
 			orderIdMapping.setRequestId(requestId);
 			orderIdMapping.setOrderIds(orderids.substring(0, orderids.length() - 1));
-			
-			orderIdMapping.setCreatedDate(java.time.LocalDate.now());
-			/*Criteria criteriaRole = session.createCriteria(LchRole.class);
-			criteriaRole.add(Restrictions.eq("userEmail", createdBy));
-			List<LchRole> roles = new ArrayList<LchRole>();
-			roles = criteriaRole.list();
-			StringBuilder createdByList = new StringBuilder();
-			for (LchRole l : roles) {
-				createdByList.append(l.getUserId());
-				createdByList.append(",");
-			}
 
-			String createdby2 = createdByList.substring(0, createdByList.length() - 2);
-		System.out.println(createdby2);*/
-			orderIdMapping.setCreatedBy("");
+			orderIdMapping.setCreatedDate(java.time.LocalDate.now());
+			
 			session.saveOrUpdate(orderIdMapping);
 
 		} catch (Exception e) {

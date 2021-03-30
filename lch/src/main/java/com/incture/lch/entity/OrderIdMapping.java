@@ -22,8 +22,8 @@ public class OrderIdMapping
 	@Column(name="CREATED DATE")
 	private LocalDate createdDate;
 	
-	@Column(name="CREATED BY")
-	private String createdBy;
+	//@Column(name="CREATED BY")
+	//private String createdBy;
 
 	public String getRequestId() {
 		return requestId;
@@ -48,7 +48,7 @@ public class OrderIdMapping
 	public void setCreatedDate(LocalDate createdDate) {
 		this.createdDate = createdDate;
 	}
-
+/*
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -58,5 +58,5 @@ public class OrderIdMapping
 	}
 	
 	
-
+*/
 }

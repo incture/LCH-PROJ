@@ -11,7 +11,7 @@ public class OrderIdMappingDto
 
 	private Date createdDate;
 
-	private String createdBy;
+	//private String createdBy;
 
 	public String getRequestId() {
 		return requestId;
@@ -36,7 +36,7 @@ public class OrderIdMappingDto
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-
+/*
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -46,5 +46,5 @@ public class OrderIdMappingDto
 	}
 	
 	
-
+*/
 }

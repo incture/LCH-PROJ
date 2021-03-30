@@ -13,13 +13,14 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name= "T_PREMIUM_FREIGHT_CHARGE_DETAILS")
 public class PremiumFreightChargeDetails 
 {
-	@Id
+	/*@Id
 	@Column(name="ID")
 	//@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy = "uuid")
-	private String premiumId;
+	private String premiumId;*/
 	
+	@Id
 	@Column(name="ORDER_ID")
 	private String orderId;
 	
@@ -96,7 +97,7 @@ public class PremiumFreightChargeDetails
 		return orderId;
 	}
 
-	public String getPremiumId() {
+	/*public String getPremiumId() {
 		return premiumId;
 	}
 
@@ -104,7 +105,7 @@ public class PremiumFreightChargeDetails
 		this.premiumId = premiumId;
 	}
 
-	public void setorderId(String orderId) {
+	*/public void setorderId(String orderId) {
 		this.orderId = orderId;
 	}
 

@@ -698,12 +698,14 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 				
 			}
 			}
-			adhocOrders.setPendingWith(pendingWith.substring(0,pendingWith.length()-2));
+			adhocOrders.setPendingWith(pendingWith.substring(0,pendingWith.length()-1));
 			session.saveOrUpdate(adhocOrders); 
 			//PremiumFreight Premium Order here
 			//Update the Master Table with Status as Pending at Planner
 			//Pending with : Role Table Planner details
 			//Not in the workflow table update
+			
+			
 			
 		}
 		session.flush();
