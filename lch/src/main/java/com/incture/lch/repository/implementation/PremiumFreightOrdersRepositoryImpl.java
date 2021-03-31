@@ -16,7 +16,10 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.incture.lch.adhoc.custom.dto.AdhocWorkflowCustomDto;
+import com.incture.lch.adhoc.workflow.constant.WorkflowConstants;
 import com.incture.lch.dao.CarrierDetailsDao;
+import com.incture.lch.dto.AdhocOrderWorkflowDto;
 import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
@@ -106,7 +109,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 		criteria.add(Restrictions.eq("premiumFreight", "true"));
 		criteria.add(Restrictions.ne("status", "REJECTED"));
-		criteria.add(Restrictions.eq("status", "Pending with Carrier Admin"));
+		criteria.add(Restrictions.ne("status", "Pending with Carrier Admin"));
 
 		String filter_field = null;
 		try {
@@ -395,10 +398,9 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					// Getting the charge details from the same id
 					criteria.add(Restrictions.eq("orderId", adid));
 
-					List<PremiumFreightChargeDetails> premiumFreightChargeDetails2= new ArrayList<PremiumFreightChargeDetails>();
-					premiumFreightChargeDetails2=criteria.list();
-					
-					
+					List<PremiumFreightChargeDetails> premiumFreightChargeDetails2 = new ArrayList<PremiumFreightChargeDetails>();
+					premiumFreightChargeDetails2 = criteria.list();
+
 					// Setting the new object for PremiumCharge Details
 					premiumFreightChargeDetails.setorderId(adid);
 
@@ -435,9 +437,8 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					premiumFreightChargeDetails.setStatus("Pending with Carrier Admin");
 					premiumFreightChargeDetails.setPlannerEmail(aorders.getPlannerEmail());
 
-						session.saveOrUpdate(premiumFreightChargeDetails);
-					
-					
+					session.saveOrUpdate(premiumFreightChargeDetails);
+
 				}
 
 			}
@@ -457,8 +458,13 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 			orderIdMapping.setOrderIds(orderids.substring(0, orderids.length() - 1));
 
 			orderIdMapping.setCreatedDate(java.time.LocalDate.now());
-			
+
 			session.saveOrUpdate(orderIdMapping);
+
+			// Create a Premium Workflow DTO and populate it here , by calling
+			// another export kind of function
+			// Trigger the Premium Workflow DTO
+			// Triggering is done in the Workflow Trigger Services
 
 		} catch (Exception e) {
 			System.out.print(e);
@@ -471,6 +477,44 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		}
 
 		return premiumFreightOrderDtos;
+	}
+
+	// workflow API
+
+	public String updateTableDetails(/* input - Premium Workflow Dto */) {
+		// from the premium workflow dto fetch role
+
+		// String role = dto.getRole() - from the role table using UserId
+		// AdhocOrder Object - adorders
+		// PremiumCharge dEtails object - pchargedetails
+
+		// Role condition 1: carrier Admin
+		// updates Status in master table as Pending with Planner
+		// adorders.setStatus("Pending at Planner")
+		// session.save(adorders)
+		// pchargedetails.setCost
+		// pchargedetails.setStatus
+		// pchargeDetails.save()
+
+		// role condition 2 :Planner
+		// updates Status in master table as Pending with Planner
+		// adorders.setStatus("Pending at Manager")
+		// session.save(adorders)
+		// pchargedetails.setStatus
+
+		// role Condition 3: Manager
+		// updates Status in master table as Pending with Planner
+		// adorders.setStatus("Pending at Accountant")
+		// session.save(adorders)
+		// pchargedetails.setStatus
+
+		// role Condition 4:Accountant
+		// updates Status in master table as Pending with Planner
+		// adorders.setStatus("Confirmed")
+		// session.save(adorders)
+		// pchargedetails.setStatus
+
+		return null;
 	}
 
 	// Charge is set by the carrier admin here. Once the Charge is set it
@@ -733,4 +777,47 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		return responseDto;
 	}
 
+	public String updateTableData(AdhocWorkflowCustomDto dto) {
+		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
+		workflowDto.setOrderId(dto.getAdhocOrderId());
+		workflowDto.setBusinessKey(dto.getCreatedBy());
+		workflowDto.setWorkflowName("Adhoc Workflow");
+		workflowDto.setDescription("Adhoc Type IS AS");
+		workflowDto.setBusinessKey("NA");
+		workflowDto.setStatus(WorkflowConstants.COMPLETED);
+		workflowDto.setUpdatedBy(dto.getCreatedBy());
+		workflowDto.setSubject("NA");
+		workflowDto.setUpdatedDate(new Date());
+		workflowDto.setPendingWith(null);
+		System.out.println("Yuhooo" + workflowDto.getOrderId());
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		List<AdhocOrders> adhocOrder = new ArrayList<AdhocOrders>();
+		Criteria criteria = session.createCriteria(AdhocOrders.class);
+		criteria.add(Restrictions.eq("fwoNum", dto.getAdhocOrderId()));
+		adhocOrder = criteria.list();
+
+		System.out.println(adhocOrder.size());
+		for (AdhocOrders a : adhocOrder) {
+
+			System.out.println(a.getFwoNum());
+			a.setUpdatedBy(dto.getCreatedBy());
+			a.setUpdatedDate(new Date());
+			a.setStatus(WorkflowConstants.COMPLETED);
+			a.setPendingWith(null);
+			session.saveOrUpdate(a);
+		}
+
+		session.save(adhocOrderWorkflowDao.importAdhocWorkflow(workflowDto));
+
+		session.flush();
+		session.clear();
+		tx.commit();
+		session.close();
+
+		System.out.println(workflowDto.getOrderId());
+		return workflowDto.getOrderId();
+		return null;
+	}
 }
