@@ -6,6 +6,8 @@ public class PremiumWorkflowApprovalTaskDto {
 
 	private String adhocOrderId;
 
+	private String role;
+	//Role here means the page we're on
 	private String businessDivision;
 
 	private String cratedBy;
@@ -718,6 +720,15 @@ public class PremiumWorkflowApprovalTaskDto {
 				+ carrierDetails + ", carrierScac=" + carrierScac + ", carrierRatePerKM=" + carrierRatePerKM
 				+ ", carrierMode=" + carrierMode + ", requestId=" + requestId + ", charge=" + charge + ", reasonCode="
 				+ reasonCode + ", status=" + status + ", plannerEmail=" + plannerEmail + "]";
+	}
+
+	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 }

@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.hpsf.Array;
 import org.apache.poi.util.SystemOutLogger;
+import org.apache.xmlbeans.impl.xb.xsdschema.RestrictionDocument.Restriction;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Repository;
 
 import com.incture.lch.adhoc.custom.dto.AdhocWorkflowCustomDto;
 import com.incture.lch.adhoc.workflow.constant.WorkflowConstants;
+import com.incture.lch.adhoc.workflow.dto.PremiumWorkflowApprovalTaskDto;
 import com.incture.lch.dao.CarrierDetailsDao;
 import com.incture.lch.dto.AdhocOrderWorkflowDto;
 import com.incture.lch.dto.CarrierDetailsDto;
@@ -479,8 +482,6 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		return premiumFreightOrderDtos;
 	}
 
-	
-
 	// Charge is set by the carrier admin here. Once the Charge is set it
 	// updates the charge table
 	// and update the Status as Pending At Planner
@@ -743,43 +744,112 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 	// workflow API
 
-		public String updateTableDetails(/* input - Premium Workflow Dto */) {
-			// from the premium workflow dto fetch role
+	public String updateTableDetails(PremiumWorkflowApprovalTaskDto premiumWorkflowDto) {
+		// from the premium workflow dto fetch role
 
-			
-			// String role = dto.getRole() - from the role table using UserId
-			// AdhocOrder Object - adorders
-			// PremiumCharge dEtails object - pchargedetails
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		String current_role = premiumWorkflowDto.getRole();
 
-			//if else (role condition)- condition set status only 
-			//Once save operation at end
-			
-			// Role condition 1: carrier Admin
-			// updates Status in master table as Pending with Planner
-			// adorders.setStatus("Pending at Planner")
-			// session.save(adorders)
-			// pchargedetails.setCost
-			// pchargedetails.setStatus
-			// pchargeDetails.save()
+		AdhocOrders aorder = new AdhocOrders();
+		List<AdhocOrders> aorders = new ArrayList<AdhocOrders>();
+		PremiumFreightChargeDetails pdetail = new PremiumFreightChargeDetails();
+		List<PremiumFreightChargeDetails> pdetails = new ArrayList<PremiumFreightChargeDetails>();
 
-			// role condition 2 :Planner
-			// updates Status in master table as Pending with Planner
-			// adorders.setStatus("Pending at Manager")
-			// session.save(adorders)
-			// pchargedetails.setStatus
+		String orderId = premiumWorkflowDto.getAdhocOrderId();
 
-			// role Condition 3: Manager
-			// updates Status in master table as Pending with Planner
-			// adorders.setStatus("Pending at Accountant")
-			// session.save(adorders)
-			// pchargedetails.setStatus
+		Criteria criteria_adhoc = session.createCriteria(AdhocOrders.class);
+		criteria_adhoc.add(Restrictions.eq("fwoNum", orderId));
+		aorders = criteria_adhoc.list();
 
-			// role Condition 4:Accountant
-			// updates Status in master table as Pending with Planner
-			// adorders.setStatus("Confirmed")
-			// session.save(adorders)
-			// pchargedetails.setStatus
+		Criteria criteria_premium = session.createCriteria(PremiumFreightChargeDetails.class);
+		criteria_premium.add(Restrictions.eq("orderId", orderId));
+		pdetails = criteria_premium.list();
 
-			return null;
+		StringBuilder userIdList = new StringBuilder();
+		List<LchRole> roles = new ArrayList<LchRole>();
+
+		Criteria criteria_role = session.createCriteria(LchRole.class);
+		criteria_role.add(Restrictions.eq("role", current_role));
+		roles = criteria_role.list();
+
+		for (LchRole l : roles) {
+			userIdList.append(l.getUserId());
+			userIdList.append(",");
 		}
+
+		String userIds = userIdList.substring(0, userIdList.length() - 1);
+
+		if (current_role.equals("LCH_Planner")) {
+			if (premiumWorkflowDto.getCharge() == 0) {
+				for (AdhocOrders a : aorders) {
+					a.setStatus("Pending at Carrier Admin");
+					a.setPendingWith(userIds);
+					session.saveOrUpdate(a);
+				}
+				for (PremiumFreightChargeDetails p : pdetails) {
+					p.setStatus("Pending at Carrier Admin");
+					// p.setCharge(premiumWorkflowDto.getCharge());
+					session.saveOrUpdate(p);
+
+				}
+			} else {
+				for (AdhocOrders a : aorders) {
+					a.setStatus("Pending at Manager");
+					a.setPendingWith(userIds);
+					session.saveOrUpdate(a);
+				}
+				for (PremiumFreightChargeDetails p : pdetails) {
+					p.setStatus("Pending at Manager");
+					session.saveOrUpdate(p);
+
+				}
+			}
+		}
+
+		if (current_role.equals("LCH_Carrier_Admin")) {
+			for (AdhocOrders a : aorders) {
+				a.setStatus("Pending at Planner");
+				a.setPendingWith(userIds);
+				session.saveOrUpdate(a);
+			}
+			for (PremiumFreightChargeDetails p : pdetails) {
+				p.setStatus("Pending at Planner");
+				p.setCharge(premiumWorkflowDto.getCharge());
+				session.saveOrUpdate(p);
+
+			}
+
+		}
+
+		if (current_role.equals("LCH_Manager")) {
+			for (AdhocOrders a : aorders) {
+				a.setStatus("Pending at Accountant");
+				a.setPendingWith(userIds);
+				session.saveOrUpdate(a);
+			}
+			for (PremiumFreightChargeDetails p : pdetails) {
+				p.setStatus("Pending at Accountant");
+				session.saveOrUpdate(p);
+
+			}
+
+		}
+
+		if (current_role.equals("LCH_Accountant")) {
+			for (AdhocOrders a : aorders) {
+				a.setStatus("Completed");
+				a.setPendingWith(userIds);
+				session.saveOrUpdate(a);
+			}
+			for (PremiumFreightChargeDetails p : pdetails) {
+				p.setStatus("Completed");
+				session.saveOrUpdate(p);
+
+			}
+
+		}
+
+		return premiumWorkflowDto.getAdhocOrderId();
+	}
 }

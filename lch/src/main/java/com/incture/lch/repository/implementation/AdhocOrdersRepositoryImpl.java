@@ -37,6 +37,7 @@ import com.incture.lch.adhoc.custom.dto.WorkflowCustomDto;
 import org.json.JSONObject;
 import com.incture.lch.dao.AdhocApprovalRuleDao;
 import com.incture.lch.adhoc.workflow.constant.WorkflowConstants;
+import com.incture.lch.adhoc.workflow.dto.PremiumWorkflowApprovalTaskDto;
 import com.incture.lch.adhoc.workflow.dto.WorkflowApprovalTaskDto;
 import com.incture.lch.adhoc.workflow.service.WorkFlowServiceLocal;
 import com.incture.lch.dao.AdhocOrderWorkflowDao;
@@ -605,7 +606,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	}
 
-	@SuppressWarnings({ "unchecked", "deprecation"})
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public ResponseDto addAdhocOrders(AdhocOrderDto AdhocOrderDto) {
 		ResponseDto responseDto = new ResponseDto();
 		AdhocOrders adhocOrders = new AdhocOrders();
@@ -667,46 +668,52 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		LOGGER.info("Starting Workflow");
 		WorkflowApprovalTaskDto workflowDto = new WorkflowApprovalTaskDto();
 		workflowDto = exportAdhocWorkflowDto(adhocOrders);
-		List<AdhocApprovalRuleDto> ruleDtoList = adhocApprovalRuleDao.getAdhocApprovalsByAdhocTypeAndApprovalType(adhocOrders.getAdhocType());
-		
+		List<AdhocApprovalRuleDto> ruleDtoList = adhocApprovalRuleDao
+				.getAdhocApprovalsByAdhocTypeAndApprovalType(adhocOrders.getAdhocType());
 
 		workflowDto.setManager(adhocOrderWorkflowHelper.getManagerDetails(ruleDtoList));
 		workflowDto.setPlanner(adhocOrderWorkflowHelper.getPlannerDetails(ruleDtoList));
 		LOGGER.info("Workflow inputs........" + workflowDto.toString());
-		if (!AdhocOrderDto.getPremiumFreight().equals(Boolean.TRUE)) 
+		if (!AdhocOrderDto.getPremiumFreight().equals(Boolean.TRUE))
 		{
 			wfService.triggerWorkflow(workflowDto);
 			LOGGER.info("Workflow Started........");
 		}
 		else
 		{
-			List<LchRole> roles =  new ArrayList<LchRole>();
+			List<LchRole> roles = new ArrayList<LchRole>();
 			Criteria criteria = session.createCriteria(LchRole.class);
-			criteria.add(Restrictions.eq("role","LCH_Planner"));
-			roles=criteria.list();
-			System.out.println("Size"+ roles.size());
-			//System.out.println("Roles " + roles.get(0));
-			StringBuilder pendingWith=new StringBuilder();
-			//String pendingWith="";
-			if (!ServiceUtil.isEmpty(roles)) {
-			for(LchRole l:roles)
+			criteria.add(Restrictions.eq("role", "LCH_Planner"));
+			roles = criteria.list();
+			System.out.println("Size" + roles.size());
+			StringBuilder pendingWith = new StringBuilder();
+			if (!ServiceUtil.isEmpty(roles)) 
 			{
-				System.out.println(l.getUserId());
-			//	pendingWith.concat(l.getUserId()+",");
-				pendingWith.append(l.getUserId());
-				pendingWith.append(",");
-				
+				for (LchRole l : roles) 
+				{
+					System.out.println(l.getUserId());
+					pendingWith.append(l.getUserId());
+					pendingWith.append(",");
+
+				}
 			}
-			}
-			adhocOrders.setPendingWith(pendingWith.substring(0,pendingWith.length()-1));
-			session.saveOrUpdate(adhocOrders); 
-			//PremiumFreight Premium Order here
-			//Update the Master Table with Status as Pending at Planner
-			//Pending with : Role Table Planner details
-			//Not in the workflow table update
+			adhocOrders.setPendingWith(pendingWith.substring(0, pendingWith.length() - 1));
+			session.saveOrUpdate(adhocOrders);
+			// PremiumFreight Premium Order here
+			// Update the Master Table with Status as Pending at Planner
+			// Pending with : Role Table Planner details
+			// Not in the workflow table update
+
+			// Triggering the workflow will happen here
 			
+			/*
 			
+			PremiumWorkflowApprovalTaskDto premiumWorkflowDto = new PremiumWorkflowApprovalTaskDto();
+			premiumWorkflowDto=exportToPremiumWorkflowDto(workflowDto);
+			wfService.triggerPremiumWorkflow(premiumWorkflowDto);
+			LOGGER.info("Premium Workflow Started");*/
 			
+
 		}
 		session.flush();
 		session.clear();
