@@ -479,43 +479,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		return premiumFreightOrderDtos;
 	}
 
-	// workflow API
-
-	public String updateTableDetails(/* input - Premium Workflow Dto */) {
-		// from the premium workflow dto fetch role
-
-		// String role = dto.getRole() - from the role table using UserId
-		// AdhocOrder Object - adorders
-		// PremiumCharge dEtails object - pchargedetails
-
-		// Role condition 1: carrier Admin
-		// updates Status in master table as Pending with Planner
-		// adorders.setStatus("Pending at Planner")
-		// session.save(adorders)
-		// pchargedetails.setCost
-		// pchargedetails.setStatus
-		// pchargeDetails.save()
-
-		// role condition 2 :Planner
-		// updates Status in master table as Pending with Planner
-		// adorders.setStatus("Pending at Manager")
-		// session.save(adorders)
-		// pchargedetails.setStatus
-
-		// role Condition 3: Manager
-		// updates Status in master table as Pending with Planner
-		// adorders.setStatus("Pending at Accountant")
-		// session.save(adorders)
-		// pchargedetails.setStatus
-
-		// role Condition 4:Accountant
-		// updates Status in master table as Pending with Planner
-		// adorders.setStatus("Confirmed")
-		// session.save(adorders)
-		// pchargedetails.setStatus
-
-		return null;
-	}
+	
 
 	// Charge is set by the carrier admin here. Once the Charge is set it
 	// updates the charge table
@@ -777,47 +741,45 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		return responseDto;
 	}
 
-	public String updateTableData(AdhocWorkflowCustomDto dto) {
-		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
-		workflowDto.setOrderId(dto.getAdhocOrderId());
-		workflowDto.setBusinessKey(dto.getCreatedBy());
-		workflowDto.setWorkflowName("Adhoc Workflow");
-		workflowDto.setDescription("Adhoc Type IS AS");
-		workflowDto.setBusinessKey("NA");
-		workflowDto.setStatus(WorkflowConstants.COMPLETED);
-		workflowDto.setUpdatedBy(dto.getCreatedBy());
-		workflowDto.setSubject("NA");
-		workflowDto.setUpdatedDate(new Date());
-		workflowDto.setPendingWith(null);
-		System.out.println("Yuhooo" + workflowDto.getOrderId());
+	// workflow API
 
-		Session session = sessionFactory.openSession();
-		Transaction tx = session.beginTransaction();
-		List<AdhocOrders> adhocOrder = new ArrayList<AdhocOrders>();
-		Criteria criteria = session.createCriteria(AdhocOrders.class);
-		criteria.add(Restrictions.eq("fwoNum", dto.getAdhocOrderId()));
-		adhocOrder = criteria.list();
+		public String updateTableDetails(/* input - Premium Workflow Dto */) {
+			// from the premium workflow dto fetch role
 
-		System.out.println(adhocOrder.size());
-		for (AdhocOrders a : adhocOrder) {
+			
+			// String role = dto.getRole() - from the role table using UserId
+			// AdhocOrder Object - adorders
+			// PremiumCharge dEtails object - pchargedetails
 
-			System.out.println(a.getFwoNum());
-			a.setUpdatedBy(dto.getCreatedBy());
-			a.setUpdatedDate(new Date());
-			a.setStatus(WorkflowConstants.COMPLETED);
-			a.setPendingWith(null);
-			session.saveOrUpdate(a);
+			//if else (role condition)- condition set status only 
+			//Once save operation at end
+			
+			// Role condition 1: carrier Admin
+			// updates Status in master table as Pending with Planner
+			// adorders.setStatus("Pending at Planner")
+			// session.save(adorders)
+			// pchargedetails.setCost
+			// pchargedetails.setStatus
+			// pchargeDetails.save()
+
+			// role condition 2 :Planner
+			// updates Status in master table as Pending with Planner
+			// adorders.setStatus("Pending at Manager")
+			// session.save(adorders)
+			// pchargedetails.setStatus
+
+			// role Condition 3: Manager
+			// updates Status in master table as Pending with Planner
+			// adorders.setStatus("Pending at Accountant")
+			// session.save(adorders)
+			// pchargedetails.setStatus
+
+			// role Condition 4:Accountant
+			// updates Status in master table as Pending with Planner
+			// adorders.setStatus("Confirmed")
+			// session.save(adorders)
+			// pchargedetails.setStatus
+
+			return null;
 		}
-
-		session.save(adhocOrderWorkflowDao.importAdhocWorkflow(workflowDto));
-
-		session.flush();
-		session.clear();
-		tx.commit();
-		session.close();
-
-		System.out.println(workflowDto.getOrderId());
-		return workflowDto.getOrderId();
-		return null;
-	}
 }
