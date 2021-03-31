@@ -35,10 +35,11 @@
 		"bLabelNonVisible": false,
 		"bSaveAsDraft": false,
 		"bDestination": false,
-		"bApprove" : true,
+		"bApprove" : false,
 		"bReject" : true,
-		"bGetcost" : true,
-		"bSetcost" : true,
+		"bCarrierAdmin":true,
+		"bManager":true,
+		"bPlanner":true,
 		"createdDate" : true
 	},
 
@@ -56,8 +57,9 @@
 		"carrierMode" : false,
 		"bApprove" : true,
 		"bReject" : true,
-		"bGetcost" : true,
-		"bSetcost" : true,
+		"bCarrierAdmin":true,
+		"bManager":true,
+		"bPlanner":true,
 		"costInput" : false
 		
 	},

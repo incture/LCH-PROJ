@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ExtPicker="com.incture.lch.premfreightOrders.control"
 	xmlns:core="sap.ui.core" xmlns:ui="sap.ui.table">
 	<ui:Table id="premfreightstable" rows="{mCommon>/aPremfreightorders}" visibleRowCountMode="Fixed" alternateRowColors="true"
-		enableColumnReordering="false" class="sapUiMediumMarginBegin sapUiSmallMarginEnd sapUiTableNoColBorders" selectionMode="MultiToggle">
+		enableColumnReordering="false" class="sapUiMediumMarginBegin sapUiSmallMarginEnd sapUiTableNoColBorders" selectionMode="None">
 		<ui:columns>
 			<ui:Column tooltip="{i18n>ORDER_ID}" width="10rem" sorted="true" sortProperty="{mCommon>adhocOrderId}">
 				<Label text="{i18n>ORDER_ID}" design="Bold"/>
@@ -87,6 +87,22 @@
 				<Label text="{i18n>COST}" design="Bold"/>
 				<ui:template>
 					<Input value="{mCommon>charge}" enabled="{mCommon>/enable/costInput}"></Input>
+				</ui:template>
+			</ui:Column>
+			<ui:Column tooltip="{i18n>ACTION}">
+				<Label text="{i18n>ACTION}" design="Bold"/>
+				<ui:template>
+					<HBox>
+						<Button icon="sap-icon://customer-financial-fact-sheet" tooltip="{i18n>FORW_CA}" press="onGetCost"
+							visible="{mCommon>/visible/bCarrierAdmin}" enabled="{mCommon>bCarrierAdmin}"/>
+						<Button icon="sap-icon://manager" tooltip="{i18n>FORW_MANAGER}" press="onCost" visible="{mCommon>/visible/bManager}"
+							enabled="{mCommon>/enable/bManager}"/>
+						<Button icon="sap-icon://activity-individual" tooltip="{i18n>FORW_PLAN}" press="onCost" visible="{mCommon>/visible/bPlanner}"
+							enabled="{mCommon>/enable/bPlanner}"/>
+						<Button icon="sap-icon://accept" tooltip="{i18n>APPROVE}" press="onApprove" visible="{mCommon>/visible/bApprove}"
+							enabled="{mCommon>/enable/bApprove}"/>
+						<Button icon="sap-icon://decline" tooltip="{i18n>REJECT}" type="Reject" press="onReject" visible="{mCommon>/visible/bReject}"
+							enabled="{mCommon>/enable/bReject}"/></HBox>
 				</ui:template>
 			</ui:Column>
 		</ui:columns>
