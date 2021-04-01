@@ -1,5 +1,7 @@
 package com.incture.lch.config;
 
+ 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -43,7 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/updateApprovalWorkflowDetails").permitAll()
         .antMatchers("/LCH/**").permitAll()
         .antMatchers("/swagger-ui.html").permitAll()
-        .antMatchers("/lch/**").permitAll();
+        .antMatchers("/lch/**").permitAll()
+        .antMatchers("/v3/**").permitAll().anyRequest().authenticated();
         //http.csrf().disable();
 
  
