@@ -12,42 +12,53 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.Jwt;
 
+ 
+
 import com.sap.cloud.security.xsuaa.XsuaaServiceConfiguration;
 import com.sap.cloud.security.xsuaa.token.TokenAuthenticationConverter;
+
+ 
 
 @Configuration
 @EnableWebSecurity
 @Profile("security")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	XsuaaServiceConfiguration xsuaaServiceConfiguration;
+ 
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		/*http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.antMatchers("/lch/**").permitAll().anyRequest().authenticated().and().oauth2ResourceServer().jwt()
-				.jwtAuthenticationConverter(getJwtAuthenticationConverter());*/
-		
-		http.csrf().disable()
+    @Autowired
+    XsuaaServiceConfiguration xsuaaServiceConfiguration;
+
+ 
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        /*http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+                .antMatchers("/lch/**").permitAll().anyRequest().authenticated().and().oauth2ResourceServer().jwt()
+                .jwtAuthenticationConverter(getJwtAuthenticationConverter());*/
+        
+        http.csrf().disable()
         //no authentication needed for these context paths
         .authorizeRequests()
         .antMatchers("/updateApprovalWorkflowDetails").permitAll()
         .antMatchers("/LCH/**").permitAll()
         .antMatchers("/swagger-ui.html").permitAll()
-        .antMatchers("/lch/**").permitAll()
-        .antMatchers("/v3/**").permitAll().anyRequest();
-		//http.csrf().disable();
+        .antMatchers("/lch/**").permitAll();
+        //http.csrf().disable();
 
-	}
+ 
 
-	Converter<Jwt, AbstractAuthenticationToken> getJwtAuthenticationConverter() {
-		TokenAuthenticationConverter converter = new TokenAuthenticationConverter(xsuaaServiceConfiguration);
-		converter.setLocalScopeAsAuthorities(true);
-		return converter;
-	}
-	
-	  @Override
+    }
+
+ 
+
+    Converter<Jwt, AbstractAuthenticationToken> getJwtAuthenticationConverter() {
+        TokenAuthenticationConverter converter = new TokenAuthenticationConverter(xsuaaServiceConfiguration);
+        converter.setLocalScopeAsAuthorities(true);
+        return converter;
+    }
+    
+      @Override
       public void configure(WebSecurity webSecurity) throws Exception
         {
          webSecurity
@@ -55,5 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           // All of Spring Security will ignore the requests
           .antMatchers("/lch/**").antMatchers("/LCH/**");
          }  
+
+ 
 
 }
