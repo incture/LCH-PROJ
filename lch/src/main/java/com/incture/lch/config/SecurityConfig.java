@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.Jwt;
 
  
@@ -44,9 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/updateApprovalWorkflowDetails").permitAll()
         .antMatchers("/LCH/**").permitAll()
-        .antMatchers("/swagger-ui.html").permitAll()
-        .antMatchers("/lch/**").permitAll()
-        .antMatchers("/v3/**").permitAll().anyRequest().authenticated();
+        .antMatchers("/swagger-ui.html/**").permitAll()
+        .antMatchers("/lch/**").permitAll();
         //http.csrf().disable();
 
  
@@ -70,6 +68,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .antMatchers("/lch/**").antMatchers("/LCH/**");
          }  
 
- 
+    
 
 }
