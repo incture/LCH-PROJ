@@ -20,8 +20,8 @@ modules:
           url: '~{url}'
           forwardAuthToken: true
       - name: lch_workflow
-      - name: portal_resources_LCH
       - name: uaa_LCH
+      - name: portal_resources_LCH
     properties:
       SEND_XFRAMEOPTIONS: false
   - name: LCH_ui_deployer
@@ -43,7 +43,6 @@ modules:
           artifacts:
             - './*'
           target-path: resources/premfreightOrders
- 
   - name: Adhoc
     type: html5
     path: Adhoc
@@ -95,7 +94,6 @@ modules:
         - npm run build
       supported-platforms: []
       build-result: dist
-  
   - name: lch_fiori
     type: com.sap.application.portal.content
     path: lch_fiori
@@ -111,7 +109,6 @@ modules:
       - name: lch_workflow
       - name: LCH_html5_repo_host
       - name: LCH_ui_deployer
-  
 resources:
   - name: LCH_html5_repo_runtime
     parameters:

@@ -437,7 +437,7 @@ sap.ui.define([
 
 			/*	oHeader.user = oThisController._oCommon.userDetails.id;*/
 			/*	oHeader.role = oThisController._oCommon.userDetails.name;*/
-			oHeader.user = "P000331";
+			oHeader.user = "P000330";
 			sUrl += oHeader.user;
 
 			oThisController.fnProcessDataRequest(sUrl, "GET", oHeader, false, function (oXHR, status) {
@@ -450,12 +450,10 @@ sap.ui.define([
 					console.log(role);
 					for (var i = 0; i < role.length; i++) {
 						if (role[i] === "LCH_Planner") {
-							oMdlCommon.setProperty("/visible/bApprove", false);
-							oMdlCommon.setProperty("/visible/bCarrierAdmin", true);
-							oMdlCommon.setProperty("/visible/bManager", true);
-							oMdlCommon.setProperty("/enable/bManager", false);
-							oMdlCommon.setProperty("/visible/bPlanner", false);
+							oMdlCommon.setProperty("/visible/bApprove", true);
 							oMdlCommon.setProperty("/visible/bReject", true);
+							oMdlCommon.setProperty("/visible/bGetcost", true);
+							oMdlCommon.setProperty("/visible/bSetcost", false);
 							oMdlCommon.setProperty("/visible/createdDate", true);
 							oMdlCommon.setProperty("/enable/costInput", false);
 							oMdlCommon.setProperty("/visible/carrierText", false);
@@ -466,11 +464,10 @@ sap.ui.define([
 							oMdlCommon.refresh();
 						} else if (role[i] === "LCH_Carrier_Admin") {
 							oMdlCommon.setProperty("/visible/bApprove", false);
-							oMdlCommon.setProperty("/visible/bCarrierAdmin", false);
-							oMdlCommon.setProperty("/visible/bManager", false);
-							oMdlCommon.setProperty("/visible/bPlanner", true);
 							oMdlCommon.setProperty("/visible/bReject", false);
+							oMdlCommon.setProperty("/visible/bGetcost", false);
 							oMdlCommon.setProperty("/visible/createdDate", false);
+							oMdlCommon.setProperty("/visible/bSetcost", true);
 							oMdlCommon.setProperty("/visible/carrierText", true);
 							oMdlCommon.setProperty("/visible/carrierCombo", false);
 							oMdlCommon.setProperty("/enable/costInput", true);
@@ -478,20 +475,18 @@ sap.ui.define([
 							oMdlCommon.setProperty("/visible/carrierDetails", true);
 							oMdlCommon.setProperty("/currRole", "Carrier_admin");
 							oMdlCommon.refresh();
-						} /*else if (role[i] === "LCH_Manager") {
-							oMdlCommon.setProperty("/visible/bApprove", true);
-							oMdlCommon.setProperty("/visible/bReject", true);
-							oMdlCommon.setProperty("/visible/bCarrierAdmin", false);
-							oMdlCommon.setProperty("/visible/bManager", false);
-							oMdlCommon.setProperty("/visible/bPlanner", false);
+						}
+						/*else if (role[i] === "LCH_Manager") {
+							oMdlCommon.setProperty("/visible/bApprove", false);
+							oMdlCommon.setProperty("/visible/bReject", false);
+							oMdlCommon.setProperty("/visible/bGetcost", false);
+							oMdlCommon.setProperty("/visible/bSetcost", false);
+							oMdlCommon.setProperty("/enable/bApprove", false);
+							oMdlCommon.setProperty("/enable/bReject", false);
+							oMdlCommon.setProperty("/enable/bGetcost", false);
+							oMdlCommon.setProperty("/enable/bSetcost", false);
 							oMdlCommon.setProperty("/enable/costInput", false);
-							oMdlCommon.setProperty("/visible/createdDate", false);
-							oMdlCommon.setProperty("/visible/carrierText", true);
-							oMdlCommon.setProperty("/visible/carrierCombo", false);
-							oMdlCommon.setProperty("/enable/costInput", true);
-							oMdlCommon.setProperty("/visible/carrierScac", true);
-							oMdlCommon.setProperty("/visible/carrierDetails", true);
-							oMdlCommon.setProperty("/currRole", "Manager");
+								oMdlCommon.setProperty("/currRole","Manager");
 							oMdlCommon.refresh();
 						}*/
 					}

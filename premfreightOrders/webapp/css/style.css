@@ -1,8 +1,5 @@
 /* Enter your custom styles here */
-.sapMBtnInner{
-	border:none !important;
-	background-color : transparent !important;
-}
+
 .sapMSwitch .sapMSwtOn:not(.sapMSwtAcceptReject) {
     background: #05b10b;
     border-color: #05b105;
@@ -442,7 +439,8 @@
 
 .sapMBtnInner.sapMBtnReject{
 	background-image: none;
-    background-color: transparent !important;
+    background-color: #f7f7f7 !important;
+    border-color: #b00 !important;
     color: #b00 !important;
 }
 

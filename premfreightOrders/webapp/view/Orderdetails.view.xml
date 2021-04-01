@@ -67,7 +67,7 @@
 						<OverflowToolbarLayoutData priority="NeverOverflow"/>
 					</layoutData>
 				</ToolbarSpacer>
-			<!--	<Button text="{i18n>REJECT}" type="Reject" press="onReject" visible="{mCommon>/visible/bReject}" enabled="{mCommon>/enable/bReject}"/>-->
+				<Button text="{i18n>REJECT}" type="Reject" press="onReject" visible="{mCommon>/visible/bReject}" enabled="{mCommon>/enable/bReject}"/>
 				<layoutData>
 					<OverflowToolbarLayoutData priority="NeverOverflow"/>
 				</layoutData>
@@ -92,10 +92,10 @@
 						visible="true"></Button>
 				</HBox>
 				<ToolbarSpacer/>
-			<!--	<Button text="{i18n>FORW_TO_CA}" type="Emphasized" press="onGetCost" visible="{mCommon>/visible/bGetcost}"
+				<Button text="{i18n>FORW_TO_CA}" type="Emphasized" press="onGetCost" visible="{mCommon>/visible/bGetcost}"
 					enabled="{mCommon>/enable/bGetcost}"/>
 				<Button text="{i18n>FORW_PLANNER}" type="Emphasized" press="onSetCost"
-					visible="{mCommon>/visible/bSetcost}" enabled="{mCommon>/enable/bSetcost}"/>-->
+					visible="{mCommon>/visible/bSetcost}" enabled="{mCommon>/enable/bSetcost}"/>
 				<!--<Button text="{i18n>Approve}" type="Accept" press="onApprove" visible="{mCommon>/visible/bApprove}" enabled="{mCommon>/enable/bApprove}"/>-->
 				<ToolbarSpacer width="2rem">
 					<layoutData>
