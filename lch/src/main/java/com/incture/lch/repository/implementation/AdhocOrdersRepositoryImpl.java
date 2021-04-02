@@ -55,6 +55,7 @@ import com.incture.lch.dto.PartNumberDescDto;
 import com.incture.lch.dto.ReasonCodeDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.dto.WorkflowInputDto;
+import com.incture.lch.entity.AdhocApprovalRule;
 import com.incture.lch.entity.AdhocOrderWorkflow;
 import com.incture.lch.entity.AdhocOrders;
 import com.incture.lch.entity.LchRole;
@@ -659,7 +660,16 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			adhocOrders.setFwoNum(adhocOrderId);
 
 		}
+		List<AdhocApprovalRuleDto> ruleDtoList  = new ArrayList<AdhocApprovalRuleDto>();
 
+		if(!adhocOrders.getAdhocType().equals("AS IS"))
+		{
+			ruleDtoList = adhocApprovalRuleDao.getAdhocApprovalsByAdhocTypeAndApprovalType(adhocOrders.getAdhocType());
+			adhocOrders.setPendingWith(adhocOrderWorkflowHelper.getManagerDetails(ruleDtoList));
+			adhocOrders.setStatus("Pending At Manager");
+			
+		}
+		
 		session.saveOrUpdate(adhocOrders);
 		responseDto.setMessage("Save success");
 		responseDto.setStatus("SUCCESS");
@@ -668,11 +678,14 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		LOGGER.info("Starting Workflow");
 		WorkflowApprovalTaskDto workflowDto = new WorkflowApprovalTaskDto();
 		workflowDto = exportAdhocWorkflowDto(adhocOrders);
-		List<AdhocApprovalRuleDto> ruleDtoList = adhocApprovalRuleDao
-				.getAdhocApprovalsByAdhocTypeAndApprovalType(adhocOrders.getAdhocType());
-
+		if(!adhocOrders.getAdhocType().equals("AS IS"))
+		{
 		workflowDto.setManager(adhocOrderWorkflowHelper.getManagerDetails(ruleDtoList));
+		if(!adhocOrders.getAdhocType().equals("Inventory"))
+		{
 		workflowDto.setPlanner(adhocOrderWorkflowHelper.getPlannerDetails(ruleDtoList));
+		}
+		}
 		LOGGER.info("Workflow inputs........" + workflowDto.toString());
 		if (!AdhocOrderDto.getPremiumFreight().equals(Boolean.TRUE))
 		{
@@ -1178,7 +1191,42 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			a.setUpdatedBy(workflowDto.getUpdatedBy());
 			a.setUpdatedDate(new Date());
 			a.setStatus(workflowDto.getStatus());
-			a.setPendingWith(workflowDto.getPendingWith());
+			a.setPendingWith(obj.getPlannerDetails());
+			session.saveOrUpdate(a);
+		}
+
+		session.save(adhocOrderWorkflowDao.importAdhocWorkflow(workflowDto));
+
+		session.flush();
+		session.clear();
+		tx.commit();
+		session.close();
+
+		System.out.println(workflowDto.getOrderId());
+		return workflowDto.getOrderId();
+	}
+
+	public String updateApprovalWorflowDetails1(WorkflowCustomDto obj)
+			throws JSONException, ClientProtocolException, IOException {
+		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
+		workflowDto = prepareAdhocApprovalWorkflowDto(obj);
+		System.out.println("Yuhooo" + workflowDto.getOrderId());
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		List<AdhocOrders> adhocOrder = new ArrayList<AdhocOrders>();
+		Criteria criteria = session.createCriteria(AdhocOrders.class);
+		criteria.add(Restrictions.eq("fwoNum", workflowDto.getOrderId()));
+		adhocOrder = criteria.list();
+
+		System.out.println(adhocOrder.size());
+		for (AdhocOrders a : adhocOrder) {
+
+			System.out.println(a.getFwoNum());
+			a.setUpdatedBy(workflowDto.getUpdatedBy());
+			a.setUpdatedDate(new Date());
+			a.setStatus("Pending At Planner");
+			a.setPendingWith(obj.getPlannerDetails());
 			session.saveOrUpdate(a);
 		}
 
@@ -1236,6 +1284,10 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		System.out.println(workflowDto.getOrderId());
 		return workflowDto.getOrderId();
 	}
+	
+
+
+	
 
 	public AdhocOrderWorkflowDto prepareAdhocApprovalWorkflowDto(WorkflowCustomDto data)
 			throws JSONException, ClientProtocolException, IOException {
@@ -1250,7 +1302,9 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		LOGGER.info("objectData Array:: " + obj.toString());
 		workflowDto.setDescription(obj.getString("description"));
 		workflowDto.setInstanceId(obj.getString("id"));
+		
 		workflowDto.setPendingWith(null);
+		
 		workflowDto.setRequestedBy(obj.getString("createdBy"));
 		workflowDto.setRequestedDate(ServiceUtil.convertStringToDate(obj.getString("createdAt")));
 		workflowDto.setUpdatedDate(new Date());
