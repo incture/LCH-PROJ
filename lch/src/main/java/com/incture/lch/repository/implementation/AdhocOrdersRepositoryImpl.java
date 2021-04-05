@@ -712,15 +712,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			}
 			adhocOrders.setPendingWith(pendingWith.substring(0, pendingWith.length() - 1));
 			session.saveOrUpdate(adhocOrders);
-			// PremiumFreight Premium Order here
-			// Update the Master Table with Status as Pending at Planner
-			// Pending with : Role Table Planner details
-			// Not in the workflow table update
-
-			// Triggering the workflow will happen here
-			
-			/*
-			
+			/*			
 			PremiumWorkflowApprovalTaskDto premiumWorkflowDto = new PremiumWorkflowApprovalTaskDto();
 			premiumWorkflowDto=exportToPremiumWorkflowDto(workflowDto);
 			wfService.triggerPremiumWorkflow(premiumWorkflowDto);
@@ -1206,6 +1198,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		return workflowDto.getOrderId();
 	}
 
+	@Override
 	public String updateApprovalWorflowDetails1(WorkflowCustomDto obj)
 			throws JSONException, ClientProtocolException, IOException {
 		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();

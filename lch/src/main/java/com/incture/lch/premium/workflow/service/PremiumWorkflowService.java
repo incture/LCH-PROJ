@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.transaction.Transactional;
 
+import org.apache.http.HttpResponse;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -18,6 +20,7 @@ import com.incture.lch.dao.AdhocOrderWorkflowDao;
 import com.incture.lch.dto.AdhocOrderWorkflowDto;
 import com.incture.lch.dto.ResponseDataDto;
 import com.incture.lch.helper.AdhocOrderWorkflowHelper;
+import com.incture.lch.premium.custom.dto.WorkflowPremiumCustomDto;
 import com.incture.lch.util.ServicesUtil;
 
 @Transactional
@@ -34,6 +37,9 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 
 	@Autowired
 	private AdhocOrderWorkflowHelper adhocOrderDao;
+
+	@Autowired
+	private PremiumWorkflowInvokerLocal premiumWorkflowInvokerLocal;
 
 	/**
 	 * Trigger workflow
@@ -75,7 +81,8 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 			responseDto.setStatusCode(500);
 			responseDto.setMessage(e.getMessage());
 		}
-		MYLOGGER.info("LCH | PremiumWorkFlowService | triggerPremiumWorkflow | Execution Output : " + responseDto.toString());
+		MYLOGGER.info(
+				"LCH | PremiumWorkFlowService | triggerPremiumWorkflow | Execution Output : " + responseDto.toString());
 		return responseDto;
 	}
 
@@ -85,30 +92,38 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 	 * @param ApproverUiDto
 	 * @return ResponseDto Success/Failure message
 	 */
-	/*
-	 * @Override public ResponseDataDto approveTask(ApproverUiDto approverUiDto)
-	 * { MYLOGGER.
-	 * info("LCH | WorkFlowService | approveTask | Execution Start Input : " +
-	 * approverUiDto.toString()); ResponseDataDto responseDto = new
-	 * ResponseDataDto(); try { responseDto.setStatus(Boolean.TRUE);
-	 * responseDto.setStatusCode(200); // Map<String, String>
-	 * destinationProperties = callDestination(); Object[] workflowInstanceId =
-	 * workFlowTaskDao.getWorkflowInstanceId(approverUiDto.getTaskId());
-	 * JSONArray taskArray =
-	 * workflowInvokerLocal.getWorkflowTaskInstanceId((String)
-	 * workflowInstanceId[3]); JSONObject taskObj = taskArray.getJSONObject(0);
-	 * String taskInstanceId = taskObj.getString(WorkflowConstants.ID); String
-	 * input = buildWorkflowApproverPayload(approverUiDto); HttpResponse
-	 * wfResponse = workflowInvokerLocal.approveTask(input, taskInstanceId); if
-	 * ((wfResponse.getStatusLine().getStatusCode()) ==
-	 * WorkflowConstants.SUCCESS_CODE) {
-	 * workFlowTaskDao.updateTaskDetails(approverUiDto); } } catch (Exception e)
-	 * { MYLOGGER.error("LCH | WorkFlowService | approveTask | Exception : " +
-	 * e.getMessage()); responseDto.setStatus(Boolean.FALSE);
-	 * responseDto.setStatusCode(500); responseDto.setMessage(e.getMessage()); }
-	 * MYLOGGER.info("LCH | WorkFlowService | approveTask | Execution Output : "
-	 * + responseDto.toString()); return responseDto; }
-	 */
+
+	/*@Override
+	public ResponseDataDto approveTask(WorkflowPremiumCustomDto dto) {
+		MYLOGGER.info("LCH | WorkFlowService | approveTask | Execution Start Input : " + dto.toString());
+		ResponseDataDto responseDto = new ResponseDataDto();
+		try {
+			responseDto.setStatus(Boolean.TRUE);
+			responseDto.setStatusCode(200);
+			// Map<String, String> destinationProperties = callDestination();
+			
+			 * JSONObject workflowInstanceId =
+			 * premiumWorkflowInvokerLocal.getWorkflowApprovalTaskInstanceId(dto
+			 * .getTaskIdDetails()); JSONArray taskArray =
+			 * workflowInvokerLocal.getWorkflowTaskInstanceId((String)
+			 * workflowInstanceId.get); JSONObject taskObj =
+			 * taskArray.getJSONObject(0); String taskInstanceId =
+			 * taskObj.getString(WorkflowConstants.ID);
+			 
+			String input = buildWorkflowApproverPayload(dto);
+			HttpResponse wfResponse = workflowInvokerLocal.approveTask(input, taskInstanceId);
+			if ((wfResponse.getStatusLine().getStatusCode()) == WorkflowConstants.SUCCESS_CODE) {
+				premiumWorkflowInvokerLocal.updateTaskDetails(approverUiDto);
+			}
+		} catch (Exception e) {
+			MYLOGGER.error("LCH | WorkFlowService | approveTask | Exception : " + e.getMessage());
+			responseDto.setStatus(Boolean.FALSE);
+			responseDto.setStatusCode(500);
+			responseDto.setMessage(e.getMessage());
+		}
+		MYLOGGER.info("LCH | WorkFlowService | approveTask | Execution Output : " + responseDto.toString());
+		return responseDto;
+	}*/
 
 	/**
 	 * Build payload for trigger workflow
@@ -135,7 +150,7 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 		context.put("carrierScac", triggerWorkFlowDto.getCarrierScac());
 		context.put("carrierRatePerKM", triggerWorkFlowDto.getCarrierRatePerKM());
 		context.put("carrierMode", triggerWorkFlowDto.getCarrierMode());
-		context.put("requestId", triggerWorkFlowDto.getRequestId());
+		// context.put("requestId", triggerWorkFlowDto.getRequestId());
 
 		context.put("charge", triggerWorkFlowDto.getCharge());
 
@@ -170,22 +185,27 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 	 * @throws JSONException
 	 * @return Context Json string
 	 */
-	/*
-	 * private String buildWorkflowApproverPayload(ApproverUiDto approverUiDto)
-	 * throws JSONException { JSONObject response = new JSONObject(); JSONObject
-	 * context = new JSONObject(); response.put(WorkflowConstants.STATUS,
-	 * "completed"); context.put("status", approverUiDto.getStatus());
-	 * context.put("approverComments", approverUiDto.getApproverComments()); if
-	 * (ServicesUtil.isEmpty(approverUiDto.getApproverName())) {
-	 * context.put("approverName", " "); } else { context.put("approverName",
-	 * approverUiDto.getApproverName()); } context.put("approverId",
-	 * approverUiDto.getApproverId()); if
-	 * (approverUiDto.getStatus().equals(WorkflowConstants.APPROVED)) {
-	 * context.put("isApproved", Boolean.TRUE); } else {
-	 * context.put("isApproved", Boolean.FALSE); }
-	 * response.put(WorkflowConstants.CONTEXT, context); return
-	 * response.toString(); }
-	 */
+/*
+	private String buildWorkflowApproverPayload(WorkflowPremiumCustomDto dto) throws JSONException {
+		JSONObject response = new JSONObject();
+		JSONObject context = new JSONObject();
+		response.put(WorkflowConstants.STATUS, "completed");
+		context.put("status", approverUiDto.getStatus());
+		context.put("approverComments", approverUiDto.getApproverComments());
+		if (ServicesUtil.isEmpty(approverUiDto.getApproverName())) {
+			context.put("approverName", " ");
+		} else {
+			context.put("approverName", approverUiDto.getApproverName());
+		}
+		context.put("approverId", approverUiDto.getApproverId());
+		if (approverUiDto.getStatus().equals(WorkflowConstants.APPROVED)) {
+			context.put("isApproved", Boolean.TRUE);
+		} else {
+			context.put("isApproved", Boolean.FALSE);
+		}
+		response.put(WorkflowConstants.CONTEXT, context);
+		return response.toString();
+	}*/
 
 	// private Map<String, String> callDestination() throws NamingException {
 	// return

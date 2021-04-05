@@ -235,6 +235,13 @@ public class AdhocOrdersController {
 		logger1.error("ENTERING INTO updateApprovalWorkflowDetails CONTROLLER");
 		return adhocOrdersService.updateApprovalWorflowDetails(dto);
 	}
+	@RequestMapping(value = "/updateApprovalWorkflowDetails1", method = RequestMethod.POST)
+	@ResponseBody
+	public String updateApprovalWorflowDetails1(WorkflowCustomDto obj)  throws JSONException, ClientProtocolException, IOException
+	{
+		logger1.error("ENTERING INTO updateApprovalWorkflowDetails CONTROLLER");
+		return adhocOrdersService.updateApprovalWorflowDetails1(obj);
+	}
 
 	@RequestMapping(value = "/updateApprovalWorkflowDetailsForType4", method = RequestMethod.POST)
 	@ResponseBody

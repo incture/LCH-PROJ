@@ -69,6 +69,8 @@ public interface AdhocOrdersService {
 	
 	public String updateApprovalWorflowDetails(JSONObject obj) throws JSONException;
 
+	public String updateApprovalWorflowDetails1(WorkflowCustomDto obj)  throws JSONException, ClientProtocolException, IOException ;
+
 	public String updateApprovalWorflowDetails(WorkflowCustomDto dto)
 			throws JSONException, ClientProtocolException, IOException;
 

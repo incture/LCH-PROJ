@@ -10,7 +10,7 @@ public class PremiumWorkflowApprovalTaskDto {
 	//Role here means the page we're on
 	private String businessDivision;
 
-	private String cratedBy;
+	private String createdBy;
 
 	private String createdDate;
 
@@ -65,7 +65,7 @@ public class PremiumWorkflowApprovalTaskDto {
 	private String carrierScac;
 	private String carrierRatePerKM;
 	private String carrierMode;
-	private String requestId;
+	//private String requestId;
 
 	private String userName;
 
@@ -124,12 +124,12 @@ public class PremiumWorkflowApprovalTaskDto {
 	private AdhocOrderDto adhocOrderInfo;
 	// COST DETAILS
 
-	public String getCratedBy() {
-		return cratedBy;
+	public String getCreatedBy() {
+		return createdBy;
 	}
 
-	public void setCratedBy(String cratedBy) {
-		this.cratedBy = cratedBy;
+	public void setCreatedBy(String cratedBy) {
+		this.createdBy = cratedBy;
 	}
 
 	public String getCreatedDate() {
@@ -670,7 +670,7 @@ public class PremiumWorkflowApprovalTaskDto {
 		this.carrierMode = carrierMode;
 	}
 
-	public String getRequestId() {
+	/*public String getRequestId() {
 		return requestId;
 	}
 
@@ -678,7 +678,7 @@ public class PremiumWorkflowApprovalTaskDto {
 		this.requestId = requestId;
 	}
 
-	public int getCharge() {
+	*/public int getCharge() {
 		return charge;
 	}
 
@@ -710,7 +710,7 @@ public class PremiumWorkflowApprovalTaskDto {
 		this.plannerEmail = plannerEmail;
 	}
 
-	public String toString() {
+public String toString() {
 		return "PremiumWorkflowApprovalTaskDto [premiumId=" + ", orderId=" + orderId + ", originName=" + originName
 				+ ", originAddress=" + originAddress + ", originCity=" + originCity + ", originState=" + originState
 				+ ", originZip=" + originZip + ", originCountry=" + originCountry + ", destinationName="
@@ -718,7 +718,7 @@ public class PremiumWorkflowApprovalTaskDto {
 				+ ", destinationState=" + destinationState + ", destinationZip=" + destinationZip
 				+ ", destinationCountry=" + destinationCountry + ", bpNumber=" + bpNumber + ", carrierDetails="
 				+ carrierDetails + ", carrierScac=" + carrierScac + ", carrierRatePerKM=" + carrierRatePerKM
-				+ ", carrierMode=" + carrierMode + ", requestId=" + requestId + ", charge=" + charge + ", reasonCode="
+				+ ", carrierMode=" + carrierMode +  ", charge=" + charge + ", reasonCode="
 				+ reasonCode + ", status=" + status + ", plannerEmail=" + plannerEmail + "]";
 	}
 

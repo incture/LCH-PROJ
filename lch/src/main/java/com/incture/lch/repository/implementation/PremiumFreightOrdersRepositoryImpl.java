@@ -1,13 +1,12 @@
 package com.incture.lch.repository.implementation;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.poi.hpsf.Array;
-import org.apache.poi.util.SystemOutLogger;
-import org.apache.xmlbeans.impl.xb.xsdschema.RestrictionDocument.Restriction;
+import org.apache.http.client.ClientProtocolException;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,13 +14,16 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.incture.lch.adhoc.custom.dto.AdhocWorkflowCustomDto;
-import com.incture.lch.adhoc.workflow.constant.WorkflowConstants;
 import com.incture.lch.adhoc.workflow.dto.PremiumWorkflowApprovalTaskDto;
 import com.incture.lch.dao.CarrierDetailsDao;
+import com.incture.lch.dto.AdhocOrderDto;
 import com.incture.lch.dto.AdhocOrderWorkflowDto;
 import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeDetailsPaginated;
@@ -33,12 +35,14 @@ import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.AdhocOrders;
 import com.incture.lch.entity.CarrierDetails;
 import com.incture.lch.entity.LchRole;
-import com.incture.lch.entity.OrderIdMapping;
 import com.incture.lch.entity.PremiumFreightChargeDetails;
 import com.incture.lch.exception.CarrierNotExistException;
 import com.incture.lch.exception.FilterInvalidEntryException;
 import com.incture.lch.exception.PageNumberNotFoundException;
 import com.incture.lch.exception.SetCarrierDetailsException;
+import com.incture.lch.premium.custom.dto.WorkflowPremiumCustomDto;
+import com.incture.lch.premium.workflow.service.PremiumWorkflowInvokerLocal;
+import com.incture.lch.premium.workflow.service.PremiumWorkflowServiceLocal;
 import com.incture.lch.repository.PremiumFreightOrdersRepository;
 import com.incture.lch.util.GetReferenceData;
 import com.incture.lch.util.ServiceUtil;
@@ -51,10 +55,18 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 	private SessionFactory sessionFactory;
 
 	@Autowired
+	private PremiumWorkflowServiceLocal wfService;
+
+	@Autowired
 	GetReferenceData getReferenceData;
 
 	@Autowired
 	private CarrierDetailsDao carrierDetailsDao;
+
+	@Autowired
+	private PremiumWorkflowInvokerLocal wfInvokerLocal;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PremiumFreightOrdersRepositoryImpl.class);
 
 	public void setSessionFactory(SessionFactory sf) {
 		this.sessionFactory = sf;
@@ -344,7 +356,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 	// the CA to calculate
 	// On getting the Charge respond the Same DTO Premium one for the CA
 	// The status changes to Pending with Carrier admin
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation", "deprecation" })
 	@Override
 	public List<PremiumFreightOrderDto> setCarrierDetails(List<ChargeRequestDto> chargeRequestDto) {
 
@@ -367,7 +379,6 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 				query.setParameter("fwoNum", adid);
 				adhocOrders = query.list();
 				for (AdhocOrders aorders : adhocOrders) {
-					// createdBy = aorders.getPlannerEmail();
 					PremiumFreightChargeDetails premiumFreightChargeDetails = new PremiumFreightChargeDetails();
 					// Updating Status in Master Table
 					aorders.setStatus("Pending with Carrier Admin");
@@ -376,7 +387,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					List<LchRole> role = new ArrayList<LchRole>();
 
 					// Since the order is send to the Carrier Admin , It is
-					// pending at id referring to Carrier Admin
+					// pending at id of Carrier Admin Role
 					criteria_role.add(Restrictions.eq("role", "LCH_Carrier_Admin"));
 
 					role = criteria_role.list();
@@ -387,20 +398,22 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 						pendingWith.append(l.getUserId());
 						pendingWith.append(",");
 					}
-					// Updating in Master Table
+					// Updating in Master Table, adding the pending with field
 					aorders.setPendingWith(pendingWith.substring(0, pendingWith.length() - 1));
 
 					session.saveOrUpdate(aorders);
 					// Converting AdhocOrders to Premium Format DTO
 					premiumdto = exportPremiumFreightOrders(aorders);
-					// Updating the Premium status
+					// Updating the Premium status*/
+
 					premiumdto.setStatus("Pending with Carrier Admin");
 					// adding in premium List
 					premiumFreightOrderDtos.add(premiumdto);
 					Criteria criteria = session.createCriteria(PremiumFreightChargeDetails.class);
-					// Getting the charge details from the same id
-					criteria.add(Restrictions.eq("orderId", adid));
 
+					// Getting the data from charge details table for the same
+					// id
+					criteria.add(Restrictions.eq("orderId", adid));
 					List<PremiumFreightChargeDetails> premiumFreightChargeDetails2 = new ArrayList<PremiumFreightChargeDetails>();
 					premiumFreightChargeDetails2 = criteria.list();
 
@@ -442,32 +455,15 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 					session.saveOrUpdate(premiumFreightChargeDetails);
 
+					//Creating Workflow DTO
+					PremiumWorkflowApprovalTaskDto premiumWorkflowDto = new PremiumWorkflowApprovalTaskDto();
+					premiumWorkflowDto = exportToPremiumWorkflowDto(aorders, premiumFreightChargeDetails);
+					
+					//Triggering Premium Workflow
+					wfService.triggerPremiumWorkflow(premiumWorkflowDto);
 				}
 
 			}
-			OrderIdMapping orderIdMapping = new OrderIdMapping();
-
-			String requestId = getReferenceData
-					.getNextSeqNumberRequestId(getReferenceData.executePremiumRequestId("REQ"), 4, sessionFactory);
-			System.out.println("Request Id: " + requestId);
-
-			StringBuilder orderids = new StringBuilder();
-			for (String adString : adhocOrdersList) {
-				orderids.append(adString);
-				orderids.append(",");
-			}
-			System.out.println("OrderIds: " + orderids + "   " + orderids.substring(0, orderids.length() - 1));
-			orderIdMapping.setRequestId(requestId);
-			orderIdMapping.setOrderIds(orderids.substring(0, orderids.length() - 1));
-
-			orderIdMapping.setCreatedDate(java.time.LocalDate.now());
-
-			session.saveOrUpdate(orderIdMapping);
-
-			// Create a Premium Workflow DTO and populate it here , by calling
-			// another export kind of function
-			// Trigger the Premium Workflow DTO
-			// Triggering is done in the Workflow Trigger Services
 
 		} catch (Exception e) {
 			System.out.print(e);
@@ -480,6 +476,219 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		}
 
 		return premiumFreightOrderDtos;
+	}
+
+	public AdhocOrderDto exportAdhocOrdersDto(AdhocOrders adhocOrders) {
+		AdhocOrderDto AdhocOrderDto = new AdhocOrderDto();
+
+		// System.out.println("Inside DTO CLass");
+		AdhocOrderDto.setOrderId(adhocOrders.getFwoNum());
+		AdhocOrderDto.setBusinessDivision(adhocOrders.getBusinessDivision());
+		if (adhocOrders.getCharge() != null) {
+			AdhocOrderDto.setCharge(ServiceUtil.convertStringToBoolean(adhocOrders.getCharge()));
+		}
+
+		AdhocOrderDto.setUserId(adhocOrders.getUserId());
+		AdhocOrderDto.setPartNum(adhocOrders.getPartNum());
+		AdhocOrderDto.setCreatedBy(adhocOrders.getCreatedBy());
+		if (adhocOrders.getCreatedDate() != null && !(adhocOrders.getCreatedDate().equals(""))) {
+			AdhocOrderDto.setCreatedDate(ServiceUtil.convertDateToString(adhocOrders.getCreatedDate()));
+		}
+		AdhocOrderDto.setUpdatedBy(adhocOrders.getUpdatedBy());
+		if (adhocOrders.getUpdatedDate() != null && !(adhocOrders.getUpdatedDate().equals(""))) {
+			AdhocOrderDto.setUpdatedDate(ServiceUtil.convertDateToString(adhocOrders.getUpdatedDate()));
+		}
+		AdhocOrderDto.setOriginAddress(adhocOrders.getOriginAddress());
+		AdhocOrderDto.setDestinationAddress(adhocOrders.getDestinationAddress());
+		if (adhocOrders.getShipDate() != null && !(adhocOrders.getShipDate().equals(""))) {
+			AdhocOrderDto.setShipDate(ServiceUtil.convertDateToString(adhocOrders.getShipDate()));
+		}
+		if (adhocOrders.getExpectedDeliveryDate() != null && !(adhocOrders.getExpectedDeliveryDate().equals(""))) {
+			AdhocOrderDto
+					.setExpectedDeliveryDate(ServiceUtil.convertDateToString(adhocOrders.getExpectedDeliveryDate()));
+		}
+		/////
+		AdhocOrderDto.setPartDescription(adhocOrders.getPartDescription());
+		AdhocOrderDto.setQuantity(adhocOrders.getQuantity());
+		// AdhocOrderDto.setQuantity(ServiceUtil.convertIntegerToString(adhocOrders.getQuantity()));
+
+		AdhocOrderDto.setUom(adhocOrders.getUom());
+		if (adhocOrders.getIsInternational() != null) {
+			// AdhocOrderDto.setIsInternational(ServiceUtil.convertStringToBoolean(adhocOrders.getIsInternational()));
+			AdhocOrderDto.setIsInternational(adhocOrders.getIsInternational());
+
+		}
+		AdhocOrderDto.setCountryOrigin(adhocOrders.getCountryOrigin());
+		AdhocOrderDto.setValue(adhocOrders.getValue());
+		AdhocOrderDto.setCurrency(adhocOrders.getCurrency());
+		// AdhocOrderDto.setWeight(adhocOrders.getWeight());
+		// AdhocOrderDto.setDimensionB(ServiceUtil.convertBigDecimalToString(adhocOrders.getWeight()));
+		AdhocOrderDto.setDimensionB(adhocOrders.getWeight());
+
+		if (adhocOrders.getDimensionB() != null) {
+			/*
+			 * AdhocOrderDto.setDimensionB(ServiceUtil.convertBigDecimalToString
+			 * (adhocOrders.getDimensionB()));
+			 */ AdhocOrderDto.setDimensionB(adhocOrders.getDimensionB());
+
+		}
+		if (adhocOrders.getDimensionH() != null) {
+			// AdhocOrderDto.setDimensionH(ServiceUtil.convertBigDecimalToString(adhocOrders.getDimensionH()));
+			AdhocOrderDto.setDimensionH(adhocOrders.getDimensionH());
+
+		}
+		if (adhocOrders.getDimensionL() != null) {
+			// AdhocOrderDto.setDimensionL(ServiceUtil.convertBigDecimalToString(adhocOrders.getDimensionL()));
+			AdhocOrderDto.setDimensionL(adhocOrders.getDimensionL());
+
+		}
+		AdhocOrderDto.setHazmatNumber(adhocOrders.getHazmatNumber());
+		AdhocOrderDto.setProjectNumber(adhocOrders.getProjectNumber());
+		AdhocOrderDto.setReferenceNumber(adhocOrders.getReferenceNumber());
+		if (adhocOrders.getIsTruck() != null) {
+			// AdhocOrderDto.setIsTruck(ServiceUtil.convertStringToBoolean(adhocOrders.getIsTruck()));
+			AdhocOrderDto.setIsTruck(adhocOrders.getIsTruck());
+
+		}
+		AdhocOrderDto.setVinNumber(adhocOrders.getVinNumber());
+		AdhocOrderDto.setShippingInstruction(adhocOrders.getShippingInstruction());
+		AdhocOrderDto.setShippingContact(adhocOrders.getShippingContact());
+		AdhocOrderDto.setReceivingContact(adhocOrders.getReceivingContact());
+		AdhocOrderDto.setPODataNumber(adhocOrders.getPODataNumber());
+		AdhocOrderDto.setCustomerOrderNo(adhocOrders.getCustomerOrderNo());
+		AdhocOrderDto.setTerms(adhocOrders.getTerms());
+		AdhocOrderDto.setPackageType(adhocOrders.getPackageType());
+		if (adhocOrders.getPremiumFreight() != null) {
+			AdhocOrderDto.setPremiumFreight(ServiceUtil.convertStringToBoolean(adhocOrders.getPremiumFreight()));
+			// AdhocOrderDto.setPremiumFreight(adhocOrders.getPremiumFreight());
+		}
+		AdhocOrderDto.setReasonCode(adhocOrders.getReasonCode());
+		AdhocOrderDto.setGlcode(adhocOrders.getGlCode());
+		AdhocOrderDto.setDestinationAddress(adhocOrders.getDestinationAddress());
+		AdhocOrderDto.setDestinationCity(adhocOrders.getDestinationCity());
+		AdhocOrderDto.setDestinationName(adhocOrders.getDestinationName());
+		AdhocOrderDto.setDestinationState(adhocOrders.getDestinationState());
+		AdhocOrderDto.setDestinationZip(adhocOrders.getDestinationZip());
+		AdhocOrderDto.setShipperName(adhocOrders.getShipperName());
+		AdhocOrderDto.setOriginCity(adhocOrders.getOriginCity());
+		AdhocOrderDto.setOriginState(adhocOrders.getOriginState());
+		AdhocOrderDto.setOriginZip(adhocOrders.getOriginZip());
+
+		if (adhocOrders.getIsHazmat() != null) {
+			// AdhocOrderDto.setIsHazmat(ServiceUtil.convertStringToBoolean(adhocOrders.getIsHazmat()));
+			AdhocOrderDto.setIsHazmat(adhocOrders.getIsHazmat());
+
+		}
+		AdhocOrderDto.setShipperNameFreeText(adhocOrders.getShipperNameFreeText());
+		AdhocOrderDto.setOriginCountry(adhocOrders.getOriginCountry());
+		AdhocOrderDto.setDestinationNameFreeText(adhocOrders.getDestinationNameFreeText());
+		AdhocOrderDto.setDestinationCountry(adhocOrders.getDestinationCountry());
+		AdhocOrderDto.setHazmatUn(adhocOrders.getHazmatUn());
+		AdhocOrderDto.setWeightUom(adhocOrders.getWeightUom());
+		AdhocOrderDto.setDimensionsUom(adhocOrders.getDimensionsUom());
+
+		AdhocOrderDto.setShipperNameDesc(adhocOrders.getShipperNameDesc());
+		AdhocOrderDto.setDestinationNameDesc(adhocOrders.getDestinationNameDesc());
+		AdhocOrderDto.setUserName(adhocOrders.getUserName());
+		AdhocOrderDto.setUserEmail(adhocOrders.getUserEmail());
+		AdhocOrderDto.setPremiumReasonCode(adhocOrders.getPremiumReasonCode());
+		AdhocOrderDto.setPlannerEmail(adhocOrders.getPlannerEmail());
+		AdhocOrderDto.setAdhocType(adhocOrders.getAdhocType());
+		AdhocOrderDto.setStatus(adhocOrders.getStatus());
+		AdhocOrderDto.setPendingWith(adhocOrders.getPendingWith());
+		AdhocOrderDto.setManagerEmail(adhocOrders.getManagerEmail());
+		AdhocOrderDto.setIsSaved(adhocOrders.getIsSaved());
+		// System.out.println("End of DTO CLass");
+
+		return AdhocOrderDto;
+	}
+
+	private PremiumWorkflowApprovalTaskDto exportToPremiumWorkflowDto(AdhocOrders adhocOrders,
+			PremiumFreightChargeDetails premiumFreightChargeDetails) {
+		PremiumWorkflowApprovalTaskDto workflowDto = new PremiumWorkflowApprovalTaskDto();
+		workflowDto.setAdhocOrderId(adhocOrders.getFwoNum());
+		workflowDto.setAdhocType(adhocOrders.getAdhocType());
+
+		// workflowDto.setManager(manager);
+
+		workflowDto.setAdhocOrderInfo(exportAdhocOrdersDto(adhocOrders));
+
+		workflowDto.setBusinessDivision(adhocOrders.getBusinessDivision());
+		// workflowDto.setCharge(adhocOrders.getCharge());
+		workflowDto.setCountryOfOrigin(adhocOrders.getCountryOrigin());
+		workflowDto.setCreatedDate(ServiceUtil.convertDateToString(adhocOrders.getCreatedDate()));
+		workflowDto.setCreatedBy(adhocOrders.getCreatedBy());
+		workflowDto.setCurrency(adhocOrders.getCurrency());
+		workflowDto.setCustomerOrderNo(adhocOrders.getCustomerOrderNo());
+		workflowDto.setDestinationAdress(adhocOrders.getDestinationAddress());
+		workflowDto.setDestinationCity(adhocOrders.getDestinationCity());
+		workflowDto.setDestinationName(adhocOrders.getDestinationName());
+		workflowDto.setDestinationNameDesc(adhocOrders.getDestinationNameDesc());
+		workflowDto.setDestinationNameFreeText(adhocOrders.getDestinationNameFreeText());
+		workflowDto.setDestinationState(adhocOrders.getDestinationState());
+		workflowDto.setDestinationZip(adhocOrders.getDestinationZip());
+		workflowDto.setDimensionB(adhocOrders.getDimensionB() != null ? adhocOrders.getDimensionB().toString() : null);
+		workflowDto.setDimensionH(adhocOrders.getDimensionH() != null ? adhocOrders.getDimensionH().toString() : null);
+		workflowDto.setDimensionL(adhocOrders.getDimensionL() != null ? adhocOrders.getDimensionL().toString() : null);
+		workflowDto.setDimensionsUom(adhocOrders.getDimensionsUom());
+		workflowDto.setExpectedDeliveryDate(ServiceUtil.convertDateToString(adhocOrders.getExpectedDeliveryDate()));
+		workflowDto.setGlcode(adhocOrders.getGlCode());
+		workflowDto.setHazmatNumber(adhocOrders.getHazmatNumber());
+		workflowDto.setIsHazmat(adhocOrders.getIsHazmat());
+		workflowDto.setIsInternational(adhocOrders.getIsInternational());
+		workflowDto.setIsTruck(adhocOrders.getIsTruck());
+		workflowDto.setOriginAddress(adhocOrders.getOriginAddress());
+		workflowDto.setOriginCity(adhocOrders.getOriginCity());
+		workflowDto.setOriginCountry(adhocOrders.getOriginCountry());
+		workflowDto.setOriginState(adhocOrders.getOriginState());
+		workflowDto.setOriginZip(adhocOrders.getOriginZip());
+		workflowDto.setPackageType(adhocOrders.getPackageType());
+		workflowDto.setPartDescription(adhocOrders.getPartDescription());
+		workflowDto.setPartNum(adhocOrders.getPartNum());
+
+		// workflowDto.setPlanner(adhocOrd);
+
+		workflowDto.setPlannerEmail(adhocOrders.getPlannerEmail());
+		workflowDto.setPODataNumber(adhocOrders.getPODataNumber());
+		// workflowDto.setPremiumFreight(ServiceUtil.convertStringToBoolean(adhocOrders.getPremiumFreight()));
+		workflowDto.setPremiumReasonCode(adhocOrders.getPremiumReasonCode());
+		workflowDto.setPremiumReasonCode(adhocOrders.getPremiumReasonCode());
+		workflowDto.setProjectNumber(adhocOrders.getProjectNumber());
+		workflowDto.setQuantity(String.valueOf(adhocOrders.getQuantity()));
+		workflowDto.setReasonCode(adhocOrders.getReasonCode());
+		workflowDto.setReceivingContact(adhocOrders.getReceivingContact());
+		workflowDto.setReferenceNumber(adhocOrders.getReferenceNumber());
+		workflowDto.setShipDate(ServiceUtil.convertDateToString(adhocOrders.getShipDate()));
+		workflowDto.setShipperName(adhocOrders.getShipperName());
+		workflowDto.setShipperNameDesc(adhocOrders.getShipperNameDesc());
+		workflowDto.setShipperNameFreeText(adhocOrders.getShipperNameFreeText());
+		workflowDto.setShippingContact(adhocOrders.getShippingContact());
+		workflowDto.setShippingInstruction(adhocOrders.getShippingInstruction());
+		workflowDto.setTerms(adhocOrders.getTerms());
+		workflowDto.setUom(adhocOrders.getUom());
+		workflowDto.setUserEmail(adhocOrders.getUserEmail());
+
+		// workflowDto.setUserGroup(adhocOrders.get);
+
+		workflowDto.setUserId(adhocOrders.getUserId());
+		workflowDto.setUserName(adhocOrders.getUserName());
+		workflowDto.setValue(adhocOrders.getValue());
+		workflowDto.setVinNumber(adhocOrders.getVinNumber());
+		workflowDto.setWeight(String.valueOf(adhocOrders.getWeight()));
+		workflowDto.setWeightUom(adhocOrders.getWeightUom());
+
+		workflowDto.setBpNumber(premiumFreightChargeDetails.getBpNumber());
+		workflowDto.setCarrierDetails(premiumFreightChargeDetails.getCarrierDetails());
+		workflowDto.setCarrierScac(premiumFreightChargeDetails.getCarrierScac());
+		workflowDto.setCarrierRatePerKM(premiumFreightChargeDetails.getCarrierRatePerKM());
+		workflowDto.setCarrierMode(premiumFreightChargeDetails.getCarrierMode());
+		workflowDto.setOrderId(premiumFreightChargeDetails.getorderId());
+		workflowDto.setCharge(premiumFreightChargeDetails.getCharge());
+		workflowDto.setReasonCode(premiumFreightChargeDetails.getReasonCode());
+		workflowDto.setPlannerEmail(premiumFreightChargeDetails.getPlannerEmail());
+		workflowDto.setStatus(premiumFreightChargeDetails.getStatus());
+
+		return workflowDto;
 	}
 
 	// Charge is set by the carrier admin here. Once the Charge is set it
@@ -744,6 +953,151 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 	// workflow API
 
+	public String updateTableDetails(WorkflowPremiumCustomDto dto) throws ClientProtocolException, JSONException, IOException
+	{
+		//AdhocOrderWorkflowDto----> for workflow log table
+		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
+		workflowDto = prepareAdhocApprovalWorkflowDto(dto);
+		System.out.println("Yuhooo" + workflowDto.getOrderId());
+		String s= updateTableBasedoOnRole(dto);
+		return null;
+	}
+
+	private String updateTableBasedoOnRole(WorkflowPremiumCustomDto dto) {
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		String current_role = dto.getRoleDetails();
+
+		AdhocOrders aorder = new AdhocOrders();
+		List<AdhocOrders> aorders = new ArrayList<AdhocOrders>();
+		PremiumFreightChargeDetails pdetail = new PremiumFreightChargeDetails();
+		List<PremiumFreightChargeDetails> pdetails = new ArrayList<PremiumFreightChargeDetails>();
+
+		String orderId = dto.getOrderIdDetails();
+
+		Criteria criteria_adhoc = session.createCriteria(AdhocOrders.class);
+		criteria_adhoc.add(Restrictions.eq("fwoNum", orderId));
+		aorders = criteria_adhoc.list();
+
+		Criteria criteria_premium = session.createCriteria(PremiumFreightChargeDetails.class);
+		criteria_premium.add(Restrictions.eq("orderId", orderId));
+		pdetails = criteria_premium.list();
+
+		StringBuilder userIdList = new StringBuilder();
+		List<LchRole> roles = new ArrayList<LchRole>();
+
+		Criteria criteria_role = session.createCriteria(LchRole.class);
+		criteria_role.add(Restrictions.eq("role", current_role));
+		roles = criteria_role.list();
+
+		for (LchRole l : roles) {
+			userIdList.append(l.getUserId());
+			userIdList.append(",");
+		}
+
+		String userIds = userIdList.substring(0, userIdList.length() - 1);
+
+		if (current_role.equals("LCH_Planner")) {
+			if (dto.getChargeDetails() == 0) {
+				for (AdhocOrders a : aorders) {
+					a.setStatus("Pending at Carrier Admin");
+					a.setPendingWith(userIds);
+					session.saveOrUpdate(a);
+				}
+				for (PremiumFreightChargeDetails p : pdetails) {
+					p.setStatus("Pending at Carrier Admin");
+					// p.setCharge(premiumWorkflowDto.getCharge());
+					session.saveOrUpdate(p);
+
+				}
+			} else {
+				for (AdhocOrders a : aorders) {
+					a.setStatus("Pending at Manager");
+					a.setPendingWith(userIds);
+					session.saveOrUpdate(a);
+				}
+				for (PremiumFreightChargeDetails p : pdetails) {
+					p.setStatus("Pending at Manager");
+					session.saveOrUpdate(p);
+
+				}
+			}
+		}
+
+		if (current_role.equals("LCH_Carrier_Admin")) {
+			for (AdhocOrders a : aorders) {
+				a.setStatus("Pending at Planner");
+				a.setPendingWith(userIds);
+				session.saveOrUpdate(a);
+			}
+			for (PremiumFreightChargeDetails p : pdetails) {
+				p.setStatus("Pending at Planner");
+				p.setCharge(dto.getChargeDetails());
+				session.saveOrUpdate(p);
+
+			}
+
+		}
+
+		if (current_role.equals("LCH_Manager")) {
+			for (AdhocOrders a : aorders) {
+				a.setStatus("Pending at Accountant");
+				a.setPendingWith(userIds);
+				session.saveOrUpdate(a);
+			}
+			for (PremiumFreightChargeDetails p : pdetails) {
+				p.setStatus("Pending at Accountant");
+				session.saveOrUpdate(p);
+
+			}
+
+		}
+
+		if (current_role.equals("LCH_Accountant")) {
+			for (AdhocOrders a : aorders) {
+				a.setStatus("Completed");
+				a.setPendingWith(userIds);
+				session.saveOrUpdate(a);
+			}
+			for (PremiumFreightChargeDetails p : pdetails) {
+				p.setStatus("Completed");
+				session.saveOrUpdate(p);
+
+			}
+
+		}
+
+		return dto.getOrderIdDetails() ;
+	}
+
+		
+	public AdhocOrderWorkflowDto prepareAdhocApprovalWorkflowDto(WorkflowPremiumCustomDto data)
+			throws JSONException, ClientProtocolException, IOException {
+		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
+		System.err.println("[prepareAdhocApprovalWorkflowDto WorkflowCustomDto] : " + data.toString() + "---"
+				+ data.getTaskIdDetails());
+
+		workflowDto.setOrderId(data.getOrderIdDetails());
+		JSONObject obj = wfInvokerLocal.getWorkflowApprovalTaskInstanceId(data.getTaskIdDetails());
+		System.err.println("[prepareAdhocApprovalWorkflowDto objectData] : " + obj.toString());
+		LOGGER.info("objectData:: " + obj.toString());
+		LOGGER.info("objectData Array:: " + obj.toString());
+		workflowDto.setDescription(obj.getString("description"));
+		workflowDto.setInstanceId(obj.getString("id"));
+		
+		workflowDto.setPendingWith(null);
+		
+		workflowDto.setRequestedBy(obj.getString("createdBy"));
+		workflowDto.setRequestedDate(ServiceUtil.convertStringToDate(obj.getString("createdAt")));
+		workflowDto.setUpdatedDate(new java.util.Date());
+		workflowDto.setSubject(obj.getString("subject"));
+		workflowDto.setUpdatedBy(obj.getString("processor"));
+		workflowDto.setStatus(obj.getString("status"));
+		return workflowDto;
+	
+	}
+	
 	public String updateTableDetails(PremiumWorkflowApprovalTaskDto premiumWorkflowDto) {
 		// from the premium workflow dto fetch role
 
