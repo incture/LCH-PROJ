@@ -710,7 +710,9 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 				}
 			}
+			
 			adhocOrders.setPendingWith(pendingWith.substring(0, pendingWith.length() - 1));
+			adhocOrders.setStatus("Pending at Planner");
 			session.saveOrUpdate(adhocOrders);
 			/*			
 			PremiumWorkflowApprovalTaskDto premiumWorkflowDto = new PremiumWorkflowApprovalTaskDto();

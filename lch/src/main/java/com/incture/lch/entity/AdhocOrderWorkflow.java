@@ -69,6 +69,9 @@ public class AdhocOrderWorkflow {
 	@Column(name = "REQUEST_ID")
 	private String requestId;
 	
+	@Column(name= "WORKFLOW_INSTANCE_ID")
+	private String workflowInstanceId;
+	
 	public String getRequestId() {
 		return requestId;
 	}
@@ -203,6 +206,14 @@ public class AdhocOrderWorkflow {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getWorkflowInstanceId() {
+		return workflowInstanceId;
+	}
+
+	public void setWorkflowInstanceId(String workflowInstanceId) {
+		this.workflowInstanceId = workflowInstanceId;
 	}
 	
 	

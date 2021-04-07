@@ -29,6 +29,8 @@ import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
+import com.incture.lch.dto.PaginationDto1;
+import com.incture.lch.dto.PremiumFreightDto1;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
@@ -106,6 +108,63 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		premiumFreightOrderDto.setStatus(adhocOrders.getStatus());
 		// premiumFreightOrderDto.setStatus(status);
 
+		return premiumFreightOrderDto;
+	}
+	
+	public PremiumFreightDto1 exportPremiumFreightOrders1(AdhocOrders adhocOrders) {
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		PremiumFreightDto1 premiumFreightOrderDto = new PremiumFreightDto1();
+
+		premiumFreightOrderDto.setOrderId(adhocOrders.getFwoNum());
+		premiumFreightOrderDto.setCreatedBy(adhocOrders.getCreatedBy());
+
+		if (adhocOrders.getCreatedDate() != null && !(adhocOrders.getCreatedDate().equals(""))) {
+			premiumFreightOrderDto.setCreatedDate(ServiceUtil.convertDateToString(adhocOrders.getCreatedDate()));
+		}
+
+		premiumFreightOrderDto.setCountryOrigin(adhocOrders.getCountryOrigin());
+		premiumFreightOrderDto.setCurrency(adhocOrders.getCurrency());
+
+		premiumFreightOrderDto.setDestinationName(adhocOrders.getDestinationName());
+		premiumFreightOrderDto.setDestinationAddress(adhocOrders.getDestinationAddress());
+		premiumFreightOrderDto.setDestinationCity(adhocOrders.getDestinationCity());
+		premiumFreightOrderDto.setDestinationState(adhocOrders.getDestinationState());
+		premiumFreightOrderDto.setDestinationCountry(adhocOrders.getDestinationCountry());
+		premiumFreightOrderDto.setDestinationZip(adhocOrders.getDestinationZip());
+
+		premiumFreightOrderDto.setOriginName(adhocOrders.getShipperName());
+		premiumFreightOrderDto.setOriginAddress(adhocOrders.getShippingContact());
+		premiumFreightOrderDto.setOriginCity(adhocOrders.getOriginCity());
+		premiumFreightOrderDto.setOriginState(adhocOrders.getOriginState());
+		premiumFreightOrderDto.setOriginCountry(adhocOrders.getCountryOrigin());
+		premiumFreightOrderDto.setOriginZip(adhocOrders.getOriginZip());
+
+		premiumFreightOrderDto.setReasonCode(adhocOrders.getPremiumReasonCode());
+		premiumFreightOrderDto.setPlannerEmail(adhocOrders.getPlannerEmail());
+		premiumFreightOrderDto.setStatus(adhocOrders.getStatus());
+		// premiumFreightOrderDto.setStatus(status);
+
+		Criteria criteria = session.createCriteria(PremiumFreightChargeDetails.class);
+		criteria.add(Restrictions.eq("orderId", adhocOrders.getFwoNum()));
+		List<PremiumFreightChargeDetails> pdetails = new ArrayList<PremiumFreightChargeDetails>();
+		pdetails = criteria.list();
+		
+		for(PremiumFreightChargeDetails p :pdetails)
+		{
+			premiumFreightOrderDto.setBpNumber(p.getBpNumber());
+			premiumFreightOrderDto.setCarrierDetails(p.getCarrierDetails());
+			premiumFreightOrderDto.setCarrierScac(p.getCarrierScac());	
+			premiumFreightOrderDto.setCarrierMode(p.getCarrierMode());	
+			premiumFreightOrderDto.setCharge(p.getCharge());
+			premiumFreightOrderDto.setReasonCode(p.getReasonCode());
+		}
+		session.flush();
+		session.clear();
+		tx.commit();
+		session.close();
+		
 		return premiumFreightOrderDto;
 	}
 
@@ -205,6 +264,100 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		session.close();
 		return paginationDto;
 	}
+	
+	@Override
+	public PaginationDto1 getAllPremiumFreightOrders1(PremiumRequestDto premiumRequestDto) {
+		List<PremiumFreightDto1> premiumFreightDto1s = new ArrayList<>();
+		PaginationDto1 paginationDto1 = new PaginationDto1();
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+
+		@SuppressWarnings("deprecation")
+		Criteria criteria = session.createCriteria(AdhocOrders.class);
+
+		criteria.add(Restrictions.eq("premiumFreight", "true"));
+		criteria.add(Restrictions.ne("status", "REJECTED"));
+		//criteria.add(Restrictions.ne("status", "Pending with Carrier Admin"));
+
+		String filter_field = null;
+		try {
+			if (premiumRequestDto.getorderId() != null && !(premiumRequestDto.getorderId().equals(""))) {
+				criteria.add(Restrictions.eq("orderId", premiumRequestDto.getorderId()));
+				filter_field = "adhocOrderId";
+
+			}
+			if ((premiumRequestDto.getFromDate() != null && !(premiumRequestDto.getFromDate().equals("")))
+					&& (premiumRequestDto.getToDate() != null) && !(premiumRequestDto.getToDate().equals(""))) {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				try {
+					Date d1 = (Date) sdf.parse(premiumRequestDto.getFromDate());
+					Date d2 = (Date) sdf.parse(premiumRequestDto.getToDate());
+					criteria.add(Restrictions.between("createdDate", d1, d2));
+				} catch (Exception e) {
+					System.out.println("Error in date format");
+				}
+				filter_field = "date_filter";
+
+			}
+			if (premiumRequestDto.getPlannerEmail() != null && !(premiumRequestDto.getPlannerEmail().equals(""))) {
+
+				criteria.add(Restrictions.eq("plannerEmail", premiumRequestDto.getPlannerEmail()));
+				filter_field = "planner Email";
+
+			}
+			if (premiumRequestDto.getReasonCode() != null && !(premiumRequestDto.getReasonCode().equals(""))) {
+				criteria.add(Restrictions.eq("premiumReasonCode", premiumRequestDto.getReasonCode()));
+				filter_field = "reason_code";
+
+			}
+			if (premiumRequestDto.getStatus() != null && !(premiumRequestDto.getStatus().equals(""))) {
+				criteria.add(Restrictions.eq("status", premiumRequestDto.getStatus()));
+				filter_field = "status";
+			}
+
+			if (premiumRequestDto.getOriginName() != null && !(premiumRequestDto.getOriginName().equals(""))) {
+				criteria.add(Restrictions.eq("shipperName", premiumRequestDto.getOriginName()));
+				filter_field = "Origin Name";
+			}
+
+			if (premiumRequestDto.getDestinationName() != null
+					&& !(premiumRequestDto.getDestinationName().equals(""))) {
+				criteria.add(Restrictions.eq("DestinationName", premiumRequestDto.getDestinationName()));
+				filter_field = "destiantion name";
+			}
+		} catch (Exception e) {
+			// Catch that the filter value is invalid
+			throw new FilterInvalidEntryException(filter_field);
+		}
+		criteria.addOrder(Order.asc("fwoNum"));
+		int total_entries = criteria.list().size();
+		int startNum = (premiumRequestDto.getPageNumber() - 1) * 10;
+
+		if (premiumRequestDto.getNoOfEntry() > total_entries) {
+			throw new PageNumberNotFoundException(total_entries);
+		}
+
+		criteria.setFirstResult(startNum);
+		if (premiumRequestDto.getNoOfEntry() == 0) {
+			criteria.setMaxResults(10);
+		} else {
+			criteria.setMaxResults(premiumRequestDto.getNoOfEntry());
+		}
+
+		List<AdhocOrders> adhocOrders = criteria.list();
+
+		for (AdhocOrders adOrders : adhocOrders) {
+			premiumFreightDto1s.add(exportPremiumFreightOrders1(adOrders));
+		}
+		paginationDto1.setPremiumFreightDto1(premiumFreightDto1s);
+		paginationDto1.setCount(total_entries);
+
+		session.flush();
+		session.clear();
+		tx.commit();
+		session.close();
+		return paginationDto1;
+	}
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -262,6 +415,87 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		int total_entries = criteria.list().size();
 		int startNum = (premiumRequestDto.getPageNumber() - 1) * 10;
 
+		if (premiumRequestDto.getNoOfEntry() > total_entries) {
+			throw new PageNumberNotFoundException(total_entries);
+		}
+
+		criteria.setFirstResult(startNum);
+		if (premiumRequestDto.getNoOfEntry() == 0) {
+			criteria.setMaxResults(10);
+		} else {
+			criteria.setMaxResults(premiumRequestDto.getNoOfEntry());
+		}
+
+		premiumFreightChargeDetails = criteria.list();
+
+		chargeDetailsPaginated.setPremiumFreightChargeDetails(premiumFreightChargeDetails);
+		chargeDetailsPaginated.setCount(total_entries);
+
+		session.flush();
+		session.clear();
+		tx.commit();
+		session.close();
+		return chargeDetailsPaginated;
+	}
+	
+	
+	@Override
+	public ChargeDetailsPaginated getAllManagerOrders(PremiumRequestDto premiumRequestDto) {
+
+		List<PremiumFreightChargeDetails> premiumFreightChargeDetails = new ArrayList<PremiumFreightChargeDetails>();
+		ChargeDetailsPaginated chargeDetailsPaginated = new ChargeDetailsPaginated();
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+
+		@SuppressWarnings("deprecation")
+		Criteria criteria = session.createCriteria(PremiumFreightChargeDetails.class);
+
+		criteria.add(Restrictions.eq("status", "Pending at Manager"));
+
+		if (premiumRequestDto.getorderId() != null && !(premiumRequestDto.getorderId().equals(""))) {
+			criteria.add(Restrictions.eq("orderId", premiumRequestDto.getorderId()));
+
+		}
+		if ((premiumRequestDto.getFromDate() != null && !(premiumRequestDto.getFromDate().equals("")))
+				&& (premiumRequestDto.getToDate() != null) && !(premiumRequestDto.getToDate().equals(""))) {
+			@SuppressWarnings("deprecation")
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			try {
+				Date d1 = (Date) sdf.parse(premiumRequestDto.getFromDate());
+				Date d2 = (Date) sdf.parse(premiumRequestDto.getToDate());
+				criteria.add(Restrictions.between("createdDate", d1, d2));
+			} catch (Exception e) {
+				System.out.println("Error in date format");
+			}
+
+		}
+		if (premiumRequestDto.getPlannerEmail() != null && !(premiumRequestDto.getPlannerEmail().equals(""))) {
+
+			criteria.add(Restrictions.eq("plannerEmail", premiumRequestDto.getPlannerEmail()));
+
+		}
+		if (premiumRequestDto.getReasonCode() != null && !(premiumRequestDto.getReasonCode().equals(""))) {
+			criteria.add(Restrictions.eq("premiumReasonCode", premiumRequestDto.getReasonCode()));
+
+		}
+		if (premiumRequestDto.getStatus() != null && !(premiumRequestDto.getStatus().equals(""))) {
+			criteria.add(Restrictions.eq("status", premiumRequestDto.getStatus()));
+		}
+
+		if (premiumRequestDto.getOriginName() != null && !(premiumRequestDto.getOriginName().equals(""))) {
+			criteria.add(Restrictions.eq("shipperName", premiumRequestDto.getOriginName()));
+		}
+
+		if (premiumRequestDto.getDestinationName() != null && !(premiumRequestDto.getDestinationName().equals(""))) {
+			criteria.add(Restrictions.eq("destinationName", premiumRequestDto.getDestinationName()));
+		}
+
+		criteria.addOrder(Order.asc("orderId"));
+		int total_entries = criteria.list().size();
+		System.out.println("Enter the page number" + premiumRequestDto.getPageNumber());
+		int startNum = (premiumRequestDto.getPageNumber() - 1) * 10;
+
+		System.out.println("Page Number "+ startNum);
 		if (premiumRequestDto.getNoOfEntry() > total_entries) {
 			throw new PageNumberNotFoundException(total_entries);
 		}
@@ -370,7 +604,8 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 		PremiumFreightOrderDto premiumdto = new PremiumFreightOrderDto();
 		try {
-			for (ChargeRequestDto c : chargeRequestDto) {
+			for (ChargeRequestDto c : chargeRequestDto)
+			{
 				String adid = c.getorderId();
 				adhocOrdersList.add(adid);
 
@@ -378,7 +613,8 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 				Query query = session.createQuery(queryStr);
 				query.setParameter("fwoNum", adid);
 				adhocOrders = query.list();
-				for (AdhocOrders aorders : adhocOrders) {
+				for (AdhocOrders aorders : adhocOrders) 
+				{
 					PremiumFreightChargeDetails premiumFreightChargeDetails = new PremiumFreightChargeDetails();
 					// Updating Status in Master Table
 					aorders.setStatus("Pending with Carrier Admin");
@@ -426,7 +662,8 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					criteria3.add(Restrictions.eq("bpNumber", c.getBpNumber()));
 					criteria3.add(Restrictions.eq("carrierMode", c.getCarrierMode()));
 					carrierDetails = criteria3.list();
-					for (CarrierDetails cdets : carrierDetails) {
+					for (CarrierDetails cdets : carrierDetails) 
+					{
 						premiumFreightChargeDetails.setBpNumber(cdets.getBpNumber());
 						premiumFreightChargeDetails.setCarrierDetails(cdets.getCarrierDetails());
 						premiumFreightChargeDetails.setCarrierMode(cdets.getCarrierMode());
@@ -787,13 +1024,14 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		ResponseDto responseDto = new ResponseDto();
 
 		try {
-			for (PremiumRequestDto p : premiumRequestDto) {
+			for (PremiumRequestDto p : premiumRequestDto) 
+			{
 				String adhocOrderId = p.getorderId();
 				Criteria c1 = session.createCriteria(AdhocOrders.class);
 				Criteria c2 = session.createCriteria(PremiumFreightChargeDetails.class);
 
 				c1.add(Restrictions.eq("fwoNum", adhocOrderId));
-				c2.add(Restrictions.eq("adhocOrderId", adhocOrderId));
+				c2.add(Restrictions.eq("orderId", adhocOrderId));
 
 				List<AdhocOrders> adhocOrders = new ArrayList<AdhocOrders>();
 				List<PremiumFreightChargeDetails> premiumChargeDetails = new ArrayList<PremiumFreightChargeDetails>();
@@ -803,12 +1041,13 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 				System.out.println(premiumChargeDetails.size());
 
-				for (AdhocOrders a : adhocOrders) {
+				for (AdhocOrders a : adhocOrders) 
+				{
 
 					System.out.println(a.getFwoNum());
 					System.out.println(a.getStatus());
 
-					a.setStatus("Pending With Approver");
+					a.setStatus("Pending at Manager");
 					session.saveOrUpdate(a);
 					session.saveOrUpdate(a);
 					// updating in AdhocTable
@@ -817,11 +1056,12 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 				}
 
-				for (PremiumFreightChargeDetails pdetail : premiumChargeDetails) {
+				for (PremiumFreightChargeDetails pdetail : premiumChargeDetails) 
+				{
 					System.out.println(pdetail.getStatus());
 
 					System.out.println(pdetail.getorderId());
-					pdetail.setStatus("Pending with Approver");
+					pdetail.setStatus("Pending at Manager");
 					session.saveOrUpdate(pdetail);
 					session.saveOrUpdate(pdetail);
 					System.out.println(pdetail.getStatus());
@@ -962,6 +1202,11 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		String s= updateTableBasedoOnRole(dto);
 		return null;
 	}
+	
+	public String approveTask()
+	{
+		return null;
+	}
 
 	private String updateTableBasedoOnRole(WorkflowPremiumCustomDto dto) {
 
@@ -1097,7 +1342,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		return workflowDto;
 	
 	}
-	
+	//Not needed
 	public String updateTableDetails(PremiumWorkflowApprovalTaskDto premiumWorkflowDto) {
 		// from the premium workflow dto fetch role
 

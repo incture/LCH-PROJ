@@ -14,6 +14,7 @@ import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
+import com.incture.lch.dto.PaginationDto1;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
@@ -49,6 +50,17 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 		return premiumFreightOrdersRepo.getMode(bpNumber);
 	}
 
+	@Override
+	public PaginationDto1 getAllPremiumFreightOrders1(PremiumRequestDto premiumRequestDto) 
+	{
+		return premiumFreightOrdersRepo.getAllPremiumFreightOrders1(premiumRequestDto);
+	}
+
+	@Override
+	public ChargeDetailsPaginated getAllManagerOrders(PremiumRequestDto premiumRequestDto)
+	{
+		return premiumFreightOrdersRepo.getAllManagerOrders(premiumRequestDto);
+	}
 	@Override
 	public List<PremiumFreightOrderDto> setCarrierDetails(List<ChargeRequestDto> chargeRequestDto) {
 		return premiumFreightOrdersRepo.setCarrierDetails(chargeRequestDto);

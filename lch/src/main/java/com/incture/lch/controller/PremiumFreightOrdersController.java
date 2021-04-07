@@ -18,6 +18,7 @@ import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
+import com.incture.lch.dto.PaginationDto1;
 import com.incture.lch.dto.PremiumFreightApprovalRuleDTO;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
@@ -42,6 +43,12 @@ public class PremiumFreightOrdersController
 	public PaginationDto getAllPremiumFreightOrders(@RequestBody PremiumRequestDto premiumRequestDto) {
 			return premiumFreightOrdersService.getAllPremiumFreightOrders(premiumRequestDto);
 	}
+	
+	@RequestMapping(value = "/getAllPremiumOrders1", method = RequestMethod.POST,consumes = { "application/json" })
+	@ResponseBody
+	public PaginationDto1 getAllPremiumFreightOrders1(@RequestBody PremiumRequestDto premiumRequestDto) {
+			return premiumFreightOrdersService.getAllPremiumFreightOrders1(premiumRequestDto);
+	}
 
 	
 	@RequestMapping(value = "/getAllCarrierDetails", method = RequestMethod.POST, consumes = { "application/json" })
@@ -56,6 +63,13 @@ public class PremiumFreightOrdersController
 		return premiumFreightOrdersService.getAllCarrierOrders(premiumRequestDto);
 	}
 	
+	@RequestMapping(value = "/getAllManagerOrders", method = RequestMethod.POST, consumes = { "application/json" })
+	@ResponseBody
+	public ChargeDetailsPaginated getAllManagerOrders(@RequestBody PremiumRequestDto premiumRequestDto)
+	{
+		return premiumFreightOrdersService.getAllManagerOrders(premiumRequestDto);
+	}
+
 	@RequestMapping(value = "/getMode", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
 	public List<HashMap<String,String>>getMode(@RequestBody  JSONObject bpNumber)

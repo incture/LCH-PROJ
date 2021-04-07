@@ -6,6 +6,7 @@ import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
+import com.incture.lch.dto.PaginationDto1;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
@@ -23,7 +24,9 @@ public interface PremiumFreightOrdersRepository
 
 	public ChargeDetailsPaginated getAllCarrierOrders(PremiumRequestDto premiumRequestDto) ;
 
-	
+	public PaginationDto1 getAllPremiumFreightOrders1(PremiumRequestDto premiumRequestDto) ;
+	public ChargeDetailsPaginated getAllManagerOrders(PremiumRequestDto premiumRequestDto) ;
+
 	public List<String> getMode(String bpNumber);
 
 	public List<PremiumFreightOrderDto> setCarrierDetails(List<ChargeRequestDto> chargeRequestDto);

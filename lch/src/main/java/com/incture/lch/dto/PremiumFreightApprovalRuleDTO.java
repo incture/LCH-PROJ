@@ -4,28 +4,24 @@ public class PremiumFreightApprovalRuleDTO
 {
     private Long id;
 	
-	private String shipTo;
+	private String plant;
 	
 	private int cost_min;
 	
 	private int cost_max;
 
 	private String approver;
-
+	
+	private String approverEmail;
+	
+	private String backup;
+	
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getShipTo() {
-		return shipTo;
-	}
-
-	public void setShipTo(String shipTo) {
-		this.shipTo = shipTo;
 	}
 
 	public int getCost_min() {
@@ -50,6 +46,30 @@ public class PremiumFreightApprovalRuleDTO
 
 	public void setApprover(String approver) {
 		this.approver = approver;
+	}
+
+	public String getPlant() {
+		return plant;
+	}
+
+	public void setPlant(String plant) {
+		this.plant = plant;
+	}
+
+	public String getApproverEmail() {
+		return approverEmail;
+	}
+
+	public void setApproverEmail(String approverEmail) {
+		this.approverEmail = approverEmail;
+	}
+
+	public String getBackup() {
+		return backup;
+	}
+
+	public void setBackup(String backup) {
+		this.backup = backup;
 	}
 	
 	

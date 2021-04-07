@@ -34,10 +34,12 @@ public class PremiumFreightApprovalRuleDao
 		PremiumFreightAprrovalRule ruleDo = new PremiumFreightAprrovalRule();
 		
 		ruleDo.setId(dto.getId());
-		ruleDo.setShipTo(dto.getShipTo());
+		ruleDo.setPlant(dto.getPlant());
 		ruleDo.setCost_min(dto.getCost_min());
 		ruleDo.setCost_max(dto.getCost_max());
 		ruleDo.setApprover(dto.getApprover());
+		ruleDo.setApproverEmail(dto.getApproverEmail());
+		ruleDo.setBackup(dto.getBackup());
 		return ruleDo;
 
 	}
@@ -45,10 +47,12 @@ public class PremiumFreightApprovalRuleDao
 	public PremiumFreightApprovalRuleDTO exportApprovalRule(PremiumFreightAprrovalRule ruledo) {
 		PremiumFreightApprovalRuleDTO ruleDto = new PremiumFreightApprovalRuleDTO();
 		ruleDto.setId(ruledo.getId());
-		ruleDto.setShipTo(ruledo.getShipTo());
+		ruleDto.setPlant(ruledo.getPlant());
 		ruleDto.setCost_max(ruledo.getCost_max());
 		ruleDto.setCost_min(ruledo.getCost_min());
 		ruleDto.setApprover(ruledo.getApprover());
+		ruleDto.setApproverEmail(ruledo.getApproverEmail());
+		ruleDto.setBackup(ruledo.getBackup());
 		return ruleDto;
 
 	}
@@ -61,7 +65,7 @@ public class PremiumFreightApprovalRuleDao
 		ResponseDto responseDto = new ResponseDto();
 		for (PremiumFreightApprovalRuleDTO dto : ruleList) {
 			try {
-				LOGGER.error("Enter into PremiunFreightApprovalRuleDTO saveApproval end here " + dto.getShipTo() + " - "
+				LOGGER.error("Enter into PremiunFreightApprovalRuleDTO saveApproval end here " + dto.getPlant() + " - "
 						+ dto.getCost_min() + "- " + dto.getCost_max() + " - " + dto.getApprover());
 				session.save(importApprovalRule(dto));
 				responseDto.setMessage("Save success");
