@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.incture.lch.lchWorkflowApplication.workflow.dto.ApprovalDto;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.PremiumWorkflowCustomDto;
 import com.incture.lch.lchWorkflowApplication.workflow.service.PremiumWorkflowService;
 
@@ -43,6 +44,14 @@ public class PremiumWorkflowController
 		MYLOGGER.error("ENTERING INTO updateApprovalWorkflowDetails CONTROLLER");
 		return premiumWorkflowService.rejectTask(dto);
 	}
+	
+	@PostMapping("/workFlowAction")
+	public HttpResponse workflowAction(@RequestBody ApprovalDto dto)
+
+			throws ClientProtocolException, IOException, JSONException {
+		MYLOGGER.error("ENTERING INTO updateApprovalWorkflowDetails CONTROLLER");
+		return premiumWorkflowService.workflowAction(dto);
+	} 
 	
 	
 	/*@PostMapping("/updatePremiumTableData")

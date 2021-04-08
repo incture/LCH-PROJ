@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import com.incture.lch.lchWorkflowApplication.workflow.constant.AuthorizationConstants;
 import com.incture.lch.lchWorkflowApplication.workflow.constant.WorkflowConstants;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.AdhocWorkflowCustomDto;
+import com.incture.lch.lchWorkflowApplication.workflow.dto.ApprovalDto;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.PremiumWorkflowCustomDto;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.ResponseMessage;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.WorkflowCustomDto;
@@ -281,6 +282,67 @@ public class PremiumWorkflowService {
 		MYLOGGER.error("PremiumWorkFlowService : ApproveTask : enter");
 		// return callApprovalTask(dto);
 		return rejectTaskForPremium(null, dto.getTaskIdDetails());
+
+	}
+	
+	public HttpResponse workflowActionForPremium(String input, String taskInstanceId, String Status)
+			throws ClientProtocolException, IOException, JSONException {
+		MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD");
+		HttpResponse httpResponse = null;
+
+		HttpRequestBase httpRequestBase = null;
+		StringEntity data = null;
+		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+		try {
+			String bearerToken = getBearerToken(httpClient);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD bearerToken:: " + bearerToken);
+			httpRequestBase = new HttpPatch(url + WorkflowConstants.APPROVE_TASK_URL + taskInstanceId);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD httpRequestBase:: " + httpRequestBase);
+			JSONObject context = new JSONObject();
+			if (Status=="Accepted")
+   			{
+				
+				context.put("actionType", "Accepted");
+
+   			}
+			else 
+			{
+				context.put("actionType", "Rejected");
+			}
+			context.put("status", "Completed");
+			context.put("taskInstanceId", taskInstanceId);
+			context.put(WorkflowConstants.CONTEXT, context);
+			input = context.toString();
+			data = new StringEntity(input, "UTF-8");
+			data.setContentType(WorkflowConstants.CONTENT_TYPE);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD input:: " + input);
+			((HttpPatch) httpRequestBase).setEntity(data);
+
+			httpRequestBase.addHeader(WorkflowConstants.ACCEPT, WorkflowConstants.CONTENT_TYPE);
+			httpRequestBase.addHeader(WorkflowConstants.AUTHORIZATION,
+					AuthorizationConstants.BEARER + " " + bearerToken);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD BEFORE EXECUTE:: " + input);
+			httpResponse = httpClient.execute(httpRequestBase);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD AFTER EXECUTE:: " + input);
+
+			if (httpResponse.getStatusLine().getStatusCode() == 400) {
+				MYLOGGER.error("WorkflowInvoker | approveTask | Error :" + input);
+			}
+		} catch (Exception e) {
+			MYLOGGER.error("WorkflowInvoker | approveTask | Exception :" + e.toString());
+		} finally {
+			httpClient.close();
+		}
+
+		MYLOGGER.error("WorkflowInvoker | approveTask | httpResponse :" + httpResponse.toString());
+		return httpResponse;
+	}
+	
+	public HttpResponse workflowAction(ApprovalDto dto)
+			throws ClientProtocolException, IOException, JSONException {
+		MYLOGGER.error("PremiumWorkFlowService : ApproveTask : enter");
+		// return callApprovalTask(dto);
+		return workflowActionForPremium(null,dto.getTaskIdDetails(),dto.getStatus());
 
 	}
 
