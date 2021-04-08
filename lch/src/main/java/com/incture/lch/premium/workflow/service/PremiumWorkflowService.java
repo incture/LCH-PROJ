@@ -64,7 +64,7 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 			AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
 			workflowDto.setInstanceId(resWfObj.getString("id"));
 			workflowDto.setDefinitionId(resWfObj.getString("definitionId"));
-			workflowDto.setWorkflowName("PremiumOrders");
+			workflowDto.setWorkflowName("PremiumOrderWorkflow");
 			workflowDto.setSubject(resWfObj.getString("subject"));
 			// workflowDto.setDescription(resWfObj.getString("description"));
 			workflowDto.setBusinessKey(triggerWorkFlowDto.getAdhocOrderInfo().getUserId());
@@ -136,7 +136,7 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 			throws JSONException {
 		JSONObject reponse = new JSONObject();
 		JSONObject context = new JSONObject();
-		reponse.put(WorkflowConstants.DEFINITION_ID, WorkflowConstants.USER_WF_DEFINITION_ID);
+		reponse.put(WorkflowConstants.DEFINITION_ID, WorkflowConstants.USER_WF_DEFINITION_ID_PREMIUM);
 		context.put("orderId", triggerWorkFlowDto.getOrderId());
 		context.put("originName", triggerWorkFlowDto.getOriginName());
 		context.put("originAddress", triggerWorkFlowDto.getOriginAddress());
@@ -174,6 +174,8 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 		context.put("businessDivison", triggerWorkFlowDto.getBusinessDivision());
 		context.put("adhocOrderInfo", triggerWorkFlowDto.getAdhocOrderInfo());
 
+		context.put("pendingWithManager",triggerWorkFlowDto.getPendingWithManager());
+		context.put("pendingWithAccountant",triggerWorkFlowDto.getPendingWithAccountant());
 		reponse.put(WorkflowConstants.CONTEXT, context);
 		return reponse.toString();
 	}

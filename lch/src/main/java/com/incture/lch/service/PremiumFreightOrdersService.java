@@ -1,6 +1,10 @@
 package com.incture.lch.service;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 
 import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeDetailsPaginated;
@@ -11,6 +15,7 @@ import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.PremiumFreightChargeDetails;
+import com.incture.lch.premium.custom.dto.PremiumManagerCustomDto;
 
 public interface PremiumFreightOrdersService {
 	public PaginationDto getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto);
@@ -32,5 +37,7 @@ public interface PremiumFreightOrdersService {
 	public ResponseDto RejectPremiumOrder(List<String> adhocOrderIds);
 
 	public ResponseDto addCarrier(CarrierDetailsDto carrierdto);
+	public List<PremiumManagerCustomDto> getManagerOrders(String userId) throws ClientProtocolException, IOException, JSONException;
+
 
 }

@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="T_PREMIUM_FREIGHT_APPROVAL_RULE")
-public class PremiumFreightAprrovalRule 
+public class PremiumFreightApprovalRule 
 {
 	@Id
 	@Column(name="ID")

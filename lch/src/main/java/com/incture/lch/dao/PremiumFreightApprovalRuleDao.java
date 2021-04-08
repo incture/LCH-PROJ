@@ -3,6 +3,7 @@ package com.incture.lch.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,15 +13,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.incture.lch.adhoc.workflow.constant.WorkflowConstants;
 import com.incture.lch.dto.AdhocApprovalRuleDto;
 import com.incture.lch.dto.PremiumFreightApprovalRuleDTO;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.AdhocApprovalRule;
-import com.incture.lch.entity.PremiumFreightAprrovalRule;
+import com.incture.lch.entity.PremiumFreightApprovalRule;
+import com.incture.lch.util.ServiceUtil;
 
 @Repository
-public class PremiumFreightApprovalRuleDao 
-{
+public class PremiumFreightApprovalRuleDao {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdhocApprovalRuleDao.class);
 
 	@Autowired
@@ -30,9 +32,9 @@ public class PremiumFreightApprovalRuleDao
 		this.sessionFactory = sf;
 	}
 
-	public PremiumFreightAprrovalRule importApprovalRule(PremiumFreightApprovalRuleDTO dto) {
-		PremiumFreightAprrovalRule ruleDo = new PremiumFreightAprrovalRule();
-		
+	public PremiumFreightApprovalRule importApprovalRule(PremiumFreightApprovalRuleDTO dto) {
+		PremiumFreightApprovalRule ruleDo = new PremiumFreightApprovalRule();
+
 		ruleDo.setId(dto.getId());
 		ruleDo.setPlant(dto.getPlant());
 		ruleDo.setCost_min(dto.getCost_min());
@@ -44,7 +46,7 @@ public class PremiumFreightApprovalRuleDao
 
 	}
 
-	public PremiumFreightApprovalRuleDTO exportApprovalRule(PremiumFreightAprrovalRule ruledo) {
+	public PremiumFreightApprovalRuleDTO exportApprovalRule(PremiumFreightApprovalRule ruledo) {
 		PremiumFreightApprovalRuleDTO ruleDto = new PremiumFreightApprovalRuleDTO();
 		ruleDto.setId(ruledo.getId());
 		ruleDto.setPlant(ruledo.getPlant());
@@ -59,7 +61,7 @@ public class PremiumFreightApprovalRuleDao
 
 	// @SuppressWarnings("deprecation")
 	public ResponseDto saveApproval(List<PremiumFreightApprovalRuleDTO> ruleList) {
-	    
+
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		ResponseDto responseDto = new ResponseDto();
@@ -71,8 +73,7 @@ public class PremiumFreightApprovalRuleDao
 				responseDto.setMessage("Save success");
 				responseDto.setStatus("SUCCESS");
 				responseDto.setCode("00");
-				
-				
+
 			} catch (Exception e) {
 				responseDto.setCode("02");
 				responseDto.setMessage("Save or Update Failed due to " + e.getMessage());
@@ -92,13 +93,13 @@ public class PremiumFreightApprovalRuleDao
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		List<PremiumFreightApprovalRuleDTO> appRuleList = new ArrayList<>();
-		List<PremiumFreightAprrovalRule> appRule = new ArrayList<>();
+		List<PremiumFreightApprovalRule> appRule = new ArrayList<>();
 
 		try {
 			String queryStr = "select rule from PremiumFreightAprrovalRule rule";
 			Query query = session.createQuery(queryStr);
 			appRule = query.list();
-			for (PremiumFreightAprrovalRule lkDiv : appRule) {
+			for (PremiumFreightApprovalRule lkDiv : appRule) {
 				appRuleList.add(exportApprovalRule(lkDiv));
 			}
 		} catch (Exception e) {
@@ -113,4 +114,24 @@ public class PremiumFreightApprovalRuleDao
 
 	}
 
+	public String getApproverByCost(int charge) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+
+		List<PremiumFreightApprovalRule> ruledo = new ArrayList<PremiumFreightApprovalRule>();
+		Criteria criteria = session.createCriteria(PremiumFreightApprovalRule.class);
+		ruledo = criteria.list();
+		String managerUserId = null;
+		for (PremiumFreightApprovalRule rule : ruledo) {
+			int cost_min = rule.getCost_min();
+			int cost_max = rule.getCost_max();
+			if (charge > cost_min && charge < cost_max) {
+
+				managerUserId = rule.getApprover();
+
+			}
+		}
+		return managerUserId;
+
+	}
 }

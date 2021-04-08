@@ -5,7 +5,6 @@ public class PremiumWorkflowCustomDto
 
 	private String orderIdDetails;
 	private String taskIdDetails;
-	private String plannerDetails;
 	private String role;
 	public String getOrderIdDetails() {
 		return orderIdDetails;
@@ -18,12 +17,6 @@ public class PremiumWorkflowCustomDto
 	}
 	public void setTaskIdDetails(String taskIdDetails) {
 		this.taskIdDetails = taskIdDetails;
-	}
-	public String getPlannerDetails() {
-		return plannerDetails;
-	}
-	public void setPlannerDetails(String plannerDetails) {
-		this.plannerDetails = plannerDetails;
 	}
 	public String getRole() {
 		return role;

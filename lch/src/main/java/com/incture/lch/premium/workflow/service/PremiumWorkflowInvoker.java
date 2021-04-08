@@ -1,6 +1,8 @@
 package com.incture.lch.premium.workflow.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -24,44 +26,48 @@ import org.springframework.stereotype.Service;
 import com.incture.lch.adhoc.workflow.constant.AuthorizationConstants;
 import com.incture.lch.adhoc.workflow.constant.WorkflowConstants;
 import com.incture.lch.util.ServiceUtil;
+import com.incture.lch.dto.*;
 
 @Transactional
 @Service
-public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal  {
-	
+public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
+
 	private final Logger MYLOGGER = LoggerFactory.getLogger(this.getClass());
 
-	private String workflow_rest_url;
-	private String url;
-	private String clientid;
-	private String clientsecret;
+	/*
+	 * private String workflow_rest_url; private String url; private String
+	 * clientid; private String clientsecret;
+	 */
 
-	public PremiumWorkflowInvoker() {
-		try {
-			JSONObject jsonObj = new JSONObject(System.getenv("VCAP_SERVICES"));
-			System.err.println("[PremiumWorkflowInvoker:VCAP_SERVICES] : " + jsonObj.toString());
+	private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
+	private static String url = "https://hrapps.authentication.eu10.hana.ondemand.com";
+	private static String clientid = "sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
+	private static String clientsecret = "5d1faa91-b683-4b9f-a8cc-3fb83736583b$sTFdfQiPu-NbvSV9LFmV_3u2vk5cKT3ZoStBLkWfjtw=";
 
-			JSONArray jsonArr = jsonObj.getJSONArray("workflow");
-			JSONObject credentials = jsonArr.getJSONObject(0).getJSONObject("credentials");
-			JSONObject endpoints = credentials.getJSONObject("endpoints");
-
-			// endpoint url
-			workflow_rest_url = endpoints.getString("workflow_rest_url");
-
-			// client credentials
-			JSONObject uaa = credentials.getJSONObject("uaa");
-
-			url = uaa.getString("url");
-			clientid = uaa.getString("clientid");
-			clientsecret = uaa.getString("clientsecret");
-
-			System.err.println("[PremiumWorkflowInvoker] : " + jsonArr.toString());
-
-		} catch (JSONException e) {
-			MYLOGGER.error("[PremiumWorkflowInvoker] reading environmental variables failed:" + e.getMessage());
-		}
-	}
-
+	/*
+	 * public PremiumWorkflowInvoker() { try { JSONObject jsonObj = new
+	 * JSONObject(System.getenv("VCAP_SERVICES"));
+	 * System.err.println("[PremiumWorkflowInvoker:VCAP_SERVICES] : " +
+	 * jsonObj.toString());
+	 * 
+	 * JSONArray jsonArr = jsonObj.getJSONArray("workflow"); JSONObject
+	 * credentials = jsonArr.getJSONObject(0).getJSONObject("credentials");
+	 * JSONObject endpoints = credentials.getJSONObject("endpoints");
+	 * 
+	 * // endpoint url workflow_rest_url =
+	 * endpoints.getString("workflow_rest_url");
+	 * 
+	 * // client credentials JSONObject uaa = credentials.getJSONObject("uaa");
+	 * 
+	 * url = uaa.getString("url"); clientid = uaa.getString("clientid");
+	 * clientsecret = uaa.getString("clientsecret");
+	 * 
+	 * System.err.println("[PremiumWorkflowInvoker] : " + jsonArr.toString());
+	 * 
+	 * } catch (JSONException e) { MYLOGGER.
+	 * error("[PremiumWorkflowInvoker] reading environmental variables failed:"
+	 * + e.getMessage()); } }
+	 */
 	@Override
 	public JSONObject triggerPremiumWorkflow(String input) throws ClientProtocolException, IOException, JSONException {
 
@@ -108,52 +114,50 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal  {
 
 	@Override
 	public HttpResponse approveTask(String input, String taskInstanceId)
-			throws ClientProtocolException, IOException, JSONException{
+			throws ClientProtocolException, IOException, JSONException {
 		MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD");
 		HttpResponse httpResponse = null;
 
 		HttpRequestBase httpRequestBase = null;
 		StringEntity data = null;
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-		try{
-		String bearerToken = getBearerToken(httpClient);
-		MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD bearerToken:: "+bearerToken);
-		httpRequestBase = new HttpPatch(workflow_rest_url + WorkflowConstants.APPROVE_TASK_URL + taskInstanceId);
-		MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD httpRequestBase:: "+httpRequestBase);
-		JSONObject context = new JSONObject();
-		context.put("status2", "Completed2");
-		context.put(WorkflowConstants.CONTEXT, context);
-		input = context.toString();
-		data = new StringEntity(input, "UTF-8");
-		data.setContentType(WorkflowConstants.CONTENT_TYPE);
-		MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD input:: "+input);
-		((HttpPatch) httpRequestBase).setEntity(data);
+		try {
+			String bearerToken = getBearerToken(httpClient);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD bearerToken:: " + bearerToken);
+			httpRequestBase = new HttpPatch(workflow_rest_url + WorkflowConstants.APPROVE_TASK_URL + taskInstanceId);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD httpRequestBase:: " + httpRequestBase);
+			JSONObject context = new JSONObject();
+			context.put("status2", "Completed2");
+			context.put(WorkflowConstants.CONTEXT, context);
+			input = context.toString();
+			data = new StringEntity(input, "UTF-8");
+			data.setContentType(WorkflowConstants.CONTENT_TYPE);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD input:: " + input);
+			((HttpPatch) httpRequestBase).setEntity(data);
 
-		httpRequestBase.addHeader(WorkflowConstants.ACCEPT, WorkflowConstants.CONTENT_TYPE);
-		httpRequestBase.addHeader(WorkflowConstants.AUTHORIZATION, AuthorizationConstants.BEARER + " " + bearerToken);
-		MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD BEFORE EXECUTE:: "+input);
-		httpResponse = httpClient.execute(httpRequestBase);
-		MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD AFTER EXECUTE:: "+input);
+			httpRequestBase.addHeader(WorkflowConstants.ACCEPT, WorkflowConstants.CONTENT_TYPE);
+			httpRequestBase.addHeader(WorkflowConstants.AUTHORIZATION,
+					AuthorizationConstants.BEARER + " " + bearerToken);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD BEFORE EXECUTE:: " + input);
+			httpResponse = httpClient.execute(httpRequestBase);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD AFTER EXECUTE:: " + input);
 
-		if (httpResponse.getStatusLine().getStatusCode() == 400) {
-			MYLOGGER.error("PremiumWorkflowInvoker | approveTask | Error :" + input);
-		}
-		}
-		catch(Exception e)
-		{
+			if (httpResponse.getStatusLine().getStatusCode() == 400) {
+				MYLOGGER.error("PremiumWorkflowInvoker | approveTask | Error :" + input);
+			}
+		} catch (Exception e) {
 			MYLOGGER.error("PremiumWorkflowInvoker | approveTask | Exception :" + e.toString());
-		}
-		finally{
-		httpClient.close();
+		} finally {
+			httpClient.close();
 		}
 
-		MYLOGGER.error("PremiumWorkflowInvoker | approveTask | httpResponse :" +httpResponse.toString());
+		MYLOGGER.error("PremiumWorkflowInvoker | approveTask | httpResponse :" + httpResponse.toString());
 		return httpResponse;
 	}
 
 	@Override
 	public JSONArray getWorkflowTaskInstanceId(String workflowInstanceId)
-			throws ClientProtocolException, IOException, JSONException{
+			throws ClientProtocolException, IOException, JSONException {
 
 		HttpResponse httpResponse = null;
 		String jsonString = null;
@@ -180,7 +184,7 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal  {
 
 		return responseObj;
 	}
-	
+
 	public JSONObject getWorkflowApprovalTaskInstanceId(String workflowInstanceId)
 			throws ClientProtocolException, IOException, JSONException {
 
@@ -193,8 +197,7 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal  {
 
 		String bearerToken = getBearerToken(httpClient);
 
-		httpRequestBase = new HttpGet(
-				workflow_rest_url + WorkflowConstants.APPROVE_TASK_URL + workflowInstanceId);
+		httpRequestBase = new HttpGet(workflow_rest_url + WorkflowConstants.APPROVE_TASK_URL + workflowInstanceId);
 
 		httpRequestBase.addHeader(WorkflowConstants.ACCEPT, WorkflowConstants.CONTENT_TYPE);
 		httpRequestBase.addHeader(WorkflowConstants.AUTHORIZATION, AuthorizationConstants.BEARER + " " + bearerToken);
@@ -211,7 +214,7 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal  {
 	}
 
 	@Override
-	public Boolean validateString(String input){
+	public Boolean validateString(String input) {
 
 		Boolean flag = Boolean.TRUE;
 
@@ -245,7 +248,78 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal  {
 		return null;
 
 	}
-	
-	
 
+	@Override
+	public List<TaskDetailsDto> getAllWorkflowTaskInstanceId(String userId)
+			throws ClientProtocolException, IOException, JSONException {
+
+		HttpResponse httpResponse = null;
+		String jsonString = null;
+		// JSONArray responseObj = null;
+
+		HttpRequestBase httpRequestBase = null;
+		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+
+		String bearerToken = getBearerToken(httpClient);
+
+		httpRequestBase = new HttpGet(workflow_rest_url + WorkflowConstants.GET_ALL_TASK_INSTANCE_ID + userId);
+
+		httpRequestBase.addHeader(WorkflowConstants.ACCEPT, WorkflowConstants.CONTENT_TYPE);
+		httpRequestBase.addHeader(WorkflowConstants.AUTHORIZATION, AuthorizationConstants.BEARER + " " + bearerToken);
+
+		httpResponse = httpClient.execute(httpRequestBase);
+
+		jsonString = EntityUtils.toString(httpResponse.getEntity());
+		System.err.println("Error" + jsonString);
+
+		//JSONArray responseObj = new JSONArray(jsonString);
+		//System.err.println("JSONArray" + responseObj);
+
+		httpClient.close();
+
+		JSONArray jsonArray = new JSONArray(jsonString);
+
+		List<TaskDetailsDto> taskInfoList = new ArrayList<>();
+		for (int counter = 0; counter < jsonArray.length(); counter++) {
+			JSONObject instanceObject = jsonArray.getJSONObject(counter);
+			if (!instanceObject.get(WorkflowConstants.STATUS).equals(WorkflowConstants.READY)) {
+				TaskDetailsDto taskInfo = new TaskDetailsDto();
+				taskInfo.setTaskId(instanceObject.get(WorkflowConstants.ID).toString());
+				taskInfo.setActivityId(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.ACTIVITY_ID)) ? null
+						: instanceObject.get(WorkflowConstants.ACTIVITY_ID).toString());
+				taskInfo.setClaimedAt(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.CLAIMED_AT)) ? null
+						: instanceObject.get(WorkflowConstants.CLAIMED_AT).toString());
+				taskInfo.setCompletedAt(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.COMPLETED_AT)) ? null
+						: instanceObject.get(WorkflowConstants.COMPLETED_AT).toString());
+				taskInfo.setCreatedAt(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.CREATED_AT)) ? null
+						: instanceObject.get(WorkflowConstants.CREATED_AT).toString());
+				taskInfo.setDescription(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.DESCRIPTION)) ? null
+						: instanceObject.get(WorkflowConstants.DESCRIPTION).toString());
+				taskInfo.setDueDate(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.DUE_DATE)) ? null
+						: instanceObject.get(WorkflowConstants.DUE_DATE).toString());
+				taskInfo.setPriority(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.PRIORITY)) ? null
+						: instanceObject.get(WorkflowConstants.PRIORITY).toString());
+				taskInfo.setProcessor(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.PROCESSOR)) ? null
+						: instanceObject.get(WorkflowConstants.PROCESSOR).toString());
+				taskInfo.setRecipientGroup(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.RECIPIENT_GROUP))
+						? null : instanceObject.get(WorkflowConstants.RECIPIENT_GROUP).toString());
+				taskInfo.setRecipientUsers(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.RECIPIENT_USERS))
+						? null : instanceObject.get(WorkflowConstants.RECIPIENT_USERS).toString());
+				taskInfo.setStatus(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.STATUS)) ? null
+						: instanceObject.get(WorkflowConstants.STATUS).toString());
+				taskInfo.setSubject(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.SUBJECT)) ? null
+						: instanceObject.get(WorkflowConstants.SUBJECT).toString());
+				taskInfo.setWorkflowDefinitionId(
+						ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.WORKFLOW_DEFINITION_ID)) ? null
+								: instanceObject.get(WorkflowConstants.WORKFLOW_DEFINITION_ID).toString());
+				taskInfo.setWorkflowInstanceId(
+						ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.WORKFLOW_INSTANCE_ID)) ? null
+								: instanceObject.get(WorkflowConstants.WORKFLOW_INSTANCE_ID).toString());
+				taskInfoList.add(taskInfo);
+			}
+
+		}
+
+		return taskInfoList;
+	}
 }

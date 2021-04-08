@@ -12,7 +12,7 @@ import org.json.JSONObject;
  * @author Ravi Kumar.P
  *
  */
-public interface WorkflowInvokerLocal  {
+public interface WorkflowInvokerLocal {
 
 	JSONObject triggerWorkflow(String input) throws ClientProtocolException, IOException, JSONException;
 
@@ -21,7 +21,9 @@ public interface WorkflowInvokerLocal  {
 
 	JSONArray getWorkflowTaskInstanceId(String workflowInstanceId)
 			throws ClientProtocolException, IOException, JSONException;
-	
+
+	JSONArray getAllWorkflowTaskInstanceId(String userId) throws ClientProtocolException, IOException, JSONException;
+
 	JSONObject getWorkflowApprovalTaskInstanceId(String workflowInstanceId)
 			throws ClientProtocolException, IOException, JSONException;
 

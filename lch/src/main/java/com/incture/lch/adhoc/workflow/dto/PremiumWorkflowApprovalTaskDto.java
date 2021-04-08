@@ -121,6 +121,25 @@ public class PremiumWorkflowApprovalTaskDto {
 
 	private String destinationNameDesc;
 
+	private String pendingWithManager;
+	
+	private String pendingWithAccountant;
+	public String getPendingWithManager() {
+		return pendingWithManager;
+	}
+
+	public void setPendingWithManager(String pendingWithManager) {
+		this.pendingWithManager = pendingWithManager;
+	}
+
+	public String getPendingWithAccountant() {
+		return pendingWithAccountant;
+	}
+
+	public void setPendingWithAccountant(String pendingWithAccountant) {
+		this.pendingWithAccountant = pendingWithAccountant;
+	}
+
 	private AdhocOrderDto adhocOrderInfo;
 	// COST DETAILS
 

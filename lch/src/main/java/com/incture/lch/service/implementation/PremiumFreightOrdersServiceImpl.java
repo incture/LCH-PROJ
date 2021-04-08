@@ -3,10 +3,13 @@
  */
 package com.incture.lch.service.implementation;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.PremiumFreightChargeDetails;
+import com.incture.lch.premium.custom.dto.PremiumManagerCustomDto;
 import com.incture.lch.repository.PremiumFreightOrdersRepository;
 import com.incture.lch.service.PremiumFreightOrdersService;
 
@@ -91,6 +95,12 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 	public ChargeDetailsPaginated getAllCarrierOrders(PremiumRequestDto premiumRequestDto) 
 	{
 		return  premiumFreightOrdersRepo.getAllCarrierOrders(premiumRequestDto);
+	}
+
+	@Override
+	public List<PremiumManagerCustomDto> getManagerOrders(String userId)
+			throws ClientProtocolException, IOException, JSONException {
+		return premiumFreightOrdersRepo.getManagerOrders(userId);
 	}
 
 }

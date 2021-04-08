@@ -6,7 +6,6 @@ public class WorkflowPremiumCustomDto
 	private String orderIdDetails;
 	private String taskIdDetails;
 	private String roleDetails;
-	private int chargeDetails;
 	public String getOrderIdDetails() {
 		return orderIdDetails;
 	}
@@ -25,12 +24,6 @@ public class WorkflowPremiumCustomDto
 	public void setRoleDetails(String roleDetails) {
 		this.roleDetails = roleDetails;
 	}
-	public int getChargeDetails() {
-		return chargeDetails;
-	}
-	public void setChargeDetails(int chargeDetails) {
-		this.chargeDetails = chargeDetails;
-	}
-
+	
 
 }
