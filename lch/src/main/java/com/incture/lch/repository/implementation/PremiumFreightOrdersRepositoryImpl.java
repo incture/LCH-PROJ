@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
+import org.apache.xmlbeans.impl.xb.xsdschema.RestrictionDocument.Restriction;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.incture.lch.adhoc.workflow.dto.PremiumWorkflowApprovalTaskDto;
+import com.incture.lch.dao.AdhocOrderWorkflowDao;
 import com.incture.lch.dao.CarrierDetailsDao;
 import com.incture.lch.dto.AdhocOrderDto;
 import com.incture.lch.dto.AdhocOrderWorkflowDto;
@@ -30,10 +32,12 @@ import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PaginationDto1;
+import com.incture.lch.dto.PremiumFreightChargeDetailsDto;
 import com.incture.lch.dto.PremiumFreightDto1;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
+import com.incture.lch.entity.AdhocOrderWorkflow;
 import com.incture.lch.entity.AdhocOrders;
 import com.incture.lch.entity.CarrierDetails;
 import com.incture.lch.entity.LchRole;
@@ -65,6 +69,8 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 	@Autowired
 	private CarrierDetailsDao carrierDetailsDao;
 
+	@Autowired
+	private AdhocOrderWorkflowDao adhocOrderWorkflowDao;
 	@Autowired
 	private PremiumWorkflowInvokerLocal wfInvokerLocal;
 
@@ -1342,6 +1348,70 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		return workflowDto;
 	
 	}
+	
+	
+	
+	
+	
+	
+	public PremiumFreightDto1 getManagerScreen(AdhocOrderWorkflowDto workflowDto)
+	{
+		Session session = sessionFactory.openSession();
+		Transaction tx= session.beginTransaction();
+		
+		String instanceId= workflowDto.getInstanceId();
+		String workflowInstanceId = workflowDto.getWorkflowInstanceId();
+		List<AdhocOrderWorkflow> adhocOrderWorkflows= new ArrayList<AdhocOrderWorkflow>();
+		
+		StringBuilder orderId = new StringBuilder();
+		Criteria criteria = session.createCriteria(AdhocOrderWorkflow.class);
+		criteria.add(Restrictions.eq("instanceId", instanceId));
+		if (workflowInstanceId != null && !(workflowInstanceId.equals(""))) 
+		{
+			criteria.add(Restrictions.eq("workflowInstanceId", workflowInstanceId));
+
+		}
+		adhocOrderWorkflows=criteria.list();
+		for(AdhocOrderWorkflow a:adhocOrderWorkflows)
+		{
+			if(adhocOrderWorkflows.size()==1)
+			{
+			orderId.append(a.getOrderId());
+			}
+			else
+			{
+				orderId.append(adhocOrderWorkflows.get(0).getOrderId());
+				
+			}
+		}
+		
+		Criteria criteria_adhoc = session.createCriteria(AdhocOrders.class);
+		criteria_adhoc.add(Restrictions.eq("fwoNum", orderId));
+		List<AdhocOrders> adorders  = new ArrayList<AdhocOrders>();
+		adorders = criteria.list();
+		PremiumFreightChargeDetailsDto dto = new PremiumFreightChargeDetailsDto();
+		PremiumFreightChargeDetails premiumFreightChargeDetails= new PremiumFreightChargeDetails();
+		PremiumFreightDto1 pdetails = new PremiumFreightDto1();
+		for(AdhocOrders a:adorders)
+		{
+		pdetails= exportPremiumFreightOrders1(a);
+		}
+		
+		session.flush();
+		session.clear();
+		tx.commit();
+		session.close();
+		return pdetails;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+
 	//Not needed
 	public String updateTableDetails(PremiumWorkflowApprovalTaskDto premiumWorkflowDto) {
 		// from the premium workflow dto fetch role

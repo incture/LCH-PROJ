@@ -31,6 +31,7 @@ import com.incture.lch.adhoc.custom.dto.AdhocWorkflowCustomDto;
 import com.incture.lch.adhoc.custom.dto.ResponseMessage;
 import com.incture.lch.adhoc.custom.dto.WorkflowCustomDto;
 import com.incture.lch.dao.AdhocApprovalRuleDao;
+import com.incture.lch.dao.AdhocOrderWorkflowDao;
 import com.incture.lch.dto.AdhocApprovalRuleDto;
 import com.incture.lch.dto.AdhocOrderDto;
 import com.incture.lch.dto.AdhocOrderWorkflowDto;
@@ -41,6 +42,7 @@ import com.incture.lch.dto.LkShipperDetailsDto;
 import com.incture.lch.dto.PartNumberDescDto;
 import com.incture.lch.dto.ReasonCodeDto;
 import com.incture.lch.dto.ResponseDto;
+import com.incture.lch.entity.AdhocOrderWorkflow;
 import com.incture.lch.helper.AdhocExcelHelper;
 import com.incture.lch.service.AdhocExcelService;
 import com.incture.lch.service.AdhocOrdersService;
@@ -59,6 +61,8 @@ public class AdhocOrdersController {
 	@Autowired
 	private AdhocApprovalRuleDao adhocApprovalRuleDao;
 
+	@Autowired
+	private AdhocOrderWorkflowDao adhocOrderWorkflowDao;
 	@Autowired
 	private AdhocExcelHelper helper;
 
@@ -251,5 +255,12 @@ public class AdhocOrdersController {
 		return adhocOrdersService.updateApprovalWorflowDetailsForType4(dto);
 	}
 
+
+	@RequestMapping(value = "/getAllPremiumWorkflowLog", method = RequestMethod.POST)
+    @ResponseBody
+	public List<AdhocOrderWorkflowDto> getAllPremiumWorkflowLog()
+	{
+		return adhocOrderWorkflowDao.getAllPremiumWorkflowLog();
+	}
 
 }

@@ -13,7 +13,7 @@ public class WorkflowConstants {
 	public static final String WORKFLOW_TRIGGER_URL = "/v1/workflow-instances";
 	public static final String APPROVE_TASK_URL = "/v1/task-instances/";
 	public static final String GET_TASK_INSTANCE_ID_URL = "/v1/task-instances?workflowInstanceId=";
-	public static final String GET_ALL_TASK_INSTANCE_ID = "/v1/workflow-instances/";
+	public static final String GET_ALL_TASK_INSTANCE_ID = "/v1/task-instances?processor=";
 	public static final String GET_WORKFLOW_CONTEXT = "/v1/workflow-instances/";
 
 	public static final String LCH_APP_URL_FOR_UPDATE = "https://LCH.cfapps.eu10.hana.ondemand.com/adhocorders/updateApprovalWorkflowDetails";

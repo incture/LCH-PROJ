@@ -2,6 +2,8 @@ package com.incture.lch.dto;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+
 public class AdhocOrderWorkflowDto {
 
 	private Long id;
@@ -18,7 +20,10 @@ public class AdhocOrderWorkflowDto {
 	private String pendingWith;
 	private String businessKey;
 	private String description;
+	private String workflowInstanceId;
 
+
+	
 	private String type;
 	
 	public Long getId() {
@@ -148,6 +153,14 @@ public class AdhocOrderWorkflowDto {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getWorkflowInstanceId() {
+		return workflowInstanceId;
+	}
+
+	public void setWorkflowInstanceId(String workflowInstanceId) {
+		this.workflowInstanceId = workflowInstanceId;
 	}
 
 }

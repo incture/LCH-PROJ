@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.incture.lch.lchWorkflowApplication.workflow.constant.AuthorizationConstants;
@@ -30,16 +31,22 @@ import com.incture.lch.lchWorkflowApplication.workflow.dto.ResponseMessage;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.WorkflowCustomDto;
 import com.incture.lch.lchWorkflowApplication.workflow.util.ServiceUtil;
 
+@Service
 public class PremiumWorkflowService {
 	private final Logger MYLOGGER = LoggerFactory.getLogger(this.getClass());
 
-	private String workflow_rest_url;
+	/*private String workflow_rest_url;
 	private String url;
 	private String clientid;
-	private String clientsecret;
+	private String clientsecret;*/
 
+	private static String workflow_rest_url="https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
+	private static String url="https://hrapps.authentication.eu10.hana.ondemand.com";
+	private static String clientid="sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
+	private static String clientsecret="5d1faa91-b683-4b9f-a8cc-3fb83736583b$sTFdfQiPu-NbvSV9LFmV_3u2vk5cKT3ZoStBLkWfjtw=";	
 	// Calling the VCAP Environment Variable for fetching the Credentials
-	public PremiumWorkflowService() {
+
+	/*public PremiumWorkflowService() {
 		try {
 			JSONObject jsonObj = new JSONObject(System.getenv("VCAP_SERVICES"));
 			System.err.println("[WorkflowInvoker:VCAP_SERVICES] : " + jsonObj.toString());
@@ -61,7 +68,7 @@ public class PremiumWorkflowService {
 		}
 	}
 
-	// Getting the bearer Token from the Variable received
+	*/// Getting the bearer Token from the Variable received
 	private String getBearerToken(CloseableHttpClient httpClient)
 			throws ClientProtocolException, IOException, JSONException {
 		MYLOGGER.info("LCH | WorkflowInvoker | getBearerToken | Execution Start ");
@@ -84,7 +91,8 @@ public class PremiumWorkflowService {
 
 	}
 
-	public JSONArray getAllTaskInstanceId(String workflowInstanceId)
+	
+	public JSONArray getAllTaskInstanceId(String userId)
 			throws ClientProtocolException, IOException, JSONException 
 	{
 
@@ -98,7 +106,7 @@ public class PremiumWorkflowService {
 		String bearerToken = getBearerToken(httpClient);
 
 		httpRequestBase = new HttpGet(
-				workflow_rest_url + WorkflowConstants.GET_ALL_TASK_INSTANCE_ID + workflowInstanceId);
+				workflow_rest_url + WorkflowConstants.GET_ALL_TASK_INSTANCE_ID + userId);
 
 		httpRequestBase.addHeader(WorkflowConstants.ACCEPT, WorkflowConstants.CONTENT_TYPE);
 		httpRequestBase.addHeader(WorkflowConstants.AUTHORIZATION, AuthorizationConstants.BEARER + " " + bearerToken);
