@@ -58,7 +58,7 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 			String wfInput = buildPremiumWorkflowTriggerPayload(triggerWorkFlowDto);
 			MYLOGGER.error("LCH | PremiumWorkFlowService | triggerPremiumWorkflow | wfInput : " + wfInput);
 			// Map<String, String> destinationProperties = callDestination();
-			JSONObject resWfObj = workflowInvokerLocal.triggerWorkflow(wfInput);
+			JSONObject resWfObj = premiumWorkflowInvokerLocal.triggerPremiumWorkflow(wfInput);
 			MYLOGGER.error("LCH | PremiumWorkFlowService | triggerPremiumWorkflow | JSON WORKFLOW OUT DATA : "
 					+ resWfObj.toString());
 			AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
@@ -70,8 +70,9 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 			workflowDto.setBusinessKey(triggerWorkFlowDto.getAdhocOrderInfo().getUserId());
 			workflowDto.setRequestedDate(ServicesUtil.convertDate(new Date()));
 			workflowDto.setStatus(WorkflowConstants.PENDING_AT_MANAGER);
-			workflowDto.setRequestedBy(resWfObj.getString("startedBy"));
-			workflowDto.setPendingWith(triggerWorkFlowDto.getManager());
+			workflowDto.setRequestedBy(resWfObj.getString("processor"));
+			workflowDto.setPendingWith(triggerWorkFlowDto.getPendingWithManager());
+			workflowDto.setWorkflowInstanceId(resWfObj.getString("workflowInstanceId"));
 			adhocOrderDao.updateWorflowDetails(workflowDto);
 			responseDto.setStatus(Boolean.TRUE);
 			responseDto.setStatusCode(200);

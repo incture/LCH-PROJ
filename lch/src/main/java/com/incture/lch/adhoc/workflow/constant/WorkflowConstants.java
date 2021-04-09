@@ -11,6 +11,8 @@ public class WorkflowConstants {
 
 	public static final String XSCRF_TOKEN_URL = "/v1/xsrf-token";
 	public static final String WORKFLOW_TRIGGER_URL = "/v1/workflow-instances";
+	public static final String WORKFLOW_TRIGGER_URL_PREMIUM = "/v1/workflow-instances";
+
 	public static final String APPROVE_TASK_URL = "/v1/task-instances/";
 	public static final String GET_TASK_INSTANCE_ID_URL = "/v1/task-instances?workflowInstanceId=";
 	public static final String GET_WORKFLOW_CONTEXT = "/v1/workflow-instances/";

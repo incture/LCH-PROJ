@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
-import org.apache.xmlbeans.impl.xb.xsdschema.RestrictionDocument.Restriction;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,7 +14,6 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -25,7 +23,6 @@ import org.springframework.stereotype.Repository;
 
 import com.incture.lch.adhoc.custom.dto.ResponseMessage;
 import com.incture.lch.adhoc.workflow.dto.PremiumWorkflowApprovalTaskDto;
-import com.incture.lch.dao.AccountingDetailsDao;
 import com.incture.lch.dao.AdhocOrderWorkflowDao;
 import com.incture.lch.dao.CarrierDetailsDao;
 import com.incture.lch.dao.PremiumFreightApprovalRuleDao;
@@ -37,7 +34,6 @@ import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PaginationDto1;
-import com.incture.lch.dto.PremiumFreightChargeDetailsDto;
 import com.incture.lch.dto.PremiumFreightDto1;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
@@ -79,6 +75,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 	@Autowired
 	private AdhocOrderWorkflowDao adhocOrderWorkflowDao;
+	
 	@Autowired
 	private PremiumWorkflowInvokerLocal wfInvokerLocal;
 
@@ -87,12 +84,14 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 	@Autowired
 	private PremiumOrderAccountingDetailsDao accoutingDetailsdao;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(PremiumFreightOrdersRepositoryImpl.class);
 
 	public void setSessionFactory(SessionFactory sf) {
 		this.sessionFactory = sf;
 	}
 
+	//Convert AdhocOrders to PremiumFreightOrders Dto : The returned DTO doesnot contains thec 
 	@Override
 	public PremiumFreightOrderDto exportPremiumFreightOrders(AdhocOrders adhocOrders) {
 

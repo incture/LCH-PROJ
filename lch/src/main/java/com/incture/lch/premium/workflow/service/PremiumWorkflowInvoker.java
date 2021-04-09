@@ -38,16 +38,17 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 	private String url;
 	private String clientid;
 	private String clientsecret;
+	
+	/* private static String workflow_rest_url =
+	 "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
+	 private static String url =
+	 "https://hrapps.authentication.eu10.hana.ondemand.com";
+	 private static String clientid =
+	 "sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
+	 private static String clientsecret =
+	 "ba7aee4f-997a-42ec-84f8-0a033cd63199$hHrRXVWKRcQEAJPTFz_9bpfGqJtMpnJig4NerH1R_vw=";
 
-	// private static String workflow_rest_url =
-	// "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
-	// private static String url =
-	// "https://hrapps.authentication.eu10.hana.ondemand.com";
-	// private static String clientid =
-	// "sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
-	// private static String clientsecret =
-	// "5d1faa91-b683-4b9f-a8cc-3fb83736583b$sTFdfQiPu-NbvSV9LFmV_3u2vk5cKT3ZoStBLkWfjtw=";
-
+	*/
 	public PremiumWorkflowInvoker() {
 		try {
 			JSONObject jsonObj = new JSONObject(System.getenv("VCAP_SERVICES"));
@@ -91,7 +92,7 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 
 		MYLOGGER.error("Ravi :Token" + bearerToken);
 
-		httpRequestBase = new HttpPost(workflow_rest_url + WorkflowConstants.WORKFLOW_TRIGGER_URL);
+		httpRequestBase = new HttpPost(workflow_rest_url + WorkflowConstants.WORKFLOW_TRIGGER_URL_PREMIUM);
 
 		data = new StringEntity(input);
 		data.setContentType(WorkflowConstants.CONTENT_TYPE);
