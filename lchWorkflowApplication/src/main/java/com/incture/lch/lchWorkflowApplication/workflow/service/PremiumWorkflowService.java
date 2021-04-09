@@ -36,18 +36,18 @@ import com.incture.lch.lchWorkflowApplication.workflow.util.ServiceUtil;
 public class PremiumWorkflowService {
 	private final Logger MYLOGGER = LoggerFactory.getLogger(this.getClass());
 
-	/*private String workflow_rest_url;
+	private String workflow_rest_url;
 	private String url;
 	private String clientid;
-	private String clientsecret;*/
+	private String clientsecret;
 
-	private static String workflow_rest_url="https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
+	/*private static String workflow_rest_url="https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
 	private static String url="https://hrapps.authentication.eu10.hana.ondemand.com";
 	private static String clientid="sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
 	private static String clientsecret="5d1faa91-b683-4b9f-a8cc-3fb83736583b$sTFdfQiPu-NbvSV9LFmV_3u2vk5cKT3ZoStBLkWfjtw=";	
-	// Calling the VCAP Environment Variable for fetching the Credentials
+	*/// Calling the VCAP Environment Variable for fetching the Credentials
 
-	/*public PremiumWorkflowService() {
+	public PremiumWorkflowService() {
 		try {
 			JSONObject jsonObj = new JSONObject(System.getenv("VCAP_SERVICES"));
 			System.err.println("[WorkflowInvoker:VCAP_SERVICES] : " + jsonObj.toString());
@@ -69,7 +69,6 @@ public class PremiumWorkflowService {
 		}
 	}
 
-	*/// Getting the bearer Token from the Variable received
 	private String getBearerToken(CloseableHttpClient httpClient)
 			throws ClientProtocolException, IOException, JSONException {
 		MYLOGGER.info("LCH | WorkflowInvoker | getBearerToken | Execution Start ");

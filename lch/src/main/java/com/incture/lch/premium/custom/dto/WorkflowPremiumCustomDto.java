@@ -1,11 +1,37 @@
 package com.incture.lch.premium.custom.dto;
 
+import com.incture.lch.dto.PremiumOrderAccountingDetailsDto;
+
 public class WorkflowPremiumCustomDto 
 {
 
 	private String orderIdDetails;
 	private String taskIdDetails;
 	private String roleDetails;
+	private String managerActionType;
+	private String accountantActionType;
+	private PremiumOrderAccountingDetailsDto accoutingDetailsDto;
+	
+	
+	
+	public PremiumOrderAccountingDetailsDto getAccoutingDetailsDto() {
+		return accoutingDetailsDto;
+	}
+	public void setAccoutingDetailsDto(PremiumOrderAccountingDetailsDto accoutingDetailsDto) {
+		this.accoutingDetailsDto = accoutingDetailsDto;
+	}
+	public String getManagerActionType() {
+		return managerActionType;
+	}
+	public void setManagerActionType(String managerActionType) {
+		this.managerActionType = managerActionType;
+	}
+	public String getAccountantActionType() {
+		return accountantActionType;
+	}
+	public void setAccountantActionType(String accountantActionType) {
+		this.accountantActionType = accountantActionType;
+	}
 	public String getOrderIdDetails() {
 		return orderIdDetails;
 	}
@@ -24,6 +50,7 @@ public class WorkflowPremiumCustomDto
 	public void setRoleDetails(String roleDetails) {
 		this.roleDetails = roleDetails;
 	}
+	
 	
 
 }

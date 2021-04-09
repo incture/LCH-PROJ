@@ -176,9 +176,11 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 
 		context.put("pendingWithManager",triggerWorkFlowDto.getPendingWithManager());
 		context.put("pendingWithAccountant",triggerWorkFlowDto.getPendingWithAccountant());
+		
 		reponse.put(WorkflowConstants.CONTEXT, context);
 		return reponse.toString();
 	}
+	
 
 	/**
 	 * Build payload for approve task

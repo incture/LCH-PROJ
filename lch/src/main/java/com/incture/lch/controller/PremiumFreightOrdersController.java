@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.simple.JSONObject;
@@ -12,13 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.incture.lch.adhoc.custom.dto.ResponseMessage;
 import com.incture.lch.dao.PremiumFreightApprovalRuleDao;
+import com.incture.lch.dto.ApprovalDto;
 import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
@@ -28,8 +32,11 @@ import com.incture.lch.dto.PremiumFreightApprovalRuleDTO;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
+import com.incture.lch.dto.TaskDetailsDto;
 import com.incture.lch.entity.PremiumFreightChargeDetails;
 import com.incture.lch.premium.custom.dto.PremiumManagerCustomDto;
+import com.incture.lch.premium.custom.dto.WorkflowPremiumCustomDto;
+import com.incture.lch.premium.workflow.service.PremiumWorkflowInvokerLocal;
 import com.incture.lch.service.PremiumFreightOrdersService;
 
 @RestController
@@ -40,6 +47,7 @@ public class PremiumFreightOrdersController
 	@Autowired
 	private PremiumFreightOrdersService premiumFreightOrdersService;
 	
+	private PremiumWorkflowInvokerLocal wflocal;
 	@Autowired
 	private PremiumFreightApprovalRuleDao premiumFreightApprovalRuleDao;
 
@@ -156,4 +164,31 @@ public class PremiumFreightOrdersController
 		return premiumFreightOrdersService.getManagerOrders(userId);
 	}
 
+	@GetMapping("/getallTaskInstancesId/{userId}")
+	public List<TaskDetailsDto> getAllWorkflowTaskInstanceId(@PathVariable String userId)
+			throws ClientProtocolException, IOException, JSONException
+			{
+		return wflocal.getAllWorkflowTaskInstanceId(userId);
+			}
+	
+	
+	@PostMapping("/completeManagerTask")
+	public HttpResponse completeManagerTask(@RequestBody ApprovalDto dto)
+			throws ClientProtocolException, IOException, JSONException
+	{
+		return wflocal.completeManagerTask(dto);
+	}
+	
+	@PostMapping("/completeAccountantTask")
+	public HttpResponse completeAccountantTask(@RequestBody ApprovalDto dto)
+			throws ClientProtocolException, IOException, JSONException
+	{
+		return wflocal.completeAccountantTask(dto);
+	}
+
+	@PostMapping("/updateTableDetails")
+	public ResponseMessage updateTableDetails(@RequestBody WorkflowPremiumCustomDto dto)
+			throws ClientProtocolException, JSONException, IOException {
+		return premiumFreightOrdersService.updateTableDetails(dto);
+	}
 }
