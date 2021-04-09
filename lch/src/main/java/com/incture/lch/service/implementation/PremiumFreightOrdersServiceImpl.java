@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.incture.lch.adhoc.custom.dto.ResponseMessage;
 import com.incture.lch.dto.CarrierDetailsDto;
 import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
@@ -23,6 +24,7 @@ import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.PremiumFreightChargeDetails;
 import com.incture.lch.premium.custom.dto.PremiumManagerCustomDto;
+import com.incture.lch.premium.custom.dto.WorkflowPremiumCustomDto;
 import com.incture.lch.repository.PremiumFreightOrdersRepository;
 import com.incture.lch.service.PremiumFreightOrdersService;
 
@@ -101,6 +103,12 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 	public List<PremiumManagerCustomDto> getManagerOrders(String userId)
 			throws ClientProtocolException, IOException, JSONException {
 		return premiumFreightOrdersRepo.getManagerOrders(userId);
+	}
+
+	@Override
+	public ResponseMessage updateTableDetails(WorkflowPremiumCustomDto dto)
+			throws ClientProtocolException, JSONException, IOException {
+		return premiumFreightOrdersRepo.updateTableDetails(dto);
 	}
 
 }

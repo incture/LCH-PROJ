@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.incture.lch.dto.ApprovalDto;
 import com.incture.lch.dto.TaskDetailsDto;
 
 public interface PremiumWorkflowInvokerLocal {
@@ -27,4 +28,12 @@ public interface PremiumWorkflowInvokerLocal {
 
 	List<TaskDetailsDto> getAllWorkflowTaskInstanceId(String userId) throws ClientProtocolException, IOException, JSONException;
 
-}
+	public HttpResponse completeManagerTask(ApprovalDto dto) throws ClientProtocolException, IOException, JSONException;
+
+	public HttpResponse completeAccountantTask(ApprovalDto dto) throws ClientProtocolException, IOException, JSONException;
+
+	}
+
+
+
+
