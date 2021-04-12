@@ -34,11 +34,14 @@ import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PaginationDto1;
+import com.incture.lch.dto.PremiumFreightChargeDetailsDto;
 import com.incture.lch.dto.PremiumFreightDto1;
 import com.incture.lch.dto.PremiumFreightOrderDto;
+import com.incture.lch.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.dto.TaskDetailsDto;
+import com.incture.lch.entity.AccountingDetails;
 import com.incture.lch.entity.AdhocOrderWorkflow;
 import com.incture.lch.entity.AdhocOrders;
 import com.incture.lch.entity.CarrierDetails;
@@ -85,6 +88,8 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 	@Autowired
 	private PremiumOrderAccountingDetailsDao accoutingDetailsdao;
+	
+
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(PremiumFreightOrdersRepositoryImpl.class);
 
@@ -632,6 +637,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 				adhocOrders = query.list();
 				for (AdhocOrders aorders : adhocOrders) {
 					PremiumFreightChargeDetails premiumFreightChargeDetails = new PremiumFreightChargeDetails();
+					PremiumOrderAccountingDetails premiumOrderAccountingDetails = new PremiumOrderAccountingDetails();
 					// Updating Status in Master Table
 					aorders.setStatus("Pending with Carrier Admin");
 					Criteria criteria_role = session.createCriteria(LchRole.class);
@@ -683,7 +689,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 						premiumFreightChargeDetails.setCarrierDetails(cdets.getCarrierDetails());
 						premiumFreightChargeDetails.setCarrierMode(cdets.getCarrierMode());
 						premiumFreightChargeDetails.setCarrierScac(cdets.getCarrierScac());
-
+						
 					}
 					premiumFreightChargeDetails.setOriginName(aorders.getShipperName());
 					premiumFreightChargeDetails.setOriginAddress(aorders.getOriginAddress());
@@ -707,10 +713,23 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 					
 					
-					//Here Logic to insert in the Accoutning Table:
-					//
+					// Logic to insert in the Accoutning Table:
+						
+					
 					session.saveOrUpdate(premiumFreightChargeDetails);
 
+				}
+				// Logic to insert in the Accoutning Table:
+				for (AdhocOrders aorders : adhocOrders) {
+					
+					
+					
+					
+					
+					
+				
+					
+					
 				}
 
 			}
@@ -1001,6 +1020,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					premiumFreightChargeDetail.setStatus("Pending At Planner");
 
 				}
+				
 
 				List<CarrierDetails> carrierDetails = new ArrayList<CarrierDetails>();
 				Criteria criteria3 = session.createCriteria(CarrierDetails.class);
@@ -1438,10 +1458,62 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		return premiumManagerCustomDtos;
 	}
 
+	
 	//Get Function-->task id Workflow Defination id
 	//Filter the records workflow table 123-->789
 	//Orders---> task 
 	//You'll fetch 
-	
 	//Post method -->Update the accounting 
+	@Override
+	public List<PremiumOrderAccountingDetailsDto> getPremiumAccountingDetails(String orderId){
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		List<PremiumOrderAccountingDetailsDto> premiumOrderAccountingDetailsDto = new  ArrayList<>();
+		List<PremiumOrderAccountingDetails> premiumOrderAccountingDetails = new ArrayList<>();
+
+		try {
+			Criteria criteria = session.createCriteria(PremiumOrderAccountingDetails.class);
+			criteria.add(Restrictions.eq("orderId", orderId));
+			premiumOrderAccountingDetails = criteria.list();
+			for (PremiumOrderAccountingDetails cdetails : premiumOrderAccountingDetails) {
+				premiumOrderAccountingDetailsDto.add(accoutingDetailsdao.exportPremiumOrderAccountingDetails(cdetails));
+			}
+		} catch (Exception e) {
+			// LOGGER.error("Exception in getReasonCode api" + e);
+		} finally {
+			session.flush();
+			session.clear();
+			tx.commit();
+			session.close();
+		}
+		return premiumOrderAccountingDetailsDto;
+
+	}
+	
+	@Override
+	public ResponseDto updatePremiumAccountingDetails(PremiumOrderAccountingDetailsDto accountingDetailsDto){
+		ResponseDto responseDto = new ResponseDto();
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		try {
+			PremiumOrderAccountingDetails padetails = new PremiumOrderAccountingDetails();
+			padetails = accoutingDetailsdao.importPremiumOrderAccountingDetails(accountingDetailsDto);
+			session.saveOrUpdate(padetails);
+			responseDto.setMessage("Save success");
+			responseDto.setStatus("SUCCESS");
+			responseDto.setCode("00");
+		} catch (Exception e) {
+			responseDto.setCode("02");
+			responseDto.setMessage("Save or Update Failed due to " + e.getMessage());
+			responseDto.setStatus("FAIL");
+		} finally {
+			session.flush();
+			session.clear();
+			tx.commit();
+			session.close();
+		}
+		return responseDto;
+		
+	}
+	
 }

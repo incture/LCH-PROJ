@@ -12,7 +12,9 @@ import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PaginationDto1;
+import com.incture.lch.dto.PremiumFreightChargeDetailsDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
+import com.incture.lch.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.PremiumFreightChargeDetails;
@@ -44,5 +46,8 @@ public interface PremiumFreightOrdersService {
 	public ResponseDto addCarrier(CarrierDetailsDto carrierdto);
 	public List<PremiumManagerCustomDto> getManagerOrders(String userId) throws ClientProtocolException, IOException, JSONException;
 
+	public List<PremiumOrderAccountingDetailsDto> getPremiumAccountingDetails(String orderId);
+
+	public ResponseDto updatePremiumAccountingDetails(PremiumOrderAccountingDetailsDto accountingDetailsDto);
 
 }

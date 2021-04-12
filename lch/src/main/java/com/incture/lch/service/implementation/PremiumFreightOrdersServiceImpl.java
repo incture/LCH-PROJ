@@ -12,6 +12,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.incture.lch.adhoc.custom.dto.ResponseMessage;
 import com.incture.lch.dto.CarrierDetailsDto;
@@ -19,7 +20,9 @@ import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PaginationDto1;
+import com.incture.lch.dto.PremiumFreightChargeDetailsDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
+import com.incture.lch.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.PremiumFreightChargeDetails;
@@ -111,5 +114,16 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 			throws ClientProtocolException, JSONException, IOException {
 		return premiumFreightOrdersRepo.updateTableDetails(dto);
 	}
+	
+	@Override
+	public List<PremiumOrderAccountingDetailsDto> getPremiumAccountingDetails(String userId){
+		return premiumFreightOrdersRepo.getPremiumAccountingDetails(userId);
+	}
+	
+	@Override
+	public ResponseDto updatePremiumAccountingDetails(@RequestBody PremiumOrderAccountingDetailsDto AccountingDetailsDto){
+		return premiumFreightOrdersRepo.updatePremiumAccountingDetails(AccountingDetailsDto);
+	}
+	
 
 }

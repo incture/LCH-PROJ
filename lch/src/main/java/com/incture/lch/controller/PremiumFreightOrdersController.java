@@ -29,7 +29,9 @@ import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PaginationDto1;
 import com.incture.lch.dto.PremiumFreightApprovalRuleDTO;
+import com.incture.lch.dto.PremiumFreightChargeDetailsDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
+import com.incture.lch.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.dto.TaskDetailsDto;
@@ -194,4 +196,17 @@ public class PremiumFreightOrdersController
 			throws ClientProtocolException, JSONException, IOException {
 		return premiumFreightOrdersService.updateTableDetails(dto);
 	}
+	
+	@GetMapping("/getPremiumAccountingDetails")
+	public List<PremiumOrderAccountingDetailsDto> getPremiumAccountingDetails(@PathVariable String orderId) throws ClientProtocolException, IOException, JSONException
+	{
+		return premiumFreightOrdersService.getPremiumAccountingDetails(orderId);
+	}
+	
+	@PostMapping("/updatePremiumAccountingDetails")
+	public ResponseDto updatePremiumAccountingDetails(@RequestBody PremiumOrderAccountingDetailsDto AccountingDetailsDto)
+	{
+	     return premiumFreightOrdersService.updatePremiumAccountingDetails(AccountingDetailsDto);
+	}
+	
 }
