@@ -54,7 +54,10 @@ public class AdhocOrderWorkflowHelper {
 			session.saveOrUpdate(a);
 		}
 
+		System.err.println("Inside the update Method"+ workflowDto.toString());
 		session.save(workflowDao.importAdhocWorkflow(workflowDto));
+
+		System.err.println("After Saving to DB"+ workflowDto.toString());
 
 		session.flush();
 		session.clear();

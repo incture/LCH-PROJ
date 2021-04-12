@@ -16,7 +16,7 @@ public class WorkflowConstants {
 	public static final String APPROVE_TASK_URL = "/v1/task-instances/";
 	public static final String GET_TASK_INSTANCE_ID_URL = "/v1/task-instances?workflowInstanceId=";
 	public static final String GET_WORKFLOW_CONTEXT = "/v1/workflow-instances/";
-	public static final String GET_ALL_TASK_INSTANCE_ID = "/v1/task-instances?workflowDefinitionId=PremiumOrderWorkflow&processor=";
+	public static final String GET_ALL_TASK_INSTANCE_ID = "/v1/task-instances?workflowDefinitionId=premiumorderworkflow&recipientUsers=";
 
 	public static final String APPROVED = "APPROVED";
 	public static final String REJECTED = "REJECTED";
@@ -34,7 +34,7 @@ public class WorkflowConstants {
 
 	public static final String DEFINITION_ID = "definitionId";
 	public static final String USER_WF_DEFINITION_ID = "adhoc_name";
-	public static final String USER_WF_DEFINITION_ID_PREMIUM = "PremiumOrderWorkflow";
+	public static final String USER_WF_DEFINITION_ID_PREMIUM = "premiumorderworkflow";
 	public static final String CONTEXT = "context";
 
 	public static final String ID = "id";
@@ -55,6 +55,6 @@ public class WorkflowConstants {
 	public static final String SUBJECT = "subject";
 	public static final String WORKFLOW_DEFINITION_ID = "workflowDefinitionId";
 	public static final String WORKFLOW_INSTANCE_ID = "workflowInstanceId";
-	public static final Object READY = "ready";
+	public static final Object READY = "READY";
 
 }

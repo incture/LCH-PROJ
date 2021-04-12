@@ -24,6 +24,7 @@ import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.PremiumFreightChargeDetails;
 import com.incture.lch.premium.custom.dto.PremiumManagerCustomDto;
+import com.incture.lch.premium.custom.dto.PremiumRequestUserInfoCustomDto;
 import com.incture.lch.premium.custom.dto.WorkflowPremiumCustomDto;
 import com.incture.lch.repository.PremiumFreightOrdersRepository;
 import com.incture.lch.service.PremiumFreightOrdersService;
@@ -78,8 +79,8 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 	}
 
 	@Override
-	public ResponseDto forwardToApprover(List<PremiumRequestDto> premiumRequestDtos) {
-		return premiumFreightOrdersRepo.forwardToApprover(premiumRequestDtos);
+	public ResponseDto forwardToApprover(PremiumRequestUserInfoCustomDto  premiumRequestCustomDtos) {
+		return premiumFreightOrdersRepo.forwardToApprover(premiumRequestCustomDtos);
 	}
 
 	@Override

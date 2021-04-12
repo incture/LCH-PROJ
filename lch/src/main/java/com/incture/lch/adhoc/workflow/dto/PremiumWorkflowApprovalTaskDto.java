@@ -121,17 +121,9 @@ public class PremiumWorkflowApprovalTaskDto {
 
 	private String destinationNameDesc;
 
-	private String pendingWithManager;
+	private String pendingWithApprover;
 	
 	private String pendingWithAccountant;
-	public String getPendingWithManager() {
-		return pendingWithManager;
-	}
-
-	public void setPendingWithManager(String pendingWithManager) {
-		this.pendingWithManager = pendingWithManager;
-	}
-
 	public String getPendingWithAccountant() {
 		return pendingWithAccountant;
 	}
@@ -748,6 +740,14 @@ public String toString() {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getPendingWithApprover() {
+		return pendingWithApprover;
+	}
+
+	public void setPendingWithApprover(String pendingWithApprover) {
+		this.pendingWithApprover = pendingWithApprover;
 	}
 
 }

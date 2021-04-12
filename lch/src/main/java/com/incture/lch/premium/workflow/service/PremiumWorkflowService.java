@@ -19,6 +19,7 @@ import com.incture.lch.adhoc.workflow.service.WorkflowInvokerLocal;
 import com.incture.lch.dao.AdhocOrderWorkflowDao;
 import com.incture.lch.dto.AdhocOrderWorkflowDto;
 import com.incture.lch.dto.ResponseDataDto;
+import com.incture.lch.dto.UserDetailsDto;
 import com.incture.lch.helper.AdhocOrderWorkflowHelper;
 import com.incture.lch.premium.custom.dto.WorkflowPremiumCustomDto;
 import com.incture.lch.util.ServicesUtil;
@@ -49,7 +50,7 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 	 */
 
 	@Override
-	public ResponseDataDto triggerPremiumWorkflow(PremiumWorkflowApprovalTaskDto triggerWorkFlowDto) {
+	public ResponseDataDto triggerPremiumWorkflow(PremiumWorkflowApprovalTaskDto triggerWorkFlowDto,UserDetailsDto userDetails) {
 		MYLOGGER.info("LCH | PremiumWorkFlowService | triggerPremiumWorkflow | Execution Start Input : "
 				+ triggerWorkFlowDto.toString());
 		ResponseDataDto responseDto = new ResponseDataDto();
@@ -62,6 +63,7 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 			MYLOGGER.error("LCH | PremiumWorkFlowService | triggerPremiumWorkflow | JSON WORKFLOW OUT DATA : "
 					+ resWfObj.toString());
 			AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
+			workflowDto.setOrderId(triggerWorkFlowDto.getOrderId());
 			workflowDto.setInstanceId(resWfObj.getString("id"));
 			workflowDto.setDefinitionId(resWfObj.getString("definitionId"));
 			workflowDto.setWorkflowName("PremiumOrderWorkflow");
@@ -70,9 +72,9 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 			workflowDto.setBusinessKey(triggerWorkFlowDto.getAdhocOrderInfo().getUserId());
 			workflowDto.setRequestedDate(ServicesUtil.convertDate(new Date()));
 			workflowDto.setStatus(WorkflowConstants.PENDING_AT_MANAGER);
-			workflowDto.setRequestedBy(resWfObj.getString("processor"));
-			workflowDto.setPendingWith(triggerWorkFlowDto.getPendingWithManager());
-			workflowDto.setWorkflowInstanceId(resWfObj.getString("workflowInstanceId"));
+			workflowDto.setRequestedBy(userDetails.getUserId());
+			workflowDto.setPendingWith(triggerWorkFlowDto.getPendingWithApprover());
+			workflowDto.setWorkflowInstanceId(resWfObj.getString("rootInstanceId"));
 			adhocOrderDao.updateWorflowDetails(workflowDto);
 			responseDto.setStatus(Boolean.TRUE);
 			responseDto.setStatusCode(200);
@@ -175,7 +177,7 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 		context.put("businessDivison", triggerWorkFlowDto.getBusinessDivision());
 		context.put("adhocOrderInfo", triggerWorkFlowDto.getAdhocOrderInfo());
 
-		context.put("pendingWithManager",triggerWorkFlowDto.getPendingWithManager());
+		context.put("pendingWithApprover",triggerWorkFlowDto.getPendingWithApprover());
 		context.put("pendingWithAccountant",triggerWorkFlowDto.getPendingWithAccountant());
 		
 		reponse.put(WorkflowConstants.CONTEXT, context);

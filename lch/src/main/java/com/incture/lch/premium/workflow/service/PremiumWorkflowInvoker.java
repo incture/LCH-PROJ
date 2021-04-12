@@ -34,12 +34,12 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 
 	private final Logger MYLOGGER = LoggerFactory.getLogger(this.getClass());
 
-	private String workflow_rest_url;
+	/*private String workflow_rest_url;
 	private String url;
 	private String clientid;
-	private String clientsecret;
+	private String clientsecret;*/
 	
-	/* private static String workflow_rest_url =
+	 private static String workflow_rest_url =
 	 "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
 	 private static String url =
 	 "https://hrapps.authentication.eu10.hana.ondemand.com";
@@ -48,8 +48,8 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 	 private static String clientsecret =
 	 "ba7aee4f-997a-42ec-84f8-0a033cd63199$hHrRXVWKRcQEAJPTFz_9bpfGqJtMpnJig4NerH1R_vw=";
 
-	*/
-	public PremiumWorkflowInvoker() {
+	
+	/*public PremiumWorkflowInvoker() {
 		try {
 			JSONObject jsonObj = new JSONObject(System.getenv("VCAP_SERVICES"));
 			System.err.println("[PremiumWorkflowInvoker:VCAP_SERVICES] : " + jsonObj.toString());
@@ -73,13 +73,14 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 		} catch (JSONException e) {
 			MYLOGGER.error("[PremiumWorkflowInvoker] reading environmental variables failed:" + e.getMessage());
 		}
-	}
+	}*/
 
 	@Override
 	public JSONObject triggerPremiumWorkflow(String input) throws ClientProtocolException, IOException, JSONException {
 
 		MYLOGGER.error("Ravi: Input" + input);
 
+		System.err.println("Ravi: Input" + input);
 		HttpResponse httpResponse = null;
 		String jsonString = null;
 		JSONObject responseObj = null;
@@ -289,7 +290,7 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 		List<TaskDetailsDto> taskInfoList = new ArrayList<>();
 		for (int counter = 0; counter < jsonArray.length(); counter++) {
 			JSONObject instanceObject = jsonArray.getJSONObject(counter);
-			if (!instanceObject.get(WorkflowConstants.STATUS).equals(WorkflowConstants.READY)) {
+			if (instanceObject.get(WorkflowConstants.STATUS).equals(WorkflowConstants.READY)) {
 				TaskDetailsDto taskInfo = new TaskDetailsDto();
 				taskInfo.setTaskId(instanceObject.get(WorkflowConstants.ID).toString());
 				taskInfo.setActivityId(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.ACTIVITY_ID)) ? null

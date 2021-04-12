@@ -35,6 +35,7 @@ import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.dto.TaskDetailsDto;
 import com.incture.lch.entity.PremiumFreightChargeDetails;
 import com.incture.lch.premium.custom.dto.PremiumManagerCustomDto;
+import com.incture.lch.premium.custom.dto.PremiumRequestUserInfoCustomDto;
 import com.incture.lch.premium.custom.dto.WorkflowPremiumCustomDto;
 import com.incture.lch.premium.workflow.service.PremiumWorkflowInvokerLocal;
 import com.incture.lch.service.PremiumFreightOrdersService;
@@ -47,6 +48,7 @@ public class PremiumFreightOrdersController
 	@Autowired
 	private PremiumFreightOrdersService premiumFreightOrdersService;
 	
+	@Autowired
 	private PremiumWorkflowInvokerLocal wflocal;
 	@Autowired
 	private PremiumFreightApprovalRuleDao premiumFreightApprovalRuleDao;
@@ -123,8 +125,9 @@ public class PremiumFreightOrdersController
 	
 	@RequestMapping(value = "/forwardToApprover", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
-	public ResponseDto forwardToApprover(@RequestBody List<PremiumRequestDto> premiumRequestDtos) {
-		return premiumFreightOrdersService.forwardToApprover(premiumRequestDtos);
+	public ResponseDto forwardToApprover(@RequestBody PremiumRequestUserInfoCustomDto premiumRequestCustomDtos) {
+		
+		return premiumFreightOrdersService.forwardToApprover(premiumRequestCustomDtos);
 	}
 
 

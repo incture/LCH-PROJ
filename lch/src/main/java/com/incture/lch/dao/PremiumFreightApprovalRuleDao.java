@@ -118,6 +118,7 @@ public class PremiumFreightApprovalRuleDao {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 
+		System.err.println("The charge is "+charge);
 		List<PremiumFreightApprovalRule> ruledo = new ArrayList<PremiumFreightApprovalRule>();
 		Criteria criteria = session.createCriteria(PremiumFreightApprovalRule.class);
 		ruledo = criteria.list();
@@ -125,11 +126,15 @@ public class PremiumFreightApprovalRuleDao {
 		for (PremiumFreightApprovalRule rule : ruledo) {
 			int cost_min = rule.getCost_min();
 			int cost_max = rule.getCost_max();
+			System.err.println("Cost _Min And Cost_max"+cost_max+ " "+cost_min);
 			if (charge > cost_min && charge < cost_max) {
 
 				managerUserId = rule.getApprover();
+				System.err.println("Manager Id"+ managerUserId);
+				return managerUserId;
 
 			}
+
 		}
 		return managerUserId;
 
