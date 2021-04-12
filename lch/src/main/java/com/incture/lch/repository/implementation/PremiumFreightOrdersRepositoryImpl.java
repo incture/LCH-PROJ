@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.incture.lch.adhoc.custom.dto.AdhocWorkflowCustomDto;
 import com.incture.lch.adhoc.custom.dto.ResponseMessage;
 import com.incture.lch.adhoc.workflow.dto.PremiumWorkflowApprovalTaskDto;
 import com.incture.lch.dao.AdhocOrderWorkflowDao;
@@ -79,7 +80,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 	@Autowired
 	private AdhocOrderWorkflowDao adhocOrderWorkflowDao;
-	
+
 	@Autowired
 	private PremiumWorkflowInvokerLocal wfInvokerLocal;
 
@@ -88,16 +89,15 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 	@Autowired
 	private PremiumOrderAccountingDetailsDao accoutingDetailsdao;
-	
 
-	
 	private static final Logger LOGGER = LoggerFactory.getLogger(PremiumFreightOrdersRepositoryImpl.class);
 
 	public void setSessionFactory(SessionFactory sf) {
 		this.sessionFactory = sf;
 	}
 
-	//Convert AdhocOrders to PremiumFreightOrders Dto : The returned DTO doesnot contains thec 
+	// Convert AdhocOrders to PremiumFreightOrders Dto : The returned DTO
+	// doesnot contains thec
 	@Override
 	public PremiumFreightOrderDto exportPremiumFreightOrders(AdhocOrders adhocOrders) {
 
@@ -669,6 +669,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					premiumFreightOrderDtos.add(premiumdto);
 					Criteria criteria = session.createCriteria(PremiumFreightChargeDetails.class);
 
+					PremiumOrderAccountingDetails accountingDetails = new PremiumOrderAccountingDetails();
 					// Getting the data from charge details table for the same
 					// id
 					criteria.add(Restrictions.eq("orderId", adid));
@@ -677,6 +678,9 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 					// Setting the new object for PremiumCharge Details
 					premiumFreightChargeDetails.setorderId(adid);
+
+					// Setting the new Object for Premium Accounting Details
+					accountingDetails.setOrderId(adid);
 
 					// Fetching the Carrier Details to set in charge table
 					List<CarrierDetails> carrierDetails = new ArrayList<CarrierDetails>();
@@ -689,7 +693,8 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 						premiumFreightChargeDetails.setCarrierDetails(cdets.getCarrierDetails());
 						premiumFreightChargeDetails.setCarrierMode(cdets.getCarrierMode());
 						premiumFreightChargeDetails.setCarrierScac(cdets.getCarrierScac());
-						
+						accountingDetails.setCarrier(cdets.getCarrierDetails());
+
 					}
 					premiumFreightChargeDetails.setOriginName(aorders.getShipperName());
 					premiumFreightChargeDetails.setOriginAddress(aorders.getOriginAddress());
@@ -711,26 +716,26 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					premiumFreightChargeDetails.setStatus("Pending with Carrier Admin");
 					premiumFreightChargeDetails.setPlannerEmail(aorders.getPlannerEmail());
 
-					
-					
-					// Logic to insert in the Accoutning Table:
-						
-					
+					// Logic to insert in the Accounting Table:
+
 					session.saveOrUpdate(premiumFreightChargeDetails);
+					session.saveOrUpdate(accountingDetails);
 
 				}
 				// Logic to insert in the Accoutning Table:
-				for (AdhocOrders aorders : adhocOrders) {
-					
-					
-					
-					
-					
-					
-				
-					
-					
-				}
+				/*
+				 * for (AdhocOrders aorders : adhocOrders) {
+				 * 
+				 * 
+				 * 
+				 * 
+				 * 
+				 * 
+				 * 
+				 * 
+				 * 
+				 * }
+				 */
 
 			}
 
@@ -951,7 +956,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 			workflowDto.setWeightUom(adhocOrders.getWeightUom());
 			workflowDto.setPendingWithApprover(adhocOrders.getPendingWith());
 			workflowDto.setPendingWithAccountant(adhocOrders.getPendingWith());
-			
+
 		}
 		for (PremiumFreightChargeDetails premiumFreightChargeDetails : premiumFreightChargeDetailsList) {
 			workflowDto.setBpNumber(premiumFreightChargeDetails.getBpNumber());
@@ -975,27 +980,35 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 	@SuppressWarnings("unchecked")
 	@Override
 	public String setCharge(List<ChargeRequestDto> dto) {
+		// Getting List of Charges with orderIds
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		PremiumFreightChargeDetails premiumFreightChargeDetail = new PremiumFreightChargeDetails();
+		List<PremiumOrderAccountingDetails> accountingDetailsList = new ArrayList<PremiumOrderAccountingDetails>();
 		List<PremiumFreightChargeDetails> premiumFreightChargeDetails = new ArrayList<PremiumFreightChargeDetails>();
+
 		for (ChargeRequestDto c : dto) {
+			// Fetching the AdhocOrders List from all the AdhocOrderId received
 			Criteria criteria = session.createCriteria(AdhocOrders.class);
 			criteria.add(Restrictions.eq("fwoNum", c.getorderId()));
 			List<AdhocOrders> adhocOrders = new ArrayList<AdhocOrders>();
-
+			// adhocOrders will have list of all orders
 			adhocOrders = criteria.list();
+			// For every AdhocOrder Details update the Status.
 			for (AdhocOrders a : adhocOrders) {
 				a.setStatus("Pending At Planner");
 				session.saveOrUpdate(a);
 
 			}
 
+			// Fetching the list of PremiumFreighChargeDetails from the orderId
 			Criteria criteria2 = session.createCriteria(PremiumFreightChargeDetails.class);
 			criteria2.add(Restrictions.eq("orderId", c.getorderId()));
 			premiumFreightChargeDetails = criteria2.list();
+
+			// Condition when no such orderId exist in Charge Table
+			// Creating a new one using the adhocOrders details
 			if (premiumFreightChargeDetails == null) {
-				// If the details aren't there
 				for (AdhocOrders a : adhocOrders) {
 
 					premiumFreightChargeDetail.setorderId(a.getFwoNum());
@@ -1020,26 +1033,33 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					premiumFreightChargeDetail.setStatus("Pending At Planner");
 
 				}
-				
-
+				// We are getting the bpnumber and carrierMode from the
+				// front-end
+				// so we need to fetch the details from that from carrier Table
 				List<CarrierDetails> carrierDetails = new ArrayList<CarrierDetails>();
 				Criteria criteria3 = session.createCriteria(CarrierDetails.class);
 				criteria3.add(Restrictions.eq("bpNumber", c.getBpNumber()));
 				criteria3.add(Restrictions.eq("carrierMode", c.getCarrierMode()));
 				carrierDetails = criteria3.list();
+				//// Since only one carrier is there , setting the carrier
+				//// Details in the charge details object
 				for (CarrierDetails cdets : carrierDetails) {
 					premiumFreightChargeDetail.setBpNumber(cdets.getBpNumber());
 					premiumFreightChargeDetail.setCarrierScac(cdets.getCarrierScac());
 					premiumFreightChargeDetail.setCarrierDetails(cdets.getCarrierDetails());
 					premiumFreightChargeDetail.setCarrierMode(cdets.getCarrierMode());
-					session.saveOrUpdate(premiumFreightChargeDetail);
-					//We will update the Accounting
-					//AccountinDetails.setCharge
+					// We will update the Accounting
+					// AccountinDetails.setCharge
 
 				}
+				// setting the chage from the details obtained
 				premiumFreightChargeDetail.setCharge(c.getCharge());
+				session.saveOrUpdate(premiumFreightChargeDetail);
 
-			} else {
+			}
+			// If there is already a record from that orderId
+			else {
+				// Go thru the list and update the necessary field
 				for (PremiumFreightChargeDetails p : premiumFreightChargeDetails) {
 					System.out.println("This is where it is alreday present");
 					p.setCharge(c.getCharge());
@@ -1047,6 +1067,16 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					session.saveOrUpdate(p);
 				}
 			}
+			// Setting details in the accounting table
+			Criteria criteria_accounting = session.createCriteria(PremiumOrderAccountingDetails.class);
+			criteria_accounting.add(Restrictions.eq("orderId", c.getorderId()));
+			accountingDetailsList = criteria_accounting.list();
+			for (PremiumOrderAccountingDetails accnt_dets : accountingDetailsList) {
+
+				accnt_dets.setTotalCost(c.getCharge());
+				session.saveOrUpdate(accnt_dets);
+			}
+
 		}
 
 		session.flush();
@@ -1054,22 +1084,18 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		tx.commit();
 		session.close();
 		return "Charge Set";
-		// Same as above
-		// Pending at planner
 
 	}
 
 	@Override
-	public ResponseDto forwardToApprover(PremiumRequestUserInfoCustomDto  premiumRequestCustomDtos) {
+	public ResponseDto forwardToApprover(PremiumRequestUserInfoCustomDto premiumRequestCustomDtos) {
 		PremiumFreightChargeDetails chargeDetails = new PremiumFreightChargeDetails();
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		ResponseDto responseDto = new ResponseDto();
 
-		
 		try {
-			for (PremiumRequestDto p : premiumRequestCustomDtos.getPremiumRequestDtoList())
-			{
+			for (PremiumRequestDto p : premiumRequestCustomDtos.getPremiumRequestDtoList()) {
 				String adhocOrderId = p.getorderId();
 				Criteria c1 = session.createCriteria(AdhocOrders.class);
 				Criteria c2 = session.createCriteria(PremiumFreightChargeDetails.class);
@@ -1096,7 +1122,6 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 					pendingWith.add(ruleDao.getApproverByCost(charge));
 
-					
 					session.saveOrUpdate(pdetail);
 					session.saveOrUpdate(pdetail);
 
@@ -1127,7 +1152,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 				premiumWorkflowDto = exportToPremiumWorkflowDto(adhocOrders, premiumChargeDetails);
 
 				// Triggering Premium Workflow
-				wfService.triggerPremiumWorkflow(premiumWorkflowDto,premiumRequestCustomDtos.getUserDetailInfo());
+				wfService.triggerPremiumWorkflow(premiumWorkflowDto, premiumRequestCustomDtos.getUserDetailInfo());
 
 			}
 			responseDto.setMessage("Save success");
@@ -1261,7 +1286,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		workflowDto = prepareAdhocApprovalWorkflowDto(dto);
 		System.out.println("Yuhooo" + workflowDto.getOrderId());
 		return updateTableBasedoOnRole(dto);
-		
+
 	}
 
 	public String approveTask() {
@@ -1292,8 +1317,6 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		StringBuilder userIdList = new StringBuilder();
 		List<LchRole> roles = new ArrayList<LchRole>();
 
-		
-
 		if (current_role.equalsIgnoreCase("LCH_Manager")) {
 			if (dto.getManagerActionType().equalsIgnoreCase("Approved")) {
 				Criteria criteria_role = session.createCriteria(LchRole.class);
@@ -1319,8 +1342,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					a.setPendingWith(userIds);
 					session.saveOrUpdate(a);
 				}
-			}
-			else{
+			} else {
 				for (PremiumFreightChargeDetails p : pdetails) {
 					p.setStatus("Rejected");
 
@@ -1337,23 +1359,21 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 		}
 
-		if (current_role.equalsIgnoreCase("LCH_Accountant"))
-		{
-			
+		if (current_role.equalsIgnoreCase("LCH_Accountant")) {
+
 			for (AdhocOrders a : aorders) {
-				a.setStatus(dto.getAccountantActionType().equalsIgnoreCase("Approved")?"COMPLETED":"REJECTED");
+				a.setStatus(dto.getAccountantActionType().equalsIgnoreCase("Approved") ? "COMPLETED" : "REJECTED");
 				a.setPendingWith(null);
 				session.saveOrUpdate(a);
 			}
 			for (PremiumFreightChargeDetails p : pdetails) {
-				p.setStatus(dto.getAccountantActionType().equalsIgnoreCase("Approved")?"COMPLETED":"REJECTED");
+				p.setStatus(dto.getAccountantActionType().equalsIgnoreCase("Approved") ? "COMPLETED" : "REJECTED");
 				session.saveOrUpdate(p);
 
 			}
 			PremiumOrderAccountingDetails accountingDetails = new PremiumOrderAccountingDetails();
-			accountingDetails= accoutingDetailsdao.importPremiumOrderAccountingDetails(dto.getAccoutingDetailsDto());
+			accountingDetails = accoutingDetailsdao.importPremiumOrderAccountingDetails(dto.getAccoutingDetailsDto());
 			session.saveOrUpdate(accountingDetails);
-			
 
 		}
 
@@ -1387,8 +1407,6 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 	}
 
-	// Will get all the manager Table details
-
 	@Override
 	public List<PremiumManagerCustomDto> getManagerOrders(String userId)
 			throws ClientProtocolException, IOException, JSONException {
@@ -1410,8 +1428,8 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 			premiumcustomDto.setTaskDetailsDto(t);
 
-			String orderId=null;
-			//StringBuilder orderId = new StringBuilder();
+			String orderId = null;
+			// StringBuilder orderId = new StringBuilder();
 			Criteria criteria = session.createCriteria(AdhocOrderWorkflow.class);
 			if (workflowDefinitionId != null && workflowDefinitionId.equals("")) {
 				criteria.add(Restrictions.eq("workflowDefinitionId", "premiumorderworkflow"));
@@ -1419,30 +1437,28 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 			if (criteria.list() == null) {
 				return null;
 			}
-			//criteria.add(Restrictions.eq("instanceId", instanceId));
+			// criteria.add(Restrictions.eq("instanceId", instanceId));
 			// task Id.
 			if (workflowInstanceId != null && !(workflowInstanceId.equals(""))) {
 				criteria.add(Restrictions.eq("workflowInstanceId", workflowInstanceId));
 
 			}
 
-			
 			adhocOrderWorkflows = criteria.list();
-			
-			System.err.println("Size of the Workflow added filter"+adhocOrderWorkflows.size());
-			
+
+			System.err.println("Size of the Workflow added filter" + adhocOrderWorkflows.size());
+
 			for (AdhocOrderWorkflow a : adhocOrderWorkflows) {
 				if (adhocOrderWorkflows.size() == 1) {
-					/*orderId.append(a.getOrderId());*/
-					orderId=a.getorderId();
+					/* orderId.append(a.getOrderId()); */
+					orderId = a.getorderId();
 				} else {
-					//orderId.append(adhocOrderWorkflows.get(0).getOrderId());
-					orderId=adhocOrderWorkflows.get(0).getOrderId();
-
+					// orderId.append(adhocOrderWorkflows.get(0).getOrderId());
+					orderId = adhocOrderWorkflows.get(0).getOrderId();
 
 				}
-				System.err.println("OrderID"+orderId);
-						}
+				System.err.println("OrderID" + orderId);
+			}
 
 			Criteria criteria_adhoc = session.createCriteria(AdhocOrders.class);
 			criteria_adhoc.add(Restrictions.eq("fwoNum", orderId));
@@ -1458,40 +1474,54 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		return premiumManagerCustomDtos;
 	}
 
-	
-	//Get Function-->task id Workflow Defination id
-	//Filter the records workflow table 123-->789
-	//Orders---> task 
-	//You'll fetch 
-	//Post method -->Update the accounting 
+	// Get Function-->task id Workflow Defination id
+	// Filter the records workflow table 123-->789
+	// Orders---> task
+	// You'll fetch
+	// Post method -->Update the accounting
 	@Override
-	public List<PremiumOrderAccountingDetailsDto> getPremiumAccountingDetails(String orderId){
+	public PremiumOrderAccountingDetailsDto getPremiumAccountingDetails(String workflowInstanceId)
+	{
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
-		List<PremiumOrderAccountingDetailsDto> premiumOrderAccountingDetailsDto = new  ArrayList<>();
+		
+		List<AdhocOrderWorkflow> adhocOrderWorkflowList= new ArrayList<AdhocOrderWorkflow>();
+		Criteria criteria_workflow = session.createCriteria(AdhocOrderWorkflow.class);
+		criteria_workflow.add(Restrictions.eq("workflowInstanceId", workflowInstanceId));
+		adhocOrderWorkflowList=criteria_workflow.list();
+		
+		List<String> orderIdList = new ArrayList<String>();
+		for(AdhocOrderWorkflow workflowdets: adhocOrderWorkflowList)
+		{
+			orderIdList.add(workflowdets.getOrderId());
+		}
+		List<PremiumOrderAccountingDetailsDto> premiumOrderAccountingDetailsDtos = new  ArrayList<>();
 		List<PremiumOrderAccountingDetails> premiumOrderAccountingDetails = new ArrayList<>();
 
-		try {
+		PremiumOrderAccountingDetailsDto premiumOrderAccountingDetailsDto = new PremiumOrderAccountingDetailsDto();
+		
+		for(String orderId:orderIdList)
+		{	
 			Criteria criteria = session.createCriteria(PremiumOrderAccountingDetails.class);
 			criteria.add(Restrictions.eq("orderId", orderId));
 			premiumOrderAccountingDetails = criteria.list();
-			for (PremiumOrderAccountingDetails cdetails : premiumOrderAccountingDetails) {
-				premiumOrderAccountingDetailsDto.add(accoutingDetailsdao.exportPremiumOrderAccountingDetails(cdetails));
+			for (PremiumOrderAccountingDetails accountingdetails : premiumOrderAccountingDetails) 
+			{
+				premiumOrderAccountingDetailsDto = accoutingDetailsdao.exportPremiumOrderAccountingDetails(accountingdetails);
 			}
-		} catch (Exception e) {
-			// LOGGER.error("Exception in getReasonCode api" + e);
-		} finally {
+		}
 			session.flush();
 			session.clear();
 			tx.commit();
 			session.close();
-		}
+		
+		
 		return premiumOrderAccountingDetailsDto;
 
 	}
-	
+
 	@Override
-	public ResponseDto updatePremiumAccountingDetails(PremiumOrderAccountingDetailsDto accountingDetailsDto){
+	public ResponseDto updatePremiumAccountingDetails(PremiumOrderAccountingDetailsDto accountingDetailsDto) {
 		ResponseDto responseDto = new ResponseDto();
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
@@ -1513,7 +1543,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 			session.close();
 		}
 		return responseDto;
-		
+
 	}
-	
+
 }

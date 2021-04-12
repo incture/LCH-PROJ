@@ -53,7 +53,7 @@ public class PremiumOrderAccountingDetails
 	private String comment;
 	
 	@Column(name="TOTAL_COST")
-	private String totalCost;
+	private int totalCost;
 
 	public String getOrderId() {
 		return orderId;
@@ -167,11 +167,11 @@ public class PremiumOrderAccountingDetails
 		this.comment = comment;
 	}
 
-	public String getTotalCost() {
+	public int getTotalCost() {
 		return totalCost;
 	}
 
-	public void setTotalCost(String totalCost) {
+	public void setTotalCost(int totalCost) {
 		this.totalCost = totalCost;
 	}
 	

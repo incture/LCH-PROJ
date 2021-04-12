@@ -54,7 +54,7 @@ public interface PremiumFreightOrdersRepository
 
 	public ResponseMessage updateTableDetails(WorkflowPremiumCustomDto dto) throws ClientProtocolException, JSONException, IOException;
 
-	public List<PremiumOrderAccountingDetailsDto> getPremiumAccountingDetails(String orderId);
+	public PremiumOrderAccountingDetailsDto getPremiumAccountingDetails(String workflowInstanceId);
 
 	public ResponseDto updatePremiumAccountingDetails(PremiumOrderAccountingDetailsDto accountingDetailsDto);
 	

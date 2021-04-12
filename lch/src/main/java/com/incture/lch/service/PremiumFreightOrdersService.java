@@ -46,7 +46,7 @@ public interface PremiumFreightOrdersService {
 	public ResponseDto addCarrier(CarrierDetailsDto carrierdto);
 	public List<PremiumManagerCustomDto> getManagerOrders(String userId) throws ClientProtocolException, IOException, JSONException;
 
-	public List<PremiumOrderAccountingDetailsDto> getPremiumAccountingDetails(String orderId);
+	public PremiumOrderAccountingDetailsDto getPremiumAccountingDetails(String workflowInstanceId);
 
 	public ResponseDto updatePremiumAccountingDetails(PremiumOrderAccountingDetailsDto accountingDetailsDto);
 

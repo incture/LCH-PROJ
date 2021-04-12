@@ -198,9 +198,9 @@ public class PremiumFreightOrdersController
 	}
 	
 	@GetMapping("/getPremiumAccountingDetails")
-	public List<PremiumOrderAccountingDetailsDto> getPremiumAccountingDetails(@PathVariable String orderId) throws ClientProtocolException, IOException, JSONException
+	public PremiumOrderAccountingDetailsDto getPremiumAccountingDetails(@PathVariable String workflowInstanceId) throws ClientProtocolException, IOException, JSONException
 	{
-		return premiumFreightOrdersService.getPremiumAccountingDetails(orderId);
+		return premiumFreightOrdersService.getPremiumAccountingDetails(workflowInstanceId);
 	}
 	
 	@PostMapping("/updatePremiumAccountingDetails")

@@ -30,7 +30,7 @@ public class PremiumOrderAccountingDetailsDto {
 
 	private String comment;
 
-	private String totalCost;
+	private int totalCost;
 
 	public String getOrderId() {
 		return orderId;
@@ -144,11 +144,11 @@ public class PremiumOrderAccountingDetailsDto {
 		this.comment = comment;
 	}
 
-	public String getTotalCost() {
+	public int getTotalCost() {
 		return totalCost;
 	}
 
-	public void setTotalCost(String totalCost) {
+	public void setTotalCost(int totalCost) {
 		this.totalCost = totalCost;
 	}
 

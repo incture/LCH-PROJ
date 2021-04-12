@@ -115,10 +115,13 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 		return premiumFreightOrdersRepo.updateTableDetails(dto);
 	}
 	
+	
 	@Override
-	public List<PremiumOrderAccountingDetailsDto> getPremiumAccountingDetails(String userId){
-		return premiumFreightOrdersRepo.getPremiumAccountingDetails(userId);
+	public PremiumOrderAccountingDetailsDto getPremiumAccountingDetails(String workflowInstanceId)
+	{
+		return premiumFreightOrdersRepo.getPremiumAccountingDetails(workflowInstanceId);
 	}
+
 	
 	@Override
 	public ResponseDto updatePremiumAccountingDetails(@RequestBody PremiumOrderAccountingDetailsDto AccountingDetailsDto){

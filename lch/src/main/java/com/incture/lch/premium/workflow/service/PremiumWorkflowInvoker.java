@@ -34,22 +34,18 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 
 	private final Logger MYLOGGER = LoggerFactory.getLogger(this.getClass());
 
-	/*private String workflow_rest_url;
+	private String workflow_rest_url;
 	private String url;
 	private String clientid;
-	private String clientsecret;*/
+	private String clientsecret;
 	
-	 private static String workflow_rest_url =
-	 "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
-	 private static String url =
-	 "https://hrapps.authentication.eu10.hana.ondemand.com";
-	 private static String clientid =
-	 "sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
-	 private static String clientsecret =
-	 "ba7aee4f-997a-42ec-84f8-0a033cd63199$hHrRXVWKRcQEAJPTFz_9bpfGqJtMpnJig4NerH1R_vw=";
+	// private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
+	// private static String url =	 "https://hrapps.authentication.eu10.hana.ondemand.com";
+	// private static String clientid =	 "sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
+	// private static String clientsecret =	 "ba7aee4f-997a-42ec-84f8-0a033cd63199$hHrRXVWKRcQEAJPTFz_9bpfGqJtMpnJig4NerH1R_vw=";
 
 	
-	/*public PremiumWorkflowInvoker() {
+	public PremiumWorkflowInvoker() {
 		try {
 			JSONObject jsonObj = new JSONObject(System.getenv("VCAP_SERVICES"));
 			System.err.println("[PremiumWorkflowInvoker:VCAP_SERVICES] : " + jsonObj.toString());
@@ -73,7 +69,7 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 		} catch (JSONException e) {
 			MYLOGGER.error("[PremiumWorkflowInvoker] reading environmental variables failed:" + e.getMessage());
 		}
-	}*/
+	}
 
 	@Override
 	public JSONObject triggerPremiumWorkflow(String input) throws ClientProtocolException, IOException, JSONException {
