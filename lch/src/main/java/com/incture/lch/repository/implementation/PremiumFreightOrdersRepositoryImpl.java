@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.incture.lch.adhoc.custom.dto.AdhocWorkflowCustomDto;
 import com.incture.lch.adhoc.custom.dto.ResponseMessage;
 import com.incture.lch.adhoc.workflow.dto.PremiumWorkflowApprovalTaskDto;
 import com.incture.lch.dao.AdhocOrderWorkflowDao;
@@ -35,14 +34,12 @@ import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PaginationDto1;
-import com.incture.lch.dto.PremiumFreightChargeDetailsDto;
 import com.incture.lch.dto.PremiumFreightDto1;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.dto.TaskDetailsDto;
-import com.incture.lch.entity.AccountingDetails;
 import com.incture.lch.entity.AdhocOrderWorkflow;
 import com.incture.lch.entity.AdhocOrders;
 import com.incture.lch.entity.CarrierDetails;
@@ -191,101 +188,122 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		return premiumFreightOrderDto;
 	}
 
-	// List of all the Premium Freight Orders based on the PlannerEmail plus
-	// date filters
+	//Paginated List of Data for all screen
 	@SuppressWarnings({ "unchecked" })
 	@Override
-	public PaginationDto getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto) {
-		List<PremiumFreightOrderDto> premiumFreightOrderDtos = new ArrayList<>();
-		PaginationDto paginationDto = new PaginationDto();
+	public PaginationDto getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto) throws ClientProtocolException, IOException, JSONException {
+
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
+		
+		String current_userId = premiumRequestDto.getUserId();
 
-		@SuppressWarnings("deprecation")
-		Criteria criteria = session.createCriteria(AdhocOrders.class);
+		System.err.println("The UserId is " + current_userId );
+		
+		PaginationDto paginationDtoCommon = new PaginationDto();
+		/*
+		Criteria criteria_role = session.createCriteria(LchRole.class);
+		List<LchRole> role = new ArrayList<LchRole>();
 
-		criteria.add(Restrictions.eq("premiumFreight", "true"));
-		criteria.add(Restrictions.ne("status", "REJECTED"));
-		criteria.add(Restrictions.ne("status", "Pending with Carrier Admin"));
+		criteria_role.add(Restrictions.eq("userId", current_userId));
 
-		String filter_field = null;
-		try {
-			if (premiumRequestDto.getorderId() != null && !(premiumRequestDto.getorderId().equals(""))) {
-				criteria.add(Restrictions.eq("orderId", premiumRequestDto.getorderId()));
-				filter_field = "adhocOrderId";
+		role = criteria_role.list();
 
+		String current_page_role="";
+		for (LchRole l : role) 
+		{
+			current_page_role=l.getRole();
+		}*/
+		
+		String current_page_role = premiumRequestDto.getUser_role();
+		
+		System.err.println("The User Role is  " + current_page_role );
+
+		if (current_page_role.equalsIgnoreCase("LCH_Planner"))
+		{
+			PaginationDto1 paginationDtoForPlanner = getAllPremiumFreightOrders1(premiumRequestDto);
+			List<PremiumFreightDto1> premiumFreightDto1s = new ArrayList<PremiumFreightDto1>();
+			premiumFreightDto1s = paginationDtoForPlanner.getPremiumFreightDto1();
+
+			List<PremiumManagerCustomDto> premiumManagerCustomDtos = new ArrayList<PremiumManagerCustomDto>();
+			PremiumManagerCustomDto premiumManagerCustomDto = new PremiumManagerCustomDto();
+			for (PremiumFreightDto1 p : premiumFreightDto1s)
+			{
+				premiumManagerCustomDto.setPremiumFreightDto1(p);
+				premiumManagerCustomDto.setTaskDetailsDto(null);
+				premiumManagerCustomDtos.add(premiumManagerCustomDto);
 			}
-			if ((premiumRequestDto.getFromDate() != null && !(premiumRequestDto.getFromDate().equals("")))
-					&& (premiumRequestDto.getToDate() != null) && !(premiumRequestDto.getToDate().equals(""))) {
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				try {
-					Date d1 = (Date) sdf.parse(premiumRequestDto.getFromDate());
-					Date d2 = (Date) sdf.parse(premiumRequestDto.getToDate());
-					criteria.add(Restrictions.between("createdDate", d1, d2));
-				} catch (Exception e) {
-					System.out.println("Error in date format");
-				}
-				filter_field = "date_filter";
+			paginationDtoCommon.setPremiumFreightOrderDetailsList(premiumManagerCustomDtos);
+			paginationDtoCommon.setCount(paginationDtoForPlanner.getCount());
 
-			}
-			if (premiumRequestDto.getPlannerEmail() != null && !(premiumRequestDto.getPlannerEmail().equals(""))) {
-
-				criteria.add(Restrictions.eq("plannerEmail", premiumRequestDto.getPlannerEmail()));
-				filter_field = "planner Email";
-
-			}
-			if (premiumRequestDto.getReasonCode() != null && !(premiumRequestDto.getReasonCode().equals(""))) {
-				criteria.add(Restrictions.eq("premiumReasonCode", premiumRequestDto.getReasonCode()));
-				filter_field = "reason_code";
-
-			}
-			if (premiumRequestDto.getStatus() != null && !(premiumRequestDto.getStatus().equals(""))) {
-				criteria.add(Restrictions.eq("status", premiumRequestDto.getStatus()));
-				filter_field = "status";
-			}
-
-			if (premiumRequestDto.getOriginName() != null && !(premiumRequestDto.getOriginName().equals(""))) {
-				criteria.add(Restrictions.eq("shipperName", premiumRequestDto.getOriginName()));
-				filter_field = "Origin Name";
-			}
-
-			if (premiumRequestDto.getDestinationName() != null
-					&& !(premiumRequestDto.getDestinationName().equals(""))) {
-				criteria.add(Restrictions.eq("DestinationName", premiumRequestDto.getDestinationName()));
-				filter_field = "destiantion name";
-			}
-		} catch (Exception e) {
-			// Catch that the filter value is invalid
-			throw new FilterInvalidEntryException(filter_field);
 		}
-		criteria.addOrder(Order.asc("fwoNum"));
-		int total_entries = criteria.list().size();
-		int startNum = (premiumRequestDto.getPageNumber() - 1) * 10;
+		else if(current_page_role.equalsIgnoreCase("LCH_Carrier_Admin"))
+		{
+			ChargeDetailsPaginated paginationDtoForCarrier =getAllCarrierOrders(premiumRequestDto);
+			List<PremiumFreightChargeDetails> premiumFreightChargeDetailsList = new ArrayList<PremiumFreightChargeDetails>();
+			premiumFreightChargeDetailsList=paginationDtoForCarrier.getPremiumFreightChargeDetails();
+			
+			List<PremiumFreightDto1> premiumFreightDto1s = new ArrayList<PremiumFreightDto1>();
+			PremiumFreightDto1 premiumFreightDto1 = new PremiumFreightDto1();
+			for(PremiumFreightChargeDetails p : premiumFreightChargeDetailsList)
+			{
+				premiumFreightDto1.setBpNumber(p.getBpNumber());
+				premiumFreightDto1.setCarrierDetails(p.getCarrierDetails());
+				premiumFreightDto1.setCarrierMode(p.getCarrierMode());
+				premiumFreightDto1.setCarrierRatePerKM(p.getCarrierRatePerKM());
+				premiumFreightDto1.setCarrierScac(p.getCarrierScac());
+				premiumFreightDto1.setCharge(p.getCharge());
+				premiumFreightDto1.setCountryOrigin(null);
+				//CreatedBy, CreatedDate,Currency field is irrelevant to the Carrier
+				premiumFreightDto1.setCreatedBy(null);
+				premiumFreightDto1.setCreatedDate(null);
+				premiumFreightDto1.setCurrency(null);
+				premiumFreightDto1.setDestinationAddress(p.getDestinationAdress());
+				premiumFreightDto1.setDestinationCity(p.getDestinationCity());
+				premiumFreightDto1.setDestinationCountry(p.getDestinationCountry());
+				premiumFreightDto1.setDestinationName(p.getDestinationName());
+				premiumFreightDto1.setDestinationState(p.getDestinationState());
+				premiumFreightDto1.setDestinationZip(p.getDestinationZip());
+				premiumFreightDto1.setOrderId(p.getorderId());
+				premiumFreightDto1.setOriginAddress(p.getOriginAddress());
+				premiumFreightDto1.setOriginCity(p.getOriginCity()); 
+				premiumFreightDto1.setOriginCountry(p.getOriginCountry());
+				premiumFreightDto1.setOriginName(p.getOriginName());
+				premiumFreightDto1.setOriginState(p.getOriginState());
+				premiumFreightDto1.setOriginZip(p.getOriginZip());
+				premiumFreightDto1.setPlannerEmail(p.getPlannerEmail());
+				premiumFreightDto1.setReasonCode(p.getReasonCode());
+				premiumFreightDto1.setStatus(p.getStatus());
+				
+				premiumFreightDto1s.add(premiumFreightDto1);
+				
+			}
 
-		if (premiumRequestDto.getNoOfEntry() > total_entries) {
-			throw new PageNumberNotFoundException(total_entries);
+			List<PremiumManagerCustomDto> premiumManagerCustomDtos = new ArrayList<PremiumManagerCustomDto>();
+			PremiumManagerCustomDto premiumManagerCustomDto = new PremiumManagerCustomDto();
+			for (PremiumFreightDto1 p : premiumFreightDto1s)
+			{
+				premiumManagerCustomDto.setPremiumFreightDto1(p);
+				premiumManagerCustomDto.setTaskDetailsDto(null);
+				premiumManagerCustomDtos.add(premiumManagerCustomDto);
+			}
+			paginationDtoCommon.setPremiumFreightOrderDetailsList(premiumManagerCustomDtos);
+			paginationDtoCommon.setCount(paginationDtoForCarrier.getCount());
 		}
+		
+		//Condition for Manager
+		else if(current_page_role.equalsIgnoreCase("LCH_Manager"))
+		{
+			List<PremiumManagerCustomDto> premiumManagerCustomDtoList = new ArrayList<PremiumManagerCustomDto>();
+			premiumManagerCustomDtoList=getManagerOrders(current_userId);
+			paginationDtoCommon.setPremiumFreightOrderDetailsList(premiumManagerCustomDtoList);
+			paginationDtoCommon.setCount(premiumManagerCustomDtoList.size());
 
-		criteria.setFirstResult(startNum);
-		if (premiumRequestDto.getNoOfEntry() == 0) {
-			criteria.setMaxResults(10);
-		} else {
-			criteria.setMaxResults(premiumRequestDto.getNoOfEntry());
+			
+			
 		}
-
-		List<AdhocOrders> adhocOrders = criteria.list();
-
-		for (AdhocOrders adOrders : adhocOrders) {
-			premiumFreightOrderDtos.add(exportPremiumFreightOrders(adOrders));
-		}
-		paginationDto.setPremiumFreightOrderDtos(premiumFreightOrderDtos);
-		paginationDto.setCount(total_entries);
-
-		session.flush();
-		session.clear();
-		tx.commit();
-		session.close();
-		return paginationDto;
+				
+		return paginationDtoCommon;
 	}
 
 	@Override
@@ -682,6 +700,11 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 					// Setting the new Object for Premium Accounting Details
 					accountingDetails.setOrderId(adid);
 
+					accountingDetails.setGlCode(aorders.getGlCode());
+					System.err.println("Quantity " + aorders.getQuantity());
+					accountingDetails.setQuantity(aorders.getQuantity());
+
+					accountingDetails.setPlannerEmail(aorders.getPlannerEmail());
 					// Fetching the Carrier Details to set in charge table
 					List<CarrierDetails> carrierDetails = new ArrayList<CarrierDetails>();
 					Criteria criteria3 = session.createCriteria(CarrierDetails.class);
@@ -1068,11 +1091,17 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 				}
 			}
 			// Setting details in the accounting table
+
+			System.err.println("The Charge is :" + c.getCharge());
+
 			Criteria criteria_accounting = session.createCriteria(PremiumOrderAccountingDetails.class);
 			criteria_accounting.add(Restrictions.eq("orderId", c.getorderId()));
 			accountingDetailsList = criteria_accounting.list();
+			System.err.println("The Size Is :" + accountingDetailsList.size());
+
 			for (PremiumOrderAccountingDetails accnt_dets : accountingDetailsList) {
 
+				System.err.println("The Charge is :" + c.getCharge());
 				accnt_dets.setTotalCost(c.getCharge());
 				session.saveOrUpdate(accnt_dets);
 			}
@@ -1474,48 +1503,44 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		return premiumManagerCustomDtos;
 	}
 
-	// Get Function-->task id Workflow Defination id
-	// Filter the records workflow table 123-->789
-	// Orders---> task
-	// You'll fetch
-	// Post method -->Update the accounting
 	@Override
-	public PremiumOrderAccountingDetailsDto getPremiumAccountingDetails(String workflowInstanceId)
-	{
+	public PremiumOrderAccountingDetailsDto getPremiumAccountingDetails(String workflowInstanceId) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
-		
-		List<AdhocOrderWorkflow> adhocOrderWorkflowList= new ArrayList<AdhocOrderWorkflow>();
+		System.err.println(workflowInstanceId);
+		List<AdhocOrderWorkflow> adhocOrderWorkflowList = new ArrayList<AdhocOrderWorkflow>();
 		Criteria criteria_workflow = session.createCriteria(AdhocOrderWorkflow.class);
 		criteria_workflow.add(Restrictions.eq("workflowInstanceId", workflowInstanceId));
-		adhocOrderWorkflowList=criteria_workflow.list();
-		
+		adhocOrderWorkflowList = criteria_workflow.list();
+		System.err.println("Size of the array that contain the instance Id : " + adhocOrderWorkflowList.size());
 		List<String> orderIdList = new ArrayList<String>();
-		for(AdhocOrderWorkflow workflowdets: adhocOrderWorkflowList)
-		{
+		for (AdhocOrderWorkflow workflowdets : adhocOrderWorkflowList) {
 			orderIdList.add(workflowdets.getOrderId());
+			System.err.println("OrderId: " + orderIdList);
 		}
-		List<PremiumOrderAccountingDetailsDto> premiumOrderAccountingDetailsDtos = new  ArrayList<>();
+
+		List<PremiumOrderAccountingDetailsDto> premiumOrderAccountingDetailsDtos = new ArrayList<>();
 		List<PremiumOrderAccountingDetails> premiumOrderAccountingDetails = new ArrayList<>();
 
 		PremiumOrderAccountingDetailsDto premiumOrderAccountingDetailsDto = new PremiumOrderAccountingDetailsDto();
-		
-		for(String orderId:orderIdList)
-		{	
+
+		for (String orderId : orderIdList) {
+			System.err.println("Order Id : " + orderId);
 			Criteria criteria = session.createCriteria(PremiumOrderAccountingDetails.class);
 			criteria.add(Restrictions.eq("orderId", orderId));
 			premiumOrderAccountingDetails = criteria.list();
-			for (PremiumOrderAccountingDetails accountingdetails : premiumOrderAccountingDetails) 
-			{
-				premiumOrderAccountingDetailsDto = accoutingDetailsdao.exportPremiumOrderAccountingDetails(accountingdetails);
+
+			System.err.println("Size of details fetched: " + premiumOrderAccountingDetails.size());
+			for (PremiumOrderAccountingDetails accountingdetails : premiumOrderAccountingDetails) {
+				premiumOrderAccountingDetailsDto = accoutingDetailsdao
+						.exportPremiumOrderAccountingDetails(accountingdetails);
 			}
 		}
-			session.flush();
-			session.clear();
-			tx.commit();
-			session.close();
-		
-		
+		session.flush();
+		session.clear();
+		tx.commit();
+		session.close();
+
 		return premiumOrderAccountingDetailsDto;
 
 	}

@@ -27,6 +27,7 @@ import com.incture.lch.lchWorkflowApplication.workflow.constant.AuthorizationCon
 import com.incture.lch.lchWorkflowApplication.workflow.constant.WorkflowConstants;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.AdhocWorkflowCustomDto;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.ApprovalDto;
+import com.incture.lch.lchWorkflowApplication.workflow.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.PremiumWorkflowCustomDto;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.ResponseMessage;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.WorkflowCustomDto;
@@ -41,11 +42,16 @@ public class PremiumWorkflowService {
 	private String clientid;
 	private String clientsecret;
 
-	/*private static String workflow_rest_url="https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
-	private static String url="https://hrapps.authentication.eu10.hana.ondemand.com";
-	private static String clientid="sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
-	private static String clientsecret="5d1faa91-b683-4b9f-a8cc-3fb83736583b$sTFdfQiPu-NbvSV9LFmV_3u2vk5cKT3ZoStBLkWfjtw=";	
-	*/// Calling the VCAP Environment Variable for fetching the Credentials
+	/*
+	 * private static String workflow_rest_url=
+	 * "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
+	 * private static String
+	 * url="https://hrapps.authentication.eu10.hana.ondemand.com"; private
+	 * static String clientid=
+	 * "sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
+	 * private static String clientsecret=
+	 * "5d1faa91-b683-4b9f-a8cc-3fb83736583b$sTFdfQiPu-NbvSV9LFmV_3u2vk5cKT3ZoStBLkWfjtw=";
+	 */// Calling the VCAP Environment Variable for fetching the Credentials
 
 	public PremiumWorkflowService() {
 		try {
@@ -60,7 +66,6 @@ public class PremiumWorkflowService {
 			clientsecret = credentials.getString("clientsecret");
 			url = credentials.getString("url");
 			workflow_rest_url = endpoints.getString("workflow_rest_url");
-
 
 			System.err.println("[WorkflowInvoker] : " + jsonArr.toString());
 
@@ -91,10 +96,7 @@ public class PremiumWorkflowService {
 
 	}
 
-	
-	public JSONArray getAllTaskInstanceId(String userId)
-			throws ClientProtocolException, IOException, JSONException 
-	{
+	public JSONArray getAllTaskInstanceId(String userId) throws ClientProtocolException, IOException, JSONException {
 
 		HttpResponse httpResponse = null;
 		String jsonString = null;
@@ -105,8 +107,7 @@ public class PremiumWorkflowService {
 
 		String bearerToken = getBearerToken(httpClient);
 
-		httpRequestBase = new HttpGet(
-				workflow_rest_url + WorkflowConstants.GET_ALL_TASK_INSTANCE_ID + userId);
+		httpRequestBase = new HttpGet(workflow_rest_url + WorkflowConstants.GET_ALL_TASK_INSTANCE_ID + userId);
 
 		httpRequestBase.addHeader(WorkflowConstants.ACCEPT, WorkflowConstants.CONTENT_TYPE);
 		httpRequestBase.addHeader(WorkflowConstants.AUTHORIZATION, AuthorizationConstants.BEARER + " " + bearerToken);
@@ -121,6 +122,7 @@ public class PremiumWorkflowService {
 
 		return responseObj;
 	}
+
 	public ResponseMessage callPremiumAppToUpdateWorkflowTables(PremiumWorkflowCustomDto input)
 			throws ClientProtocolException, IOException, JSONException {
 		MYLOGGER.error("Enter into PremiumWorkflowService: callLchAppToUpdateWorkflowTables:");
@@ -216,7 +218,7 @@ public class PremiumWorkflowService {
 		MYLOGGER.error("WorkflowInvoker | approveTask | httpResponse :" + httpResponse.toString());
 		return httpResponse;
 	}
-	
+
 	public HttpResponse rejectTaskForPremium(String input, String taskInstanceId)
 			throws ClientProtocolException, IOException, JSONException {
 		MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD");
@@ -275,7 +277,7 @@ public class PremiumWorkflowService {
 		return approveTaskForPremium(null, dto.getTaskIdDetails());
 
 	}
-	
+
 	public HttpResponse rejectTask(PremiumWorkflowCustomDto dto)
 			throws ClientProtocolException, IOException, JSONException {
 		MYLOGGER.error("PremiumWorkFlowService : ApproveTask : enter");
@@ -283,7 +285,7 @@ public class PremiumWorkflowService {
 		return rejectTaskForPremium(null, dto.getTaskIdDetails());
 
 	}
-	
+
 	public HttpResponse workflowActionForPremium(String input, String taskInstanceId, String Status)
 			throws ClientProtocolException, IOException, JSONException {
 		MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD");
@@ -298,14 +300,11 @@ public class PremiumWorkflowService {
 			httpRequestBase = new HttpPatch(url + WorkflowConstants.APPROVE_TASK_URL + taskInstanceId);
 			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD httpRequestBase:: " + httpRequestBase);
 			JSONObject context = new JSONObject();
-			if (Status=="Accepted")
-   			{
-				
+			if (Status == "Accepted") {
+
 				context.put("actionType", "Accepted");
 
-   			}
-			else 
-			{
+			} else {
 				context.put("actionType", "Rejected");
 			}
 			context.put("status", "Completed");
@@ -336,12 +335,146 @@ public class PremiumWorkflowService {
 		MYLOGGER.error("WorkflowInvoker | approveTask | httpResponse :" + httpResponse.toString());
 		return httpResponse;
 	}
-	
-	public HttpResponse workflowAction(ApprovalDto dto)
-			throws ClientProtocolException, IOException, JSONException {
+
+	public HttpResponse workflowAction(ApprovalDto dto) throws ClientProtocolException, IOException, JSONException {
 		MYLOGGER.error("PremiumWorkFlowService : ApproveTask : enter");
 		// return callApprovalTask(dto);
-		return workflowActionForPremium(null,dto.getTaskIdDetails(),dto.getStatus());
+		return workflowActionForPremium(null, dto.getTaskIdDetails(), dto.getStatus());
+
+	}
+
+	public HttpResponse completeTaskForManager(String input, String taskInstanceId, String Status)
+			throws ClientProtocolException, IOException, JSONException {
+		MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD");
+		HttpResponse httpResponse = null;
+
+		HttpRequestBase httpRequestBase = null;
+		StringEntity data = null;
+		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+		try {
+			String bearerToken = getBearerToken(httpClient);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD bearerToken:: " + bearerToken);
+			httpRequestBase = new HttpPatch(url + WorkflowConstants.APPROVE_TASK_URL + taskInstanceId);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD httpRequestBase:: " + httpRequestBase);
+			System.err.println("Before Object creation");
+			JSONObject context = new JSONObject();
+			JSONObject response = new JSONObject();
+			System.err.println("After Object creation");
+
+			/*
+			 * if (Status.equalsIgnoreCase("Approved")) {
+			 * 
+			 * context.put("managerActionType", "Approved");
+			 * 
+			 * } else { context.put("managerActionType", "Rejected"); }
+			 */
+			context.put("managerActionType", Status);
+			System.err.println("After Object creation Status  " + Status);
+
+			// context.put("status", "COMPLETED");
+
+			context.put("taskInstanceId", taskInstanceId);
+			System.err.println("After Object creation instance Id" + taskInstanceId);
+
+			System.err.println("After Object creation Context" + context);
+
+			response.put(WorkflowConstants.CONTEXT, context);
+			response.put("status", "COMPLETED");
+			System.err.println("After Object creation Context" + context);
+
+			input = response.toString();
+			System.err.println("After Object creation input" + input);
+
+			data = new StringEntity(input, "UTF-8");
+			data.setContentType(WorkflowConstants.CONTENT_TYPE);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD input:: " + input);
+			((HttpPatch) httpRequestBase).setEntity(data);
+
+			httpRequestBase.addHeader(WorkflowConstants.ACCEPT, WorkflowConstants.CONTENT_TYPE);
+			httpRequestBase.addHeader(WorkflowConstants.AUTHORIZATION,
+					AuthorizationConstants.BEARER + " " + bearerToken);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD BEFORE EXECUTE:: " + input);
+			httpResponse = httpClient.execute(httpRequestBase);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD AFTER EXECUTE:: " + httpResponse.toString());
+
+			if (httpResponse.getStatusLine().getStatusCode() == 400) {
+				MYLOGGER.error("WorkflowInvoker | approveTask | Error :" + input);
+			}
+		} catch (Exception e) {
+			MYLOGGER.error("WorkflowInvoker | approveTask | Exception :" + e.toString());
+		} finally {
+			httpClient.close();
+		}
+
+		MYLOGGER.error("WorkflowInvoker | approveTask | httpResponse :" + httpResponse.toString());
+		return httpResponse;
+	}
+
+	
+	public HttpResponse completeManagerTask(ApprovalDto dto)
+			throws ClientProtocolException, IOException, JSONException {
+		MYLOGGER.error("PremiumWorkFlowService : ApproveTask : enter");
+		return completeTaskForManager(null, dto.getTaskIdDetails(), dto.getStatus());
+
+	}
+
+	public HttpResponse completeTaskForAccountant(PremiumOrderAccountingDetailsDto dto, String taskInstanceId,
+			String Status) throws ClientProtocolException, IOException, JSONException {
+		MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD");
+		HttpResponse httpResponse = null;
+
+		HttpRequestBase httpRequestBase = null;
+		StringEntity data = null;
+		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+		try {
+			String input = null;
+			String bearerToken = getBearerToken(httpClient);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD bearerToken:: " + bearerToken);
+			httpRequestBase = new HttpPatch(url + WorkflowConstants.APPROVE_TASK_URL + taskInstanceId);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD httpRequestBase:: " + httpRequestBase);
+			JSONObject context = new JSONObject();
+			if (Status.equalsIgnoreCase("Approved")) {
+
+				context.put("accountantActionType", "Approved");
+
+			} else {
+				context.put("accountantActionType", "Rejected");
+			}
+			context.put("status", "Completed");
+			context.put("taskInstanceId", taskInstanceId);
+			context.put("accountantDetailInfo", dto);
+			context.put(WorkflowConstants.CONTEXT, context);
+			input = context.toString();
+			data = new StringEntity(input, "UTF-8");
+			data.setContentType(WorkflowConstants.CONTENT_TYPE);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD input:: " + input);
+			((HttpPatch) httpRequestBase).setEntity(data);
+
+			httpRequestBase.addHeader(WorkflowConstants.ACCEPT, WorkflowConstants.CONTENT_TYPE);
+			httpRequestBase.addHeader(WorkflowConstants.AUTHORIZATION,
+					AuthorizationConstants.BEARER + " " + bearerToken);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD BEFORE EXECUTE:: " + input);
+			httpResponse = httpClient.execute(httpRequestBase);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD AFTER EXECUTE:: " + input);
+
+			if (httpResponse.getStatusLine().getStatusCode() == 400) {
+				MYLOGGER.error("WorkflowInvoker | approveTask | Error :" + input);
+			}
+		} catch (Exception e) {
+			MYLOGGER.error("WorkflowInvoker | approveTask | Exception :" + e.toString());
+		} finally {
+			httpClient.close();
+		}
+
+		MYLOGGER.error("WorkflowInvoker | approveTask | httpResponse :" + httpResponse.toString());
+		return httpResponse;
+	}
+
+	
+	public HttpResponse completeAccountantTask(ApprovalDto dto)
+			throws ClientProtocolException, IOException, JSONException {
+		MYLOGGER.error("PremiumWorkFlowService : ApproveTask : enter");
+		return completeTaskForAccountant(dto.getAccountantDto(), dto.getTaskIdDetails(), dto.getStatus());
 
 	}
 

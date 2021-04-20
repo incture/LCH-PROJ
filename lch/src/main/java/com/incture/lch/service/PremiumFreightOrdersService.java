@@ -23,7 +23,7 @@ import com.incture.lch.premium.custom.dto.PremiumRequestUserInfoCustomDto;
 import com.incture.lch.premium.custom.dto.WorkflowPremiumCustomDto;
 
 public interface PremiumFreightOrdersService {
-	public PaginationDto getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto);
+	public PaginationDto getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto) throws ClientProtocolException, IOException, JSONException;
 
 	public List<CarrierDetailsDto> getAllCarrierDetails();
 

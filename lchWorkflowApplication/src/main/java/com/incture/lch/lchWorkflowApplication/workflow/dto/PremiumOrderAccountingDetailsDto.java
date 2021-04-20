@@ -1,6 +1,4 @@
-package com.incture.lch.dto;
-
-import javax.persistence.Column;
+package com.incture.lch.lchWorkflowApplication.workflow.dto;
 
 public class PremiumOrderAccountingDetailsDto {
 	private String orderId;

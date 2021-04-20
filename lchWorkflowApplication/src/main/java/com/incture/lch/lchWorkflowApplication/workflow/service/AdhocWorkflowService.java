@@ -36,7 +36,7 @@ public class AdhocWorkflowService {
 	private String clientid;
 	private String clientsecret;
 
-	/*public AdhocWorkflowService() {
+	public AdhocWorkflowService() {
 		try {
 			JSONObject jsonObj = new JSONObject(System.getenv("VCAP_SERVICES"));
 			System.err.println("[WorkflowInvoker:VCAP_SERVICES] : " + jsonObj.toString());
@@ -54,7 +54,7 @@ public class AdhocWorkflowService {
 		}
 	}
 
-	*/private String getBearerToken(CloseableHttpClient httpClient)
+	private String getBearerToken(CloseableHttpClient httpClient)
 			throws ClientProtocolException, IOException, JSONException {
 		MYLOGGER.info("LCH | WorkflowInvoker | getBearerToken | Execution Start ");
 		HttpRequestBase httpRequestBase = new HttpPost(url + "/oauth/token?grant_type=client_credentials");

@@ -58,7 +58,7 @@ public class PremiumFreightOrdersController
 	
 	@RequestMapping(value = "/getAllPremiumOrders", method = RequestMethod.POST,consumes = { "application/json" })
 	@ResponseBody
-	public PaginationDto getAllPremiumFreightOrders(@RequestBody PremiumRequestDto premiumRequestDto) {
+	public PaginationDto getAllPremiumFreightOrders(@RequestBody PremiumRequestDto premiumRequestDto) throws ClientProtocolException, IOException, JSONException {
 			return premiumFreightOrdersService.getAllPremiumFreightOrders(premiumRequestDto);
 	}
 	
@@ -197,7 +197,7 @@ public class PremiumFreightOrdersController
 		return premiumFreightOrdersService.updateTableDetails(dto);
 	}
 	
-	@GetMapping("/getPremiumAccountingDetails")
+	@GetMapping("/getPremiumAccountingDetails/{workflowInstanceId}")
 	public PremiumOrderAccountingDetailsDto getPremiumAccountingDetails(@PathVariable String workflowInstanceId) throws ClientProtocolException, IOException, JSONException
 	{
 		return premiumFreightOrdersService.getPremiumAccountingDetails(workflowInstanceId);

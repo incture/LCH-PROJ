@@ -14,7 +14,8 @@ public class PremiumRequestDto
 	private int pageNumber;
 	private int noOfEntry=0;
 	private String reasonCode;
-	
+	private String userId;
+	private String user_role;
 	
 	public String getorderId() {
 		return orderId;
@@ -89,6 +90,19 @@ public class PremiumRequestDto
 	public void setReasonCode(String reasonCode) {
 		this.reasonCode = reasonCode;
 	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getUser_role() {
+		return user_role;
+	}
+	public void setUser_role(String user_role) {
+		this.user_role = user_role;
+	}
+	
 	
 	
 

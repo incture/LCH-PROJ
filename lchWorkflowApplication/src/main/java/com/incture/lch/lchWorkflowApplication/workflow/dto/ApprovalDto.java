@@ -1,11 +1,13 @@
 package com.incture.lch.lchWorkflowApplication.workflow.dto;
 
+
 public class ApprovalDto {
 	
 	private String orderIdDetails;
 	private String taskIdDetails;
 	private String Status;
-	
+	private PremiumOrderAccountingDetailsDto accountantDto;
+
 	public String getOrderIdDetails() {
 		return orderIdDetails;
 	}
@@ -23,6 +25,12 @@ public class ApprovalDto {
 	}
 	public void setStatus(String status) {
 		Status = status;
+	}
+	public PremiumOrderAccountingDetailsDto getAccountantDto() {
+		return accountantDto;
+	}
+	public void setAccountantDto(PremiumOrderAccountingDetailsDto accountantDto) {
+		this.accountantDto = accountantDto;
 	}
 	
 

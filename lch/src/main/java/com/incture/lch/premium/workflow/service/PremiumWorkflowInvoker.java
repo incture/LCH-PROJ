@@ -42,7 +42,7 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 	// private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
 	// private static String url =	 "https://hrapps.authentication.eu10.hana.ondemand.com";
 	// private static String clientid =	 "sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
-	// private static String clientsecret =	 "ba7aee4f-997a-42ec-84f8-0a033cd63199$hHrRXVWKRcQEAJPTFz_9bpfGqJtMpnJig4NerH1R_vw=";
+	// private static String clientsecret =	 "13bdadaa-9a12-4d6a-ba48-583a7c2565fd$8TejUIarUOXu83tyvQ3xsWmYC1mG7l2E4nHDdQ_1S_g=";
 
 	
 	public PremiumWorkflowInvoker() {
@@ -340,18 +340,35 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD bearerToken:: " + bearerToken);
 			httpRequestBase = new HttpPatch(url + WorkflowConstants.APPROVE_TASK_URL + taskInstanceId);
 			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD httpRequestBase:: " + httpRequestBase);
+			System.err.println("Before Object creation");
 			JSONObject context = new JSONObject();
-			if (Status.equalsIgnoreCase("Approved")) {
+			JSONObject response = new JSONObject();
+			System.err.println("After Object creation");
+
+			/*if (Status.equalsIgnoreCase("Approved")) {
 
 				context.put("managerActionType", "Approved");
 
 			} else {
 				context.put("managerActionType", "Rejected");
-			}
-			context.put("status", "Completed");
+			}*/
+			context.put("managerActionType", Status);
+			System.err.println("After Object creation Status  "+Status);
+
+			//context.put("status", "COMPLETED");
+			
 			context.put("taskInstanceId", taskInstanceId);
-			context.put(WorkflowConstants.CONTEXT, context);
-			input = context.toString();
+			System.err.println("After Object creation instance Id"+taskInstanceId);
+
+			System.err.println("After Object creation Context"+context);
+
+			response.put(WorkflowConstants.CONTEXT, context);
+			response.put("status", "COMPLETED");
+			System.err.println("After Object creation Context"+context);
+
+			input = response.toString();
+			System.err.println("After Object creation input"+input);
+
 			data = new StringEntity(input, "UTF-8");
 			data.setContentType(WorkflowConstants.CONTENT_TYPE);
 			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD input:: " + input);
@@ -362,7 +379,7 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 					AuthorizationConstants.BEARER + " " + bearerToken);
 			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD BEFORE EXECUTE:: " + input);
 			httpResponse = httpClient.execute(httpRequestBase);
-			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD AFTER EXECUTE:: " + input);
+			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD AFTER EXECUTE:: " + httpResponse.toString());
 
 			if (httpResponse.getStatusLine().getStatusCode() == 400) {
 				MYLOGGER.error("WorkflowInvoker | approveTask | Error :" + input);

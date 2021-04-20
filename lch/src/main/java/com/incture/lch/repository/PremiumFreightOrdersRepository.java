@@ -28,7 +28,7 @@ public interface PremiumFreightOrdersRepository
 
 	public PremiumFreightOrderDto exportPremiumFreightOrders(AdhocOrders adhocOrders);
 		
-	public PaginationDto getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto);
+	public PaginationDto getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto) throws ClientProtocolException, IOException, JSONException;
 
 	public List<CarrierDetailsDto> getAllCarrierDetails();
 

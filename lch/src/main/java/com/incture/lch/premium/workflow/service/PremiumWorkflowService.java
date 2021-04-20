@@ -74,7 +74,7 @@ public class PremiumWorkflowService implements PremiumWorkflowServiceLocal {
 			workflowDto.setStatus(WorkflowConstants.PENDING_AT_MANAGER);
 			workflowDto.setRequestedBy(userDetails.getUserId());
 			workflowDto.setPendingWith(triggerWorkFlowDto.getPendingWithApprover());
-			workflowDto.setWorkflowInstanceId(resWfObj.getString("rootInstanceId"));
+			workflowDto.setWorkflowInstanceId(resWfObj.getString("workflowInstanceId"));
 			adhocOrderDao.updateWorflowDetails(workflowDto);
 			responseDto.setStatus(Boolean.TRUE);
 			responseDto.setStatusCode(200);

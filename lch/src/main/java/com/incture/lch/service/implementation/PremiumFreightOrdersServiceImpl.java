@@ -12,6 +12,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.incture.lch.adhoc.custom.dto.ResponseMessage;
@@ -46,7 +47,7 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 	
 	
 	@Override
-	public PaginationDto getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto) {
+	public PaginationDto getAllPremiumFreightOrders(PremiumRequestDto premiumRequestDto) throws ClientProtocolException, IOException, JSONException {
 		return premiumFreightOrdersRepo.getAllPremiumFreightOrders(premiumRequestDto);
 	}
 

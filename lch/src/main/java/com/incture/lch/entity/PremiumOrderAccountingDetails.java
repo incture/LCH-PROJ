@@ -23,7 +23,7 @@ public class PremiumOrderAccountingDetails
 	private String debitCurrency;
 	
 	@Column(name="QUANTITY")
-	private String quantity;
+	private int quantity;
 	
 	@Column(name="PRO_NUMBER")
 	private String proNumber;
@@ -87,11 +87,11 @@ public class PremiumOrderAccountingDetails
 		this.debitCurrency = debitCurrency;
 	}
 
-	public String getQuantity() {
+	public int getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(String quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 

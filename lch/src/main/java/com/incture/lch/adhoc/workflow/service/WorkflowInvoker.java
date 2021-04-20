@@ -69,7 +69,6 @@ public class WorkflowInvoker implements WorkflowInvokerLocal {
 			MYLOGGER.error("[WorkflowInvoker] reading environmental variables failed:" + e.getMessage());
 		}
 	}
-
 	@Override
 	public JSONObject triggerWorkflow(String input) throws ClientProtocolException, IOException, JSONException {
 

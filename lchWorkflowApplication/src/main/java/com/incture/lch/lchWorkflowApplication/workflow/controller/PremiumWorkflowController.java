@@ -66,5 +66,20 @@ public class PremiumWorkflowController
 	{
 		return premiumWorkflowService.getAllTaskInstanceId(userId);
 	}
+	
+	@PostMapping("/completeManagerTask")
+	public HttpResponse completeManagerTask(@RequestBody ApprovalDto dto)
+			throws ClientProtocolException, IOException, JSONException
+	{
+		return premiumWorkflowService.completeManagerTask(dto);
+	}
+	
+	@PostMapping("/completeAccountantTask")
+	public HttpResponse completeAccountantTask(@RequestBody ApprovalDto dto)
+			throws ClientProtocolException, IOException, JSONException
+	{
+		return premiumWorkflowService.completeAccountantTask(dto);
+	}
+
 
 }
