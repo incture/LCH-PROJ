@@ -7,10 +7,10 @@ sap.ui.define([
 
 	return BaseController.extend("com.incture.lch.premfreightOrders.controller.App", {
 		onInit: function () {
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("Orderdetails");
-			// global model for handling local data
 			var oMdlCommon = this.getModel("mCommon");
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.navTo("Orderdetails");
+
 			var oDate = new Date();
 			oMdlCommon.setProperty("/today", oDate);
 			oMdlCommon.setProperty("/todayYear", oDate.getFullYear());

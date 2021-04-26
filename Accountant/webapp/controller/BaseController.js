@@ -2,21 +2,14 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/core/routing/History",
 	"sap/m/MessageBox",
-	"com/incture/lch/premfreightOrders/utility/Formatter",
-	"com/incture/lch/premfreightOrders/utility/DateHelper",
 	"sap/ui/model/json/JSONModel",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
-	"sap/base/Log",
-	"com/incture/lch/premfreightOrders/control/ExtDateTimePicker"
-], function (Controller, History, MessageBox, Formatter, DateHelper, JSONModel, Filter, FilterOperator, Log, ExtDateTimePicker) {
+	"sap/base/Log"
+], function (Controller, History, MessageBox, JSONModel, Filter, FilterOperator, Log) {
 	"use strict";
 
-	return Controller.extend("com.incture.lch.premfreightOrders.controller.BaseController", {
-
-		formatter: Formatter,
-
-		dateHelper: DateHelper,
+	return Controller.extend("com.incture.lch.Accountant.controller.BaseController", {
 
 		_oCommon: {},
 
@@ -24,14 +17,10 @@ sap.ui.define([
 
 		iGroupId: 0, //to-do  move this to _oCommon
 
-		/**
-		 * @author Mohammed Saleem Bani
-		 * @purpose Initialize the App 
-		 */
 		fnInitializeApp: function () {
 			var oThisController = this;
 			var oMdlCommon = this.getModel("mCommon");
-			var sRootPath = jQuery.sap.getModulePath("com.incture.lch.premfreightOrders");
+			var sRootPath = jQuery.sap.getModulePath("com.incture.lch.Accountant");
 			oThisController.fnGetLaunchPadRoles();
 		/*	oThisController.fnSetCurrentUser();*/
 			oMdlCommon.attachRequestCompleted(function (oEvent) {
@@ -309,50 +298,11 @@ sap.ui.define([
 			});
 		},
 
-		/**
-		 * @author Mohammed Saleem Bani
-		 * @purpose Model filter for given control 
-		 * @param1 aPropertyFilterSettings -- {propertyName:"",filterOperator:"",propertyValue:""}
-		 * @param2 oBinding -- Binding Object
-		 * @param3 bLogicalOperator -- boolean value true for AND operation
-		 */
-		fnApplyCustomerFilter: function (aPropertyFilterSettings, oBinding, bLogicalOperator) {
-			var aFilters = [];
-			if (aPropertyFilterSettings && aPropertyFilterSettings instanceof Array && aPropertyFilterSettings.length > 0) {
-				$.each(aPropertyFilterSettings, function (index, oRow) {
-					if (oRow.propertyName && oRow.filterOperator &&
-						(oRow.propertyValue != undefined || oRow.propertyValue != null || oRow.propertyValue != "")) {
-						aFilters.push(new Filter(oRow.propertyName, oRow.filterOperator, oRow.propertyValue));
-					}
-				});
-
-				// update list binding
-				var bOpAND = (bLogicalOperator) ? true : false;
-				oBinding.filter(new Filter(aFilters, bOpAND), "Application");
-			} else {
-				oBinding.filter([], "Application");
-			}
-		},
-
-		/*
-		 * @purpose Delayed execution
-		 * @param1 callback -- callback function to be executed
-		 * @param2 delayMicroSeconds -- delay in micro seconds
-		 */
 		fnDelayedCall: function (callback, delayMicroSeconds) {
 			var delay = (delayMicroSeconds && delayMicroSeconds > 0) ? delayMicroSeconds : 0;
 			jQuery.sap.delayedCall(delay, null, callback);
 		},
 
-		/*
-		 * @purpose Handle Service Request 
-		 * @param1 sUrl -- String
-		 * @param2 sReqType -- String-(GET/POST/PUT/DELETE)
-		 * @param3 oHeader -- Header JSON Object
-		 * @param4 bShowBusy -- Boolean value to Show Busy Dialog or not
-		 * @param5 pHandler -- function-callback function
-		 * @param6 oData -- Data to be sent JSON Object
-		 */
 		fnProcessDataRequest: function (sUrl, sReqType, oHeader, bShowBusy, pHandler, oData) {
 			var oThisController = this;
 			var oAjaxSettings = {
@@ -422,8 +372,7 @@ sap.ui.define([
 			i18nModel.refresh();
 		},
 
-		//Function to get Fiori launchpad roles
-		fnGetLaunchPadRoles: function (callback) {
+		fnGetLaunchPadRoles: function () {
 			debugger;
 			var oThisController = this;
 			this._oRouter = this.getRouter();
@@ -438,7 +387,7 @@ sap.ui.define([
 
 		/*	oHeader.user = oThisController._oCommon.userDetails.id;*/
 			/*	oHeader.role = oThisController._oCommon.userDetails.name;*/
-			oHeader.user = "P000331";
+			oHeader.user = "P000332";
 			sUrl += oHeader.user;
 
 			oThisController.fnProcessDataRequest(sUrl, "GET", oHeader, false, function (oXHR, status) {
@@ -447,62 +396,6 @@ sap.ui.define([
 					/*	oThisController._oCommon.userDetails["sRoles"] = oXHR.responseJSON.toString();*/
 					oMdlCommon.setProperty("/aCockpitRoles", oXHR.responseJSON);
 					oMdlCommon.refresh();
-					var role = oMdlCommon.getProperty("/aCockpitRoles");
-					console.log(role);
-					for (var i = 0; i < role.length; i++) {
-						if (role[i] === "LCH_Planner") {
-							oMdlCommon.setProperty("/visible/bApprove", false);
-							oMdlCommon.setProperty("/visible/bReject", true);
-							oMdlCommon.setProperty("/visible/bGetcost", true);
-							oMdlCommon.setProperty("/visible/bSetcost", false);
-							oMdlCommon.setProperty("/visible/createdDate", true);
-							oMdlCommon.setProperty("/enable/costInput", false);
-							oMdlCommon.setProperty("/visible/carrierText", false);
-							oMdlCommon.setProperty("/visible/carrierCombo", true);
-							oMdlCommon.setProperty("/visible/carrierScac", false);
-							oMdlCommon.setProperty("/visible/carrierDetails", false);
-							oMdlCommon.setProperty("/currRole", "Planner");
-							oMdlCommon.refresh();
-						} else if (role[i] === "LCH_Carrier_Admin") {
-							oMdlCommon.setProperty("/visible/bApprove", false);
-							oMdlCommon.setProperty("/visible/bReject", false);
-							oMdlCommon.setProperty("/visible/bGetcost", false);
-							oMdlCommon.setProperty("/visible/createdDate", false);
-							oMdlCommon.setProperty("/visible/bSetcost", true);
-							oMdlCommon.setProperty("/visible/carrierText", true);
-							oMdlCommon.setProperty("/visible/carrierCombo", false);
-							oMdlCommon.setProperty("/enable/costInput", true);
-							oMdlCommon.setProperty("/visible/carrierScac", true);
-							oMdlCommon.setProperty("/visible/carrierDetails", true);
-							oMdlCommon.setProperty("/currRole", "Carrier_admin ");
-							oMdlCommon.refresh();
-						
-						} else if (role[i] === "LCH_Manager") {
-							oMdlCommon.setProperty("/visible/bApprove", true);
-							oMdlCommon.setProperty("/visible/bReject", false);
-							oMdlCommon.setProperty("/visible/bGetcost", false);
-							oMdlCommon.setProperty("/visible/bSetcost", false);
-							oMdlCommon.setProperty("/enable/bApprove", true);
-							oMdlCommon.setProperty("/enable/bReject", false);
-							oMdlCommon.setProperty("/enable/bGetcost", false);
-							oMdlCommon.setProperty("/enable/bSetcost", false);
-							oMdlCommon.setProperty("/enable/costInput", false);
-							oMdlCommon.setProperty("/visible/carrierText", true);
-							oMdlCommon.setProperty("/visible/carrierCombo", false);
-							oMdlCommon.setProperty("/visible/carrierScac", true);
-							oMdlCommon.setProperty("/visible/carrierDetails", true);
-							oMdlCommon.setProperty("/currRole", "Manager");
-							oMdlCommon.refresh();
-						}
-						/* else if (role[i] === "LCH_Accountant") {
-													oMdlCommon.setProperty("/currRole", "Accountant");
-													this._oRouter.navTo("Accountant");
-													oMdlCommon.refresh();
-												}
-											}
-											console.log(oMdlCommon);
-											/*	oThisController.fnGetAuthRules(callback);*/
-					}
 				} else {
 					oMdlCommon.setProperty("/cockpitRoles", []);
 					oMdlCommon.refresh();

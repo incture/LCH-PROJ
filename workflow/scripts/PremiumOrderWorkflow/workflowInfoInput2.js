@@ -23,23 +23,20 @@ var product = {
 
 // write 'product' node to workflow context
 $.context.product = product;
-
-var productInfo = $.context.productInfo; 
-
 */
-
-var orderId = $.context.adhocOrderId;
-var taskId = $.context.taskId;
-var planner = null;
-var workflowInfo = {
-	orderIdDetails:orderId,
-	taskIdDetails: taskId,
-	plannerDetails :planner
+var orderId = $.context.orderId;
+var taskId= $.context.taskInstanceId;
+var rolename = "LCH_Accountant";
+var actionTypeDetails =$.context.accountantActionType;
+var accountingDetails = $.context.accountantDetailInfo;
+var workflowRequest =  {
+	orderIdDetails : orderId,
+	taskIdDetails : taskId,
+	roleDetails : rolename,
+	actionType : actionTypeDetails,
+	accountantDetailInfo:accountingDetails
 	
 };
 
-$.context.workflowInfo =  workflowInfo;
-
-
-
+$.context.workflowRequest =workflowRequest;
 

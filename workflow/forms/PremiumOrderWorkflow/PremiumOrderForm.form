@@ -1,0 +1,21 @@
+{
+    "id": "premiumorderform",
+    "schemaVersion": "1.1.0",
+    "name": "PremiumOrderForm",
+    "revision": "1.0",
+    "type": "task",
+    "readOnly": false,
+    "content": [],
+    "decisions": [
+        {
+            "id": "approve",
+            "text": "Approve",
+            "decisionType": "positive"
+        },
+        {
+            "id": "reject",
+            "text": "Reject",
+            "decisionType": "negative"
+        }
+    ]
+}

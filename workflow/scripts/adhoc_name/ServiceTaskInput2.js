@@ -30,7 +30,7 @@ var productInfo = $.context.productInfo;
 
 var orderId = $.context.adhocOrderId;
 var taskId = $.context.taskId;
-var planner = null;
+var planner = $.context.planner;
 var workflowInfo = {
 	orderIdDetails:orderId,
 	taskIdDetails: taskId,

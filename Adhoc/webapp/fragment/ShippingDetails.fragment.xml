@@ -98,12 +98,17 @@
 				<l:GridData span="XL2 L2 M6 S6"/>
 			</layoutData>
 		</Label>
-		<Input type="Email" value="{mCommon>/newFU/plannerEmail}" valueState="{mCommon>/valState/plannerEmail}" liveChange="onLiveChangeEmail" visible="{mCommon>/bEditPremium}" 
+		<ComboBox width="100%" selectedKey="{mCommon>/newFU/plannerEmail}" showSecondaryValues="false" change="onLiveChangeEmail" name="SHIPPING_TERMS_ID"
+			items="{path: 'mCommon>/aPlannerEmail',sorter:{ path:'text'},templateShareable:'true'}" editable="{parts: [ 'mCommon>/bIsEditable', 'mCommon>/newFU/premiumFreight', 'mCommon>/enable/bPlannerEmail' ], formatter: '.formatter.isAllThreeNonEmpty'}"
+			 valueState="{mCommon>/valState/plannerEmail}" visible="{mCommon>/bEditPremium}" >
+			<core:ListItem key="{mCommon>key}" text="{mCommon>key}"/>
+		</ComboBox>
+		<!--<Input type="Email" value="{mCommon>/newFU/plannerEmail}" valueState="{mCommon>/valState/plannerEmail}" liveChange="onLiveChangeEmail" visible="{mCommon>/bEditPremium}" 
 			editable="{parts: [ 'mCommon>/bIsEditable', 'mCommon>/newFU/premiumFreight', 'mCommon>/enable/bPlannerEmail' ], formatter: '.formatter.isAllThreeNonEmpty'}">
 			<layoutData>
 				<l:GridData span="XL4 L4 M6 S6"/>
 			</layoutData>
-		</Input>
+		</Input>-->
 		<Label design="Bold" text="{i18n>SHIPDATE}" class="sapUiTinyMarginTop sapUiSmallMarginBegin" required="true">
 			<layoutData>
 				<l:GridData linebreak="true"/>

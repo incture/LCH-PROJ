@@ -44,7 +44,8 @@
 				<Label text="{i18n>CARRIER}" design="Bold"/>
 				<ui:template>
 					<ComboBox selectedKey="{mCommon>selectedCarrier}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="true" filterSecondaryValues="true"
-						items="{path: 'mCommon>/aCarrierdetails'}" change="onChangeCarrier" valueState="{mCommon>/valstate/carrier}">
+						items="{path: 'mCommon>/aCarrierdetails'}" change="onChangeCarrier" valueState="{mCommon>/valstate/carrier}"
+						enabled="{mCommon>enablecarrier}">
 						<core:ListItem key="{mCommon>bpNumber}" text="{mCommon>bpNumber}" additionalText="{mCommon>carrierDetails}"
 							tooltip="{mCommon>carrierDetails}"/>
 					</ComboBox>
@@ -87,6 +88,25 @@
 				<Label text="{i18n>COST}" design="Bold"/>
 				<ui:template>
 					<Input value="{mCommon>charge}" enabled="{mCommon>/enable/costInput}"></Input>
+				</ui:template>
+			</ui:Column>
+			<ui:Column tooltip="{i18n>ACTION}">
+				<Label text="{i18n>ACTION}" design="Bold"/>
+				<ui:template>
+					<Label text="sample"/>
+					<!--<Button text="Open Action Sheet" class="sapUiSmallMargin" press=".onButtonPress">
+						<dependents>
+							<ActionSheet id="actionSheet" xmlns="sap.m" xmlns:core="sap.ui.core" core:require="{ MessageToast: 'sap/m/MessageToast' }"
+								title="Choose Your Action" showCancelButton="true" placement="Bottom">
+								<Button text="Accept" icon="sap-icon://accept"/>
+								<Button text="Reject" icon="sap-icon://decline"/>
+								<Button text="Email" icon="sap-icon://email"/>
+								<Button text="Forward" icon="sap-icon://forward"/>
+								<Button text="Delete" icon="sap-icon://delete"/>
+								<Button text="Other"/>
+							</ActionSheet>
+						</dependents>
+					</Button>-->
 				</ui:template>
 			</ui:Column>
 		</ui:columns>

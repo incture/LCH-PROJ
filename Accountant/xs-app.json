@@ -1,0 +1,27 @@
+{
+  "welcomeFile": "/index.html",
+  "authenticationMethod": "route",
+  "logout": {
+    "logoutEndpoint": "/do/logout"
+  },
+  "routes": [{
+		"source": "^/lch_services/",
+		"target": "/",
+		"destination": "lch_services",
+		"authenticationType": "xsuaa",
+		"csrfProtection": false
+	},{
+		"source": "^/lch_service_wf/",
+		"target": "/",
+		"destination": "lch_service_wf",
+		"authenticationType": "none",
+		"csrfProtection": false
+	},
+    {
+      "source": "^(.*)$",
+      "target": "$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa"
+    }
+  ]
+}

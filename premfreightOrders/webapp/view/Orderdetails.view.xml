@@ -1,7 +1,7 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:fb="sap.ui.comp.filterbar"
 	xmlns:f="sap.f" controllerName="com.incture.lch.premfreightOrders.controller.Orderdetails" xmlns:html="http://www.w3.org/1999/xhtml"
 	displayBlock="false" xmlns:ui="sap.ui.table" xmlns:ExtPicker="com.incture.lch.premfreightOrders.control">
-	<Page showHeader="false" enableScrolling="false" class="sapUiSizeCompact">
+	<Page showHeader="false" enableScrolling="false" class="sapUiSizeCompact" id="OrderDetails">
 		<content>
 			<l:FixFlex>
 				<l:fixContent>
@@ -56,7 +56,119 @@
 					</fb:FilterBar>
 				</l:fixContent>
 				<l:flexContent>
-					<core:Fragment fragmentName="com.incture.lch.premfreightOrders.fragment.FrieghtUnitsTable" type="XML"/>
+					<!--	<core:Fragment fragmentName="com.incture.lch.premfreightOrders.fragment.FreightUnitsTable" type="XML"/>-->
+					<ui:Table id="premfreightstable" rows="{mCommon>/aPremfreightorders}" visibleRowCountMode="Fixed" alternateRowColors="true"
+						enableColumnReordering="false" class="sapUiMediumMarginBegin sapUiSmallMarginEnd sapUiTableNoColBorders" selectionMode="Single"
+						selectionBehavior="RowOnly">
+						<ui:columns>
+							<ui:Column tooltip="{i18n>ORDER_ID}" width="10rem" sorted="true" sortProperty="{mCommon>adhocOrderId}">
+								<Label text="{i18n>ORDER_ID}" design="Bold"/>
+								<ui:template>
+									<Text maxLines="1" text="{mCommon>orderId}" tooltip="{mCommon>orderId}"/>
+								</ui:template>
+							</ui:Column>
+							<ui:Column tooltip="{i18n>REASON_CODE}">
+								<Label text="{i18n>REASON_CODE}" design="Bold"/>
+								<ui:template>
+									<Text maxLines="1" text="{mCommon>reasonCode}" tooltip="{mCommon>reasonCode}"/>
+								</ui:template>
+							</ui:Column>
+							<ui:Column tooltip="{i18n>ORIGIN_NAME}">
+								<Label text="{i18n>ORIGIN_NAME}" design="Bold"/>
+								<ui:template>
+									<Text maxLines="1" text="{mCommon>originName}" tooltip="{mCommon>originName}"/>
+								</ui:template>
+							</ui:Column>
+							<ui:Column tooltip="{i18n>DESTINATION_NAME}">
+								<Label text="{i18n>DESTINATION_NAME}" design="Bold"/>
+								<ui:template>
+									<Text maxLines="1" text="{mCommon>destinationName}" tooltip="{mCommon>destinationName}"/>
+								</ui:template>
+							</ui:Column>
+							<ui:Column tooltip="{i18n>CREATED_DATE}" visible="{mCommon>/visible/createdDate}">
+								<Label text="{i18n>CREATED_DATE}" design="Bold"/>
+								<ui:template>
+									<Text maxLines="1"
+										text="{path:'mCommon>createdDate', type:'sap.ui.model.type.DateTime', formatOptions: {source: { pattern: 'yyyy-MM-dd HH:mm:ss' },pattern: 'dd MMM yyyy', strictParsing: true}}"/>
+								</ui:template>
+							</ui:Column>
+							<ui:Column tooltip="{i18n>STATUS}">
+								<Label text="{i18n>STATUS}" design="Bold"/>
+								<ui:template>
+									<Text maxLines="1" text="{mCommon>status}"/>
+								</ui:template>
+							</ui:Column>
+							<ui:Column tooltip="{i18n>CARRIER}" hAlign="Begin" visible="{mCommon>/visible/carrierCombo}">
+								<Label text="{i18n>CARRIER}" design="Bold"/>
+								<ui:template>
+									<ComboBox selectedKey="{mCommon>selectedCarrier}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="true" filterSecondaryValues="true"
+										items="{path: 'mCommon>/aCarrierdetails'}" change="onChangeCarrier" valueState="{mCommon>/valstate/carrier}"
+										enabled="{mCommon>enablecarrier}">
+										<core:ListItem key="{mCommon>bpNumber}" text="{mCommon>bpNumber}" additionalText="{mCommon>carrierDetails}"
+											tooltip="{mCommon>carrierDetails}"/>
+									</ComboBox>
+								</ui:template>
+							</ui:Column>
+							<ui:Column tooltip="{i18n>CARRIER}" hAlign="Begin" visible="{mCommon>/visible/carrierText}">
+								<Label text="{i18n>CARRIER}" design="Bold"/>
+								<ui:template>
+									<Text maxLines="1" text="{mCommon>bpNumber}"/>
+								</ui:template>
+							</ui:Column>
+							<ui:Column tooltip="{i18n>CARRIER_MODE}" hAlign="Begin" visible="{mCommon>/visible/carrierCombo}">
+								<Label text="{i18n>CARRIER_MODE}" design="Bold"/>
+								<ui:template>
+									<ComboBox selectedKey="{mCommon>selectedCarriermode}" class="sapUiMInputBoxBorderRadius" showSecondaryValues="false"
+										items="{path: 'mCommon>/aCarriermodes'}" change="onChangeCBox" enabled="{mCommon>enablecarriermode}">
+										<core:ListItem key="{mCommon>mode}" text="{mCommon>mode}" tooltip="{mCommon>mode}"/>
+									</ComboBox>
+								</ui:template>
+							</ui:Column>
+							<ui:Column tooltip="{i18n>CARRIER_MODE}" hAlign="Begin" visible="{mCommon>/visible/carrierText}">
+								<Label text="{i18n>CARRIER_MODE}" design="Bold"/>
+								<ui:template>
+									<Text maxLines="1" text="{mCommon>carrierMode}"/>
+								</ui:template>
+							</ui:Column>
+							<ui:Column tooltip="{i18n>CARRIER_SCAC}" visible="{mCommon>/visible/carrierScac}">
+								<Label text="{i18n>CARRIER_SCAC}" design="Bold"/>
+								<ui:template>
+									<Text maxLines="1" text="{mCommon>carrierScac}"/>
+								</ui:template>
+							</ui:Column>
+							<ui:Column tooltip="{i18n>CARRIER_DETAILS}" visible="{mCommon>/visible/carrierDetails}">
+								<Label text="{i18n>CARRIER_DETAILS}" design="Bold"/>
+								<ui:template>
+									<Text maxLines="1" text="{mCommon>carrierDetails}"/>
+								</ui:template>
+							</ui:Column>
+							<ui:Column tooltip="{i18n>COST}">
+								<Label text="{i18n>COST}" design="Bold"/>
+								<ui:template>
+									<Input value="{mCommon>charge}" enabled="{mCommon>/enable/costInput}"></Input>
+								</ui:template>
+							</ui:Column>
+							<!--	<ui:Column tooltip="{i18n>ACTION}">
+								<Label text="{i18n>ACTION}" design="Bold"/>
+								<ui:template>
+									<Label text="sample"/>
+									<Button icon="sap-icon://overflow" class="sapUiSmallMargin" press="onButtonPress">
+										<dependents>
+											<ActionSheet id="actionSheet"
+												title="Choose Your Action" showCancelButton="true" placement="Bottom">
+												<Button text="Accept" icon="sap-icon://accept"/>
+												<Button text="Reject" icon="sap-icon://decline"/>
+												<Button text="Email" icon="sap-icon://email"/>
+												<Button text="Forward" icon="sap-icon://forward"/>
+												<Button text="Delete" icon="sap-icon://delete"/>
+												<Button text="Other"/>
+											</ActionSheet>
+										</dependents>
+									</Button>
+								</ui:template>
+							</ui:Column>-->
+						</ui:columns>
+					</ui:Table>
 				</l:flexContent>
 			</l:FixFlex>
 		</content>
@@ -68,11 +180,19 @@
 					</layoutData>
 				</ToolbarSpacer>
 				<Button text="{i18n>REJECT}" type="Reject" press="onReject" visible="{mCommon>/visible/bReject}" enabled="{mCommon>/enable/bReject}"/>
+				<Button text="{i18n>FORW_MANAGER}" type="Emphasized" press="onForwardtoManager" visible="{mCommon>/visible/bGetcost}"
+					enabled="{mCommon>/enable/bGetcost}"/>
+				<Button text="{i18n>FORW_TO_CA}" type="Emphasized" press="onForwardtoCA" visible="{mCommon>/visible/bGetcost}"
+					enabled="{mCommon>/enable/bGetcost}"/>
+				<Button text="{i18n>FORW_PLANNER}" type="Emphasized" press="onForwardtoPlanner" visible="{mCommon>/visible/bSetcost}"
+					enabled="{mCommon>/enable/bSetcost}"/>
+				
 				<layoutData>
 					<OverflowToolbarLayoutData priority="NeverOverflow"/>
 				</layoutData>
 				<ToolbarSpacer/>
-				<HBox>
+				<ToolbarSpacer/>
+				<HBox id="pagination">
 					<Button enabled="true" id="firstPage" press="fnPagination(1)" tooltip="{i18n>FIRST_PAGE}" icon="sap-icon://close-command-field"
 						visible="true"></Button>
 					<Button enabled="true" id="previousPage" class="btnPrev" press="fnPagination(2)" tooltip="{i18n>PREV_PAGE}"
@@ -91,12 +211,8 @@
 					<Button enabled="true" id="lastPage" class="btnPrev" press="fnPagination(4)" tooltip="{i18n>LAST_PAGE}" icon="sap-icon://open-command-field"
 						visible="true"></Button>
 				</HBox>
-				<ToolbarSpacer/>
-				<Button text="{i18n>FORW_TO_CA}" type="Emphasized" press="onGetCost" visible="{mCommon>/visible/bGetcost}"
-					enabled="{mCommon>/enable/bGetcost}"/>
-				<Button text="{i18n>FORW_PLANNER}" type="Emphasized" press="onSetCost"
-					visible="{mCommon>/visible/bSetcost}" enabled="{mCommon>/enable/bSetcost}"/>
-				<!--<Button text="{i18n>Approve}" type="Accept" press="onApprove" visible="{mCommon>/visible/bApprove}" enabled="{mCommon>/enable/bApprove}"/>-->
+				<Button text="{i18n>REJECT}" type="Reject" press="onApprove('Rejected')" visible="{mCommon>/visible/bApprove}" enabled="{mCommon>/enable/bApprove}"/>
+				<Button text="{i18n>Approve}" type="Accept" press="onApprove('Approved')" visible="{mCommon>/visible/bApprove}" enabled="{mCommon>/enable/bApprove}"/>
 				<ToolbarSpacer width="2rem">
 					<layoutData>
 						<OverflowToolbarLayoutData priority="NeverOverflow"/>

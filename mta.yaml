@@ -20,8 +20,8 @@ modules:
           url: '~{url}'
           forwardAuthToken: true
       - name: lch_workflow
-      - name: uaa_LCH
       - name: portal_resources_LCH
+      - name: uaa_LCH
     properties:
       SEND_XFRAMEOPTIONS: false
   - name: LCH_ui_deployer
@@ -43,6 +43,10 @@ modules:
           artifacts:
             - './*'
           target-path: resources/premfreightOrders
+        - name: Accountant
+          artifacts:
+            - './*'
+          target-path: resources/Accountant
   - name: Adhoc
     type: html5
     path: Adhoc
@@ -109,6 +113,16 @@ modules:
       - name: lch_workflow
       - name: LCH_html5_repo_host
       - name: LCH_ui_deployer
+  - name: Accountant
+    type: html5
+    path: Accountant
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist
 resources:
   - name: LCH_html5_repo_runtime
     parameters:

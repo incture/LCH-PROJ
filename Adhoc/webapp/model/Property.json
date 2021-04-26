@@ -68,6 +68,12 @@
 	}],
 	"aHistory": [],
 	"aCountries": [],
+	"aPlannerEmail": [
+		{
+			"key" : "test@email.com"
+		}, {
+			"key" : "Bindhu.Sivakumar@incture.com"
+		}],
 	"aCurrency": [{
 			"key": "PLN",
 			"currency": "Polish zloty",
