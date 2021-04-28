@@ -16,6 +16,7 @@ import com.sap.cloud.security.xsuaa.token.TokenAuthenticationConverter;
 
 @Configuration
 @EnableWebSecurity
+
 @Profile("security_local")
 public class SecurityConfigLocal extends WebSecurityConfigurerAdapter {
 

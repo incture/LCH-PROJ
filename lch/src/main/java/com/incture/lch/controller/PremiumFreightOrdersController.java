@@ -9,6 +9,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +49,8 @@ import com.incture.lch.service.PremiumFreightOrdersService;
 @RequestMapping(value = "/premiumOrders", produces = "application/json")
 public class PremiumFreightOrdersController 
 {
+	private final Logger MYLOGGER = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	private PremiumFreightOrdersService premiumFreightOrdersService;
 	
@@ -188,6 +192,8 @@ public class PremiumFreightOrdersController
 	public HttpResponse completeAccountantTask(@RequestBody ApprovalDto dto)
 			throws ClientProtocolException, IOException, JSONException
 	{
+		MYLOGGER.error("Premium Workflow Controller : Accountant Task Entering : enter"+dto.getOrderIdDetails());
+
 		return wflocal.completeAccountantTask(dto);
 	}
 

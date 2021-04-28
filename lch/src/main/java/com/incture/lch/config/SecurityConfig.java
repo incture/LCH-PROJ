@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.Jwt;
 
  
@@ -23,6 +24,7 @@ import com.sap.cloud.security.xsuaa.token.TokenAuthenticationConverter;
 @Configuration
 @EnableWebSecurity
 @Profile("security")
+
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
  
@@ -37,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         /*http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
                 .antMatchers("/lch/**").permitAll().anyRequest().authenticated().and().oauth2ResourceServer().jwt()
                 .jwtAuthenticationConverter(getJwtAuthenticationConverter());*/
-        
+    	http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.csrf().disable()
         //no authentication needed for these context paths
         .authorizeRequests()

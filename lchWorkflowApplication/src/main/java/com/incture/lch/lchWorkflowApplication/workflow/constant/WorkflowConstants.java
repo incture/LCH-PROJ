@@ -21,7 +21,9 @@ public class WorkflowConstants {
 	public static final String LCH_APP_URL_FOR_UPDATETYPE4= "https://LCH.cfapps.eu10.hana.ondemand.com/adhocorders/updateApprovalWorkflowDetailsForType4";
 	public static final String PREMIUM_APP_URL_FOR_UPDATE = "https://LCH.cfapps.eu10.hana.ondemand.com/adhocorders/updateTableDetails";
 	public static final String PREMIUM_APP_URL_FOR_APPROVAL="https://LCH.cfapps.eu10.hana.ondemand.com/adhocorders/approveTask";
-	
+	public static final String PREMIUM_APP_URL_FOR_TASK_COMPLETION="https://hrapps.authentication.eu10.hana.ondemand.com/v1/task-instances?taskInstanceId=";
+	public static final String PREMIUM_APP_URL_FOR_TABLE_UPDATE="https://LCH.cfapps.eu10.hana.ondemand.com/premiumOrders/updateTableDetails";
+
 	public static final String APPROVED = "APPROVED";
 	public static final String REJECTED = "REJECTED";
 	public static final String COMPLETED = "COMPLETED";

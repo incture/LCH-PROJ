@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.incture.lch.dto.ApprovalDto;
+import com.incture.lch.adhoc.custom.dto.ResponseMessage;
 import com.incture.lch.dto.TaskDetailsDto;
 
 public interface PremiumWorkflowInvokerLocal {

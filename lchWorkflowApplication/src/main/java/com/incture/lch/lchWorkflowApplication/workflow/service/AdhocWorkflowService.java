@@ -36,6 +36,11 @@ public class AdhocWorkflowService {
 	private String clientid;
 	private String clientsecret;
 
+	/*private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
+	private static String url = "https://hrapps.authentication.eu10.hana.ondemand.com";
+	private static String clientid = "sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
+	private static String clientsecret = "696410cf-20aa-4437-adc5-6b34b84c7e45$SutX2XMS8KLWjm8ed_USprkpdwZ0r8jTACJhPVXhApQ=";
+*/
 	public AdhocWorkflowService() {
 		try {
 			JSONObject jsonObj = new JSONObject(System.getenv("VCAP_SERVICES"));

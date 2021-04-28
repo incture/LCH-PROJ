@@ -1463,16 +1463,20 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 			if (workflowDefinitionId != null && workflowDefinitionId.equals("")) {
 				criteria.add(Restrictions.eq("workflowDefinitionId", "premiumorderworkflow"));
 			}
+			System.err.println("Size of the Workflow added filter" + criteria.list().size());
+
 			if (criteria.list() == null) {
 				return null;
 			}
-			// criteria.add(Restrictions.eq("instanceId", instanceId));
+			criteria.add(Restrictions.eq("instanceId", workflowInstanceId));
 			// task Id.
+			/*System.err.println("Size of the Workflow added filter" + criteria.list().size());
+
 			if (workflowInstanceId != null && !(workflowInstanceId.equals(""))) {
 				criteria.add(Restrictions.eq("workflowInstanceId", workflowInstanceId));
 
-			}
-
+			
+*/
 			adhocOrderWorkflows = criteria.list();
 
 			System.err.println("Size of the Workflow added filter" + adhocOrderWorkflows.size());
@@ -1510,7 +1514,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		System.err.println(workflowInstanceId);
 		List<AdhocOrderWorkflow> adhocOrderWorkflowList = new ArrayList<AdhocOrderWorkflow>();
 		Criteria criteria_workflow = session.createCriteria(AdhocOrderWorkflow.class);
-		criteria_workflow.add(Restrictions.eq("workflowInstanceId", workflowInstanceId));
+		criteria_workflow.add(Restrictions.eq("instanceId", workflowInstanceId));
 		adhocOrderWorkflowList = criteria_workflow.list();
 		System.err.println("Size of the array that contain the instance Id : " + adhocOrderWorkflowList.size());
 		List<String> orderIdList = new ArrayList<String>();

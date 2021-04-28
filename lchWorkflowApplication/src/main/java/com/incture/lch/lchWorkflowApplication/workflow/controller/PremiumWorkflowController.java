@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.incture.lch.lchWorkflowApplication.workflow.dto.ApprovalDto;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.PremiumWorkflowCustomDto;
+import com.incture.lch.lchWorkflowApplication.workflow.dto.ResponseMessage;
+import com.incture.lch.lchWorkflowApplication.workflow.dto.WorkflowPremiumCustomDto;
 import com.incture.lch.lchWorkflowApplication.workflow.service.PremiumWorkflowService;
 
 @RestController
@@ -81,5 +83,10 @@ public class PremiumWorkflowController
 		return premiumWorkflowService.completeAccountantTask(dto);
 	}
 
+	@PostMapping("/updateTableDetails")
+	public ResponseMessage updateTableDetails(@RequestBody WorkflowPremiumCustomDto dto)
+			throws ClientProtocolException, JSONException, IOException {
+		return premiumWorkflowService.updateTableDetails(dto);
+	}
 
 }
