@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Response<T> {
+public class Response<T> { // NO_UCD (unused code)
 	private String status = HttpStatus.OK.getReasonPhrase();
 	private String message;
 	private Integer statusCode = HttpStatus.OK.value();

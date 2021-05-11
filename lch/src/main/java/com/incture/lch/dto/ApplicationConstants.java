@@ -1,12 +1,9 @@
 package com.incture.lch.dto;
 
-/**
- * @author Shruti Bodhe(INC01011) created on (29-Apr-2020)
- */
 public class ApplicationConstants {
 
 	public static final int LIMIT = 100;
-	public static final int ASSEMBLY_COUNT = 10;
+	public static final int ASSEMBLY_COUNT = 10; // NO_UCD (unused code)
 
 	public static final String SAVE_OP = "save";
 	public static final String UPDATE_OP = "update";

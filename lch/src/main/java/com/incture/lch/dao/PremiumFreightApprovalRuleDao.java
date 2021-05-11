@@ -13,13 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.incture.lch.adhoc.workflow.constant.WorkflowConstants;
-import com.incture.lch.dto.AdhocApprovalRuleDto;
 import com.incture.lch.dto.PremiumFreightApprovalRuleDTO;
 import com.incture.lch.dto.ResponseDto;
-import com.incture.lch.entity.AdhocApprovalRule;
 import com.incture.lch.entity.PremiumFreightApprovalRule;
-import com.incture.lch.util.ServiceUtil;
 
 @Repository
 public class PremiumFreightApprovalRuleDao {
@@ -89,6 +85,7 @@ public class PremiumFreightApprovalRuleDao {
 
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<PremiumFreightApprovalRuleDTO> getAllPremiumApprovalList() {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
@@ -114,11 +111,12 @@ public class PremiumFreightApprovalRuleDao {
 
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public String getApproverByCost(int charge) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 
-		System.err.println("The charge is "+charge);
+		System.err.println("The charge is " + charge);
 		List<PremiumFreightApprovalRule> ruledo = new ArrayList<PremiumFreightApprovalRule>();
 		Criteria criteria = session.createCriteria(PremiumFreightApprovalRule.class);
 		ruledo = criteria.list();
@@ -126,16 +124,22 @@ public class PremiumFreightApprovalRuleDao {
 		for (PremiumFreightApprovalRule rule : ruledo) {
 			int cost_min = rule.getCost_min();
 			int cost_max = rule.getCost_max();
-			System.err.println("Cost _Min And Cost_max"+cost_max+ " "+cost_min);
+			System.err.println("Cost _Min And Cost_max" + cost_max + " " + cost_min);
 			if (charge > cost_min && charge < cost_max) {
 
 				managerUserId = rule.getApprover();
-				System.err.println("Manager Id"+ managerUserId);
+				System.err.println("Manager Id" + managerUserId);
 				return managerUserId;
 
 			}
 
 		}
+
+		session.flush();
+		session.clear();
+		tx.commit();
+		session.close();
+
 		return managerUserId;
 
 	}

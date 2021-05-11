@@ -12,7 +12,8 @@ public class PartNumberDescDto {
 
 	}
 
-	public PartNumberDescDto(String partNum, String partDesc, String message, Boolean isHazMat, String hazardUnNumber) {
+// TODO from UCDetector: Constructor "PartNumberDescDto.PartNumberDescDto(String,String,String,Boolean,String)" has 0 references
+	public PartNumberDescDto(String partNum, String partDesc, String message, Boolean isHazMat, String hazardUnNumber) { // NO_UCD (unused code)
 		super();
 		this.partNum = partNum;
 		this.partDesc = partDesc;

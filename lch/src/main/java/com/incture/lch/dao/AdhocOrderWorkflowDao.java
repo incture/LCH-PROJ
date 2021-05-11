@@ -3,24 +3,19 @@ package com.incture.lch.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.Criteria;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.incture.lch.dto.AdhocOrderWorkflowDto;
 import com.incture.lch.entity.AdhocOrderWorkflow;
-import com.incture.lch.entity.AdhocOrders;
 
 @Repository("adhocOrderWorkflowDao")
 public class AdhocOrderWorkflowDao {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(AdhocOrderWorkflowDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -84,6 +79,7 @@ public class AdhocOrderWorkflowDao {
 		session.close();
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<AdhocOrderWorkflowDto> getAllPremiumWorkflowLog()
 	{
 		List<AdhocOrderWorkflowDto> adhocOrdersWorkflowDtoList= new ArrayList<AdhocOrderWorkflowDto>();

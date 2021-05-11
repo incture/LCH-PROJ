@@ -11,12 +11,12 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.incture.lch.dto.RoleDto;
-import com.incture.lch.entity.LchRole;
+import com.incture.lch.dto.PremiumRoleDto;
+import com.incture.lch.entity.PremiumRole;
 
 @Repository
-
-public class RoleDao {
+public class PremiumRoleDao 
+{
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -26,18 +26,18 @@ public class RoleDao {
 	}
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
-	public List<String> getRole(String userId) {
+	public List<String> getPremiumRole(String userId) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
-		List<RoleDto> roleDtos = new ArrayList<RoleDto>();
-		List<LchRole> roles = new ArrayList<LchRole>();
+		List<PremiumRoleDto> roleDtos = new ArrayList<PremiumRoleDto>();
+		List<PremiumRole> roles = new ArrayList<PremiumRole>();
 
 		List<String> rolesDescription= new ArrayList<String>();
-		Criteria criteria = session.createCriteria(LchRole.class);
+		Criteria criteria = session.createCriteria(PremiumRole.class);
 		criteria.add(Restrictions.eq("userId", userId));
 		roles = criteria.list();
-		for (LchRole role : roles) {
-			RoleDto r = new RoleDto();
+		for (PremiumRole role : roles) {
+			PremiumRoleDto r = new PremiumRoleDto();
 			r.setUserId(role.getUserId());
 			r.setUserEmail(role.getUserEmail());
 			r.setRole(role.getRole());
@@ -52,14 +52,14 @@ public class RoleDao {
 		return rolesDescription;
 	}
 
-	public String addRole(List<RoleDto> roleDtos) {
+	public String addPremiumRole(List<PremiumRoleDto> roleDtos) {
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
-		for (RoleDto r : roleDtos) {
+		for (PremiumRoleDto r : roleDtos) {
 			System.out.println("Inside Loop");
-			LchRole role = new LchRole();
-			System.out.println(r.getUserId());
+			PremiumRole role = new PremiumRole();
+			System.out.println(r.getUserEmail());
 			role.setUserId(r.getUserId());
 			role.setUserEmail(r.getUserEmail());
 			role.setRole(r.getRole());
@@ -71,4 +71,6 @@ public class RoleDao {
 		session.close();
 		return "Success";
 	}
+
+
 }

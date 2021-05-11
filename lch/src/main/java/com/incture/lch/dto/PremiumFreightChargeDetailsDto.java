@@ -1,8 +1,5 @@
 package com.incture.lch.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-
 public class PremiumFreightChargeDetailsDto {
 
 	private String orderId;

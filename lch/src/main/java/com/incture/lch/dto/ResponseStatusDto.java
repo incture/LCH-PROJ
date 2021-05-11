@@ -1,6 +1,6 @@
 package com.incture.lch.dto;
 
-public class ResponseStatusDto {
+public class ResponseStatusDto { // NO_UCD (use default)
 
 	private String message;
 	private Integer statusCode;

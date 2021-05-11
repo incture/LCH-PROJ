@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -27,13 +26,11 @@ import org.springframework.web.client.RestTemplate;
 
 import com.incture.lch.lchWorkflowApplication.workflow.constant.AuthorizationConstants;
 import com.incture.lch.lchWorkflowApplication.workflow.constant.WorkflowConstants;
-import com.incture.lch.lchWorkflowApplication.workflow.dto.AdhocWorkflowCustomDto;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.ApprovalDto;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.ContextDto;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.PremiumWorkflowCustomDto;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.ResponseMessage;
-import com.incture.lch.lchWorkflowApplication.workflow.dto.WorkflowCustomDto;
 import com.incture.lch.lchWorkflowApplication.workflow.dto.WorkflowPremiumCustomDto;
 import com.incture.lch.lchWorkflowApplication.workflow.util.ServiceUtil;
 
@@ -134,9 +131,13 @@ public class PremiumWorkflowService {
 		try {
 			CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 			String bearerToken = getBearerToken(httpClient);
+			MYLOGGER.error("ENTERING INTO callPremiumAppToUpdateWorkflowTables bearerToken:: " + bearerToken);
+
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.set("Authorization", "Bearer " + bearerToken);
+			MYLOGGER.error("HEADERSS:: " + headers);
+
 			HttpEntity<WorkflowPremiumCustomDto> entity = new HttpEntity<WorkflowPremiumCustomDto>(input, headers);
 			String responseMessage = callRestApi.postForObject(WorkflowConstants.PREMIUM_APP_URL_FOR_TABLE_UPDATE, entity,
 					String.class);
@@ -268,7 +269,6 @@ public class PremiumWorkflowService {
 
 	public ResponseMessage updateTableDetails(WorkflowPremiumCustomDto dto)
 			throws ClientProtocolException, JSONException, IOException {
-		// TODO Auto-generated method stub
 		MYLOGGER.error("AdhocOWorkflowService: updateApprovalWorflowDetailsForType4: enter ");
 		return callPremiumAppToUpdateWorkflowTables(dto);
 	}
@@ -361,7 +361,6 @@ public class PremiumWorkflowService {
 			headers.set("Authorization", "Bearer " + bearerToken);
 			
 			JSONObject context = new JSONObject();
-			JSONObject response = new JSONObject();
 			System.err.println("After Object creation");
 			ContextDto contextdto= new ContextDto();
 			if (status.equalsIgnoreCase("Approved")) {

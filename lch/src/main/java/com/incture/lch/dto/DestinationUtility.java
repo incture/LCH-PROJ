@@ -21,6 +21,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.incture.lch.util.ServiceUtil;
+import com.incture.lch.dto.CommonsConfigConstants;
 
 /**
  * 
@@ -28,7 +29,7 @@ import com.incture.lch.util.ServiceUtil;
  *
  */
 @Component
-public class DestinationUtility {
+public class DestinationUtility { // NO_UCD (unused code)
 	private final Logger logger = LoggerFactory.getLogger(DestinationUtility.class);
 
 	public HttpResponseDto getDataFromDestinationSystem(String destinationName, String url, String methodType,
@@ -248,7 +249,6 @@ public class DestinationUtility {
 
 		System.out.println(" filtered query .." + str.toString());
 		return str.toString();
-		// TODO Auto-generated method stub
 
 	}
 

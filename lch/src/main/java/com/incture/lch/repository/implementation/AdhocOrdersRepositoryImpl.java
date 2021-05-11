@@ -20,26 +20,21 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
-import org.json.JSONException;
 
 import com.incture.lch.adhoc.custom.dto.AdhocWorkflowCustomDto;
-
-import com.incture.lch.dao.AdhocApprovalRuleDao;
-import com.incture.lch.adhoc.workflow.service.WorkflowInvokerLocal;
-
-import com.incture.lch.dao.AdhocApprovalRuleDao;
 import com.incture.lch.adhoc.custom.dto.WorkflowCustomDto;
-import org.json.JSONObject;
-import com.incture.lch.dao.AdhocApprovalRuleDao;
 import com.incture.lch.adhoc.workflow.constant.WorkflowConstants;
-import com.incture.lch.adhoc.workflow.dto.PremiumWorkflowApprovalTaskDto;
 import com.incture.lch.adhoc.workflow.dto.WorkflowApprovalTaskDto;
 import com.incture.lch.adhoc.workflow.service.WorkFlowServiceLocal;
+import com.incture.lch.adhoc.workflow.service.WorkflowInvokerLocal;
+import com.incture.lch.dao.AdhocApprovalRuleDao;
 import com.incture.lch.dao.AdhocOrderWorkflowDao;
 import com.incture.lch.dao.LkCountriesDao;
 import com.incture.lch.dao.LkDivisionDao;
@@ -54,9 +49,6 @@ import com.incture.lch.dto.LkShipperDetailsDto;
 import com.incture.lch.dto.PartNumberDescDto;
 import com.incture.lch.dto.ReasonCodeDto;
 import com.incture.lch.dto.ResponseDto;
-import com.incture.lch.dto.WorkflowInputDto;
-import com.incture.lch.entity.AdhocApprovalRule;
-import com.incture.lch.entity.AdhocOrderWorkflow;
 import com.incture.lch.entity.AdhocOrders;
 import com.incture.lch.entity.LchRole;
 import com.incture.lch.entity.LkCountries;
@@ -67,9 +59,6 @@ import com.incture.lch.helper.AdhocOrderWorkflowHelper;
 import com.incture.lch.repository.AdhocOrdersRepository;
 import com.incture.lch.util.GetReferenceData;
 import com.incture.lch.util.ServiceUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 @Repository
 public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
@@ -451,7 +440,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<AdhocOrderDto> getAllAdhocOrders() {
 		List<AdhocOrderDto> AdhocOrderDtos = new ArrayList<>();
 		List<AdhocOrders> adhocOrders = new ArrayList<>();
@@ -471,10 +460,9 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		return AdhocOrderDtos;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
 	public List<AdhocOrderDto> getDrafts(AdhocRequestDto adhocRequestDto) {
-		List<AdhocOrderDto> AdhocOrderDtos = new ArrayList<>();
 		List<AdhocOrders> adhocOrders = new ArrayList<>();
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
@@ -550,7 +538,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 	}
 
 	//////////////////////////////////////////////////////////////////
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<AdhocOrderDto> getKpi(int days, AdhocRequestDto adhocRequestDto) {
 		List<AdhocOrderDto> AdhocOrderDtos = new ArrayList<>();
 		List<AdhocOrders> adhocOrders = new ArrayList<>();
@@ -712,7 +700,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			}
 			
 			adhocOrders.setPendingWith(pendingWith.substring(0, pendingWith.length() - 1));
-			adhocOrders.setStatus("Pending at Planner");
+			adhocOrders.setStatus("Pending At Planner");
 			session.saveOrUpdate(adhocOrders);
 			/*			
 			PremiumWorkflowApprovalTaskDto premiumWorkflowDto = new PremiumWorkflowApprovalTaskDto();
@@ -811,6 +799,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		// return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public int deleteAdhocOrders(String adhocOrderId, String userId, String partNum) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
@@ -829,6 +818,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List<AdhocOrderDto> getAdhocOrders(AdhocRequestDto adhocRequestDto) {
 		StringBuilder queryString = new StringBuilder();
 		Session session = sessionFactory.openSession();
@@ -893,7 +883,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		return list;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Map<String, List<ReasonCodeDto>> getReasonCode() {
 		Session session = sessionFactory.openSession();
@@ -922,7 +912,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<LkDivisionsDto> getAllDivisions() {
 		Session session = sessionFactory.openSession();
@@ -949,7 +939,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<LkCountriesDto> getAllCountries() {
 		Session session = sessionFactory.openSession();
@@ -976,7 +966,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<LkShipperDetailsDto> getAllShipperDetails() {
 		Session session = sessionFactory.openSession();
@@ -1041,6 +1031,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public String getReasonCodeDescById(String id) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
@@ -1060,11 +1051,10 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		return desc;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<LkShipperDetailsDto> getShipperDetails(String shipperName) {
 		// String queryStr = "select sh from LkShipperDetails sh where
 		// sh.shipperName=:shipperName";
-		@SuppressWarnings("deprecation")
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		Criteria crit = session.createCriteria(LkShipperDetails.class);
@@ -1099,8 +1089,6 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			a.setPendingWith(workflowDto.getPendingWith());
 			session.saveOrUpdate(a);
 		}
-		List<AdhocOrderWorkflowDto> adhocOrderWorkflowDto = new ArrayList<AdhocOrderWorkflowDto>();
-
 		session.save(adhocOrderWorkflowDao.importAdhocWorkflow(workflowDto));
 
 		session.flush();
@@ -1135,8 +1123,6 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			a.setPendingWith(workflowDto.getPendingWith());
 			session.saveOrUpdate(a);
 		}
-		List<AdhocOrderWorkflowDto> adhocOrderWorkflowDto = new ArrayList<AdhocOrderWorkflowDto>();
-
 		session.save(adhocOrderWorkflowDao.importAdhocWorkflow(workflowDto));
 
 		session.flush();
@@ -1165,6 +1151,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public String updateApprovalWorflowDetails(WorkflowCustomDto obj)
 			throws JSONException, ClientProtocolException, IOException {
 		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();
@@ -1200,6 +1187,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		return workflowDto.getOrderId();
 	}
 
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
 	public String updateApprovalWorflowDetails1(WorkflowCustomDto obj)
 			throws JSONException, ClientProtocolException, IOException {
@@ -1236,6 +1224,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 		return workflowDto.getOrderId();
 	}
 
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public String updateApprovalWorflowDetailsForType4(AdhocWorkflowCustomDto dto)
 			throws JSONException, ClientProtocolException, IOException {
 		AdhocOrderWorkflowDto workflowDto = new AdhocOrderWorkflowDto();

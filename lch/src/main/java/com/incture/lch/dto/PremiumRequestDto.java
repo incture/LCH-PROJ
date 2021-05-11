@@ -1,13 +1,11 @@
 package com.incture.lch.dto;
 
-import java.util.Date;
-
 public class PremiumRequestDto
 {
 	private String orderId;
 	private String fromDate;
 	private String toDate;
-	private String plannerEmail;
+	//private String plannerEmail;
 	private String status;
 	private String originName;
 	private String destinationName;
@@ -15,12 +13,11 @@ public class PremiumRequestDto
 	private int noOfEntry=0;
 	private String reasonCode;
 	private String userId;
-	private String user_role;
 	
 	public String getorderId() {
 		return orderId;
 	}
-	public void setorderId(String orderId) {
+	public void setorderId(String orderId) { // NO_UCD (unused code)
 		this.orderId = orderId;
 	}
 	/*public Date getCreatedDate() {
@@ -47,12 +44,12 @@ public class PremiumRequestDto
 	public void setPartNo(String partNo) {
 		this.partNo = partNo;
 	}*/
-	public String getPlannerEmail() {
+	/*public String getPlannerEmail() {
 		return plannerEmail;
 	}
 	public void setPlannerEmail(String plannerEmail) {
 		this.plannerEmail = plannerEmail;
-	}
+	}*/
 	public String getStatus() {
 		return status;
 	}
@@ -96,15 +93,14 @@ public class PremiumRequestDto
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getUser_role() {
-		return user_role;
+	/*public String getUserRole() {
+		return userRole;
 	}
-	public void setUser_role(String user_role) {
-		this.user_role = user_role;
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
 	}
 	
-	
-	
+	*/
 
 	
 }

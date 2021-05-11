@@ -1,6 +1,6 @@
 package com.incture.lch.dto;
 
-public class ResponseMessage {
+public class ResponseMessage { // NO_UCD (unused code)
 	private String message;
 
 	public ResponseMessage(String message) {

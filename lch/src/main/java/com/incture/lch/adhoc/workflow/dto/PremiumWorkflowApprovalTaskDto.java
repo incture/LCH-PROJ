@@ -124,6 +124,7 @@ public class PremiumWorkflowApprovalTaskDto {
 	private String pendingWithApprover;
 	
 	private String pendingWithAccountant;
+
 	public String getPendingWithAccountant() {
 		return pendingWithAccountant;
 	}
@@ -750,4 +751,5 @@ public String toString() {
 		this.pendingWithApprover = pendingWithApprover;
 	}
 
+	
 }

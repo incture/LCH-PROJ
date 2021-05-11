@@ -3,7 +3,7 @@ package com.incture.lch.premium.custom.dto;
 import com.incture.lch.dto.PremiumFreightDto1;
 import com.incture.lch.dto.TaskDetailsDto;
 
-public class PremiumManagerCustomDto
+public class PremiumCustomDto
 {
 	private PremiumFreightDto1 premiumFreightDto1;
 	private TaskDetailsDto taskDetailsDto;

@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.incture.lch.dao.PremiumRoleDao;
 import com.incture.lch.dao.RoleDao;
+import com.incture.lch.dto.PremiumRoleDto;
 import com.incture.lch.dto.RoleDto;
 
 @RestController
@@ -21,6 +23,9 @@ public class RoleController
 {
 	@Autowired
 	private RoleDao roledao;
+	
+	@Autowired
+	private PremiumRoleDao premiumRoleDao;
 	@RequestMapping(value = "/getRole/{userId}", method = RequestMethod.GET, consumes = { "application/json" })
 	@ResponseBody
 	public  List<String> getRole(@PathVariable String userId)
@@ -34,5 +39,19 @@ public class RoleController
 	{
 		System.out.println(roleDtos);
 		return roledao.addRole(roleDtos);
+	}
+	@RequestMapping(value = "/getPremiumRole/{userId}", method = RequestMethod.GET, consumes = { "application/json" })
+	@ResponseBody
+	public  List<String> getPremiumRole(@PathVariable String userId)
+	{
+		return premiumRoleDao.getPremiumRole(userId);
+	}
+	
+	@RequestMapping(value="/addPremiumRole", method = RequestMethod.POST, consumes={"application/json"})
+	@ResponseBody
+	public String addPremiumRole(@RequestBody List<PremiumRoleDto> roleDtos)
+	{
+		System.out.println(roleDtos);
+		return premiumRoleDao.addPremiumRole(roleDtos);
 	}
 }

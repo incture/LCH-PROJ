@@ -23,22 +23,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.incture.lch.adhoc.custom.dto.ResponseMessage;
+import com.incture.lch.dao.AccountingDetailsDao;
 import com.incture.lch.dao.PremiumFreightApprovalRuleDao;
+import com.incture.lch.dto.AccountingDetailsDto;
 import com.incture.lch.dto.ApprovalDto;
 import com.incture.lch.dto.CarrierDetailsDto;
-import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
-import com.incture.lch.dto.PaginationDto1;
 import com.incture.lch.dto.PremiumFreightApprovalRuleDTO;
-import com.incture.lch.dto.PremiumFreightChargeDetailsDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.dto.TaskDetailsDto;
-import com.incture.lch.entity.PremiumFreightChargeDetails;
-import com.incture.lch.premium.custom.dto.PremiumManagerCustomDto;
+import com.incture.lch.premium.custom.dto.PremiumCustomDto;
 import com.incture.lch.premium.custom.dto.PremiumRequestUserInfoCustomDto;
 import com.incture.lch.premium.custom.dto.WorkflowPremiumCustomDto;
 import com.incture.lch.premium.workflow.service.PremiumWorkflowInvokerLocal;
@@ -59,6 +57,8 @@ public class PremiumFreightOrdersController
 	@Autowired
 	private PremiumFreightApprovalRuleDao premiumFreightApprovalRuleDao;
 
+	@Autowired
+	private AccountingDetailsDao accountingDao;
 	
 	@RequestMapping(value = "/getAllPremiumOrders", method = RequestMethod.POST,consumes = { "application/json" })
 	@ResponseBody
@@ -66,12 +66,14 @@ public class PremiumFreightOrdersController
 			return premiumFreightOrdersService.getAllPremiumFreightOrders(premiumRequestDto);
 	}
 	
-	@RequestMapping(value = "/getAllPremiumOrders1", method = RequestMethod.POST,consumes = { "application/json" })
-	@ResponseBody
-	public PaginationDto1 getAllPremiumFreightOrders1(@RequestBody PremiumRequestDto premiumRequestDto) {
-			return premiumFreightOrdersService.getAllPremiumFreightOrders1(premiumRequestDto);
-	}
-
+	/*
+	 * @RequestMapping(value = "/getAllPremiumOrders1", method =
+	 * RequestMethod.POST,consumes = { "application/json" })
+	 * 
+	 * @ResponseBody public PaginationDto1 getPlannerOrders(@RequestBody
+	 * PremiumRequestDto premiumRequestDto) { return
+	 * premiumFreightOrdersService.getPlannerOrders(premiumRequestDto); }
+	 */
 	
 	@RequestMapping(value = "/getAllCarrierDetails", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
@@ -79,18 +81,18 @@ public class PremiumFreightOrdersController
 		return premiumFreightOrdersService.getAllCarrierDetails();
 	}
 
-	@RequestMapping(value = "/getAllCarrierOrders", method = RequestMethod.POST, consumes = { "application/json" })
+	/*@RequestMapping(value = "/getAllCarrierOrders", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
 	public ChargeDetailsPaginated getAllCarrierOrders(@RequestBody PremiumRequestDto premiumRequestDto) {
 		return premiumFreightOrdersService.getAllCarrierOrders(premiumRequestDto);
 	}
-	
-	@RequestMapping(value = "/getAllManagerOrders", method = RequestMethod.POST, consumes = { "application/json" })
+	*/
+	/*@RequestMapping(value = "/getAllManagerOrders", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
 	public ChargeDetailsPaginated getAllManagerOrders(@RequestBody PremiumRequestDto premiumRequestDto)
 	{
 		return premiumFreightOrdersService.getAllManagerOrders(premiumRequestDto);
-	}
+	}*/
 
 	@RequestMapping(value = "/getMode", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
@@ -155,9 +157,16 @@ public class PremiumFreightOrdersController
 	
 	@RequestMapping(value = "/saveApproval", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody	
-	public ResponseDto saveApproval(List<PremiumFreightApprovalRuleDTO> ruleList) 
+	public ResponseDto saveApproval(@RequestBody List<PremiumFreightApprovalRuleDTO> ruleList) 
 	{
 		return premiumFreightApprovalRuleDao.saveApproval(ruleList);
+	}
+	
+	@RequestMapping(value = "/saveAccountingDetails", method = RequestMethod.POST, consumes = { "application/json" })
+	@ResponseBody	
+	public Boolean saveAccountingDetails(@RequestBody List<AccountingDetailsDto> accountingDetailsDto) 
+	{
+		return accountingDao.saveAccountingDetails(accountingDetailsDto);
 	}
 
 	@RequestMapping(value="/addCarrier", method = RequestMethod.POST, consumes={"application/json"})
@@ -167,12 +176,12 @@ public class PremiumFreightOrdersController
 	}
 
 	
-	@GetMapping("/getManagerOrders/{userId}")
-	public List<PremiumManagerCustomDto> getManagerOrders(@PathVariable String userId) throws ClientProtocolException, IOException, JSONException
+	/*@GetMapping("/getManagerOrders")
+	public List<PremiumCustomDto> getManagerOrders(@RequestBody PremiumRequestDto premiumRequestDto) throws ClientProtocolException, IOException, JSONException
 	{
-		return premiumFreightOrdersService.getManagerOrders(userId);
+		return premiumFreightOrdersService.getManagerOrders(premiumRequestDto);
 	}
-
+*/
 	@GetMapping("/getallTaskInstancesId/{userId}")
 	public List<TaskDetailsDto> getAllWorkflowTaskInstanceId(@PathVariable String userId)
 			throws ClientProtocolException, IOException, JSONException
@@ -213,6 +222,19 @@ public class PremiumFreightOrdersController
 	public ResponseDto updatePremiumAccountingDetails(@RequestBody PremiumOrderAccountingDetailsDto AccountingDetailsDto)
 	{
 	     return premiumFreightOrdersService.updatePremiumAccountingDetails(AccountingDetailsDto);
+	}
+	
+	@RequestMapping(value = "/getAllAccountantOrders", method = RequestMethod.POST,consumes = { "application/json" })
+	@ResponseBody
+	public List<PremiumCustomDto> getAllAccountantOrders(@RequestBody PremiumRequestDto premiumRequestDto) throws ClientProtocolException, IOException, JSONException
+	{
+		return premiumFreightOrdersService.getAllAccountantOrders(premiumRequestDto);
+	}
+
+	@GetMapping("/getAllAccountingDetails")
+	public List<AccountingDetailsDto> getAllAccountingDetails()
+	{
+		return accountingDao.getAllAccountingDetails();
 	}
 	
 }

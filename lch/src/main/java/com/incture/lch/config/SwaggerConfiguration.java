@@ -24,7 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 
 @ComponentScan(basePackages = { "com.incture.*" })
-public class SwaggerConfiguration extends WebMvcConfigurationSupport {
+public class SwaggerConfiguration extends WebMvcConfigurationSupport { // NO_UCD (unused code)
 
 	@Bean
 	public Docket productApi() {

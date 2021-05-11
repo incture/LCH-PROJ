@@ -13,15 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.incture.lch.dto.AccountingDetailsDto;
-import com.incture.lch.dto.AdhocApprovalRuleDto;
 import com.incture.lch.entity.AccountingDetails;
-import com.incture.lch.entity.AdhocApprovalRule;
 
 @Repository
 public class AccountingDetailsDao 
 {
 
 
+	public AccountingDetailsDao(){}
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountingDetailsDao.class);
 
 	@Autowired
@@ -78,6 +77,7 @@ public class AccountingDetailsDao
 		return isSaved;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<AccountingDetailsDto> getAllAccountingDetails()
 	{
 		Session session= sessionFactory.openSession();

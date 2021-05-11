@@ -1,6 +1,6 @@
 package com.incture.lch.dto;
 
-public class DestinationDto {
+public class DestinationDto { // NO_UCD (use default)
 
 	private String name;
 	private String description;

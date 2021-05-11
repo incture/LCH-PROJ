@@ -1,111 +1,154 @@
 package com.incture.lch.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
-@Table(name= "T_PREMIUM_FREIGHT_CHARGE_DETAILS")
-public class PremiumFreightChargeDetails 
-{
-	/*@Id
-	@Column(name="ID")
-	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(generator="system-uuid")
-	@GenericGenerator(name="system-uuid", strategy = "uuid")
-	private String premiumId;*/
-	
+@Table(name = "T_PREMIUM_FREIGHT_CHARGE_DETAILS")
+public class PremiumFreightChargeDetails {
+	/*
+	 * @Id
+	 * 
+	 * @Column(name="ID") //@GeneratedValue(strategy = GenerationType.AUTO)
+	 * 
+	 * @GeneratedValue(generator="system-uuid")
+	 * 
+	 * @GenericGenerator(name="system-uuid", strategy = "uuid") private String
+	 * premiumId;
+	 */
+
 	@Id
-	@Column(name="ORDER_ID")
+	@Column(name = "ORDER_ID")
 	private String orderId;
-	
-	//ORIGIN DETAILS
-	@Column(name="ORIGIN_NAME")
+
+	// ORIGIN DETAILS
+	@Column(name = "ORIGIN_NAME")
 	private String originName;
-	
-	@Column(name="ORIGIN_ADDRESS")
+
+	@Column(name = "ORIGIN_ADDRESS")
 	private String originAddress;
-	
-	@Column(name="ORIGIN_CITY")
+
+	@Column(name = "ORIGIN_CITY")
 	private String originCity;
-	
-	@Column(name="ORIGIN_STATE")
+
+	@Column(name = "ORIGIN_STATE")
 	private String originState;
-	
-	@Column(name="ORIGIN_ZIP")
+
+	@Column(name = "ORIGIN_ZIP")
 	private String originZip;
-	
-	@Column(name="ORIGIN_COUNTRY")
+
+	@Column(name = "ORIGIN_COUNTRY")
 	private String originCountry;
-	
-    //Destination Details
-	
-	@Column(name="DESTINATION_NAME")
+
+	// Destination Details
+
+	@Column(name = "DESTINATION_NAME")
 	private String destinationName;
-	
-	@Column(name="DESTINATION_ADDERSS")
+
+	@Column(name = "DESTINATION_ADDERSS")
 	private String destinationAdress;
-	
-	@Column(name="DESTINATION_CITY")
+
+	@Column(name = "DESTINATION_CITY")
 	private String destinationCity;
-	
-	@Column(name="DESTINATION_STATE")
+
+	@Column(name = "DESTINATION_STATE")
 	private String destinationState;
-	
-	@Column(name="DESTINATION_ZIP")
+
+	@Column(name = "DESTINATION_ZIP")
 	private String destinationZip;
-	
-	@Column(name="DESTINATION_COUNTRY")
+
+	@Column(name = "DESTINATION_COUNTRY")
 	private String destinationCountry;
-	
-	//CARRIER DETAILS
-	@Column(name="BP_NUMBER")
+
+	// CARRIER DETAILS
+	@Column(name = "BP_NUMBER")
 	private String bpNumber;
-	
-	@Column(name="CARRIER_DETAILS")
+
+	@Column(name = "CARRIER_DETAILS")
 	private String carrierDetails;
-	
-	@Column(name="CARRIER_SCAC")
+
+	@Column(name = "CARRIER_SCAC")
 	private String carrierScac;
-	
-	@Column(name="CARRIER_RATE")
+
+	@Column(name = "CARRIER_RATE")
 	private String carrierRatePerKM;
-	
-	@Column(name="CARRIER_MODE")
+
+	@Column(name = "CARRIER_MODE")
 	private String carrierMode;
-	
-	//COST DETAILS
-	
-	@Column(name="CHARGE")
+
+	// COST DETAILS
+
+	@Column(name = "CHARGE")
 	private int charge;
 
-
-	//STATUS
-	@Column(name="REASON_CODE")
+	// STATUS
+	@Column(name = "REASON_CODE")
 	private String reasonCode;
-	@Column(name="STATUS")
+	@Column(name = "STATUS")
 	private String status;
-	@Column(name="PLANNER_EMAIL")
+	@Column(name = "PLANNER_EMAIL")
 	private String plannerEmail;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "createdDate")
+	private Date createdDate;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "shipDate")
+	private Date shipDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "expectedDeliveryDate")
+	private Date expectedDeliveryDate;
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Date getShipDate() {
+		return shipDate;
+	}
+
+	public void setShipDate(Date shipDate) {
+		this.shipDate = shipDate;
+	}
+
+	public Date getExpectedDeliveryDate() {
+		return expectedDeliveryDate;
+	}
+
+	public void setExpectedDeliveryDate(Date expectedDeliveryDate) {
+		this.expectedDeliveryDate = expectedDeliveryDate;
+	}
 
 	public String getorderId() {
 		return orderId;
 	}
 
-	/*public String getPremiumId() {
-		return premiumId;
-	}
-
-	public void setPremiumId(String premiumId) {
-		this.premiumId = premiumId;
-	}
-
-	*/public void setorderId(String orderId) {
+	/*
+	 * public String getPremiumId() { return premiumId; }
+	 * 
+	 * public void setPremiumId(String premiumId) { this.premiumId = premiumId;
+	 * }
+	 * 
+	 */public void setorderId(String orderId) {
 		this.orderId = orderId;
 	}
 
@@ -276,17 +319,5 @@ public class PremiumFreightChargeDetails
 	public void setPlannerEmail(String plannerEmail) {
 		this.plannerEmail = plannerEmail;
 	}
-	
-	
-	
-	
-	
-
-
-
-	
-	
-
-	
 
 }

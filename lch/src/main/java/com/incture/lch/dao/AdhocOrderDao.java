@@ -3,8 +3,6 @@ package com.incture.lch.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +12,6 @@ import com.incture.lch.util.ServiceUtil;
 
 @Repository("adhocOrderDao")
 public class AdhocOrderDao {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(AdhocOrderWorkflowDao.class);
 
 	@Autowired
 	private SessionFactory sessionFactory;

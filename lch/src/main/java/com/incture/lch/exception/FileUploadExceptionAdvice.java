@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.incture.lch.adhoc.custom.dto.ResponseMessage;
 
 @ControllerAdvice
-public class FileUploadExceptionAdvice extends ResponseEntityExceptionHandler {
+public class FileUploadExceptionAdvice extends ResponseEntityExceptionHandler { // NO_UCD (unused code)
 
 	@ExceptionHandler(MaxUploadSizeExceededException.class)
 	public ResponseEntity<ResponseMessage> handleMaxSizeException(MaxUploadSizeExceededException exc) {

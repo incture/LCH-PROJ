@@ -1,7 +1,5 @@
 package com.incture.lch.dto;
 
-import javax.persistence.Column;
-
 public class PremiumOrderAccountingDetailsDto {
 	private String orderId;
 

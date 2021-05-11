@@ -6,8 +6,8 @@ import com.incture.lch.entity.PremiumFreightChargeDetails;
 
 public class ChargeDetailsPaginated 
 {
-	List<PremiumFreightChargeDetails> premiumFreightChargeDetails;
-	int count=0;
+	private List<PremiumFreightChargeDetails> premiumFreightChargeDetails;
+	private int count=0;
 	public List<PremiumFreightChargeDetails> getPremiumFreightChargeDetails() {
 		return premiumFreightChargeDetails;
 	}

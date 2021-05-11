@@ -90,10 +90,7 @@ public class GetReferenceData {
 				sessionFactory.getCurrentSession());
 	}
 	
-	public String getNextSeqNumberRequestId(String referenceCode, int noOfDigits, SessionFactory sessionFactory) {
-		return SequenceNumberGenRequestId.getInstance().getNextSeqNumber(referenceCode, noOfDigits,
-				sessionFactory.getCurrentSession());
-	}
+	
 
 
 }

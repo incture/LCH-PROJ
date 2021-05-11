@@ -2,13 +2,13 @@ package com.incture.lch.dto;
 
 import java.util.List;
 
-import com.incture.lch.premium.custom.dto.PremiumManagerCustomDto;
+import com.incture.lch.premium.custom.dto.PremiumCustomDto;
 
 public class PaginationDto {
 
 	// PagiantionDto
 	// private List<PremiumFreightOrderDto> premiumFreightOrderDtos;
-	private List<PremiumManagerCustomDto> premiumFreightOrderDetailsList;
+	private List<PremiumCustomDto> premiumFreightOrderDetailsList;
 	private int count;
 
 	/*
@@ -26,11 +26,11 @@ public class PaginationDto {
 		this.count = count;
 	}
 
-	public List<PremiumManagerCustomDto> getPremiumFreightOrderDetailsList() {
+	public List<PremiumCustomDto> getPremiumFreightOrderDetailsList() {
 		return premiumFreightOrderDetailsList;
 	}
 
-	public void setPremiumFreightOrderDetailsList(List<PremiumManagerCustomDto> premiumFreightOrderDetailsList) {
+	public void setPremiumFreightOrderDetailsList(List<PremiumCustomDto> premiumFreightOrderDetailsList) {
 		this.premiumFreightOrderDetailsList = premiumFreightOrderDetailsList;
 	}
 

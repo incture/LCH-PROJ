@@ -2,7 +2,7 @@ package com.incture.lch.dto;
 
 import java.util.Map;
 
-public class HttpResponseDto {
+public class HttpResponseDto { // NO_UCD (use default)
 	private String responseData;
 	private Integer statuscode;
 	private Map<String, String> headers;

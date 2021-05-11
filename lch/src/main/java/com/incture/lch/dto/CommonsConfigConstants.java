@@ -1,6 +1,7 @@
 package com.incture.lch.dto;
 
-public class CommonsConfigConstants {
+
+public class CommonsConfigConstants { 
 
 	public static final int LIMIT = 100;
 	public static final int ASSEMBLY_COUNT = 10;

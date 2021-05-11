@@ -30,7 +30,7 @@ public class InvalidInputFault extends Exception {
 		this.faultInfo = faultInfo;
 	}
 
-	public InvalidInputFault(String message, MessageUIDto faultInfo,
+	public InvalidInputFault(String message, MessageUIDto faultInfo, // NO_UCD (unused code)
 			Throwable cause) {
 		super(message, cause);
 		this.faultInfo = faultInfo;

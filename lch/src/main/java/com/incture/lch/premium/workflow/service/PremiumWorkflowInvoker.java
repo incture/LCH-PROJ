@@ -36,19 +36,17 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 
 	private final Logger MYLOGGER = LoggerFactory.getLogger(this.getClass());
 
-	/*private String workflow_rest_url;
+    private String workflow_rest_url;
 	private String url;
 	private String clientid;
 	private String clientsecret;
+/*
+private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
+	private static String url = "https://hrapps.authentication.eu10.hana.ondemand.com";
+	private static String clientid = "sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
+	private static String clientsecret = "b643d0fa-8f03-4632-b8f5-02a59c6f1e63$hCJcWZ947HFtpS0C6Ni0tGwini2EIUJULDLF7H7IgGQ=";
 */
-	 private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
-	 private static String url ="https://hrapps.authentication.eu10.hana.ondemand.com";
-	 private static String clientid ="sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
-	 private static String clientsecret ="bbb2e7b9-53f9-45d5-8e54-5d38a160dfc6$OMMym3o77Yg4uuBRlrYge_NIU4R4oyjt8z2R0uGuDAk=";
-
-	
-	
-	/*public PremiumWorkflowInvoker() {
+	public PremiumWorkflowInvoker() {
 		try {
 			JSONObject jsonObj = new JSONObject(System.getenv("VCAP_SERVICES"));
 			System.err.println("[PremiumWorkflowInvoker:VCAP_SERVICES] : " + jsonObj.toString());
@@ -73,7 +71,7 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 		} catch (JSONException e) {
 			MYLOGGER.error("[PremiumWorkflowInvoker] reading environmental variables failed:" + e.getMessage());
 		}
-	}*/
+	}
 
 	@Override
 	public JSONObject triggerPremiumWorkflow(String input) throws ClientProtocolException, IOException, JSONException {
@@ -330,6 +328,7 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 
 		return taskInfoList;
 	}
+
 	public HttpResponse completeTaskForAccountant(PremiumOrderAccountingDetailsDto dto, String taskInstanceId,
 			String Status) throws ClientProtocolException, IOException, JSONException {
 		MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD");
@@ -360,9 +359,11 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 			context.put("accountantActionType", Status);
 			System.err.println("After Object creation Status  " + Status);
 
-
 			context.put("taskInstanceId", taskInstanceId);
 			System.err.println("After Object creation instance Id" + taskInstanceId);
+			
+			context.put("accountantDetailInfo", dto);
+
 
 			System.err.println("After Object creation Context" + context);
 
@@ -372,7 +373,7 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 
 			input = response.toString();
 			System.err.println("After Object creation input" + input);
-			
+
 			data = new StringEntity(input, "UTF-8");
 			data.setContentType(WorkflowConstants.CONTENT_TYPE);
 			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD input:: " + input);
@@ -526,12 +527,10 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 			throws ClientProtocolException, IOException, JSONException {
 		MYLOGGER.error("PremiumWorkFlowService : ApproveTask : enter");
 		// return callApprovalTask(dto);
-		return completeTaskForManager(null, dto.getTaskIdDetails(),dto.getStatus());
-	//	return completeTaskForManager(dto);
+		return completeTaskForManager(null, dto.getTaskIdDetails(), dto.getStatus());
+		// return completeTaskForManager(dto);
 
 	}
-
-	
 
 	@Override
 	public HttpResponse completeAccountantTask(ApprovalDto dto)

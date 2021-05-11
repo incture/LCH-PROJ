@@ -10,7 +10,7 @@ package com.incture.lch.exception;
  * @version 2, 21-January-2013
  * @since CR8313
  */
-public class MessageUIDto {
+public class MessageUIDto { // NO_UCD (use default)
 
 	private String message;
 

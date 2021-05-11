@@ -18,7 +18,7 @@ import com.sap.cloud.security.xsuaa.token.TokenAuthenticationConverter;
 @EnableWebSecurity
 
 @Profile("security_local")
-public class SecurityConfigLocal extends WebSecurityConfigurerAdapter {
+public class SecurityConfigLocal extends WebSecurityConfigurerAdapter { // NO_UCD (unused code)
 
 	@Autowired
 	XsuaaServiceConfiguration xsuaaServiceConfiguration;

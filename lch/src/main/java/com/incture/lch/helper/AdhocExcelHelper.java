@@ -21,9 +21,9 @@ import com.incture.lch.dto.AdhocApprovalRuleDto;
 
 @Repository
 public class AdhocExcelHelper {
-	public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-	static String[] HEADERs = { "AdhocType", "UserGroup", "ApproverType", "Approver" };
-	static String SHEET = "AdhocApproval";
+	private static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+	private static String[] HEADERs = { "AdhocType", "UserGroup", "ApproverType", "Approver" };
+	private static String SHEET = "AdhocApproval";
 
 	public static boolean hasExcelFormat(MultipartFile file) {
 

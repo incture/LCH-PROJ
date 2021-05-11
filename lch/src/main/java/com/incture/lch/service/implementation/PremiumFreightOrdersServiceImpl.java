@@ -12,22 +12,17 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.incture.lch.adhoc.custom.dto.ResponseMessage;
 import com.incture.lch.dto.CarrierDetailsDto;
-import com.incture.lch.dto.ChargeDetailsPaginated;
 import com.incture.lch.dto.ChargeRequestDto;
 import com.incture.lch.dto.PaginationDto;
-import com.incture.lch.dto.PaginationDto1;
-import com.incture.lch.dto.PremiumFreightChargeDetailsDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.dto.PremiumRequestDto;
 import com.incture.lch.dto.ResponseDto;
-import com.incture.lch.entity.PremiumFreightChargeDetails;
-import com.incture.lch.premium.custom.dto.PremiumManagerCustomDto;
+import com.incture.lch.premium.custom.dto.PremiumCustomDto;
 import com.incture.lch.premium.custom.dto.PremiumRequestUserInfoCustomDto;
 import com.incture.lch.premium.custom.dto.WorkflowPremiumCustomDto;
 import com.incture.lch.repository.PremiumFreightOrdersRepository;
@@ -60,18 +55,18 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 	public List<String> getMode(String bpNumber) {
 		return premiumFreightOrdersRepo.getMode(bpNumber);
 	}
-
+/*
 	@Override
-	public PaginationDto1 getAllPremiumFreightOrders1(PremiumRequestDto premiumRequestDto) 
+	public PaginationDto1 getPlannerOrders(PremiumRequestDto premiumRequestDto) 
 	{
-		return premiumFreightOrdersRepo.getAllPremiumFreightOrders1(premiumRequestDto);
+		return premiumFreightOrdersRepo.getPlannerOrders(premiumRequestDto);
 	}
 
 	@Override
 	public ChargeDetailsPaginated getAllManagerOrders(PremiumRequestDto premiumRequestDto)
 	{
 		return premiumFreightOrdersRepo.getAllManagerOrders(premiumRequestDto);
-	}
+	}*/
 	@Override
 	public List<PremiumFreightOrderDto> setCarrierDetails(List<ChargeRequestDto> chargeRequestDto) {
 		return premiumFreightOrdersRepo.setCarrierDetails(chargeRequestDto);
@@ -97,7 +92,7 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 	{
 		return premiumFreightOrdersRepo.addCarrier(carrierdto); 
 	}
-
+/*
 	@Override
 	public ChargeDetailsPaginated getAllCarrierOrders(PremiumRequestDto premiumRequestDto) 
 	{
@@ -105,11 +100,11 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 	}
 
 	@Override
-	public List<PremiumManagerCustomDto> getManagerOrders(String userId)
+	public List<PremiumCustomDto> getManagerOrders(PremiumRequestDto premiumRequestDto)
 			throws ClientProtocolException, IOException, JSONException {
-		return premiumFreightOrdersRepo.getManagerOrders(userId);
+		return premiumFreightOrdersRepo.getManagerOrders(premiumRequestDto);
 	}
-
+*/
 	@Override
 	public ResponseMessage updateTableDetails(WorkflowPremiumCustomDto dto)
 			throws ClientProtocolException, JSONException, IOException {
@@ -127,6 +122,12 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 	@Override
 	public ResponseDto updatePremiumAccountingDetails(@RequestBody PremiumOrderAccountingDetailsDto AccountingDetailsDto){
 		return premiumFreightOrdersRepo.updatePremiumAccountingDetails(AccountingDetailsDto);
+	}
+
+	@Override
+	public List<PremiumCustomDto> getAllAccountantOrders(PremiumRequestDto premiumRequestDto) throws ClientProtocolException, IOException, JSONException {
+		
+		return premiumFreightOrdersRepo.getAllAccountantOrders(premiumRequestDto);
 	}
 	
 

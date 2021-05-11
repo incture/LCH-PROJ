@@ -34,8 +34,6 @@ import com.sap.core.connectivity.api.configuration.DestinationConfiguration;
 
 public class ServiceUtil {
 	
-	private final Logger MYLOGGER = LoggerFactory.getLogger(this.getClass());
-
 	public static final String NOT_APPLICABLE = "N/A";
 	public static SimpleDateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 

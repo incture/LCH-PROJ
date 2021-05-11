@@ -1,7 +1,7 @@
 package com.incture.lch.exception;
 import java.util.List;
 
-public class NoResultFault extends Exception {
+public class NoResultFault extends Exception { // NO_UCD (unused code)
 	/**
 	 * 
 	 */

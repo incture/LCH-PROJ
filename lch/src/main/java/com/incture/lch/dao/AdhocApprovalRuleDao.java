@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import com.incture.lch.dto.AdhocApprovalRuleDto;
 import com.incture.lch.entity.AdhocApprovalRule;
-import com.incture.lch.entity.ReasonCode;
 
 @Repository("adhocApprovalRuleDao")
 public class AdhocApprovalRuleDao {
@@ -78,6 +77,7 @@ public class AdhocApprovalRuleDao {
 
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<AdhocApprovalRuleDto> getAllAdhocApprovalList() {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
@@ -103,6 +103,7 @@ public class AdhocApprovalRuleDao {
 
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public List<AdhocApprovalRuleDto> getAdhocApprovalsByAdhocTypeAndApprovalType(String type) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();

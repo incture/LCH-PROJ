@@ -33,6 +33,7 @@ public class SequenceNumberGenAdhoc {
 	 * map variable is lazy loaded once, and value persist to relevant table in
 	 * CEDB on every request.
 	 */
+	@SuppressWarnings("deprecation")
 	public synchronized String getNextSeqNumber(String referenceCode, Integer noOfDigits, Session session) {
 		Criteria criteria = session.createCriteria(SequenceNumberAdhoc.class);
 		criteria.add(Restrictions.eq("referenceCode", referenceCode));
@@ -77,6 +78,7 @@ public class SequenceNumberGenAdhoc {
 		return sequenceNumber.getRunningNumber();
 	}
 
+	@SuppressWarnings("deprecation")
 	private int updateRecord(SequenceNumberAdhoc sequenceNumber, Session session) {
 		int runningnumber = 0;
 		sequenceNumber.setRunningNumber(sequenceNumber.getRunningNumber() + 1);

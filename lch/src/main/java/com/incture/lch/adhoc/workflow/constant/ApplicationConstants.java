@@ -8,7 +8,7 @@ package com.incture.lch.adhoc.workflow.constant;
  * @version 1.0
  */
 
-public class ApplicationConstants {
+public class ApplicationConstants { // NO_UCD (unused code)
 
 	public static final String NEW_USER = "NEW_USER";
 	public static final String ACTIVATED = "ACTIVE";

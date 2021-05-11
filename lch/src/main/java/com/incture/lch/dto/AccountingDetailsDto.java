@@ -1,7 +1,5 @@
 package com.incture.lch.dto;
 
-import javax.persistence.Column;
-
 public class AccountingDetailsDto {
 
 	private String companyCode;
@@ -13,6 +11,7 @@ public class AccountingDetailsDto {
 	private String profitCenter;
 
 	private String s4Debit;
+	
 
 	public String getCompanyCode() {
 		return companyCode;

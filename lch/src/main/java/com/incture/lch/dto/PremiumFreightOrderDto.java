@@ -40,7 +40,7 @@ public class PremiumFreightOrderDto {
 
 	private String status;
 
-	public String getorderId() {
+	public String getorderId() { // NO_UCD (unused code)
 		return orderId;
 	}
 

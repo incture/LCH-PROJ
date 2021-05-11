@@ -1,4 +1,4 @@
-package com.incture.lch.entity;
+package com.incture .lch.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,9 +8,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 @Entity
-@Table(name="T_ROLE")
-public class LchRole {
-
+@Table(name="PREMIUM_ROLE")
+public class PremiumRole {
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy = "uuid")
@@ -46,5 +45,5 @@ public class LchRole {
 		this.role = role;
 	}
 	
-	
+
 }

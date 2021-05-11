@@ -10,7 +10,7 @@ package com.incture.lch.exception;
  */
 // @WebFault(name = "RecordExistFault", faultBean =
 // "com.incture.u2k2.mmw.exception.MessageUIDto")
-public class RecordExistFault extends Exception {
+public class RecordExistFault extends Exception { // NO_UCD (unused code)
 	/**
 	 * 
 	 */

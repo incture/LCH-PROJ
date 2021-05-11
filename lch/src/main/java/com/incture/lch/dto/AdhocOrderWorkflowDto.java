@@ -2,8 +2,6 @@ package com.incture.lch.dto;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-
 public class AdhocOrderWorkflowDto {
 
 	private Long id;

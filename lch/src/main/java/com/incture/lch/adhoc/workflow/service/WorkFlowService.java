@@ -13,24 +13,19 @@ import org.springframework.stereotype.Service;
 
 import com.incture.lch.adhoc.workflow.constant.WorkflowConstants;
 import com.incture.lch.adhoc.workflow.dto.WorkflowApprovalTaskDto;
-import com.incture.lch.dao.AdhocOrderWorkflowDao;
 import com.incture.lch.dto.AdhocOrderWorkflowDto;
 import com.incture.lch.dto.ResponseDataDto;
 import com.incture.lch.helper.AdhocOrderWorkflowHelper;
 import com.incture.lch.util.ServicesUtil;
 
-/**
- * @author Ravi Kumar P
- *
- */
+
 @Transactional
 @Service
 public class WorkFlowService implements WorkFlowServiceLocal {
 
 	private final Logger MYLOGGER = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
-	private AdhocOrderWorkflowDao adhocOrderWorkflowDao;
+	
 
 	@Autowired
 	private WorkflowInvokerLocal workflowInvokerLocal;

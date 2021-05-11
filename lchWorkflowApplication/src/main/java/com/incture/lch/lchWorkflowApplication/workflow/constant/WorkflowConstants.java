@@ -47,4 +47,5 @@ public class WorkflowConstants {
 	public static final String MANAGER = "MANAGER";
 	public static final String PLANNER = "PLANNER";
 
+	public static final String SWAGGER_UI = "https://LCH.cfapps.eu10.hana.ondemand.com/v2/api-docs";
 }
