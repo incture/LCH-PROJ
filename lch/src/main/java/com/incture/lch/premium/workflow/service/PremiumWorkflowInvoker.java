@@ -40,13 +40,14 @@ public class PremiumWorkflowInvoker implements PremiumWorkflowInvokerLocal {
 	private String url;
 	private String clientid;
 	private String clientsecret;
-/*
-private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
+
+   /*private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
 	private static String url = "https://hrapps.authentication.eu10.hana.ondemand.com";
 	private static String clientid = "sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
-	private static String clientsecret = "b643d0fa-8f03-4632-b8f5-02a59c6f1e63$hCJcWZ947HFtpS0C6Ni0tGwini2EIUJULDLF7H7IgGQ=";
+	private static String clientsecret = "3569cf5b-aa9e-4a6d-8e16-3e36cb51b6d7$o94E7npqq7EFVQDXb5tLGF1oLR4t_ir4v4no13_Vwcg=";
 */
-	public PremiumWorkflowInvoker() {
+ 	public PremiumWorkflowInvoker() {
+ 
 		try {
 			JSONObject jsonObj = new JSONObject(System.getenv("VCAP_SERVICES"));
 			System.err.println("[PremiumWorkflowInvoker:VCAP_SERVICES] : " + jsonObj.toString());
@@ -288,7 +289,7 @@ private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.
 		List<TaskDetailsDto> taskInfoList = new ArrayList<>();
 		for (int counter = 0; counter < jsonArray.length(); counter++) {
 			JSONObject instanceObject = jsonArray.getJSONObject(counter);
-			if (instanceObject.get(WorkflowConstants.STATUS).equals(WorkflowConstants.READY)) {
+			//if (instanceObject.get(WorkflowConstants.STATUS).equals(WorkflowConstants.READY)) {
 				TaskDetailsDto taskInfo = new TaskDetailsDto();
 				taskInfo.setTaskId(instanceObject.get(WorkflowConstants.ID).toString());
 				taskInfo.setActivityId(ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.ACTIVITY_ID)) ? null
@@ -322,7 +323,7 @@ private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.
 						ServiceUtil.isEmpty(instanceObject.get(WorkflowConstants.WORKFLOW_INSTANCE_ID)) ? null
 								: instanceObject.get(WorkflowConstants.WORKFLOW_INSTANCE_ID).toString());
 				taskInfoList.add(taskInfo);
-			}
+			//}
 
 		}
 
@@ -408,6 +409,7 @@ private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.
 		StringEntity data = null;
 		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 		try {
+
 			String bearerToken = getBearerToken(httpClient);
 			MYLOGGER.error("ENTERING INTO approveTask INVOKER METHOD bearerToken:: " + bearerToken);
 			httpRequestBase = new HttpPatch(workflow_rest_url + WorkflowConstants.APPROVE_TASK_URL + taskInstanceId);
@@ -432,6 +434,7 @@ private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.
 
 			context.put("taskInstanceId", taskInstanceId);
 			System.err.println("After Object creation instance Id" + taskInstanceId);
+
 
 			System.err.println("After Object creation Context" + context);
 
@@ -467,61 +470,7 @@ private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.
 		return httpResponse;
 	}
 
-	/*
-	 * public ResponseMessage completeTaskForManager(ApprovalDto dto) throws
-	 * ClientProtocolException, IOException, JSONException {
-	 * 
-	 * try { // CloseableHttpClient httpClient = //
-	 * HttpClientBuilder.create().build(); CloseableHttpClient httpClient =
-	 * HttpClients.custom().setSSLHostnameVerifier(new NoopHostnameVerifier())
-	 * .build(); HttpComponentsClientHttpRequestFactory requestFactory = new
-	 * HttpComponentsClientHttpRequestFactory();
-	 * requestFactory.setHttpClient(httpClient); MYLOGGER.
-	 * error("Enter into PremiumWorkflowService: callLchAppToUpdateWorkflowTables:"
-	 * ); RestTemplate callRestApi = new RestTemplate(requestFactory); String
-	 * taskInstanceId = dto.getTaskIdDetails(); String status = dto.getStatus();
-	 * String bearerToken = getBearerToken(httpClient); HttpHeaders headers =
-	 * new HttpHeaders(); headers.setContentType(MediaType.APPLICATION_JSON);
-	 * headers.add("user-agent",
-	 * "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36"
-	 * );
-	 * 
-	 * headers.set("Authorization", "Bearer " + bearerToken);
-	 * 
-	 * 
-	 * System.err.println("After Object creation"); ContextDto contextdto = new
-	 * ContextDto(); if (status.equalsIgnoreCase("Approved")) {
-	 * 
-	 * contextdto.setManagerActionType("Approved");
-	 * 
-	 * } else { contextdto.setManagerActionType("Rejected");
-	 * 
-	 * }
-	 * 
-	 * 
-	 * System.err.println("After Object creation Status  " + status);
-	 * 
-	 * contextdto.setTaskInstanceId(taskInstanceId);
-	 * 
-	 * System.err.println("After Object creation instance Id" + taskInstanceId);
-	 * 
-	 * 
-	 * contextdto.setStatus("COMPLETED");
-	 * 
-	 * HttpEntity<ContextDto> entity = new HttpEntity<ContextDto>(contextdto,
-	 * headers);
-	 * 
-	 * String responseMessageForPatch = callRestApi.patchForObject(
-	 * workflow_rest_url + WorkflowConstants.APPROVE_TASK_URL + taskInstanceId,
-	 * entity, String.class);
-	 * 
-	 * ResponseMessage response1 = new ResponseMessage(responseMessageForPatch);
-	 * 
-	 * HttpResponse httpResponse = ResponseMessage.class(); return
-	 * (HttpResponse) response1; return response1; } catch (Exception e) {
-	 * MYLOGGER.error("PremiumWorkflowService: completeTask for MANAGER: error "
-	 * + e.toString()); } return null; }
-	 */
+	
 	@Override
 	public HttpResponse completeManagerTask(ApprovalDto dto)
 			throws ClientProtocolException, IOException, JSONException {

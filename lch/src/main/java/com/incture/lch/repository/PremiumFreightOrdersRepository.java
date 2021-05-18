@@ -13,6 +13,7 @@ import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.dto.PremiumRequestDto;
+import com.incture.lch.dto.RejectAtPlannerDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.entity.AdhocOrders;
 import com.incture.lch.premium.custom.dto.PremiumCustomDto;
@@ -41,7 +42,6 @@ public interface PremiumFreightOrdersRepository
 
 	public ResponseDto forwardToApprover(PremiumRequestUserInfoCustomDto  premiumRequestCustomDtos);
 	
-	public ResponseDto RejectPremiumOrder (List<String> adhocOrderIds);
 	
 	public ResponseDto addCarrier(CarrierDetailsDto carrierdto);
 	
@@ -53,6 +53,8 @@ public interface PremiumFreightOrdersRepository
 	public PremiumOrderAccountingDetailsDto getPremiumAccountingDetails(String workflowInstanceId);
 
 	public ResponseDto updatePremiumAccountingDetails(PremiumOrderAccountingDetailsDto accountingDetailsDto);
+
+	ResponseDto RejectPremiumOrder(RejectAtPlannerDto dto);
 
 /*	PaginationDto1 getPlannerOrders(PremiumRequestDto premiumRequestDto);
 */

@@ -1,24 +1,24 @@
-package com.incture.lch.dto;
+package com.incture.lch.entity;
 
-public class PartNumberDescDto {
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+@Entity
+@Table(name="PART_NUMBER_DESC")
+public class PartNumberDesc 
+{
+	@Id
+	@Column(name="PART_NUM")
 	private String partNum;
-	private String partDesc;
-	private String message;
 	
+	@Column(name="PART_DESC")
+	private String partDesc;
+	
+	@Column(name="MESSAGE")
+	private String message;
 
-	public PartNumberDescDto() {
-
-	}
-
-	public PartNumberDescDto(String partNum, String partDesc, String message) { // NO_UCD (unused code)
-		super();
-		this.partNum = partNum;
-		this.partDesc = partDesc;
-		this.message = message;
-		
-	}
-
+	
 	public String getPartNum() {
 		return partNum;
 	}
@@ -42,6 +42,6 @@ public class PartNumberDescDto {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
+	
 	
 }

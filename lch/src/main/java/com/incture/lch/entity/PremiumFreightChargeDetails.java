@@ -99,6 +99,8 @@ public class PremiumFreightChargeDetails {
 	@Column(name = "createdDate")
 	private Date createdDate;
 
+	@Column(name="COMMENT")
+	private String comment;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "shipDate")
 	private Date shipDate;
@@ -318,6 +320,14 @@ public class PremiumFreightChargeDetails {
 
 	public void setPlannerEmail(String plannerEmail) {
 		this.plannerEmail = plannerEmail;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 }

@@ -21,6 +21,7 @@ import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.dto.PremiumRequestDto;
+import com.incture.lch.dto.RejectAtPlannerDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.premium.custom.dto.PremiumCustomDto;
 import com.incture.lch.premium.custom.dto.PremiumRequestUserInfoCustomDto;
@@ -82,9 +83,10 @@ public class PremiumFreightOrdersServiceImpl implements PremiumFreightOrdersServ
 		return premiumFreightOrdersRepo.forwardToApprover(premiumRequestCustomDtos);
 	}
 
+	
 	@Override
-	public ResponseDto RejectPremiumOrder (List<String> adhocOrderIds){
-		return premiumFreightOrdersRepo.RejectPremiumOrder(adhocOrderIds);
+	public ResponseDto RejectPremiumOrder (RejectAtPlannerDto dto){
+		return premiumFreightOrdersRepo.RejectPremiumOrder(dto);
 	}
 	
 	@Override

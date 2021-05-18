@@ -13,6 +13,7 @@ import com.incture.lch.dto.PaginationDto;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.dto.PremiumRequestDto;
+import com.incture.lch.dto.RejectAtPlannerDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.premium.custom.dto.PremiumCustomDto;
 import com.incture.lch.premium.custom.dto.PremiumRequestUserInfoCustomDto;
@@ -35,7 +36,8 @@ public interface PremiumFreightOrdersService {
 
 	public ResponseDto forwardToApprover(PremiumRequestUserInfoCustomDto  premiumRequestCustomDtos);
 
-	public ResponseDto RejectPremiumOrder(List<String> adhocOrderIds);
+
+	public ResponseDto RejectPremiumOrder(RejectAtPlannerDto dto) ;
 
 	public ResponseMessage updateTableDetails(WorkflowPremiumCustomDto dto) throws ClientProtocolException, JSONException, IOException;
 

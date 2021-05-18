@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import com.incture.lch.adhoc.custom.dto.AdhocWorkflowCustomDto;
 import com.incture.lch.adhoc.custom.dto.WorkflowCustomDto;
 import com.incture.lch.adhoc.workflow.service.WorkflowInvoker;
+import com.incture.lch.dao.PartNumberDescDao;
 import com.incture.lch.dto.AdhocOrderDto;
 import com.incture.lch.dto.AdhocOrderWorkflowDto;
 import com.incture.lch.dto.AdhocRequestDto;
@@ -42,6 +43,9 @@ public class AdhocOrdersServiceImplementation implements AdhocOrdersService {
 
 	@Autowired
 	private WorkflowInvoker wfInvoker;
+	
+	@Autowired
+	private PartNumberDescDao partDao;
 
 	@Override
 	public List<AdhocOrderDto> getAllAdhocOrders() {
@@ -135,7 +139,9 @@ public class AdhocOrdersServiceImplementation implements AdhocOrdersService {
 	}
 
 	public PartNumberDescDto getByPartNumber(PartNumberDescDto partNum) {
-		return adhocOrdersRepository.getByPartNumber(partNum);
+		String partNumber = partNum.getPartNum();
+		return partDao.getDetailsByPartNumber(partNumber);
+		//return adhocOrdersRepository.getByPartNumber(partNum);
 	}
 
 	/*

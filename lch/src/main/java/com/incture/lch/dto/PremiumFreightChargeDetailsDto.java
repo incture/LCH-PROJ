@@ -41,6 +41,7 @@ public class PremiumFreightChargeDetailsDto {
 	private String reasonCode;
 	private String status;
 	private String plannerEmail;
+	private String comment;
 	public String getOrderId() {
 		return orderId;
 	}
@@ -172,6 +173,12 @@ public class PremiumFreightChargeDetailsDto {
 	}
 	public void setPlannerEmail(String plannerEmail) {
 		this.plannerEmail = plannerEmail;
+	}
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	
 	

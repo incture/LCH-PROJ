@@ -38,6 +38,7 @@ import com.incture.lch.dto.PremiumFreightDto1;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.dto.PremiumRequestDto;
+import com.incture.lch.dto.RejectAtPlannerDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.dto.TaskDetailsDto;
 import com.incture.lch.entity.AdhocOrderWorkflow;
@@ -1188,8 +1189,10 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
-	public ResponseDto RejectPremiumOrder(List<String> adhocOrderIds) {
+	public ResponseDto RejectPremiumOrder(RejectAtPlannerDto dto) {
 		ResponseDto responseDto = new ResponseDto();
+		
+		List<String> adhocOrderIds = dto.getAdhocorderIds();
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		try {
@@ -1219,6 +1222,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 
 					System.out.println("ADHOCSTATUS" + p.getStatus());
 					p.setStatus("REJECTED");
+					p.setComment("Rejected By planner : "+dto.getComment());
 					session.saveOrUpdate(p);
 					System.out.println("ADHOCSTATUS" + p.getStatus());
 
@@ -1376,6 +1380,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 				for (PremiumFreightChargeDetails p : pdetails) {
 					p.setStatus("Rejected");
 
+
 					session.saveOrUpdate(p);
 
 				}
@@ -1409,6 +1414,9 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 				LOGGER.info("Entering into Accountant Conditions.  -----   Premium  OrderId Saving : "+p.getOrderId()  );
 
 				p.setStatus(status);
+				//if(dto.getAccoutingDetailsDto().getComment().equal)
+				p.setComment("Approved at Accountant ");
+
 				session.saveOrUpdate(p);
 				
 				LOGGER.info("Exiting into Accountant Conditions.  -----   Premium  OrderId saved : "+p.getOrderId()  );
@@ -1453,7 +1461,7 @@ public class PremiumFreightOrdersRepositoryImpl implements PremiumFreightOrdersR
 		workflowDto.setPendingWith(null);
 
 		workflowDto.setRequestedBy(obj.getString("createdBy"));
-		workflowDto.setRequestedDate(ServiceUtil.convertStringToDate(obj.getString("createdAt")));
+		//workflowDto.setRequestedDate(ServiceUtil.convertStringToDate(obj.getString("createdAt")));
 		workflowDto.setUpdatedDate(new java.util.Date());
 		workflowDto.setSubject(obj.getString("subject"));
 		workflowDto.setUpdatedBy(obj.getString("processor"));

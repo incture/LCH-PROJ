@@ -47,6 +47,7 @@ public class PremiumFreightChargeDetailsDao {
 		dto.setReasonCode(pChargeDetails.getReasonCode());
 		dto.setStatus(pChargeDetails.getStatus());
 		dto.setPlannerEmail(pChargeDetails.getPlannerEmail());
+		dto.setComment(pChargeDetails.getComment());
 
 		return dto;
 	}
@@ -80,6 +81,7 @@ public class PremiumFreightChargeDetailsDao {
 		dto.setReasonCode(pChargeDetails.getReasonCode());
 		dto.setStatus(pChargeDetails.getStatus());
 		dto.setPlannerEmail(pChargeDetails.getPlannerEmail());
+		dto.setComment(pChargeDetails.getComment());
 
 		return dto;
 	}

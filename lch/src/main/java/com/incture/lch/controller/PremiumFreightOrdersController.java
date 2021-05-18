@@ -34,6 +34,7 @@ import com.incture.lch.dto.PremiumFreightApprovalRuleDTO;
 import com.incture.lch.dto.PremiumFreightOrderDto;
 import com.incture.lch.dto.PremiumOrderAccountingDetailsDto;
 import com.incture.lch.dto.PremiumRequestDto;
+import com.incture.lch.dto.RejectAtPlannerDto;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.dto.TaskDetailsDto;
 import com.incture.lch.premium.custom.dto.PremiumCustomDto;
@@ -66,33 +67,13 @@ public class PremiumFreightOrdersController
 			return premiumFreightOrdersService.getAllPremiumFreightOrders(premiumRequestDto);
 	}
 	
-	/*
-	 * @RequestMapping(value = "/getAllPremiumOrders1", method =
-	 * RequestMethod.POST,consumes = { "application/json" })
-	 * 
-	 * @ResponseBody public PaginationDto1 getPlannerOrders(@RequestBody
-	 * PremiumRequestDto premiumRequestDto) { return
-	 * premiumFreightOrdersService.getPlannerOrders(premiumRequestDto); }
-	 */
-	
+		
 	@RequestMapping(value = "/getAllCarrierDetails", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
 	public List<CarrierDetailsDto> getAllCarrierDetails() {
 		return premiumFreightOrdersService.getAllCarrierDetails();
 	}
 
-	/*@RequestMapping(value = "/getAllCarrierOrders", method = RequestMethod.POST, consumes = { "application/json" })
-	@ResponseBody
-	public ChargeDetailsPaginated getAllCarrierOrders(@RequestBody PremiumRequestDto premiumRequestDto) {
-		return premiumFreightOrdersService.getAllCarrierOrders(premiumRequestDto);
-	}
-	*/
-	/*@RequestMapping(value = "/getAllManagerOrders", method = RequestMethod.POST, consumes = { "application/json" })
-	@ResponseBody
-	public ChargeDetailsPaginated getAllManagerOrders(@RequestBody PremiumRequestDto premiumRequestDto)
-	{
-		return premiumFreightOrdersService.getAllManagerOrders(premiumRequestDto);
-	}*/
 
 	@RequestMapping(value = "/getMode", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
@@ -141,9 +122,8 @@ public class PremiumFreightOrdersController
 
 	@RequestMapping(value = "/rejectPremiumOrder", method = RequestMethod.POST, consumes = { "application/json" })
 	@ResponseBody
-	public ResponseDto RejectPremiumOrder(@RequestBody List<String>  adhocOrderIds) {
-		//String adid= (String) adhocOrderId.get("adhocOrderId");
-		return premiumFreightOrdersService.RejectPremiumOrder(adhocOrderIds);
+	public ResponseDto RejectPremiumOrder(@RequestBody RejectAtPlannerDto dto) {
+		return premiumFreightOrdersService.RejectPremiumOrder(dto);
 
 		
 	}
@@ -176,12 +156,7 @@ public class PremiumFreightOrdersController
 	}
 
 	
-	/*@GetMapping("/getManagerOrders")
-	public List<PremiumCustomDto> getManagerOrders(@RequestBody PremiumRequestDto premiumRequestDto) throws ClientProtocolException, IOException, JSONException
-	{
-		return premiumFreightOrdersService.getManagerOrders(premiumRequestDto);
-	}
-*/
+	
 	@GetMapping("/getallTaskInstancesId/{userId}")
 	public List<TaskDetailsDto> getAllWorkflowTaskInstanceId(@PathVariable String userId)
 			throws ClientProtocolException, IOException, JSONException
