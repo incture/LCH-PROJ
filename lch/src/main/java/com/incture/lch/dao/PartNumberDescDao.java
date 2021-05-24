@@ -88,6 +88,7 @@ public class PartNumberDescDao {
 
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public PartNumberDescDto getDetailsByPartNumber(String partNumber) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
@@ -95,7 +96,7 @@ public class PartNumberDescDao {
 		String queryStr = "select part from PartNumberDesc part where part.partNum=:partNum";
 		Query query = session.createQuery(queryStr);
 		query.setParameter("partNum", partNumber);
-		@SuppressWarnings("unchecked")			PartNumberDescDto pdto= new PartNumberDescDto();
+		PartNumberDescDto pdto= new PartNumberDescDto();
 
 		List<PartNumberDesc> listData = query.list();
 		for (PartNumberDesc rule : listData) {
