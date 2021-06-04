@@ -1,19 +1,6 @@
 {
+	"pid" : "",
 	"today": null,
-
-	"bTotalFu": true,
-	"bNext24H": false,
-	"bNext72H": false,
-	"bNext7D": false,
-	"bPastFu": false,
-
-	"iFuLength": 0,
-
-	"TotalFuCount": 0,
-	"Next7d": 0,
-	"Next72h": 0,
-	"Next24h": 0,
-	"PastFu": 0,
 
 	"selNavigationKey": "Orders",
 
@@ -21,6 +8,7 @@
 		"bEditable": true
 	},
 
+	"bShowBusy" : true,
 	"userDetails": {},
 	"valStFltrOriginID": "None",
 	"visible": {
@@ -58,11 +46,16 @@
 		"bReject" : true,
 		"bGetcost" : true,
 		"bSetcost" : true,
-		"costInput" : false
+		"costInput" : false,
+		"firstPage" : false,
+		"previousPage" : false,
+		"nextPage" : false,
+		"lastPage" : false
+		
 		
 	},
 	
-	"countOfRecords" : "",
+	"countOfRecords" : 0,
 
 	"rowcounts": [{
 		"key": "5",
@@ -249,16 +242,16 @@
 		"originName": "Incture Technologies"
 	}],
 
-	"aStatus": [{
-		"status": "Approved"
-	}, {
+	"aStatus": [ {
 		"status": "Pending At Planner"
 	},{
-		"status": "Pending With Approver"
-	}, {
 		"status": "Pending with Carrier Admin"
+	},{
+		"status": "Pending At Manager"
+	},{
+		"status": "Pending At Accountant"
 	}, {
-		"status": "Completed"
+		"status": "COMPLETED"
 	}],
 
 	"aDestination": [{
@@ -322,135 +315,10 @@
 
 	"aPremfreightorders": [],
 	
+	"aTaskDetails" : [],
+	
 	"currRole" : "",
 
-	"aColumn": [],
+	"aColumn": []
 
-	"aFUColumnBackUp": [{
-		"preferenceId": "",
-		"columnName": "Sel",
-		"isVisible": true,
-		"isMandatory": true,
-		"isEditable": false,
-		"sequence": 1
-	}, {
-		"preferenceId": "",
-		"columnName": "FU",
-		"isVisible": true,
-		"isMandatory": false,
-		"isEditable": true,
-		"sequence": 2
-	}, {
-		"preferenceId": "",
-		"columnName": "PartNum",
-		"isVisible": true,
-		"isMandatory": true,
-		"isEditable": true,
-		"sequence": 4
-	}, {
-		"preferenceId": "",
-		"columnName": "LSeqNum",
-		"isVisible": true,
-		"isMandatory": false,
-		"isEditable": true,
-		"sequence": 5
-	}, {
-		"preferenceId": "",
-		"columnName": "OriginId",
-		"isVisible": true,
-		"isMandatory": true,
-		"isEditable": true,
-		"sequence": 3
-	}, {
-		"preferenceId": "",
-		"columnName": "ShipOn",
-		"isVisible": true,
-		"isMandatory": false,
-		"isEditable": true,
-		"sequence": 6
-	}, {
-		"preferenceId": "",
-		"columnName": "Qty",
-		"isVisible": true,
-		"isMandatory": true,
-		"isEditable": true,
-		"sequence": 7
-	}, {
-		"preferenceId": "",
-		"columnName": "NewShipOn",
-		"isVisible": true,
-		"isMandatory": true,
-		"isEditable": true,
-		"sequence": 8
-	}, {
-		"preferenceId": "",
-		"columnName": "NewQty",
-		"isVisible": true,
-		"isMandatory": true,
-		"isEditable": true,
-		"sequence": 9
-	}, {
-		"preferenceId": "",
-		"columnName": "RemShipOn",
-		"isVisible": true,
-		"isMandatory": true,
-		"isEditable": true,
-		"sequence": 10
-	}, {
-		"preferenceId": "",
-		"columnName": "RemQty",
-		"isVisible": true,
-		"isMandatory": true,
-		"isEditable": true,
-		"sequence": 11
-	}, {
-		"preferenceId": "",
-		"columnName": "DesId",
-		"isVisible": true,
-		"isMandatory": false,
-		"isEditable": true,
-		"sequence": 12
-	}, {
-		"preferenceId": "",
-		"columnName": "COO",
-		"isVisible": true,
-		"isMandatory": true,
-		"isEditable": true,
-		"sequence": 13
-	}, {
-		"preferenceId": "",
-		"columnName": "PO",
-		"isVisible": true,
-		"isMandatory": false,
-		"isEditable": true,
-		"sequence": 14
-	}, {
-		"preferenceId": "",
-		"columnName": "PartDesc",
-		"isVisible": true,
-		"isMandatory": true,
-		"isEditable": true,
-		"sequence": 15
-	}, {
-		"preferenceId": "",
-		"columnName": "SupPartNum",
-		"isVisible": true,
-		"isMandatory": false,
-		"isEditable": true,
-		"sequence": 16
-	}, {
-		"preferenceId": "",
-		"columnName": "CustOrdNum",
-		"isVisible": true,
-		"isMandatory": false,
-		"isEditable": true,
-		"sequence": 17
-	}, {
-		"preferenceId": "",
-		"columnName": "DraftStatus",
-		"isVisible": true,
-		"isMandatory": true,
-		"isEditable": false,
-		"sequence": 99
-	}]
 }

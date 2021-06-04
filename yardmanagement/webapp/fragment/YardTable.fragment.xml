@@ -1,0 +1,253 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ExtPicker="com.incture.lch.yardmanagement.control" xmlns:core="sap.ui.core"
+	xmlns:ui="sap.ui.table">
+	<ui:Table rows="{mCommon>/aShipments}" selectionMode="None" visibleRowCountMode="Auto" alternateRowColors="true" fixedColumnCount="4"
+		enableColumnReordering="false" filter="onFilterChangeFU" class="sapUiMediumMarginBeginEnd sapFbfilterbar sapUiTableNoColBorders">
+		<ui:extension>
+			<Toolbar>
+				<SegmentedButton selectedKey="{mCommon>/shipmentsViewType}" selectionChange="onCngViewType" class="sapUiSmallMarginTopBottom">
+					<items>
+						<SegmentedButtonItem text="{i18n>ALL_SHIPMENTS_VIEW}" key="ALL"/>
+						<SegmentedButtonItem text="{i18n>PRIORITY_SHIPMENTS_VIEW}" key="PRIORITY"/>
+					</items>
+				</SegmentedButton>
+				<ToolbarSpacer/>
+				<Button type="Transparent" icon="sap-icon://email"
+					visible="{parts:['mCommon>/bVisibleEmail','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}" enabled="{mCommon>/bUpdateYard}"
+					text="{i18n>EMAIL}" tooltip="{i18n>EMAIL}" press="onSendEmail"/>
+				<Button type="Transparent" icon="sap-icon://paper-plane" visible="{mCommon>/bEditable}" enabled="{mCommon>/bUpdateYard}"
+					text="{i18n>UPDATE}" tooltip="{i18n>UPDATE}" press="onUpdateYard"/>
+				<Button type="Transparent" icon="sap-icon://add-product"
+					visible="{parts:['mCommon>/bVisibleCreateAdhoc','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}" text="{i18n>CREATE_ADHOC}"
+					tooltip="{i18n>CREATE_ADHOC_SHIPMENT}" press="onCreateAdhoc"/>
+				<Button type="Transparent" icon="sap-icon://shipping-status"
+					visible="{parts:['mCommon>/bVisibleAging','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}" text="{i18n>AGING_EXCEED}"
+					tooltip="{i18n>AGING_EXCEED}" press="onFilterAgingExceed"/>
+				<Button type="Transparent" icon="sap-icon://excel-attachment"
+					visible="{parts:['mCommon>/bVisibleAging','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}" 
+					text="{i18n>DOWNLOAD_AGING}" tooltip="{i18n>AGING_EXCEL_DOWNLOAD}" press="onAgingDownload"/>
+				<Button type="Transparent" icon="sap-icon://download" text="{i18n>DOWNLOAD}"
+					tooltip="{i18n>EXCEL_DOWNLOAD}" press="onDownload"/>
+				<Button type="Transparent" icon="sap-icon://refresh" text="{i18n>RELOAD}" tooltip="{i18n>RELOAD}" press="onReloadYard"/>
+				<Text text="{i18n>PAGINATION}" class="sapUiMFontBold sapUiMCement"/>
+				<Label text="({mCommon>/iYardLoaded}/{mCommon>/iTotalLength})" design="Bold" class="sapUiTinyMarginBegin sapUiMediumMarginEnd"/>
+			</Toolbar>
+		</ui:extension>
+		<ui:columns>
+			<ui:Column width="3rem" name="ID_CHECKBOX_COLUMN" resizable="false">
+				<CheckBox name="ID_CHECKBOX_COLUMN_HEADERLEVEL" selected="{mCommon>/isSelectedAllFO}" select="onChangeSelectAll"/>
+				<ui:template >
+					<CheckBox name="ID_CHECKBOX_CONTENT" selected="{mCommon>isSelected}" select="onChangeIsSelected" width="3rem"
+						editable="{mCommon>/bEditable}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="4rem" resizable="false">
+				<Label text="{i18n>PRIORITY}" tooltip="{i18n>PRIORITY}" design="Bold"/>
+				<ui:template>
+					<Input value="{mCommon>priority}" textAlign="Right"
+						editable="{parts:['mCommon>/bEditPriority','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}" maxLength="2"
+						change="onChngePriority" class="sapUiMInputBorderRadius" width="3.25rem"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="7.5rem" resizable="false">
+				<Label text="{i18n>CARRIER}" tooltip="{i18n>CARRIER}" design="Bold"/>
+				<ui:template>
+					<HBox renderType="Bare" width="7rem">
+						<Input type="Text" selectedKey="{mCommon>carrierKey}" value="{mCommon>carrierName}" showSuggestion="true" startSuggestion="1"
+							suggest="onSuggestCarrier" name="CARRIER_ID"
+							editable="{parts:['mCommon>bCarier','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}"
+							suggestionItems="{ path: 'mCommon>/aCarrier',templateShareable:'true'}" change="onChangeCarrier"
+							valueState="{mCommon>sYrdTbleCarrierValState}" tooltip="{mCommon>carrierName}">
+							<suggestionItems>
+								<core:ListItem key="{mCommon>bpNumber}" text="{mCommon>carrierDetails}" additionalText="{mCommon>carrierScac}"/>
+							</suggestionItems>
+						</Input>
+						<Button icon="sap-icon://write-new" press="onNewCarrier" tooltip="{i18n>NEW_CARRIER}" visible="{mCommon>bAdhocEntry}"/>
+					</HBox>
+					<!--<Input value="{mCommon>carrierName}" class="sapUiMInputBorderRadius"-->
+					<!--	editable="{parts:['mCommon>bCarier','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}" tooltip="{mCommon>carrierName}"-->
+					<!--	width="10.4rem"/>-->
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="7rem" resizable="false">
+				<Label text="{i18n>TRAILER_NUM}" tooltip="{i18n>TRAILER_NUM}" design="Bold"/>
+				<ui:template >
+					<Input value="{mCommon>trailer}" class="sapUiMInputBorderRadius" width="6.31rem"
+						editable="{parts:['mCommon>bTrailerNo','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="7rem">
+				<Label text="{i18n>SEAL_NUMBER}" tooltip="{i18n>SEAL_NUMBER}" design="Bold"/>
+				<ui:template >
+					<Input value="{mCommon>sealNo}" class="sapUiMInputBorderRadius"
+						editable="{parts:['mCommon>bSealNo','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="7rem">
+				<Label text="{i18n>LICENSE_PLATE}" tooltip="{i18n>LICENSE_PLATE}" design="Bold"/>
+				<ui:template >
+					<Input value="{mCommon>licencePlateNo}" class="sapUiMInputBorderRadius"
+						editable="{parts:['mCommon>bLicense','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="10rem">
+				<Label text="{i18n>STATUS}" tooltip="{i18n>STATUS}" design="Bold"/>
+				<ui:template >
+					<ComboBox width="100%" selectedKey="{mCommon>status}" showSecondaryValues="true" change="onChangeYardStatus" editable="{mCommon>/bEditable}"
+						valueState="{mCommon>sValStateYardStatus}" items="{path: 'mCommon>/aJavaYardStatus',templateShareable:'true'}">
+						<core:ListItem key="{mCommon>statusId}" text="{mCommon>statusDesc}" additionalText="{mCommon>groupOrKpi}"
+							enabled="{path:'mCommon>statusId',formatter:'.formatter.getStatusEnabled'}"/>
+					</ComboBox>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="10rem">
+				<Label text="{i18n>SUPPLIER}" tooltip="{i18n>SUPPLIER}" design="Bold"/>
+				<ui:template>
+					<HBox renderType="Bare">
+						<Input type="Text" selectedKey="{mCommon>supplierKey}" value="{mCommon>supplier}" showSuggestion="true" startSuggestion="1"
+							suggest="onSuggestSupplier" name="SUPPLIER_ID"
+							editable="{parts:['mCommon>bSupplier','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}"
+							suggestionItems="{ path: 'mCommon>/aSupplier',templateShareable:'true'}" change="onChangeSupplier"
+							valueState="{mCommon>sYrdTbleSupplierValState}" tooltip="{mCommon>supplier}">
+							<suggestionItems>
+								<core:ListItem key="{mCommon>bpNumber}" text="{mCommon>shipperName}" additionalText="{mCommon>bpNumber}"/>
+							</suggestionItems>
+						</Input>
+						<Button icon="sap-icon://write-new" press="onNewSupplier" tooltip="{i18n>NEW_SUPPLIER}" visible="{mCommon>bAdhocEntry}"/>
+					</HBox>
+					<!--<Input value="{mCommon>supplierAddress}  ({mCommon>supplier})" tooltip="{mCommon>supplier}" class="sapUiMInputBorderRadius"  -->
+					<!--	editable="{parts:['mCommon>bSupplier','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}" />-->
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="7rem">
+				<Label text="{i18n>DEST_ID}" tooltip="{i18n>DEST_ID}" design="Bold"/>
+				<ui:template>
+					<HBox renderType="Bare">
+						<Input type="Text" selectedKey="{mCommon>destKey}" value="{mCommon>destId}" showSuggestion="true" startSuggestion="1"
+							suggest="onSuggestDest" name="DEST_ID" editable="{parts:['mCommon>bDestId','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}"
+							suggestionItems="{ path: 'mCommon>/aDestination',templateShareable:'true'}" change="onChangeDest"
+							valueState="{mCommon>sYrdTbleDestValState}" tooltip="{mCommon>destId}">
+							<suggestionItems>
+								<core:ListItem key="{mCommon>destId}" text="{mCommon>destId}" />
+							</suggestionItems>
+						</Input>
+						<Button icon="sap-icon://write-new" press="onNewDestination" tooltip="{i18n>NEW_CARRIER}" visible="{mCommon>bAdhocEntry}"/>
+					</HBox>
+					<!--<Input value="{mCommon>destId}" class="sapUiMInputBorderRadius" tooltip="{mCommon>destId}"-->
+					<!--	editable="{parts:['mCommon>bDestId','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}"/>-->
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="9rem">
+				<Label text="{i18n>PLAN_DUE_DATE}" tooltip="{i18n>PLAN_DUE_DATE}" design="Bold"/>
+				<ui:template>
+					<ExtPicker:ExtDatePicker class="sapUiMInputBorderRadius" placeholder=" "
+						editable="{parts:['mCommon>bPlanDueDate','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}" dateValue="{mCommon>plannedShipDate}"
+						displayFormat="dd MMM yyyy"/>
+					<!--<Input value="{path:'mCommon>plannedShipDate', type:'sap.ui.model.type.DateTime', formatOptions: {pattern: 'dd MMM yyyy, HH:mm', strictParsing: true}}"/>-->
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="9rem">
+				<Label text="{i18n>LAST_UPDATE_DATE}" tooltip="{i18n>LAST_UPDATE_DATE}" design="Bold"/>
+				<ui:template>
+					<Text
+						text="{path:'mCommon>updatedDate', type:'sap.ui.model.type.DateTime', formatOptions: {pattern: 'dd MMM yyyy, HH:mm', strictParsing: true}}"/>
+				</ui:template>
+			</ui:Column>
+			<!--<ui:Column width="7rem">
+				<Label text="{i18n>YARD_ID}" tooltip="{i18n>YARD_ID}" design="Bold"/>
+				<ui:template >
+					<ComboBox width="100%" selectedKey="{mCommon>yardId}" id="id_yard_ID" showSecondaryValues="true" change="onChangeYard"
+						items="{path: 'mCommon>/aYardLocation',templateShareable:'true'}" editable="{mCommon>bYardId}" >
+						<core:ListItem key="{mCommon>destinationId}" text="{mCommon>destinationId}" additionalText="{mCommon>destinationId}"/>
+					</ComboBox>
+				</ui:template>
+			</ui:Column>-->
+			<ui:Column width="10rem">
+				<Label text="{i18n>YARD_LOC_DESC}" tooltip="{i18n>YARD_LOC_DESC}" design="Bold"/>
+				<ui:template >
+					<ComboBox width="100%" selectedKey="{mCommon>yardLocation}" id="id_yard_location" showSecondaryValues="false" change="onChangeCBox"
+						editable="{parts:['mCommon>bYardLoc','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}"
+						items="{path: 'mCommon>/aYardLocation',templateShareable:'true'}">
+						<core:ListItem key="{mCommon>yardLocation}" text="{mCommon>yardLocation}" />
+					</ComboBox>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="9rem">
+				<Label text="{i18n>COMMENT}" tooltip="{i18n>COMMENT}" design="Bold"/>
+				<ui:template>
+					<Input value="{mCommon>comments}" class="sapUiMInputBorderRadius" editable="{mCommon>/bEditable}" change="onChngeComment" maxLength="255"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="6rem">
+				<Label text="{i18n>PPKIT}" tooltip="{i18n>PPKIT}" design="Bold"/>
+				<ui:template>
+					<Switch state="{mCommon>isPpKit}" enabled="{mCommon>/bEditable}" customTextOn="{i18n>YES}" customTextOff="{i18n>NO}" class="sapMSwitch"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="9rem">
+				<Label text="{i18n>ETA}" tooltip="{i18n>ETA_DESC}" design="Bold"/>
+				<ui:template>
+					<Input value="{mCommon>arrival}" class="sapUiMInputBorderRadius"
+						editable="{parts:['mCommon>bArrival','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="4.5rem" visible="{mCommon>/bVisibleAging}">
+				<Label text="{i18n>AGING}" tooltip="{i18n>AGING}" design="Bold"/>
+				<ui:template >
+					<Button class="sapUiSizeCompact" enabled="false"
+						text="{path:'mCommon>agingCount',formatter:'com.incture.lch.yardmanagement.utility.LabelFormatter.setAgingColor'}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="7rem">
+				<Label text="{i18n>HAND_UNIT}" tooltip="{i18n>HAND_UNIT_DESC}" design="Bold"/>
+				<ui:template >
+					<Input value="{mCommon>handlingUnit}" class="sapUiMInputBorderRadius" textAlign="Right"
+						editable="{parts:['mCommon>bHU','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column hAlign="Center" width="4rem" name="ID_COLUMN_FREIGHT_UNITS">
+				<Label design="Bold" wrapping="true" tooltip="{i18n>FU_COUNT}" text="{i18n>FU}"/>
+				<ui:template>
+					<HBox class="circleCSS">
+						<Text class="whiteTextCSS" text="{mCommon>fuCount}"/>
+					</HBox>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="8rem">
+				<Label text="{i18n>PRO_NUMBER}" tooltip="{i18n>PRO_NUMBER}" design="Bold"/>
+				<ui:template>
+					<Input value="{mCommon>proNo}" class="sapUiMInputBorderRadius"
+						editable="{parts:['mCommon>bProNo','mCommon>/bEditable'],formatter:'.formatter.isBothNonEmpty'}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="10rem">
+				<Label text="{i18n>FREIGHT_ORDER}" tooltip="{i18n>FREIGHT_ORDER}" design="Bold"/>
+				<ui:template >
+					<!--<Text text="{mCommon>freightOrderNo}" maxLines="1" />-->
+					<Button enabled="false"
+						text="{parts:['mCommon>statusGroup','mCommon>freightOrderNo'],formatter:'com.incture.lch.yardmanagement.utility.LabelFormatter.setTaskStatusColor'}"/>
+				</ui:template>
+			</ui:Column>
+			<!--<ui:Column width="9rem" visible="{mCommon>/bVisibleYardIn}">
+				<Label text="{i18n>TIME_TRUCK_ENTERED}" tooltip="{i18n>TIME_TRUCK_ENTERED}" design="Bold"/>
+				<ui:template>
+					<ExtPicker:ExtDateTimePicker minDate="{mCommon>/today}" initialFocusedDateValue="{mCommon>/today}" placeholder=" " minutesStep="15"
+						enabled="true" dateValue="{mCommon>yardIn}" displayFormat="HH:mm , dd MMM yyyy," name="ID_DATEPICKER_IN"/>
+				</ui:template>
+			</ui:Column>-->
+			<!--<ui:Column width="9rem" visible="{=${mCommon>/sActiveRole} === 'TRAFFIC_MANAGER' ? true:false}">
+				<Label text="{i18n>TRUCKTIMEEXIT}" tooltip="{i18n>TRUCKTIMEEXIT}" design="Bold"/>
+				<ui:template>
+					<ExtPicker:ExtDateTimePicker minDate="{mCommon>/today}" initialFocusedDateValue="{mCommon>/today}" placeholder=" " minutesStep="15"
+						enabled="true" dateValue="{mCommon>yardOut}" displayFormat="HH:mm , dd MMM yyyy," name="ID_DATEPICKER_OUT"/>
+				</ui:template>
+			</ui:Column>-->
+		</ui:columns>
+		<ui:footer class="sapUiToolBar">
+			<Bar>
+				<contentMiddle>
+					<Button icon="sap-icon://display-more" tooltip="{i18n>LOAD_MORE}" press="onLoadMore" enabled="false"/>
+				</contentMiddle>
+			</Bar>
+		</ui:footer>
+	</ui:Table>
+</core:FragmentDefinition>

@@ -1,0 +1,414 @@
+{
+	"bEditable": false,
+	"bVisibleEmail": false,
+	"bVisibleAging": false,
+	"bEditPriority": false,
+	"bVisibleCreateAdhoc": false,
+	"bVisibleYardIn": false,
+	"bNewCarrierBtn": false,
+	"bNewDestIdBtn": false,
+	"bNewSupplierBtn": false,
+
+	"oValState": {
+		"sFromDateValState": "None",
+		"sToDateValState": "None",
+		"sValStateFilterByKey": "None",
+		"sValStateYardLocation": "None",
+		"sValStateStatus": "None",
+		"sHisFromDateValState": "None",
+		"sHisToDateValState": "None"
+	},
+
+	"sIconNew": "sap-icon://write-new",
+
+	"bMandatoryTrailer": false,
+
+	"visible": {
+		"bVisibleSave": false
+	},
+
+	"iAgingCount": "5",
+
+	"sTntSelectedKey": "yardOverview",
+
+	"bUpdateYard": false,
+
+	"iYardLoaded": "0",
+	"iTotalLength": "0",
+	"iHistoryYardLoaded": "0",
+	"iHistoryTotalLength": "0",
+	"shipmentsViewType": "ALL",
+
+	"aFilterBy": [{
+		"key": "F1",
+		"text": "Freight Order Number"
+	}, {
+		"key": "F2",
+		"text": "Trailer Number"
+	}, {
+		"key": "F3",
+		"text": "Carrier"
+	}],
+
+	"aStatus": [{
+		"key": "S1",
+		"text": "At Dock"
+	}, {
+		"key": "S2",
+		"text": "At Gate"
+	}, {
+		"key": "S3",
+		"text": "Parked At Location"
+	}, {
+		"key": "S4",
+		"text": "Picked up by MH"
+	}, {
+		"key": "S5",
+		"text": "Out Gate"
+	}, {
+		"key": "S6",
+		"text": "Not Arrived"
+	}],
+
+	"aLocation": [{
+		"key": "L0",
+		"text": "--SELECT--"
+	}],
+
+	"aTempShipments": [{
+		"Status": "NotArrived",
+		"freightOrderNo": "61000456",
+		"carrier": "FEDEX",
+		"trailer": "TRLNO1234",
+		"supplier": "12B00AB",
+		"destId": "US01",
+		"planShipDate": null,
+		"eta": "ETA1",
+		"hu": "100",
+		"priority": "2",
+		"yardLocation": "",
+		"comments": ""
+	}, {
+		"Status": "AtGate",
+		"freightOrderNo": "610004578",
+		"carrier": "FEDEX",
+		"trailer": "TRLNO1236",
+		"supplier": "12B00AA",
+		"destId": "US02",
+		"planShipDate": null,
+		"eta": "ETA1",
+		"hu": "100",
+		"priority": "1",
+		"yardLocation": "",
+		"comments": ""
+	}, {
+		"Status": "ParkedAtLoc",
+		"freightOrderNo": "61000456",
+		"carrier": "FEDEX",
+		"trailer": "TRLNO1234",
+		"supplier": "12B00AB",
+		"destId": "US01",
+		"planShipDate": null,
+		"eta": "ETA1",
+		"hu": "100",
+		"priority": "2",
+		"yardLocation": "",
+		"comments": ""
+	}, {
+		"Status": "PickedByMH",
+		"freightOrderNo": "610004578",
+		"carrier": "WENP",
+		"trailer": "TRLNO1236",
+		"supplier": "12B00AA",
+		"destId": "US02",
+		"planShipDate": null,
+		"eta": "ETA1",
+		"hu": "100",
+		"priority": "1",
+		"yardLocation": "",
+		"comments": ""
+	}, {
+		"Status": "AtDoc",
+		"freightOrderNo": "61000456",
+		"carrier": "WENP",
+		"trailer": "TRLNO1234",
+		"supplier": "12B00AB",
+		"destId": "US01",
+		"planShipDate": null,
+		"eta": "ETA1",
+		"hu": "100",
+		"priority": "2",
+		"yardLocation": "",
+		"comments": ""
+	}, {
+		"Status": "LeftGate",
+		"freightOrderNo": "610004578",
+		"carrier": "WENP",
+		"trailer": "TRLNO1236",
+		"supplier": "12B00AA",
+		"destId": "US02",
+		"planShipDate": null,
+		"eta": "ETA1",
+		"hu": "100",
+		"priority": "1",
+		"yardLocation": "",
+		"comments": ""
+	}],
+	"oKpiDetailsbackup": {
+		"iNotArrivved": "0",
+		"iAtGate": "0",
+		"iParkedAtLoc": "0",
+		"iPickedByMH": "0",
+		"iAtDoc": "0",
+		"iOutGate": "0"
+	},
+	"oKpiActive": {
+		"bNotArrivved": false,
+		"bAtGate": false,
+		"bInYard": false,
+		"bPickedByMH": false,
+		"bAtDoc": false,
+		"bOutGate": false
+	},
+	"aKpiSelected": [{
+		"title": "notArrived",
+		"iKpiClick": 0,
+		"value": "Not Arrived"
+
+	}, {
+		"title": "AtGate",
+		"iKpiClick": 0,
+		"value": "At Gate"
+
+	}, {
+		"title": "InYard",
+		"iKpiClick": 0,
+		"value": "In Yard"
+	}, {
+		"title": "PickedByMH",
+		"iKpiClick": 0,
+		"value": "Picked By MH"
+	}, {
+		"title": "AtDock",
+		"iKpiClick": 0,
+		"value": "At Dock"
+	}, {
+		"title": "OutGate",
+		"iKpiClick": 0,
+		"value": "Out Gate"
+	}],
+
+	"oFilters": {
+		"aSelStatus": [],
+		"filterByKey": "",
+		"status": "",
+		"yardLocation": "",
+		"filterByText": "",
+		"supplierId": "",
+		"fromDateFilter": null,
+		"toDateFilter": null
+	},
+	"oHistoryFilters": {
+		"fromDateFilter": null,
+		"toDateFilter": null
+	},
+
+	"aTempStatus": [{
+			"status": "INGATE",
+			"statusDesc": "In Gate"
+		}, {
+			"status": "DOCK",
+			"statusDesc": "Dock"
+		}, {
+			"status": "LOADED",
+			"statusDesc": "Loaded"
+		}, {
+			"status": "UNLOADED/EMPTY",
+			"statusDesc": "Unloaded/Empty"
+		}, {
+			"status": "OUTBOUND",
+			"statusDesc": "Outbound"
+		}, {
+			"status": "OUTBOUND_INPROGRESS",
+			"statusDesc": "Outbound-Inprogress"
+		}, {
+			"status": "OUTBOUND_READY_FOR_YOU",
+			"statusDesc": "Outbound-Ready For You"
+		}, {
+			"status": "EMPTY_READY_FOR_PICKUP",
+			"statusDesc": "Empty-Ready For Pickup"
+		}, {
+			"status": "OUTGATE",
+			"statusDesc": "Out Gate"
+		}
+
+	],
+
+	"aTempYardStatus": [{
+		"status": "INYARD_LOADED",
+		"statusDesc": "In Yard - Loaded"
+	}, {
+		"status": "INYARD_OUTBOUND",
+		"statusDesc": "In Yard - Outbound"
+	}, {
+		"status": "INYARD_EMPTY",
+		"statusDesc": "In Yard - Empty Ready For Pickup"
+	}],
+
+	"aNewTempStatus": [{
+		"key": "NOTARRIVED",
+		"status": "Not Arrived",
+		"group": "Not Arrived"
+	}, {
+		"key": "DOCK",
+		"status": "At Dock",
+		"group": "At Dock"
+	}, {
+		"key": "EMPTY - READY FOR PICKUP",
+		"status": "Empty - Ready for Pickup",
+		"group": "In Yard"
+	}, {
+		"key": "INGATE",
+		"status": "In Gate",
+		"group": "At Gate"
+	}, {
+		"key": "LOADED",
+		"status": "Loaded",
+		"group": "In Yard"
+	}, {
+		"key": "OUTBOUND",
+		"status": "Outbound",
+		"group": "In Yard"
+	}, {
+		"key": "OUTBOUND - INPROCESS",
+		"status": "Outbound - In Process",
+		"group": "In Yard"
+	}, {
+		"key": "OUTBOUND - READY FOR PU",
+		"status": "Outbound - Ready for Pickup",
+		"group": "In Yard"
+	}, {
+		"key": "OUTGATE",
+		"status": "Out Gate",
+		"group": "Out Gate"
+	}, {
+		"key": "UNLOADED/EMPTY",
+		"status": "Unloaded / Empty",
+		"group": "In Yard"
+	}, {
+		"key": "1 QUARTER FULL",
+		"status": "1 Quarter Full",
+		"group": "In Yard"
+	}, {
+		"key": "2 QUARTER FULL",
+		"status": "2 Quarter Full",
+		"group": "In Yard"
+	}, {
+		"key": "3 QUARTER FULL",
+		"status": "3 Quarter Full",
+		"group": "In Yard"
+	}, {
+		"key": "RCVD / RELOADED",
+		"status": "Received / Reloaded",
+		"group": "In Yard"
+	}, {
+		"key": "TRAILER ISSUE",
+		"status": "Trailer Issue",
+		"group": "In Yard"
+	}, {
+		"key": "TRAILER ISSUE- PICKUP",
+		"status": "Trailer Issue - Pickup",
+		"group": "In Yard"
+	}, {
+		"key": "HOLD OR RESERVE",
+		"status": "Hold / Reserve",
+		"group": "In Yard"
+	}],
+
+	"oNewAdhocData": {
+		"adhocType": "ADHOC",
+		"arrival": "",
+		"bol": "",
+		"carrierDesc": "",
+		"carrierName": "",
+		"comments": "",
+		"createdDate": "",
+		"destDesc": "",
+		"destId": "",
+		"freightOrderNo": "",
+		"fuCount": "0",
+		"id": "",
+		"isPpKit": false,
+		"isSelected": true,
+		"labelstatus": "",
+		"lineSeq": "",
+		"location": "",
+		"pendingWith": "",
+		"pickNo": "",
+		"plannedShipDate": null,
+		"proNo": "",
+		"qty": "",
+		"referenceNo": "",
+		"status": "",
+		"supplier": "",
+		"supplierAddress": "",
+		"trailer": "",
+		"toDate": "",
+		"updatedBy": "",
+		"updatedDate": "",
+		"yard": "",
+		"yardId": "",
+		"yardLocation": "",
+		"aRowLoc": "",
+		"carrier": "",
+		"createdBy": "",
+		"priority": "",
+		"handlingUnit": "",
+		"licencePlateNo": "",
+		"sealNo": "",
+		"planningShipdate": "",
+		"supplierKey": "",
+		"carrierKey": "",
+		"destKey": "",
+		"bAdhocEntry": true,
+
+		"bCarier": true,
+		"bTrailerNo": true,
+		"bSealNo": true,
+		"bLicense": true,
+		"bSupplier": true,
+		"bDestId": true,
+		"bPlanDueDate": true,
+		"bYardId": true,
+		"bYardLoc": true,
+		"bArrival": true,
+		"bHU": true,
+		"bProNo": true
+	},
+
+	"aDestination": [{
+		"DestinationId": "CX34",
+		"DestName": "CX34 KenMex MSS SCK Receiving Docks",
+		"DestAddress": "CX34 KenMex MSS SCK Receiving Docks/1778 Zineta Rd//92231/Calexico/CA/US"
+	}, {
+		"DestinationId": "US01",
+		"DestName": "Kenworth Renton",
+		"DestAddress": "Kenworth Renton/N. 8th Street/1601/98057/Renton/WA/US"
+	}, {
+		"DestinationId": "MX01",
+		"DestName": "PACCAR Mexicali Plant",
+		"DestAddress": "PACCAR Mexicali Plant/KM 10.5 Carretera a San Luis//21910/Mexicali/BC/MX"
+	}],
+
+	"aCarrier": [{
+		"Carrier": "1000000321",
+		"CarrierDes": "WERNER ENTERPRISES"
+	}, {
+		"Carrier": "1000000335",
+		"CarrierDes": "FEDEX FREIGHT"
+	}, {
+		"Carrier": "1000000782",
+		"CarrierDes": "R & L CARRIERS"
+	}]
+
+}

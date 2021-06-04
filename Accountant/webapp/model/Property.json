@@ -1,5 +1,14 @@
 {
 
 "aTaskList" : [],
-"oPremAccountingDetails" : {}
+"oPremAccountingDetails" : {},
+
+"totalCostVisible" : false,
+
+"valueState" : {
+	"debitBy" : "None",
+	"debitCurrency" : "None",
+	"debitTo" : "None",
+	"debitAmount" : "None"
+}
 }

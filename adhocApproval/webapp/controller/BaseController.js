@@ -33,15 +33,11 @@ sap.ui.define([
 				oMdlCommon.setProperty("/today", new Date());
 				var mcontextModel = oThisController.getOwnerComponent().getModel("context");
 				var contextData = mcontextModel.getData();
-				console.log(contextData);
-				console.log(oMdlCommon);
 				oMdlCommon.setProperty("/context",contextData);
 				oMdlCommon.refresh();
 				oThisController.getRouter().navTo("Order");
 			
-			/*	oThisController.fnGetLookUpDestination();
-				oThisController.fnGetReasonCodes();*/
-
+		
 			});
 
 			oMdlCommon.loadData(sRootPath + "/model/Property.json", null, false);

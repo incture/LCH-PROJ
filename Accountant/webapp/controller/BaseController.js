@@ -21,8 +21,9 @@ sap.ui.define([
 			var oThisController = this;
 			var oMdlCommon = this.getModel("mCommon");
 			var sRootPath = jQuery.sap.getModulePath("com.incture.lch.Accountant");
-			oThisController.fnGetLaunchPadRoles();
-		/*	oThisController.fnSetCurrentUser();*/
+			/*oThisController.fnTaskDetails();*/
+			oThisController.fnSetCurrentUser();
+		
 			oMdlCommon.attachRequestCompleted(function (oEvent) {
 				oMdlCommon.setProperty("/today", new Date());
 				oMdlCommon.refresh();
@@ -385,9 +386,9 @@ sap.ui.define([
 				"user": ""
 			};
 
-		/*	oHeader.user = oThisController._oCommon.userDetails.id;*/
+			oHeader.user = oThisController._oCommon.userDetails.id;
 			/*	oHeader.role = oThisController._oCommon.userDetails.name;*/
-			oHeader.user = "P000332";
+		/*	oHeader.user = "P000331";*/
 			sUrl += oHeader.user;
 
 			oThisController.fnProcessDataRequest(sUrl, "GET", oHeader, false, function (oXHR, status) {
@@ -418,11 +419,48 @@ sap.ui.define([
 					}
 					oMdlCommon.setProperty("/userDetails", oXHR.responseJSON);
 					oMdlCommon.refresh();
-					oThisController.fnGetLaunchPadRoles();
+					oThisController.fnTaskDetails();
 				}
 			}, null);
 
-		}
+		},
+		
+			fnTaskDetails: function () {
+			var oThisController = this;
+			var oMdlCommon = this.getModel("mCommon"),
+				sUrl = "/lch_services/premiumOrders/getAllAccountantOrders";
+
+			var oHeader = {
+					"Content-Type": "application/json",
+					"Accept": "application/json",
+				},
+				oPayload = {
+					"destinationName": "",
+					"fromDate": "",
+					"noOfEntry": "",
+					"orderId": "",
+					"originName": "",
+					"pageNumber": "",
+					"reasonCode": "",
+					"status": "",
+					"toDate": "",
+					"userId": oMdlCommon.getProperty("/userDetails/id")
+
+				};
+			oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
+				try {
+					if (oXHR && oXHR.responseJSON) {
+
+						oMdlCommon.setProperty("/aTaskList", oXHR.responseJSON);
+						oMdlCommon.refresh();
+						
+					}
+
+				} catch (e) {
+					// console.log(e);
+				}
+			},oPayload);
+		},
 
 		/*	fnSetUserInterFace: function (sAction) {
 				var oOrderModel = this.getModel("mOrderModel");

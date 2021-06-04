@@ -13,15 +13,11 @@
 				<l:GridData span="XL2 L2 M6 S6"/>
 			</layoutData>
 		</Input>
-		<Input value="{mCommon>/context/weightUom}" enabled="{mCommon>/bIsEditable}"/>
-		<!--<ComboBox width="100%" selectedKey="{mCommon>/context/weightUom}" placeholder="{i18n>UOM}" showSecondaryValues="true"
-			change="onChangeOptnlCBox" items="{path: 'mCommon>/aUomWeight',sorter:{ path:'text'},templateShareable:'true'}"
-			valueState="{mCommon>/valState/weightUom}" name="SHIPPING_WEIGHT_UOM_ID" enabled="{mCommon>/bIsEditable}">
-			<core:ListItem key="{mCommon>key}" text="{mCommon>key}" additionalText="{mCommon>text}"/>
+		<Input value="{mCommon>/context/weightUom}" enabled="{mCommon>/bIsEditable}">
 			<layoutData>
 				<l:GridData span="XL1 L1 M6 S6"/>
 			</layoutData>
-		</ComboBox>-->
+		</Input>
 		<Label design="Bold" text="{i18n>PACKAGE_TYPE}" required="true" class="sapUiTinyMarginTop sapUiSmallMarginBegin">
 			<layoutData>
 				<l:GridData span="XL2 L2 M6 S6"/>
@@ -105,7 +101,11 @@
 				<l:GridData span="XL2 L2 M4 S4"/>
 			</layoutData>
 		</ComboBox>-->
-		<Input value="{mCommon>/context/premiumReasonCode}" enabled="{mCommon>/bIsEditable}"/>
+		<Input value="{mCommon>/context/premiumReasonCode}" enabled="{mCommon>/bIsEditable}">
+			<layoutData>
+				<l:GridData span="XL2 L2 M4 S4"/>
+			</layoutData>
+		</Input>
 		<Label design="Bold" text="{i18n>PLANNER_EMAIL}" required="{mCommon>/context/premiumFreight}"
 			class="sapUiTinyMarginTop sapUiSmallMarginBegin">
 			<layoutData>
@@ -113,38 +113,21 @@
 			</layoutData>
 		</Label>
 		<Input type="Email" value="{mCommon>/context/plannerEmail}" valueState="{mCommon>/valState/plannerEmail}" liveChange="onLiveChangeEmail"
-			visible="{mCommon>/bEditPremium}">
+			enabled="{mCommon>/bIsEditable}">
 			<layoutData>
 				<l:GridData span="XL4 L4 M6 S6"/>
 			</layoutData>
 		</Input>
-		<!--	<Label design="Bold" text="{i18n>SHIPDATE}" class="sapUiTinyMarginTop sapUiSmallMarginBegin" required="true">
+		<!--<Label design="Bold" text="{i18n>SHIPPING_INSTRUCTIONS}" class="sapUiSmallMarginTop sapUiSmallMarginBegin">
 			<layoutData>
-				<l:GridData linebreak="true"/>
+				<l:GridData span="XL3 L3 M6 S6"/>
 			</layoutData>
 		</Label>
-		<ExtPicker:ExtDateTimePicker minDate="{mCommon>/today}" initialFocusedDateValue="{mCommon>shipDate}" placeholder=" "
-			name="SHIPPING_SHIPDATE_ID" minutesStep="15" valueState="{mCommon>/valState/shipDate}" enabled="{mCommon>/bIsEditable}"
-			dateValue="{mCommon>/context/shipDate}" displayFormat="dd MMM yyyy, HH:mm" change="onChangeDate"/>
-		<Label design="Bold" text="{i18n>EXPECTED_DELIVERYDATE}" class="sapUiTinyMarginTop sapUiSmallMarginBegin" required="true">
-			<layoutData>
-				<l:GridData span="XL2 L2 M6 S6"/>
-			</layoutData>
-		</Label>
-		<ExtPicker:ExtDateTimePicker minDate="{mCommon>/today}" initialFocusedDateValue="{mCommon>shipDate}" placeholder=" "
-			enabled="{mCommon>/bIsEditable}" minutesStep="15" valueState="{mCommon>/valState/expectedDeliveryDate}"
-			name="SHIPPING_EXPECTED_DELIVERYDATE_ID" dateValue="{mCommon>/context/expectedDeliveryDate}" displayFormat="dd MMM yyyy, HH:mm"
-			change="onChangeDate">
-			<ExtPicker:layoutData>
-				<l:GridData span="XL4 L4 M6 S6"/>
-			</ExtPicker:layoutData>
-		</ExtPicker:ExtDateTimePicker>-->
-		<Label design="Bold" text="{i18n>SHIPPING_INSTRUCTIONS}" class="sapUiSmallMarginTop sapUiSmallMarginBegin"/>
-		<TextArea class="sapUiSmallMarginTop" cols="150" value="{mCommon>/context/shippingInstruction}" enabled="{mCommon>/bIsEditable}"
+		<TextArea cols="150" value="{mCommon>/context/shippingInstruction}" enabled="{mCommon>/bIsEditable}"
 			name="SHIPPING_INSTRUCTIONS_ID">
 			<layoutData>
 				<l:GridData span="XL9 L9 M12 S12"/>
 			</layoutData>
-		</TextArea>
+		</TextArea>-->
 	</l:Grid>
 </core:FragmentDefinition>

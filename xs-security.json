@@ -58,5 +58,23 @@
 		"scope-references": [
 			"$XSAPPNAME.Display"
 		]
+	},  {
+		"name": "LCH_YARD_ADMIN",
+		"description": "Yard admin",
+		"scope-references": [
+			"$XSAPPNAME.Display"
+		]
+	},  {
+		"name": "LCH_MATERIAL_HANDLER",
+		"description": "Material Handler",
+		"scope-references": [
+			"$XSAPPNAME.Display"
+		]
+	},  {
+		"name": "LCH_SECURITY_GUARD",
+		"description": "Required to track at the gate",
+		"scope-references": [
+			"$XSAPPNAME.Display"
+		]
 	}]
 }

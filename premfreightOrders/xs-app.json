@@ -10,7 +10,7 @@
 		"destination": "lch_services",
 		"authenticationType": "xsuaa",
 		"csrfProtection": false
-	},{
+	}, {
 		"source": "^/lch_service_wf/",
 		"target": "/",
 		"destination": "lch_service_wf",

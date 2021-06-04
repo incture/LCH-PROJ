@@ -1,121 +1,133 @@
-<mvc:View controllerName="com.incture.lch.Accountant.controller.App" xmlns:ui="sap.ui.table" xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-	xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.f" xmlns:core="sap.ui.core" height="100%" xmlns:semantic="sap.f.semantic">
-	<App>
-		<Page>
-			<content>
-				<HBox>
-					<VBox width="20%">
-						<List headerText="{i18n>PREMIUM_FO}" items="{mCommon>/aTaskList}">
-							<CustomListItem>
-								<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
-									<Text text="{mCommon>subject}"/>
-									<Link text="{mCommon>workflowInstanceId}" press="fnPremAccDetails"/>
-									<Text text="{mCommon>workflowDefinitionId}"/>
-									<Text text="{mCommon>recipientUsers}"/>
-								</VBox>
-							</CustomListItem>
-						</List>
-					</VBox>
-					<VBox width="80%" class="sapUiSmallMarginTopBottom">
-						<Title class="title" text="{i18n>FO_DETAILS}"></Title>
-						<HBox>
-							<VBox width="25%" class="sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>ORDER_ID}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/orderId}"></Input>
+<mvc:View controllerName="com.incture.lch.Accountant.controller.App" xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+	xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.f" xmlns:core="sap.ui.core" xmlns:semantic="sap.m.semantic">
+	
+		<NavContainer id="accountant_home_container"></NavContainer>
+	<!--	<SplitContainer>
+			<masterPages>
+				<Page>
+					<List items="{mCommon>/aTaskList}" sticky="HeaderToolbar">
+						<headerToolbar>
+							<OverflowToolbar class="listHeader">
+								<Title text="{i18n>PREMIUM_FO}" level="H2"/>
+							</OverflowToolbar>
+						</headerToolbar>
+						<CustomListItem press="fnPremAccDetails" type="Active">
+							<VBox class="sapUiSmallMarginBegin sapUiSmallMarginTopBottom">
+								<Label text="{mCommon>premiumFreightDto1/orderId}"/>
+								<HBox>
+									<Label text="{i18n>CREATED_BY} :"/>
+									<Text text="{mCommon>premiumFreightDto1/createdBy}" class="sapUiTinyMarginBegin"/>
+								</HBox>
+								<HBox>
+									<Label text="{i18n>CREATED_DATE} :"/>
+									<Text
+										text="{path:'mCommon>premiumFreightDto1/createdDate', type:'sap.ui.model.type.DateTime', formatOptions: {source: { pattern: 'yyyy-MM-dd HH:mm:ss' },pattern: 'dd MMM yyyy', strictParsing: true}}"
+										class="sapUiTinyMarginBegin"/></HBox>
 							</VBox>
-							<VBox width="25%" class="sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>DEBIT_BY}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/debitBy}"></Input>
-							</VBox>
-							<VBox width="25%" class="sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>DEBIT_AMT}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/debitAmount}"></Input>
-							</VBox>
-						</HBox>
-						<HBox>
-							<VBox width="25%" class="sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>DEBIT_CURR}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/debitCurrency}"></Input>
-							</VBox>
-							<VBox width="25%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>QUANTITY}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/quantity}"></Input>
-							</VBox>
-							<VBox width="25%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>PRO_NUM}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/proNumber}"></Input>
-							</VBox>
-						</HBox>
-						<HBox>
-							<VBox width="25%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>TRAILER}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/trailerNumber}"></Input>
-							</VBox>
-							<VBox width="25%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>PLANNER_EMAIL}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/plannerEmail}"></Input>
-							</VBox>
-							<VBox width="25%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>DEBIT_POST_STATUS}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/debitPostStatus}"></Input>
-							</VBox>
-						</HBox>
-						<HBox>
-							<VBox width="25%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>DEBIT_TO}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/debitTo}"></Input>
-							</VBox>
-							<VBox width="25%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>GL_CODE}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/glCode}"></Input>
-							</VBox>
-							<VBox width="25%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>PROFIT_CENTER}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/profitCenter}"></Input>
-							</VBox>
-						</HBox>
-						<HBox>
-							<VBox width="25%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>CARRIER}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/carrier}"></Input>
-							</VBox>
-							<VBox width="25%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>TOTAL_COST}"></Label>
-								<Input value="{mCommon>/oPremAccountingDetails/totalCost}"></Input>
-							</VBox>
-						</HBox>
-						<HBox>
-							<VBox width="100%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
-								<Label text="{i18n>COMMENTS}"></Label>
-								<TextArea width="75%" placeholder="Enter Comments here" value="{mCommon>/oPremAccountingDetails/comment}"></TextArea>
-							</VBox>
-						</HBox>
-					</VBox>
-				</HBox>
-			</content>
-			<footer>
-				<OverflowToolbar class="customFooter">
-					<ToolbarSpacer width="2rem">
-						<layoutData>
-							<OverflowToolbarLayoutData priority="NeverOverflow"/>
-						</layoutData>
-					</ToolbarSpacer>
-					<Button text="{i18n>UPDATE}" type="Emphasized" press="fnUpdatePremAccDetails"  class = "sapUiSizeCompact"/>
-					<layoutData>
-						<OverflowToolbarLayoutData priority="NeverOverflow"/>
-					</layoutData>
-					<ToolbarSpacer/>
-					<ToolbarSpacer/>
-					<Button text="{i18n>REJECT}" type="Reject" press="fnCompleteAccountantTask('Rejected')" class = "sapUiSizeCompact"
-					/>
-					<Button text="{i18n>APPROVE}" type="Accept" press="fnCompleteAccountantTask('Approved')"  class = "sapUiSizeCompact"/>
-					<ToolbarSpacer width="2rem">
-						<layoutData>
-							<OverflowToolbarLayoutData priority="NeverOverflow"/>
-						</layoutData>
-					</ToolbarSpacer>
-				</OverflowToolbar>
-			</footer>
-		</Page>
-	</App>
+						</CustomListItem>
+					</List>
+				</Page>
+			</masterPages>
+			<detailPages>
+				<Page>
+					<Title class="title sapUiMediumMarginBegin sapUiTinyMarginTop " text="{i18n>FO_DETAILS}"></Title>
+					<HBox>
+					
+						<VBox width="28%" class="sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
+							<Label text="{i18n>DEBIT_BY}" required="true"></Label>
+							<Input value="{mCommon>/oPremAccountingDetails/debitBy}" valueState="{mCommon>/valueState/debitBy}"></Input>
+						</VBox>
+						<VBox width="28%" class="sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
+							<Label text="{i18n>DEBIT_AMT}" required="true"></Label>
+							<Input value="{mCommon>/oPremAccountingDetails/debitAmount}" valueState="{mCommon>/valueState/debitAmount}"></Input>
+						</VBox>
+						<VBox width="28%" class="sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
+							<Label text="{i18n>DEBIT_CURR}" required="true"></Label>
+							<Input value="{mCommon>/oPremAccountingDetails/debitCurrency}" valueState="{mCommon>/valueState/debitCurrency}"></Input>
+						</VBox>
+					</HBox>
+					<HBox>
+						<VBox width="28%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
+							<Label text="{i18n>DEBIT_TO}" required="true"></Label>
+							<Input value="{mCommon>/oPremAccountingDetails/debitTo}" valueState="{mCommon>/valueState/debitTo}"></Input>
+						</VBox>
+						<VBox width="28%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
+							<Label text="{i18n>DEBIT_POST_STATUS}"></Label>
+							<Input value="{mCommon>/oPremAccountingDetails/debitPostStatus}"></Input>
+						</VBox>
+						<VBox width="28%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
+							<Label text="{i18n>PRO_NUM}"></Label>
+							<Input value="{mCommon>/oPremAccountingDetails/proNumber}"></Input>
+						</VBox>
+					</HBox>
+					<HBox>
+						<VBox width="28%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
+							<Label text="{i18n>PROFIT_CENTER}"></Label>
+							<Input value="{mCommon>/oPremAccountingDetails/profitCenter}"></Input>
+						</VBox>
+						<VBox width="28%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
+							<Label text="{i18n>TRAILER}"></Label>
+							<Input value="{mCommon>/oPremAccountingDetails/trailerNumber}"></Input>
+						</VBox>
+					
+						<VBox width="28%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
+							<Label text="{i18n>QUANTITY}"></Label>
+							<Input value="{mCommon>/oPremAccountingDetails/quantity}" editable="false"></Input>
+						</VBox>
+					</HBox>
+					<HBox>
+							<VBox width="28%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
+							<Label text="{i18n>PLANNER_EMAIL}"></Label>
+							<Input value="{mCommon>/oPremAccountingDetails/plannerEmail}" editable="false"></Input>
+						</VBox>
+						<VBox width="28%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
+							<Label text="{i18n>GL_CODE}"></Label>
+							<Input value="{mCommon>/oPremAccountingDetails/glCode}" editable="false"></Input>
+						</VBox>
+						
+						<VBox width="28%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
+							<Label text="{i18n>CARRIER}"></Label>
+							<Input value="{mCommon>/oPremAccountingDetails/carrier}" editable="false"></Input>
+						</VBox>
+					</HBox>
+					
+					<HBox>
+						<VBox width="100%" class=" sapUiMediumMarginBegin sapUiSmallMarginTopBottom">
+							<Label text="{i18n>COMMENTS}"></Label>
+							<TextArea width="75%" placeholder="Enter Comments here" value="{mCommon>/oPremAccountingDetails/comment}"></TextArea>
+						</VBox>
+					</HBox>
+					<HBox width="95%" justifyContent="End" visible="{mCommon>/totalCostVisible}">
+					
+						<Label text="{i18n>TOTAL_COST}:"></Label>
+						<Label class="sapUiTinyMarginBegin" text="{mCommon>/oPremAccountingDetails/totalCost}"></Label>
+					
+					</HBox>
+					<footer>
+						<OverflowToolbar class="customFooter">
+							<ToolbarSpacer width="2rem">
+								<layoutData>
+									<OverflowToolbarLayoutData priority="NeverOverflow"/>
+								</layoutData>
+							</ToolbarSpacer>
+							<Button text="{i18n>UPDATE}" type="Emphasized" press="fnUpdatePremAccDetails" class="sapUiSizeCompact"/>
+							
+							<layoutData>
+								<OverflowToolbarLayoutData priority="NeverOverflow"/>
+							</layoutData>
+							<ToolbarSpacer/>
+							<ToolbarSpacer/>
+							<Button text="{i18n>REJECT}" type="Reject" press="fnCompleteAccountantTask('Rejected')" class="sapUiSizeCompact"/>
+							<Button text="{i18n>APPROVE}" type="Accept" press="fnCompleteAccountantTask('Approved')" class="sapUiSizeCompact"/>
+							<ToolbarSpacer width="2rem">
+								<layoutData>
+									<OverflowToolbarLayoutData priority="NeverOverflow"/>
+								</layoutData>
+							</ToolbarSpacer>
+						</OverflowToolbar>
+					</footer>
+				</Page>
+			</detailPages>
+		</SplitContainer>-->
+
 </mvc:View>

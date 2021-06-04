@@ -47,6 +47,10 @@ modules:
           artifacts:
             - './*'
           target-path: resources/Accountant
+        - name: yardmanagement
+          artifacts:
+            - './*'
+          target-path: resources/yardmanagement
   - name: Adhoc
     type: html5
     path: Adhoc
@@ -116,6 +120,16 @@ modules:
   - name: Accountant
     type: html5
     path: Accountant
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist
+  - name: yardmanagement
+    type: html5
+    path: yardmanagement
     build-parameters:
       builder: custom
       commands:

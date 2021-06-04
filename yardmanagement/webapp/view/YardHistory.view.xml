@@ -1,0 +1,63 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="com.incture.lch.yardmanagement.controller.YardHistory"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" xmlns:fb="sap.ui.comp.filterbar" xmlns:f="sap.f" xmlns:ui="sap.ui.table"
+	xmlns:ExtPicker="com.incture.lch.yardmanagement.control">
+	<Page showHeader="false">
+		<content>
+			<l:FixFlex>
+				<l:fixContent>
+					<Label text="{i18n>YARD_HISTORY_DETAILS}" design="Bold" class="sapUiMBlue sapUiTinyMarginTop sapUiMediumMarginBegin"/>
+					<fb:FilterBar reset="onReset" search="onGetHistoryData" id="lch_yardmgmt_filterBar" header="{i18n>ADVANCED_FILER_OPTIONS}"
+						class="sapFbfilterbar" showFilterConfiguration="false" showClearOnFB="true" clear="onHistoryClearYrdFilter">
+						<fb:filterGroupItems>
+							<fb:FilterGroupItem name="HISTORY_FILTER_BY_KEY" label="{i18n>FILTER_BY_KEY}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
+								<fb:control>
+									<ComboBox selectedKey="{mCommon>/oHistoryFilters/filterByKey}" class="sapUiMInputBorderRadius" showSecondaryValues="false"
+										placeholder="{i18n>SELECT}" items="{path: 'mCommon>/aFilterBy',sorter:{ path:'text'}}" change="onFilterKeyChangeCBox">
+										<core:ListItem key="{mCommon>key}" text="{mCommon>text}" additionalText="{mCommon>key}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="HISTORY_FILTER_BY_TEXT" label="{i18n>FILTER_BY_TEXT}" groupName="G11" visibleInFilterBar="true">
+								<fb:control>
+									<Input class="sapUiMInputBorderRadius" liveChange="onLiveChngeFilterByTxt" value="{mCommon>/oHistoryFilters/filterByText}"/>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="HISTORY_SUPPLIER_ID" label="{i18n>SUPPLIER_ID}" class="sapUiSmallMarginBegin" groupName="G2" visibleInFilterBar="true">
+								<fb:control>
+									<Input class="sapUiMInputBorderRadius" value="{mCommon>/oHistoryFilters/supplierId}"/>
+									<!--<ComboBox class="sapUiMInputBorderRadius" showSecondaryValues="true" change="onFilterChangeCBox" placeholder="{i18n>SELECT}"
+										selectedKey="{mCommon>/oHistoryFilters/supplierId}" items="{path: 'mCommon>/aSupplier',sorter:{ path:'SupplierName'}}" >
+										<core:ListItem key="{mCommon>SupplierId}" text="{mCommon>SupplierName}" additionalText="{mCommon>SupplierId}"/>
+									</ComboBox>-->
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="HISTORY_YARD_LOCATION" label="{i18n>YARD_LOCATION}" class="sapUiSmallMarginBegin" groupName="G41" visibleInFilterBar="true">
+								<fb:control>
+									<ComboBox class="sapUiMInputBorderRadius" showSecondaryValues="false" change="onFilterChangeCBox"
+										selectedKey="{mCommon>/oHistoryFilters/yardLocation}" items="{path: 'mCommon>/aYardLocation',sorter:{ path:'yardLocation'}}">
+										<core:ListItem key="{mCommon>yardLocation}" text="{mCommon>yardLocation}" additionalText="{mCommon>yardLocation}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="HISTORY_DATE_RANGE_FROM" mandatory="true"  label="{i18n>FROM_DATE}" class="sapUiSmallMarginBegin" groupName="GDF" visibleInFilterBar="true">
+								<fb:control>
+									<ExtPicker:ExtDatePicker valueState="{mCommon>/oValState/sHisFromDateValState}" change="onHistoryFromDateCBox" class="sapUiMInputBorderRadius" placeholder=" "
+										dateValue="{mCommon>/oHistoryFilters/fromDateFilter}" displayFormat="dd MMM yyyy"/>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="HISTORY_DATE_RANGE_TO" mandatory="true" label="{i18n>TO_DATE}" class="sapUiSmallMarginBegin" groupName="GDT" visibleInFilterBar="true">
+								<fb:control>
+									<ExtPicker:ExtDatePicker class="sapUiMInputBorderRadius" maxDate="{mCommon>/dHistoryMaxTDate}" minDate="{mCommon>/oHistoryFilters/fromDateFilter}" change="onHistoryToDateCBox" valueState="{mCommon>/oValState/sHisToDateValState}"
+										placeholder=" " dateValue="{mCommon>/oHistoryFilters/toDateFilter}" displayFormat="dd MMM yyyy"/>
+								</fb:control>
+							</fb:FilterGroupItem>
+						</fb:filterGroupItems>
+					</fb:FilterBar>
+				</l:fixContent>
+				<l:flexContent>
+					<core:Fragment fragmentName="com.incture.lch.yardmanagement.fragment.YardHistoryTable" type="XML"/>
+				</l:flexContent>
+			</l:FixFlex>
+		</content>
+	</Page>
+</mvc:View>

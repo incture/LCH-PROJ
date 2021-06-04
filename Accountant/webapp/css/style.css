@@ -3,9 +3,9 @@
 	font-weight : bold;
 }
 
-.sapMTB{
+/*.sapMTB{
 	background-color: #00366c !important;
-}
+}*/
 
 .sapMInputBaseContentWrapper{
 	border: none !important;
@@ -428,5 +428,11 @@
     filter: none;
     background-image: none;
 }
+
+.listHeader.sapMSticky>.sapMListHdrText, .sapMSticky>.sapMListHdrTBar.sapMTB-Transparent-CTX {
+    background: #eff0f2;
+}
+
+
 
 

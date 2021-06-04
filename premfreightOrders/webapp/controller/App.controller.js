@@ -7,6 +7,7 @@ sap.ui.define([
 
 	return BaseController.extend("com.incture.lch.premfreightOrders.controller.App", {
 		onInit: function () {
+		
 			var oMdlCommon = this.getModel("mCommon");
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("Orderdetails");
@@ -18,7 +19,7 @@ sap.ui.define([
 			oMdlCommon.setProperty("/todayDate", oDate.getDate());
 			oMdlCommon.refresh();
 			//Initialize App
-			this.fnInitializeApp();
+				this.fnInitializeApp();
 			this.pageCount = 0;
 
 		}

@@ -1,0 +1,145 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:ExtPicker="com.incture.lch.yardmanagement.control" xmlns:core="sap.ui.core"
+	xmlns:ui="sap.ui.table">
+	<ui:Table rows="{mCommon>/aHistoryShipments}" selectionMode="None" visibleRowCountMode="Auto" alternateRowColors="true" fixedColumnCount="3"
+		enableColumnReordering="false" filter="onFilterChangeFU" class="sapUiMediumMarginBeginEnd sapFbfilterbar sapUiTableNoColBorders">
+		<ui:extension>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button type="Transparent" icon="sap-icon://download" text="{i18n>DOWNLOAD}"
+					tooltip="{i18n>EXCEL_DOWNLOAD}" press="onDownloadHistory"/>
+				<Button type="Transparent" icon="sap-icon://refresh" tooltip="{i18n>RELOAD}"/>
+				<Text text="{i18n>PAGINATION}" class="sapUiMFontBold sapUiMCement"/>
+				<Label text="({mCommon>/iHistoryYardLoaded}/{mCommon>/iHistoryTotalLength})" design="Bold" class="sapUiTinyMarginBegin sapUiMediumMarginEnd"/>
+			</Toolbar>
+		</ui:extension>
+		<ui:columns>
+			<!--<ui:Column width="7rem">
+				<Label text="{i18n>PRIORITY}" tooltip="{i18n>PRIORITY}" design="Bold"/>
+				<ui:template>
+					<Text text="{mCommon>priority}" maxLines="1" tooltip="{mCommon>priority}"/>
+				</ui:template>
+			</ui:Column>-->
+			<ui:Column width="11.5rem" filterProperty="carrierName">
+				<Label text="{i18n>CARRIER}" tooltip="{i18n>CARRIER}" design="Bold"/>
+				<ui:template>
+					<Text text="{mCommon>carrierName}" width="75%" maxLines="1" tooltip="{mCommon>carrierName}" />
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="10rem">
+				<Label text="{i18n>TRAILER_NUM}" tooltip="{i18n>TRAILER_NUM}" design="Bold"/>
+				<ui:template >
+					<Text text="{mCommon>trailer}" maxLines="1" tooltip="{mCommon>trailer}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="10rem">
+				<Label text="{i18n>SEAL_NUMBER}" tooltip="{i18n>SEAL_NUMBER}" design="Bold"/>
+				<ui:template >
+					<Text text="{mCommon>sealNo}" maxLines="1" tooltip="{mCommon>sealNo}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="10rem">
+				<Label text="{i18n>LICENSE_PLATE}" tooltip="{i18n>LICENSE_PLATE}" design="Bold"/>
+				<ui:template >
+					<Text text="{mCommon>licencePlateNo}" maxLines="1" tooltip="{mCommon>licencePlateNo}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="10rem">
+				<Label text="{i18n>STATUS}" tooltip="{i18n>STATUS}" design="Bold"/>
+				<ui:template>
+					<!--<Text text="{mCommon>status}" maxLines="1" tooltip="{mCommon>status}"/>-->
+					<ComboBox width="100%" selectedKey="{mCommon>status}" editable="false" items="{path: 'mCommon>/aJavaYardStatus',templateShareable:'true'}">
+						<core:ListItem key="{mCommon>statusId}" text="{mCommon>statusDesc}" additionalText="{mCommon>groupOrKpi}"
+							enabled="{path:'mCommon>statusId',formatter:'.formatter.getStatusEnabled'}"/>
+					</ComboBox>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="10rem">
+				<Label text="{i18n>SUPPLIER}" tooltip="{i18n>SUPPLIER}" design="Bold"/>
+				<ui:template>
+					<Text text="{mCommon>supplierAddress} ({mCommon>supplier})" maxLines="1" tooltip="{mCommon>supplier}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="7rem">
+				<Label text="{i18n>DEST_ID}" tooltip="{i18n>DEST_ID}" design="Bold"/>
+				<ui:template >
+					<Text text="{mCommon>destId}" maxLines="1" tooltip="{mCommon>destId}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="10rem">
+				<Label text="{i18n>PLAN_DUE_DATE}" tooltip="{i18n>PLAN_DUE_DATE}" design="Bold"/>
+				<ui:template>
+					<Text
+						text="{path:'mCommon>plannedShipDate', type:'sap.ui.model.type.DateTime', formatOptions: {pattern: 'dd MMM yyyy, HH:mm', strictParsing: true}}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="10rem">
+				<Label text="{i18n>LAST_UPDATE_DATE}" tooltip="{i18n>LAST_UPDATE_DATE}" design="Bold"/>
+				<ui:template>
+					<Text
+						text="{path:'mCommon>updatedDate', type:'sap.ui.model.type.DateTime', formatOptions: {pattern: 'dd MMM yyyy, HH:mm', strictParsing: true}}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="10rem">
+				<Label text="{i18n>YARD_ID}" tooltip="{i18n>YARD_ID}" design="Bold"/>
+				<ui:template >
+					<Text text="{mCommon>yardId}" maxLines="1" tooltip="{mCommon>yardId}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="10rem">
+				<Label text="{i18n>YARD_LOC}" tooltip="{i18n>YARD_LOC_DESC}" design="Bold"/>
+				<ui:template >
+					<Text text="{mCommon>yardLocation}" maxLines="1" tooltip="{mCommon>yardLocation}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="7rem">
+				<Label text="{i18n>COMMENT}" tooltip="{i18n>COMMENT}" design="Bold"/>
+				<ui:template>
+					<Text text="{mCommon>comments}" maxLines="1" tooltip="{mCommon>comments}"/>
+				</ui:template>
+			</ui:Column>
+			<!-- PPKIT-->
+			<ui:Column width="7rem">
+				<Label text="{i18n>ETA}" tooltip="{i18n>ETA_DESC}" design="Bold"/>
+				<ui:template>
+					<Text text="{mCommon>arrival}" maxLines="1" tooltip="{mCommon>arrival}"/>
+				</ui:template>
+			</ui:Column>
+			<!-- Aging-->
+			<ui:Column width="5rem">
+				<Label text="{i18n>HAND_UNIT}" tooltip="{i18n>HAND_UNIT_DESC}" design="Bold"/>
+				<ui:template >
+					<Text text="{mCommon>handlingUnit}" width="100%" textAlign="Right" maxLines="1" tooltip="{mCommon>handlingUnit}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column hAlign="Center" width="4.5rem" name="ID_COLUMN_FREIGHT_UNITS">
+				<Label design="Bold" wrapping="true" tooltip="{i18n>FU_COUNT}" text="{i18n>FU_COUNT}"/>
+				<ui:template>
+					<HBox class="circleCSS">
+						<Text class="whiteTextCSS" text="{mCommon>fuCount}"/>
+					</HBox>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="10rem">
+				<Label text="{i18n>PRO_NUMBER}" tooltip="{i18n>PRO_NUMBER}" design="Bold"/>
+				<ui:template>
+					<Text text="{mCommon>proNo}" maxLines="1" tooltip="{mCommon>proNo}"/>
+				</ui:template>
+			</ui:Column>
+			<ui:Column width="12rem" filterProperty="freightOrderNo">
+				<Label text="{i18n>FREIGHT_ORDER}" tooltip="{i18n>FREIGHT_ORDER}" design="Bold"/>
+				<ui:template >
+					<!--<Text text="{mCommon>freightOrderNo}" maxLines="1" />-->
+					<Button width="11rem" enabled="false"
+						text="{parts:['mCommon>statusGroup','mCommon>freightOrderNo'],formatter:'com.incture.lch.yardmanagement.utility.LabelFormatter.setTaskStatusColor'}"/>
+				</ui:template>
+			</ui:Column>
+		</ui:columns>
+		<ui:footer class="sapUiToolBar">
+			<Bar>
+				<contentMiddle>
+					<Button icon="sap-icon://display-more" tooltip="{i18n>LOAD_MORE}" press="onLoadMore" enabled="false"/>
+				</contentMiddle>
+			</Bar>
+		</ui:footer>
+	</ui:Table>
+</core:FragmentDefinition>

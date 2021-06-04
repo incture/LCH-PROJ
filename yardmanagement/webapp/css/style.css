@@ -1,0 +1,485 @@
+/* Enter your custom styles here */
+
+
+/*----------------------------Buttons---Starts_Here--------------*/
+
+.sapMbtn .sapMBtnInner {
+    /*font-color:black;*/
+    background-image: none;
+    background-color: #eff0f2 !important;
+    color: #191818 !important;
+    box-shadow: none !important;
+    text-shadow: 0.5px 0.5px #dcdcdc;
+    border: 1.4px solid #a5a0a0;
+}
+
+.sapCoreColor .sapMBtnIcon {
+    background-image: none;
+    border-color: #427cac;
+    color: #050505 !important;
+    text-shadow: none;
+}
+
+.sapCoreColor .sapMBtnHoverable {
+    background: none !important;
+}
+
+.sapUiMCancleBtn .sapMBtnInner {
+    background: transparent !important;
+    border-color: #ffffff !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+.sapUiMCancleBtn.sapMBtn {
+    width: 6rem;
+}
+
+.sapUiMAddBtn .sapMBtnInner {
+    background-image: none;
+    background-color: #68c41b !important;
+    border-color: none !important;
+    color: #ffffff;
+    text-shadow: none;
+}
+
+.sapUiMAddBtn.sapMBtn {
+    width: 6rem;
+    z-index: 1;
+}
+
+.sapUiMAddBtn.sapMBtn {
+    z-index: 1;
+}
+
+.sapMBtn:hover>.sapMBtnHoverable {
+    border-color: black !important;
+}
+
+.sapMhover.sapMBtn:hover>.sapMBtnHoverable {
+    border-color: #0854a0 !important;
+}
+
+span.sapMBtnInner.sapMBtnEmphasized {
+    background-image: none;
+    background-color: #00366c;
+    border-color: #00366c;
+    color: #fff;
+}
+
+.sapMSegBBtn.sapMSegBBtnSel .sapMSegBBtnInner {
+    background: #00366c;
+    color: #fff;
+    border-color: #00366c;
+}
+
+
+/*----------------------------Buttons-----Ends_Here--------------*/
+
+
+/*------------------TNT-ToolPage---Starts_Here---------------------*/
+
+.sapTntToolHeader.sapMTB {
+    box-shadow: inset 0 -0.0625rem 0 0 #ecebea !important;
+}
+
+.sapMToolPage .sapTntToolPageAsideCollapsed .sapTntToolPageMain,
+.sap-tablet .sapTntToolPageAsideCollapsed .sapTntToolPageMain {
+    padding-left: 0 !important;
+}
+
+.sapTntToolHeader .sapMText,
+.sapTntToolHeader .sapMTitle,
+.sapTntToolHeader .sapUiIcon {
+    color: #00366c !important;
+}
+
+.sapTntToolHeader.sapContrast.sapTntToolHeader.sapMTB,
+.sapContrast .sapTntToolHeader.sapMTB {
+    background-color: #f5f5f5;
+    border: 0.7px solid #dcdcdc;
+}
+
+.sapTntToolBar .sapContrast.sapTntNavLIItemSelected .sapTntNavLIGroup,
+.sapContrast .sapTntNavLIItemSelected .sapTntNavLIGroup {
+    background-color: #d9e2eb !important;
+    border-left: 0.24rem solid #0052C6;
+}
+
+.sapTntToolBar {
+    background-color: #f5f5f5 !important;
+    border: 0.3px solid #dcdcdc !important;
+}
+
+.sapTntToolBar .sapContrast.sapTntNavLIGroup,
+.sapContrast .sapTntNavLIGroup {
+    border-bottom: none !important;
+}
+
+.sapTntToolBar .sapTntNavLIGroup {
+    border-bottom: none !important;
+}
+
+.sapTntToolBar.sapContrast .sapTntNavLIItem>.sapMText {
+    color: #2323f8 !important;
+    font-weight: bold;
+}
+
+.sapTntToolBar.sapContrast .sapTntNavLIItem>.sapMTextSub {
+    color: #2323f8 !important;
+    font-weight: normal;
+}
+
+.sapTntToolBar.sapContrast.sapTntNavLIItem:not(.sapTntNavLIItemDisabled):hover,
+.sapContrast .sapTntNavLIItem:not(.sapTntNavLIItemDisabled):hover {
+    background: transparent;
+}
+
+.sapTntToolBar .sapContrast.sapMText,
+.sapContrast .sapMText {
+    margin-top: 0.25rem;
+    margin-left: 0rem !important;
+    color: #00366c !important;
+    font-weight: bold;
+    cursor: pointer;
+}
+.sapTntNavLIItem .sapUiIcon {
+	color : #00366c !important;
+}
+
+.sapTntToolBar .sapContrast.sapMTextSub,
+.sapContrast .sapMTextSub {
+    margin-top: 0.25rem;
+    margin-left: 0rem !important;
+    color: #0052c6 !important;
+    font-weight: normal;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.sapTntToolBar .sapContrast.sapTntNavLIItem>.sapUiIcon,
+.sapContrast .sapTntNavLIItem>.sapUiIcon {
+    color: #0052c6 !important;
+}
+
+.sapTntToolBar .sapContrast.sapTntNavLIGroupItem.sapTntNavLIItem:last-child,
+.sapContrast .sapTntNavLIGroupItem.sapTntNavLIItem:last-child {
+    border-bottom: none !important;
+}
+
+.sapTntToolBar .sapTntNavLIItemSelected.sapTntNavLIItem,
+.sapTntNavLIItemSelected .sapTntNavLIGroup,
+.sapTntNavLIItemSelected.sapTntNavLIGroupItem.sapTntNavLIGroupItem {
+    background-color: #e5f0fa !important;
+    border-left: 0.24rem solid #00366c !important;
+}
+
+.sapTntToolBar .sapContrast.sapTntNavLIItem,
+.sapContrast .sapTntNavLIItem {
+    background-color: #eff0f2 !important;
+}
+
+.sapTntToolBar .sapContrast.sapTntNavLIItem,
+.sapContrast .sapTntNavLIItem {
+    border-left: 0.24rem solid transparent;
+}
+
+.SapMToolBar.sapMTBStandard {
+    border-bottom: none !important;
+}
+
+.sapTntNavLI .sapTntNavLIGroup.sapTntNavLIItem:not(.sapTntNavLIItemDisabled):active,
+.sapTntNavLI .sapTntNavLIGroupItem.sapTntNavLIItem:not(.sapTntNavLIItemDisabled):active {
+    background-color: transparent !important;
+}
+
+.sapTntNavLIItem>.sapMText {
+    color: #2323f8 !important;
+}
+
+.sapTntNavLIItem>.sapMTextSub {
+    color: #2323f8 !important;
+}
+
+.sapTNTMargin {
+    margin-left: 3rem !important;
+}
+
+.sapMPopover {
+    color: #2323f8;
+    font-weight: bold;
+}
+
+.sapTNTMargin {
+    margin-left: 3rem;
+    margin-top: 0.25rem;
+    color: #0052c6 !important;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+/*------------------TNT-ToolPage---Ends_Here---------------------*/
+
+
+/*----------------Advance_Filters_Starts_Here--------------------------------*/
+
+.sapFbfilterbar .sapMBtnTransparent,
+.sapMBtnGhost {
+    color: black;
+}
+
+.sapFbfilterbar {
+    background-color: white !important;
+    border-bottom: none !important;
+    /*border: 1px solid #f3f0f0;*/
+}
+
+.sapFbfilterbar .sapMH4Style {
+    font-size: 0.85rem !important;
+    font-family: "72", Arial, Helvetica, sans-serif !important;
+    font-weight: bold !important;
+    color: #696a6c !important;
+    text-shadow: 0 0 0.125rem #ffffff !important;
+}
+
+.sapFbfilterbar .sapMIBar .sapMBarChild:first-child {
+    margin-left: 0rem;
+}
+
+.sapFbfilterbar .sapMLabel {
+    font-weight: bold;
+}
+
+
+/*----------------Advance_Filters_Starts_Here--------------------------------*/
+
+
+/*------------COLORS CODE(RED, ORANGE, GREEN, YELLOW, BlUE) Starts_here----------------------*/
+
+.sapRejectedColor {
+    font-weight: bold;
+    color: #f20707
+}
+
+.sapApprovedsColor {
+    font-weight: bold;
+    color: #05b10b
+}
+
+.sapInprogressColor {
+    font-weight: bold;
+    color: orange;
+}
+
+.sapUiMBlue {
+    color: #00366c !important;
+}
+
+
+/*------------COLORS CODE(RED, ORANGE, GREEN, YELLOW) Ends_here----------------------*/
+
+
+/*------------SWITCH(RED, GREEN) Starts_here----------------------*/
+
+.sapMSwitch .sapMSwtOn:not(.sapMSwtAcceptReject) {
+    background: #05b10b;
+    border-color: #05b105;
+}
+
+.sapMSwitch .sapMSwtOn .sapMSwtHandle {
+    background: white;
+    box-sizing: border-box;
+    border: 2px solid white;
+}
+
+.sapMSwitch .sapMSwtHoverable.sapMSwtOn:not(.sapMSwtAcceptReject):hover {
+    background: #05b10b !important;
+    border-color: #05b10b !important;
+}
+
+.sapMSwitch .sapMSwtOff:not(.sapMSwtAcceptReject) {
+    background: #f35d5d !important;
+    border-color: #f35d5d !important;
+}
+
+.sapMSwitch .sapMSwtOff .sapMSwtText {
+    color: white;
+}
+
+.sapMSwitch .sapMSwtOff .sapMSwtHandle {
+    background: white;
+    box-sizing: border-box;
+    color: #ffffff;
+    border: 2px solid white;
+}
+
+.sapMSwitch .sapMSwt.sapMSwtOn:not(.sapMSwtAcceptReject) .sapMSwtHandle {
+    box-sizing: border-box;
+    background: #fafafa !important;
+    border-color: #fafafa !important;
+}
+
+.sapMSwitch .sapMSwt.sapMSwtOff:not(.sapMSwtAcceptReject) .sapMSwtHandle {
+    background: #ffffff;
+    border-color: #fafafa;
+}
+
+.sapMSwitch .sapMSwt.sapMSwtOff:not(.sapMSwtAcceptReject).sapMSwtHoverable:not(.sapMSwtAcceptReject):hover .sapMSwtHandle {
+    border-color: #fafafa;
+}
+
+.sapMSwtOff>.sapMSwtInner {
+    left: -1.7rem !important;
+}
+
+
+/*------------SWITCH(RED, GREEN) Ends_here----------------------*/
+
+
+/*------------UI_Table Starts_here----------------------*/
+
+.sapUiTableNoColBorders .sapUiTableCell {
+    border-right: none !important;
+}
+
+
+/*------------UI_Table Ends_here----------------------*/
+
+
+/*-------------Generic CSS---------Here----------------*/
+
+.sapUiMInputBorderRadius .sapMInputBaseContentWrapper {
+    height: 1.625rem;
+    border-radius: 0.2rem;
+}
+
+.sapUiMInputBorderRadius {
+    border-radius: 0.2rem;
+}
+
+.sapMPaddingInternalRed {
+    background-color: #EC8484;
+    border-radius: 0.3rem;
+    align-items: center;
+}
+
+.sapMPaddingInternalYellow {
+    background-color: #EECD74;
+    border-radius: 0.3rem;
+    align-items: center;
+}
+
+.sapMPaddingInternalBlue {
+    background-color: #67A1EB;
+    border-radius: 0.3rem;
+    align-items: center;
+}
+
+.sapMPaddingInternalGreen {
+    background-color: #87CB8B;
+    border-radius: 0.3rem;
+    align-items: center;
+}
+
+.sapMPaddingInternalGrey {
+    background-color: #B2B2B2;
+    border-radius: 0.3rem;
+    align-items: center;
+}
+
+.sapMPaddingInternalLav {
+    background-color: #7E89AA;
+    border-radius: 0.3rem;
+    align-items: center;
+}
+
+.sapUiTileText {
+    padding-top: 1rem !important;
+    color: white;
+}
+
+.sapUiTextColor {
+    color: white;
+    padding-top: 0.5rem !important;
+}
+
+
+/*-------Css for button colors in table------*/
+
+.sapUIMStsRed .sapMBtnInner {
+    background-image: none;
+    background-color: #FF2C37;
+    color: #ffffff;
+    text-shadow: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.sapUIMStsOrg .sapMBtnInner {
+    background-image: none;
+    background-color: #FFC731;
+    color: #ffffff;
+    text-shadow: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.sapUIMStsGreen .sapMBtnInner {
+    background-image: none;
+    background-color: #27B731;
+    color: #ffffff;
+    text-shadow: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.sapUIMStsBlue .sapMBtnInner {
+    background-image: none;
+    background-color: #2765B4;
+    color: #ffffff;
+    text-shadow: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.sapUIMStsGrey .sapMBtnInner {
+    background-image: none;
+    background-color: #464040;
+    color: #ffffff;
+    text-shadow: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.sapUIMStsPur .sapMBtnInner {
+    background-image: none;
+    background-color: #8595C5;
+    color: #ffffff;
+    text-shadow: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.sapUiKpiCustListItem.sapMLIB.sapMLIBSelected {
+    background: #B2B2B2 !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.342) !important;
+}
+
+.circleCSS {
+    height: 15%;
+    width: 45%;
+    background-color: #0052c6;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.whiteTextCSS {
+    color: #fff !important;
+    font-size: 0.7rem;
+}
+
+.vboxGMapCanvas {
+	height: 100%;
+    width: 100%;
+}

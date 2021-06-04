@@ -27,12 +27,15 @@ $.context.product = product;
 var orderId = $.context.orderId;
 var taskId= $.context.taskInstanceId;
 var rolename = "LCH_Manager";
+
 var actionTypeDetails = $.context.managerActionType;
 var workflowRequest =  {
 	orderIdDetails : orderId,
 	taskIdDetails : taskId,
 	roleDetails : rolename,
-	actionType : actionTypeDetails
+	managerActionType : actionTypeDetails,
+	accountantActionType : null
+
 	
 };
 

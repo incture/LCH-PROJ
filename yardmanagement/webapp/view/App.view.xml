@@ -1,0 +1,43 @@
+<mvc:View controllerName="com.incture.lch.yardmanagement.controller.App" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m"
+	xmlns:tnt="sap.tnt" xmlns:core="sap.ui.core" xmlns:ExtListItem="com.incture.lch.yardmanagement.control">
+	<tnt:ToolPage id="idLch_YardMgmt_toolpage" class="sapUiSizeCompact" sideExpanded="false">
+		<tnt:header>
+			<tnt:ToolHeader class="sapTntToolHeader">
+				<Button class="sapCoreColor" icon="sap-icon://menu2" type="Transparent" press="onSideNavigation" id="sideNavigationToggleButton">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+				</Button>
+				<!--<Button class="sapMbtn" icon="sap-icon://accept" enabled="{mCommon>/enable/bApproveBtn}" visible="{mCommon>/visible/bApproveBtn}"
+					tooltip="{i18n>APPROVE}" text="{i18n>APPROVE}" press="onApproveTickets">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+				</Button>
+				<Button class="sapMbtn" icon="sap-icon://decline" enabled="{mCommon>/enable/bRejectBtn}" visible="{mCommon>/visible/bRejectBtn}"
+					tooltip="{i18n>REJECT}" text="{i18n>REJECT}" press="onRejectTickets">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+				</Button>
+				<ToolbarSpacer width="2rem">
+					<layoutData>
+						<OverflowToolbarLayoutData priority="NeverOverflow"/>
+					</layoutData>
+				</ToolbarSpacer>-->
+			</tnt:ToolHeader>
+		</tnt:header>
+		<tnt:sideContent>
+			<tnt:SideNavigation expanded="true" itemSelect="onItemSelect" class="sapTntToolBar" selectedKey="{mCommon>/sTntSelectedKey}">
+				<tnt:NavigationList class="sapTntToolBar">
+					<tnt:NavigationListItem text="{i18n>YARD_OVERVIEW}" icon="sap-icon://SAP-icons-TNT/auto-layout" key="yardOverview" class="sapCustomNavListItemCount"/>
+					<tnt:NavigationListItem text="{i18n>YARD_HISTORY}" icon="sap-icon://dimension" key="yardHistory" class="sapCustomNavListItemCount" />
+					<tnt:NavigationListItem text="{i18n>GEO_MAP}"  icon="sap-icon://map" key="geoMap" class="sapCustomNavListItemCount"/>
+				</tnt:NavigationList>
+			</tnt:SideNavigation>
+		</tnt:sideContent>
+		<tnt:mainContents>
+			<NavContainer id="idAppYardMgmt"></NavContainer>
+		</tnt:mainContents>
+	</tnt:ToolPage>
+</mvc:View>

@@ -64,6 +64,17 @@
 	color : #00366c !important;
 }
 
+.customInbox{
+	font-size: 1rem !important;
+		color : #00366c !important;
+}
+
+
+.roleTitle {
+		font-size: 1.2rem !important;
+	color : #00366c !important;
+}
+
 .sapMcolorCement {
     color: #b5b4b4 !important;
 }

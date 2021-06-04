@@ -10,7 +10,7 @@
 							<Label design="Bold" class="sapUiMBlue" text="{i18n>ADHOC_APPROVAL}"/>
 							<ToolbarSpacer/>
 							<u:FileUploader id="fileUploader" name="myFileUpload" buttonOnly="true" buttonText="{i18n>UPLOAD}" 
-								icon="sap-icon://upload" iconFirst="true" class="customIcon" style="Emphasized" sendXHR="true" change="onUpload"/>
+								icon="sap-icon://upload" iconFirst="true" class="customIcon" style="Emphasized" fileType="xls,xlsx" change="onUpload"/>
 							<Button text="{i18n>EXTRACT_TABLE_DATE}" class="customIcon" type="Emphasized" icon="sap-icon://excel-attachment" iconFirst="true"
 								enabled="true" visible="true" press="onExtract"></Button>
 							<Button text="{i18n>DOWNLOAD_TEMPLATE}" class="customIcon" type="Emphasized" icon="sap-icon://download" iconFirst="true" enabled="true"
@@ -40,7 +40,7 @@
 					<ui:Column tooltip="{i18n>APPROVER}">
 						<Label text="{i18n>APPROVER}" design="Bold"/>
 						<ui:template>
-							<Text text="{mCommon>approverEmail}"/>
+							<Text text="{mCommon>userId}"/>
 						</ui:template>
 					</ui:Column>
 				</ui:columns>

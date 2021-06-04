@@ -31,17 +31,14 @@
 			</Label>
 			<Label design="Bold" text="{i18n>PART_NUMBER}" required="false" class="sapUiSmallMarginBegin sapUiTinyMarginTop"/>
 			<HBox renderType="Bare">
-				<Input type="Text" selectedKey="{mCommon>/newFU/partNum}" value="{mCommon>/newFU/partNumText}" showSuggestion="true"
-				name="DETAIL_PART_NO_ID" enabled="{mCommon>/bIsEditable}" startSuggestion="1" suggest="onSuggestParts"  suggestionItems="{mCommon>/aParts}" change="onPartChange"
+				<Input type="Text" selectedKey="{mCommon>/newFU/partNum}" value="{mCommon>/newFU/partNumText}"
+				name="DETAIL_PART_NO_ID" enabled="{mCommon>/bIsEditable}" change="onSuggestParts" 
 				valueState="{mCommon>/valState/partNum}" placeholder="{i18n>SEARCH_PART}" busy="{mCommon>/bPartNumBusy}" busyIndicatorDelay="0">
-				<suggestionItems>
-					<core:ListItem key="{mCommon>partNum}" text="{mCommon>partNum}" additionalText="{mCommon>partDesc}"/>
-				</suggestionItems>
 			</Input>
 			</HBox>
 			<Label design="Bold" text="{i18n>PART_DESCRIPTION}" required="{mCommon>/enable/bPartDesc}" class="sapUiSmallMarginBegin sapUiTinyMarginTop"/>
 			<Input value="{mCommon>/newFU/partDescription}" valueState="{mCommon>/valState/partDescription}" liveChange="onInpChange"
-				enabled="{parts:['mCommon>/bIsEditable','mCommon>/enable/bPartDesc'],formatter:'.formatter.isBothNonEmpty'}" name="DETAIL_PART_DESC_ID"/>
+				enabled="false" name="DETAIL_PART_DESC_ID"/>
 			<Label design="Bold" text="{i18n>QUALITY}" required="true" class="sapUiSmallMarginBegin sapUiTinyMarginTop"/>
 			<Input value="{mCommon>/newFU/quantity}" valueState="{mCommon>/valState/quantity}" liveChange="onLiveChange" maxLength="7"
 				enabled="{mCommon>/bIsEditable}" name="DETAIL_QUANTITY_ID"/>

@@ -368,32 +368,6 @@ sap.ui.define([
 			i18nModel.refresh();
 		},
 
-		//Function to get Fiori launchpad roles
-		/*	fnGetLaunchPadRoles: function (callback) {
-				var oThisController = this;
-				var oMdlCommon = this.getModel("mCommon");
-				var sUserId = oMdlCommon.getProperty("/userDetails/name");
-				var sUrl = "/lch_rest/freightunits/getRoles/" + sUserId;
-				var oHeader = {
-					"Content-Type": "application/json",
-					"Accept": "application/json"
-				};
-				oThisController.fnProcessDataRequest(sUrl, "GET", oHeader, false, function (oXHR, status) {
-					if (status === "success") {
-						if (oXHR && oXHR.responseJSON && oXHR.responseJSON.roles) {
-							oMdlCommon.setProperty("/aCockpitRoles", oXHR.responseJSON.roles);
-							oMdlCommon.refresh();
-
-							oThisController.fnGetAuthRules(callback);
-						}
-					} else {
-						oMdlCommon.setProperty("/cockpitRoles", []);
-						oMdlCommon.refresh();
-						// unable to fetch roles.
-					}
-				});
-			},*/
-
 		fnNumberOnlyLiveChange: function (oEvent) {
 			var oInput = oEvent.getSource();
 			var value = oInput.getValue();
@@ -405,82 +379,6 @@ sap.ui.define([
 			this.fnNumberOnlyLiveChange(oEvent);
 			this.onInpChange(oEvent);
 		},
-
-		//All Generic Functions that are not specific to the App will be above this line
-		/*
-				fnSetCurrentUser: function (callback) {
-					var oThisController = this;
-					var oMdlCommon = this.getModel("mCommon");
-					oThisController.fnProcessDataRequest("UserDetails/currentuser", "GET", null, false, function (oXHR, status) {
-						if (oXHR && oXHR.responseJSON) {
-							oThisController._oCommon.userDetails = oXHR.responseJSON;
-
-							if (!oXHR.responseJSON.userEmail) {
-								oXHR.responseJSON.userEmail = "testing@email.com";
-							}
-
-							oMdlCommon.setProperty("/userDetails", oXHR.responseJSON);
-							oMdlCommon.refresh();
-
-							oThisController.fnGetLaunchPadRoles(callback);
-						}
-					}, null);
-				},
-		*/
-		/*	fnGetAuthRules: function (callback) {
-				var oThisController = this;
-				var oMdlCommon = this.getModel("mCommon");
-				var aCockpitRoles = $.extend(true, [], oMdlCommon.getProperty("/aCockpitRoles"));
-				var oPayLoad = {
-					"RuleServiceId": "82304f62fc784b239cc8af849d82f3dd",
-					"Vocabulary": []
-				};
-
-				var oHeaders = {
-					"Content-Type": "application/json",
-					"X-CSRF-Token": ""
-				};
-
-				for (var i = 0; i < aCockpitRoles.length; i++) {
-					oPayLoad.Vocabulary.push({
-						"TransportRuleInputForAdhoc": {
-							"Application": "adhoc",
-							"SupplierGroup": aCockpitRoles[i],
-							"Division": "PROD"
-						}
-					});
-				}
-
-				oThisController.fnProcessDataRequest("/bpmrulesruntime_auth/rules-service/rest/v2/xsrf-token", "GET", {
-						"X-CSRF-Token": "Fetch"
-					}, false,
-					function (oXHR1, status1) {
-						oHeaders["X-CSRF-Token"] = oXHR1.getResponseHeader("X-CSRF-Token");
-						if (oHeaders["X-CSRF-Token"]) {
-							oThisController.fnProcessDataRequest("/bpmrulesruntime_auth/rules-service/rest/v2/workingset-rule-services", "POST", oHeaders,
-								false,
-								function (oXHR, status) {
-									if (oXHR && oXHR.responseJSON) {
-										var aRules = [];
-										for (var j = 0; j < oXHR.responseJSON.Result.length; j++) {
-											aRules.push(oXHR.responseJSON.Result[j].TransportRuleOutputForAdhoc);
-										}
-
-										if (aRules.some(function (row) {
-												return row.bEditPremium;
-											})) {
-											oMdlCommon.setProperty("/bEditPremium", true);
-										}
-
-										oMdlCommon.refresh();
-										if (callback) {
-											callback(oXHR, status);
-										}
-									}
-								}, oPayLoad);
-						}
-					}, null);
-			},*/
 
 		fnSetCurrentUser: function (callback) {
 			var oThisController = this;
@@ -1082,14 +980,13 @@ sap.ui.define([
 			oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
 				if (status === "success") {
 					if (oXHR.responseJSON) {
-						oMdlCommon.setProperty("/aParts", oXHR.responseJSON);
+						oMdlCommon.setProperty("/oPart", oXHR.responseJSON);
 						oMdlCommon.setProperty("/newFU/partDescription", oXHR.responseJSON.partDesc);
 					}
 					oMdlCommon.setProperty("/bPartNumBusy", false);
 					oMdlCommon.refresh();
 				}
 			}, oPayLoad);
-			console.log(oMdlCommon);
 
 		},
 
@@ -1202,8 +1099,7 @@ sap.ui.define([
 				if (status === "success") {
 					debugger;
 					if (oXHR.status === 200 && oXHR.statusText === "OK") {
-						oThisController.showMessage(oThisController.getMessage("Draft Saved Successfuly!"), "I", function () {
-						});
+						oThisController.showMessage(oThisController.getMessage("Draft Saved Successfuly!"), "I", function () {});
 					} else {
 						oThisController.showMessage(oThisController.getMessage("REQUEST_OPERATION_FAILED"), "E");
 					}
@@ -1232,7 +1128,7 @@ sap.ui.define([
 				"desc": ""
 			};
 			switch (sColumn) {
-			case "adhocOrderId":
+			case "orderId":
 				oColumnLabel.header = this.getMessage("ADHOC_ID");
 				oColumnLabel.desc = this.getMessage("ADHOC_ORDER_ID");
 				break;
@@ -1280,6 +1176,10 @@ sap.ui.define([
 				oColumnLabel.header = this.getMessage("EXP_DEL_DATE");
 				oColumnLabel.desc = this.getMessage("EXPECTED_DELIVERY_DATE");
 				break;
+			case "originName":
+				oColumnLabel.header = this.getMessage("ORIGIN_NAME");
+				oColumnLabel.desc = this.getMessage("ORIGIN_NAME");
+				break;
 			case "originAddress":
 				oColumnLabel.header = this.getMessage("ORIGIN_ADDRESS");
 				oColumnLabel.desc = this.getMessage("ORIGIN_ADDRESS");
@@ -1300,15 +1200,10 @@ sap.ui.define([
 				oColumnLabel.header = this.getMessage("PACKAGE_TYPE");
 				oColumnLabel.desc = this.getMessage("PACKAGE_TYPE");
 				break;
-			case "partNum":
-				oColumnLabel.header = this.getMessage("PART_NUMBER");
-				oColumnLabel.desc = this.getMessage("PART_NUMBER");
-				break;
 			case "partDescription":
 				oColumnLabel.header = this.getMessage("PART_DESCRIPTION");
 				oColumnLabel.desc = this.getMessage("PART_DESCRIPTION");
 				break;
-
 			case "quantity":
 				oColumnLabel.header = this.getMessage("QUANTITY");
 				oColumnLabel.desc = this.getMessage("QUANTITY");
@@ -1316,10 +1211,6 @@ sap.ui.define([
 			case "shipDate":
 				oColumnLabel.header = this.getMessage("SHIP_DATE");
 				oColumnLabel.desc = this.getMessage("SHIP_DATE");
-				break;
-			case "weight":
-				oColumnLabel.header = this.getMessage("WEIGHT");
-				oColumnLabel.desc = this.getMessage("WEIGHT");
 				break;
 			case "copy":
 				oColumnLabel.header = this.getMessage("COPY");
@@ -1346,7 +1237,7 @@ sap.ui.define([
 
 			var oColumnLabel = this.fnGetColumnLabel(oRow.columnName);
 			switch (oRow.columnName) {
-			case "adhocOrderId":
+			case "orderId":
 				oColumn = new sap.ui.table.Column({
 					width: "7rem",
 					label: new sap.m.Label({
@@ -1356,12 +1247,12 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Link({
-			
-						text: "{mCommon>adhocOrderId}",
+
+						text: "{mCommon>orderId}",
 						press: function (oEvent) {
-								oThisController.onFuDetail(oEvent);
-							}
-						
+							oThisController.onFuDetail(oEvent);
+						}
+
 					})
 				});
 				break;
@@ -1375,7 +1266,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>businessDivision}",
 						maxLines: 1
 					})
@@ -1391,7 +1282,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>countryOrigin}",
 						maxLines: 1
 					})
@@ -1407,7 +1298,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>createdBy}",
 						maxLines: 1
 					})
@@ -1423,7 +1314,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>createdDate}",
 						maxLines: 1
 					})
@@ -1439,7 +1330,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-				
+
 						text: "{mCommon>currency}",
 						maxLines: 1
 					})
@@ -1455,7 +1346,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>destinationAddress}",
 						maxLines: 1
 					})
@@ -1471,7 +1362,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>destinationCity}",
 						maxLines: 1
 					})
@@ -1487,7 +1378,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-				
+
 						text: "{mCommon>destinationName}",
 						maxLines: 1
 					})
@@ -1503,7 +1394,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>destinationState}",
 						maxLines: 1
 					})
@@ -1519,7 +1410,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>destinationZip}",
 						maxLines: 1
 					})
@@ -1536,8 +1427,24 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>expectedDeliveryDate}",
+						maxLines: 1
+					})
+				});
+				break;
+			case "originName":
+				oColumn = new sap.ui.table.Column({
+					width: "7rem",
+					label: new sap.m.Label({
+						text: oColumnLabel.header,
+						tooltip: oColumnLabel.desc,
+						wrapping: true,
+						design: "Bold"
+					}),
+					template: new sap.m.Text({
+
+						text: "{mCommon>shipperName}",
 						maxLines: 1
 					})
 				});
@@ -1552,7 +1459,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-						
+
 						text: "{mCommon>originAddress}",
 						maxLines: 1
 					})
@@ -1568,7 +1475,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>originCity}",
 						maxLines: 1
 					})
@@ -1584,7 +1491,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>originState}",
 						maxLines: 1
 					})
@@ -1601,7 +1508,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>originZip}",
 						maxLines: 1
 					})
@@ -1617,25 +1524,8 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
-						text: "{mCommon>packageType}",
-						maxLines: 1
-					})
-				});
-				break;
 
-			case "partNum":
-				oColumn = new sap.ui.table.Column({
-					width: "7rem",
-					label: new sap.m.Label({
-						text: oColumnLabel.header,
-						tooltip: oColumnLabel.desc,
-						wrapping: true,
-						design: "Bold"
-					}),
-					template: new sap.m.Text({
-					
-						text: "{mCommon>partNum}",
+						text: "{mCommon>packageType}",
 						maxLines: 1
 					})
 				});
@@ -1650,7 +1540,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>partDescription}",
 						maxLines: 1
 					})
@@ -1666,7 +1556,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-					
+
 						text: "{mCommon>quantity}",
 						maxLines: 1
 					})
@@ -1682,24 +1572,8 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.m.Text({
-						
+
 						text: "{mCommon>shipDate}",
-						maxLines: 1
-					})
-				});
-				break;
-			case "weight":
-				oColumn = new sap.ui.table.Column({
-					width: "7rem",
-					label: new sap.m.Label({
-						text: oColumnLabel.header,
-						tooltip: oColumnLabel.desc,
-						wrapping: true,
-						design: "Bold"
-					}),
-					template: new sap.m.Text({
-					
-						text: "{mCommon>weight}",
 						maxLines: 1
 					})
 				});
@@ -1714,7 +1588,7 @@ sap.ui.define([
 						design: "Bold"
 					}),
 					template: new sap.ui.core.Icon({
-					
+
 						src: "sap-icon://copy",
 						press: function (oEvent) {
 							oThisController.onCopyAdhocOrder(oEvent);

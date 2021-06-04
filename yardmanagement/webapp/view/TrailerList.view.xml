@@ -1,0 +1,146 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="com.incture.lch.yardmanagement.controller.TrailerList"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" xmlns:fb="sap.ui.comp.filterbar" xmlns:f="sap.f" xmlns:ui="sap.ui.table"
+	xmlns:ExtPicker="com.incture.lch.yardmanagement.control">
+	<Page showHeader="false">
+		<content>
+			<l:FixFlex>
+				<l:fixContent>
+					<Label text="{i18n>YARD_LTN_DETAILS} - {mCommon>/dToday}" design="Bold" class="sapUiMBlue sapUiTinyMarginTop sapUiMediumMarginBegin"/>
+					<l:Grid hSpacing="1" vSpacing="1" defaultSpan="XL2 L2 M6 S12"
+						class="sapUiLGridBorder sapUiTinyMarginTop sapUiTinyMarginBottom sapUiMediumMarginEnd sapUiMediumMarginBegin">
+						<CustomListItem class="sapUiKpiCustListItem" type="Active" press="onPressKpi" selected="{mCommon>/oKpiActive/bNotArrivved}">
+							<customData name="ID_CUSTOMDATA_FOR_NOT_ARRIVVED">
+								<core:CustomData key="target" value="notArrived"/>
+							</customData>
+							<VBox width="100%" height="4.4rem" class="sapMPaddingInternalRed">
+								<Text text="{i18n>NOT_ARRIVVED}" class="sapUiTileText"/>
+								<Text text="{mCommon>/oKpiDetails/iNotArrivved}" class="sapUiTextColor"/>
+							</VBox>
+						</CustomListItem>
+						<CustomListItem type="Active" class="sapUiKpiCustListItem" press="onPressKpi" selected="{mCommon>/oKpiActive/bAtGate}">
+							<customData name="ID_CUSTOMDATA_FOR_AT_GATE">
+								<core:CustomData key="target" value="AtGate"/>
+							</customData>
+							<VBox width="100%" height="4.4rem" class="sapMPaddingInternalYellow">
+								<Text text="{i18n>AT_GATE}" class="sapUiTileText"/>
+								<Text text="{mCommon>/oKpiDetails/iAtGate}" class="sapUiTextColor"/>
+							</VBox>
+						</CustomListItem>
+						<CustomListItem type="Active" class="sapUiKpiCustListItem" press="onPressKpi" selected="{mCommon>/oKpiActive/bInYard}">
+							<customData name="ID_CUSTOMDATA_FOR_PARKED_AT_LOCATION">
+								<core:CustomData key="target" value="InYard"/>
+							</customData>
+							<VBox width="100%" height="4.4rem" class="sapMPaddingInternalGreen">
+								<Text text="{i18n>IN_YARD}" class="sapUiTileText"/>
+								<Text text="{mCommon>/oKpiDetails/iInYard}" class="sapUiTextColor"/>
+							</VBox>
+						</CustomListItem>
+						<!--<CustomListItem type="Active" class="sapUiKpiCustListItem" press="onPressKpi" selected="{mCommon>/oKpiActive/bPickedByMH}">
+							<customData name="ID_CUSTOMDATA_FOR_PICKED_BY_MH">
+								<core:CustomData key="target" value="PickedByMH"/>
+							</customData>
+							<VBox width="100%" height="4.4rem" class="sapMPaddingInternalBlue">
+								<Text text="{i18n>PICKED_BY_MH}" class="sapUiTileText"/>
+								<Text text="{mCommon>/oKpiDetails/iPickedByMH}" class="sapUiTextColor"/>
+							</VBox>
+						</CustomListItem>-->
+						<CustomListItem type="Active" press="onPressKpi" class="sapUiKpiCustListItem" selected="{mCommon>/oKpiActive/bAtDoc}">
+							<customData name="ID_CUSTOMDATA_FOR_AT_DOC">
+								<core:CustomData key="target" value="AtDock"/>
+							</customData>
+							<VBox width="100%" height="4.4rem" class="sapMPaddingInternalGrey">
+								<Text text="{i18n>AT_DOC}" class="sapUiTileText"/>
+								<Text text="{mCommon>/oKpiDetails/iAtDoc}" class="sapUiTextColor"/>
+							</VBox>
+						</CustomListItem>
+						<CustomListItem type="Active" press="onPressKpi" class="sapUiKpiCustListItem" selected="{mCommon>/oKpiActive/bOutGate}">
+							<customData name="ID_CUSTOMDATA_FOR_LEFT_GATE">
+								<core:CustomData key="target" value="OutGate"/>
+							</customData>
+							<VBox width="100%" height="4.4rem" class="sapMPaddingInternalLav">
+								<Text text="{i18n>LEFT_GATE}" class="sapUiTileText"/>
+								<Text text="{mCommon>/oKpiDetails/iOutGate}" class="sapUiTextColor"/>
+							</VBox>
+						</CustomListItem>
+					</l:Grid>
+					<fb:FilterBar reset="onReset" search="onYardFilter" id="lch_yardmgmt_filterBar" filterBarExpanded="false"  header="{i18n>ADVANCED_FILER_OPTIONS}"
+						class="sapFbfilterbar" showFilterConfiguration="false" showClearOnFB="true" clear="onClearYrdFilter">
+						<fb:filterGroupItems>
+							<fb:FilterGroupItem name="FILTER_BY_KEY" label="{i18n>FILTER_BY_KEY}" class="sapUiSmallMarginBegin" groupName="G1" visibleInFilterBar="true">
+								<fb:control>
+									<ComboBox selectedKey="{mCommon>/oFilters/filterByKey}" class="sapUiMInputBorderRadius" showSecondaryValues="false"
+										placeholder="{i18n>SELECT}" items="{path: 'mCommon>/aFilterBy',sorter:{ path:'text'}}"
+										valueState="{mCommon>/oValState/sValStateFilterByKey}" change="onFilterKeyChangeCBox">
+										<core:ListItem key="{mCommon>key}" text="{mCommon>text}" additionalText="{mCommon>key}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="FILTER_BY_TEXT" label="{i18n>FILTER_BY_TEXT}" groupName="G11" visibleInFilterBar="true">
+								<fb:control>
+									<Input class="sapUiMInputBorderRadius" liveChange="onLiveChngeFilterByTxt" value="{mCommon>/oFilters/filterByText}"/>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="SUPPLIER_ID" label="{i18n>SUPPLIER_ID}" class="sapUiSmallMarginBegin" groupName="G2" visibleInFilterBar="true">
+								<fb:control>
+									<Input class="sapUiMInputBorderRadius" value="{mCommon>/oFilters/supplierId}"/>
+									<!--<ComboBox class="sapUiMInputBorderRadius" showSecondaryValues="true" change="onFilterChangeCBox" placeholder="{i18n>SELECT}"
+										selectedKey="{mCommon>/oFilters/supplierId}" items="{path: 'mCommon>/aSupplier',sorter:{ path:'SupplierName'}}" >
+										<core:ListItem key="{mCommon>SupplierId}" text="{mCommon>SupplierName}" additionalText="{mCommon>SupplierId}"/>
+									</ComboBox>-->
+								</fb:control>
+							</fb:FilterGroupItem>
+							<!--<fb:FilterGroupItem name="D" label="{i18n>YARD_ID}" class="sapUiSmallMarginBegin" groupName="G4" visibleInFilterBar="true">
+								<fb:control>
+									<ComboBox class="sapUiMInputBorderRadius" showSecondaryValues="false" change="onChangeYard" selectedKey="{mCommon>/oFilters/yardId}"
+										items="{path: 'mCommon>/aYard',sorter:{ path:'yardId'}}" valueState="{mCommon>/oValState/sValStateYardId}">
+										<core:ListItem key="{mCommon>yardId}" text="{mCommon>yardId}" additionalText="{mCommon>yardId}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>-->
+							<fb:FilterGroupItem name="YARD_LOCATION" label="{i18n>YARD_LOCATION}" class="sapUiSmallMarginBegin" groupName="G41" visibleInFilterBar="true">
+								<fb:control>
+									<ComboBox class="sapUiMInputBorderRadius" showSecondaryValues="false" change="onFilterChangeCBox"
+										selectedKey="{mCommon>/oFilters/yardLocation}" items="{path: 'mCommon>/aYardLocation',sorter:{ path:'yardLocation'}}"
+										valueState="{mCommon>/oValState/sValStateYardLocation}">
+										<core:ListItem key="{mCommon>yardLocation}" text="{mCommon>yardLocation}" additionalText="{mCommon>yardLocation}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="DATE_RANGE_FROM" label="{i18n>FROM_DATE}" class="sapUiSmallMarginBegin" groupName="GDF" visibleInFilterBar="true">
+								<fb:control>
+									<ExtPicker:ExtDatePicker valueState="{mCommon>/oValState/sFromDateValState}" change="onAppChngeFromDateCBox" class="sapUiMInputBorderRadius" placeholder=" "
+										dateValue="{mCommon>/oFilters/fromDateFilter}" displayFormat="dd MMM yyyy"/>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem name="DATE_RANGE_TO" label="{i18n>TO_DATE}" class="sapUiSmallMarginBegin" groupName="GDT" visibleInFilterBar="true">
+								<fb:control>
+									<ExtPicker:ExtDatePicker class="sapUiMInputBorderRadius" change="onAppChngeToDateCBox" valueState="{mCommon>/oValState/sToDateValState}"
+										placeholder=" " dateValue="{mCommon>/oFilters/toDateFilter}" displayFormat="dd MMM yyyy"/>
+								</fb:control>
+							</fb:FilterGroupItem>
+							
+							<fb:FilterGroupItem name="STATUS" label="{i18n>STATUS}" class="sapUiSmallMarginBegin" groupName="G3" visibleInFilterBar="true">
+								<fb:control>
+									<MultiComboBox class="sapUiMInputBoxBorderRadius" selectedKeys="{mCommon>/oFilters/aSelStatus}" 
+										selectionChange="onSelChangeStatus" selectionFinish="onSelFinishStatus" 
+										items="{ path: 'mCommon>/aJavaYardStatus' ,sorter: { path: 'groupOrKpi', descending: false, group: true }}">
+										<core:Item key="{mCommon>statusId}" text="{mCommon>statusDesc}" />
+									</MultiComboBox>
+									
+									<!--<ComboBox class="sapUiMInputBorderRadius" showSecondaryValues="false" change="onFilterChangeCBox" placeholder="{i18n>SELECT}"-->
+									<!--	selectedKey="{mCommon>/oFilters/status}" items="{path: 'mCommon>/aStatus',sorter:{ path:'text'}}"-->
+									<!--	valueState="{mCommon>/valState/sValStateStatus}">-->
+									<!--	<core:ListItem key="{mCommon>key}" text="{mCommon>text}" additionalText="{mCommon>key}"/>-->
+									<!--</ComboBox>-->
+								</fb:control>
+							</fb:FilterGroupItem>
+						</fb:filterGroupItems>
+					</fb:FilterBar>
+				</l:fixContent>
+				<l:flexContent>
+					<core:Fragment fragmentName="com.incture.lch.yardmanagement.fragment.YardTable" type="XML"/>
+				</l:flexContent>
+			</l:FixFlex>
+		</content>
+	</Page>
+</mvc:View>

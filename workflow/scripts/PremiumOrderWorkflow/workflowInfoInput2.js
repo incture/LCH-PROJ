@@ -33,7 +33,8 @@ var workflowRequest =  {
 	orderIdDetails : orderId,
 	taskIdDetails : taskId,
 	roleDetails : rolename,
-	actionType : actionTypeDetails,
+	managerActionType : null,
+	accountantActionType : actionTypeDetails,
 	accountantDetailInfo:accountingDetails
 	
 };

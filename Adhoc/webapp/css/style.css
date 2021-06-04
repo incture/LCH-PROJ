@@ -483,8 +483,8 @@
     color : #fff !important;
 }
 
-.customIcon{
-	color : #fff !important;
+.customIcon.sapMBtnInner{
+	color : #00366C !important;
 }
 
 .test .sapMWizardProgressNavStepIcon{

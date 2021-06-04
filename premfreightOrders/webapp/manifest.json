@@ -79,11 +79,9 @@
 			}
 		},
 		"resources": {
-			"css": [
-				{
-					"uri": "css/style.css"
-				}
-			]
+			"css": [{
+				"uri": "css/style.css"
+			}]
 		},
 		"routing": {
 			"config": {
@@ -95,39 +93,25 @@
 				"controlId": "idlch_premfreightOrders_ToolPageContainer",
 				"clearControlAggregation": false
 			},
-			"routes": [
-				{
-					"name": "App",
-					"pattern": "App",
-					"target": [
-						"Orderdetails"
-					]
-				},
-				{
-					"name": "Orderdetails",
-					"pattern": "",
-					"target": [
-						"Orderdetails"
-					]
-				},
-				{
-					"name": "Accountant",
-					"pattern": "",
-					"target": [
-						"Accountant"
-					]
-				}
-			],
+			"routes": [{
+				"name": "App",
+				"pattern": "App",
+				"target": [
+					"Orderdetails"
+				]
+			}, {
+				"name": "Orderdetails",
+				"pattern": "",
+				"target": [
+					"Orderdetails"
+				]
+			}],
 			"targets": {
 				"App": {
 					"viewName": "App"
 				},
 				"Orderdetails": {
 					"viewName": "Orderdetails"
-				},
-				"Accountant": {
-					"viewType": "XML",
-					"viewName": "Accountant"
 				}
 			}
 		}

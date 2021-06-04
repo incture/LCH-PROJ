@@ -11,7 +11,6 @@ sap.ui.define([
 	"com/incture/lch/premfreightOrders/control/ExtDateTimePicker"
 ], function (Controller, History, MessageBox, Formatter, DateHelper, JSONModel, Filter, FilterOperator, Log, ExtDateTimePicker) {
 	"use strict";
-
 	return Controller.extend("com.incture.lch.premfreightOrders.controller.BaseController", {
 
 		formatter: Formatter,
@@ -24,25 +23,18 @@ sap.ui.define([
 
 		iGroupId: 0, //to-do  move this to _oCommon
 
-		/**
-		 * @author Mohammed Saleem Bani
-		 * @purpose Initialize the App 
-		 */
 		fnInitializeApp: function () {
 			var oThisController = this;
 			var oMdlCommon = this.getModel("mCommon");
 			var sRootPath = jQuery.sap.getModulePath("com.incture.lch.premfreightOrders");
-			oThisController.fnGetLaunchPadRoles();
-		/*	oThisController.fnSetCurrentUser();*/
 			oMdlCommon.attachRequestCompleted(function (oEvent) {
+				oMdlCommon.setProperty("/pageNo", 1);
+				oThisController.fnSetCurrentUser();
 				oMdlCommon.setProperty("/today", new Date());
 				oMdlCommon.refresh();
-
-				/*	oThisController.fnManageSrvCall();*/
-
 			});
-			oMdlCommon.loadData(sRootPath + "/model/Property.json", null, false);
 
+			oMdlCommon.loadData(sRootPath + "/model/Property.json", null, false);
 			Array.prototype.uniqueByStrProp = function (prop1, prop2) {
 				var aAll = this;
 				var aUnique = [];
@@ -69,72 +61,6 @@ sap.ui.define([
 				String.prototype.splice = function (start, delCount, newSubStr) {
 					return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
 				};
-			}
-		},
-
-		fnGetPerformanceTime: function (fnName, dStartTime, dEndTime, sCatchError) {
-			var sLogType;
-			var dTimeTaken = dEndTime - dStartTime;
-			var dTotalTime = (dTimeTaken / 1000).toFixed(5);
-			if (sCatchError) {
-				sLogType = "E";
-			} else if (dTotalTime > "5.00000") {
-				sLogType = "W";
-			} else {
-				sLogType = "I";
-			}
-			this.fnCreateLogMessage(fnName, dTotalTime, sLogType, sCatchError);
-		},
-
-		fnCreateLogMessage: function (fnName, dTimeTaken, sLogType, sCatchError) {
-			var sMessage = "";
-			switch (sLogType) {
-			case "W":
-				sMessage = (fnName + " took " + dTimeTaken + " seconds");
-				break;
-			case "E":
-				sMessage = (fnName + " took " + dTimeTaken + " seconds" + ",\n " + sCatchError);
-				break;
-			case "F":
-				sMessage = (fnName + " took " + dTimeTaken + " seconds");
-				break;
-			default:
-				sMessage = (fnName + " took " + dTimeTaken + " seconds");
-			}
-			this.fnCreateLog(sMessage, sLogType);
-		},
-
-		fnCreateLog: function (sMessage, sType, oData) {
-			switch (sType) {
-			case "D":
-				Log.debug("Debug: " + sMessage);
-				if (oData) {
-					Log.debug(oData);
-				}
-				break;
-			case "E":
-				Log.error("Error: " + sMessage);
-				if (oData) {
-					Log.error(oData);
-				}
-				break;
-			case "F":
-				Log.fatal("Fatal: " + sMessage);
-				if (oData) {
-					Log.fatal(oData);
-				}
-				break;
-			case "W":
-				Log.warning("Warning: " + sMessage);
-				if (oData) {
-					Log.warning(oData);
-				}
-				break;
-			default:
-				Log.info("Information: " + sMessage);
-				if (oData) {
-					Log.info(oData);
-				}
 			}
 		},
 
@@ -184,11 +110,7 @@ sap.ui.define([
 		},
 
 		_BusyDialog: new sap.m.BusyDialog({
-			busyIndicatorDelay: 0 //,
-				// customIcon:"./media/lodr-nw.gif",
-				// customIconRotationSpeed:0,
-				// customIconWidth:"150px",
-				// customIconHeight:"150px"
+			busyIndicatorDelay: 0
 		}),
 
 		openBusyDialog: function () {
@@ -209,7 +131,6 @@ sap.ui.define([
 		},
 
 		/**
-		 * @author Mohammed Saleem Bani
 		 * @purpose Message from Resource Bundle 
 		 * @param1 pMessage -- String-Property of Resource Bundle
 		 * @param2 aParametrs -- Array-Parameters
@@ -235,7 +156,6 @@ sap.ui.define([
 		},
 
 		/**
-		 * @author Mohammed Saleem Bani
 		 * @purpose Message 
 		 * @param1 pMessage -- String-Message to be displayed
 		 * @param2 pMsgTyp -- String-Message type
@@ -309,50 +229,7 @@ sap.ui.define([
 			});
 		},
 
-		/**
-		 * @author Mohammed Saleem Bani
-		 * @purpose Model filter for given control 
-		 * @param1 aPropertyFilterSettings -- {propertyName:"",filterOperator:"",propertyValue:""}
-		 * @param2 oBinding -- Binding Object
-		 * @param3 bLogicalOperator -- boolean value true for AND operation
-		 */
-		fnApplyCustomerFilter: function (aPropertyFilterSettings, oBinding, bLogicalOperator) {
-			var aFilters = [];
-			if (aPropertyFilterSettings && aPropertyFilterSettings instanceof Array && aPropertyFilterSettings.length > 0) {
-				$.each(aPropertyFilterSettings, function (index, oRow) {
-					if (oRow.propertyName && oRow.filterOperator &&
-						(oRow.propertyValue != undefined || oRow.propertyValue != null || oRow.propertyValue != "")) {
-						aFilters.push(new Filter(oRow.propertyName, oRow.filterOperator, oRow.propertyValue));
-					}
-				});
-
-				// update list binding
-				var bOpAND = (bLogicalOperator) ? true : false;
-				oBinding.filter(new Filter(aFilters, bOpAND), "Application");
-			} else {
-				oBinding.filter([], "Application");
-			}
-		},
-
-		/*
-		 * @purpose Delayed execution
-		 * @param1 callback -- callback function to be executed
-		 * @param2 delayMicroSeconds -- delay in micro seconds
-		 */
-		fnDelayedCall: function (callback, delayMicroSeconds) {
-			var delay = (delayMicroSeconds && delayMicroSeconds > 0) ? delayMicroSeconds : 0;
-			jQuery.sap.delayedCall(delay, null, callback);
-		},
-
-		/*
-		 * @purpose Handle Service Request 
-		 * @param1 sUrl -- String
-		 * @param2 sReqType -- String-(GET/POST/PUT/DELETE)
-		 * @param3 oHeader -- Header JSON Object
-		 * @param4 bShowBusy -- Boolean value to Show Busy Dialog or not
-		 * @param5 pHandler -- function-callback function
-		 * @param6 oData -- Data to be sent JSON Object
-		 */
+		
 		fnProcessDataRequest: function (sUrl, sReqType, oHeader, bShowBusy, pHandler, oData) {
 			var oThisController = this;
 			var oAjaxSettings = {
@@ -397,13 +274,6 @@ sap.ui.define([
 			$.ajax(oAjaxSettings);
 		},
 
-		getSNumberPadZeroes: function (value, length) {
-			var sNumber = "" + value;
-			while (sNumber.length < length) {
-				sNumber = "0" + sNumber;
-			}
-			return sNumber;
-		},
 
 		onChangeLang: function (oEvent) {
 			var sSelKey = oEvent.getSource().getSelectedKey();
@@ -424,85 +294,64 @@ sap.ui.define([
 
 		//Function to get Fiori launchpad roles
 		fnGetLaunchPadRoles: function (callback) {
-			debugger;
 			var oThisController = this;
-			this._oRouter = this.getRouter();
 			var oMdlCommon = this.getModel("mCommon");
-			var sUrl = "/lch_services/lchRole/getRole/";
+			var sUrl = "/lch_services/lchRole/getPremiumRole/";
 			var oHeader = {
 				"Content-Type": "application/json",
 				"Accept": "application/json",
-				/*	"role": "",*/
 				"user": ""
 			};
-
-		/*	oHeader.user = oThisController._oCommon.userDetails.id;*/
-			/*	oHeader.role = oThisController._oCommon.userDetails.name;*/
-			oHeader.user = "P000331";
+			oHeader.user = oMdlCommon.getProperty("/userDetails/id");
 			sUrl += oHeader.user;
-
 			oThisController.fnProcessDataRequest(sUrl, "GET", oHeader, false, function (oXHR, status) {
 
 				if (oXHR && oXHR.responseJSON) {
-					/*	oThisController._oCommon.userDetails["sRoles"] = oXHR.responseJSON.toString();*/
 					oMdlCommon.setProperty("/aCockpitRoles", oXHR.responseJSON);
 					oMdlCommon.refresh();
 					var role = oMdlCommon.getProperty("/aCockpitRoles");
-					console.log(role);
-					for (var i = 0; i < role.length; i++) {
-						if (role[i] === "LCH_Planner") {
-							oMdlCommon.setProperty("/visible/bApprove", false);
-							oMdlCommon.setProperty("/visible/bReject", true);
-							oMdlCommon.setProperty("/visible/bGetcost", true);
-							oMdlCommon.setProperty("/visible/bSetcost", false);
-							oMdlCommon.setProperty("/visible/createdDate", true);
-							oMdlCommon.setProperty("/enable/costInput", false);
-							oMdlCommon.setProperty("/visible/carrierText", false);
-							oMdlCommon.setProperty("/visible/carrierCombo", true);
-							oMdlCommon.setProperty("/visible/carrierScac", false);
-							oMdlCommon.setProperty("/visible/carrierDetails", false);
-							oMdlCommon.setProperty("/currRole", "Planner");
-							oMdlCommon.refresh();
-						} else if (role[i] === "LCH_Carrier_Admin") {
-							oMdlCommon.setProperty("/visible/bApprove", false);
-							oMdlCommon.setProperty("/visible/bReject", false);
-							oMdlCommon.setProperty("/visible/bGetcost", false);
-							oMdlCommon.setProperty("/visible/createdDate", false);
-							oMdlCommon.setProperty("/visible/bSetcost", true);
-							oMdlCommon.setProperty("/visible/carrierText", true);
-							oMdlCommon.setProperty("/visible/carrierCombo", false);
-							oMdlCommon.setProperty("/enable/costInput", true);
-							oMdlCommon.setProperty("/visible/carrierScac", true);
-							oMdlCommon.setProperty("/visible/carrierDetails", true);
-							oMdlCommon.setProperty("/currRole", "Carrier_admin ");
-							oMdlCommon.refresh();
-						
-						} else if (role[i] === "LCH_Manager") {
-							oMdlCommon.setProperty("/visible/bApprove", true);
-							oMdlCommon.setProperty("/visible/bReject", false);
-							oMdlCommon.setProperty("/visible/bGetcost", false);
-							oMdlCommon.setProperty("/visible/bSetcost", false);
-							oMdlCommon.setProperty("/enable/bApprove", true);
-							oMdlCommon.setProperty("/enable/bReject", false);
-							oMdlCommon.setProperty("/enable/bGetcost", false);
-							oMdlCommon.setProperty("/enable/bSetcost", false);
-							oMdlCommon.setProperty("/enable/costInput", false);
-							oMdlCommon.setProperty("/visible/carrierText", true);
-							oMdlCommon.setProperty("/visible/carrierCombo", false);
-							oMdlCommon.setProperty("/visible/carrierScac", true);
-							oMdlCommon.setProperty("/visible/carrierDetails", true);
-							oMdlCommon.setProperty("/currRole", "Manager");
-							oMdlCommon.refresh();
-						}
-						/* else if (role[i] === "LCH_Accountant") {
-													oMdlCommon.setProperty("/currRole", "Accountant");
-													this._oRouter.navTo("Accountant");
-													oMdlCommon.refresh();
-												}
-											}
-											console.log(oMdlCommon);
-											/*	oThisController.fnGetAuthRules(callback);*/
+					if (role[0] === "LCH_Planner") {
+						oMdlCommon.setProperty("/visible/bApprove", false);
+						oMdlCommon.setProperty("/visible/bReject", true);
+						oMdlCommon.setProperty("/visible/bGetcost", true);
+						oMdlCommon.setProperty("/visible/bSetcost", false);
+						oMdlCommon.setProperty("/visible/createdDate", true);
+						oMdlCommon.setProperty("/enable/costInput", false);
+						oMdlCommon.setProperty("/visible/carrierText", false);
+						oMdlCommon.setProperty("/visible/carrierCombo", true);
+						oMdlCommon.setProperty("/visible/carrierScac", false);
+						oMdlCommon.setProperty("/visible/carrierDetails", false);
+						oMdlCommon.refresh();
+					} else if (role[0] === "LCH_Carrier_Admin") {
+						oMdlCommon.setProperty("/visible/bApprove", false);
+						oMdlCommon.setProperty("/visible/bReject", false);
+						oMdlCommon.setProperty("/visible/bGetcost", false);
+						oMdlCommon.setProperty("/visible/createdDate", false);
+						oMdlCommon.setProperty("/visible/bSetcost", true);
+						oMdlCommon.setProperty("/visible/carrierText", true);
+						oMdlCommon.setProperty("/visible/carrierCombo", false);
+						oMdlCommon.setProperty("/enable/costInput", true);
+						oMdlCommon.setProperty("/visible/carrierScac", true);
+						oMdlCommon.setProperty("/visible/carrierDetails", true);
+						oMdlCommon.refresh();
+					} else if (role[0] === "LCH_Manager") {
+						oMdlCommon.setProperty("/visible/bApprove", true);
+						oMdlCommon.setProperty("/visible/bReject", false);
+						oMdlCommon.setProperty("/visible/bGetcost", false);
+						oMdlCommon.setProperty("/visible/bSetcost", false);
+						oMdlCommon.setProperty("/enable/bApprove", true);
+						oMdlCommon.setProperty("/enable/bReject", false);
+						oMdlCommon.setProperty("/enable/bGetcost", false);
+						oMdlCommon.setProperty("/enable/bSetcost", false);
+						oMdlCommon.setProperty("/enable/costInput", false);
+						oMdlCommon.setProperty("/visible/carrierText", true);
+						oMdlCommon.setProperty("/visible/carrierCombo", false);
+						oMdlCommon.setProperty("/visible/carrierScac", true);
+						oMdlCommon.setProperty("/visible/carrierDetails", true);
+						oMdlCommon.refresh();
 					}
+					oThisController.fnFilterTest();
+
 				} else {
 					oMdlCommon.setProperty("/cockpitRoles", []);
 					oMdlCommon.refresh();
@@ -512,23 +361,204 @@ sap.ui.define([
 			});
 		},
 
-		//All Generic Functions that are not specific to the App will be above this line
+		fnSetCurrentUser: function () {
 
-		fnSetCurrentUser: function (callback) {
 			var oThisController = this;
-			var oMdlCommon = this.getModel("mCommon");
+			var oMdlCommon = this.getModel("mCommon"),
+				bShowBusy = oMdlCommon.getProperty("/bShowBusy");
+			if (bShowBusy) {
+				oThisController.openBusyDialog();
+			}
 			oThisController.fnProcessDataRequest("../user", "GET", null, false, function (oXHR, status) {
 				if (oXHR && oXHR.responseJSON) {
 					oThisController._oCommon.userDetails = oXHR.responseJSON;
 					if (!oXHR.responseJSON.emails) {
 						oXHR.responseJSON.emails = "testing@email.com";
 					}
+					oMdlCommon.setProperty("/pageNo", 1);
 					oMdlCommon.setProperty("/userDetails", oXHR.responseJSON);
 					oMdlCommon.refresh();
 					oThisController.fnGetLaunchPadRoles();
 				}
 			}, null);
 
+		},
+
+		fnPremfreightstable: function () {
+
+			var oThisController = this;
+			var oMdlCommon = this.getModel("mCommon"),
+				sUrl = "/lch_services/premiumOrders/getAllPremiumOrders",
+				bShowBusy = oMdlCommon.getProperty("/bShowBusy");
+			var originFilter = oMdlCommon.getProperty("/originFilter"),
+				destinationFilter = oMdlCommon.getProperty("/destinationFilter"),
+				statusFilter = oMdlCommon.getProperty("/statusFilter"),
+				fromDateFilter = oMdlCommon.getProperty("/fromDateFilter"),
+				toDateFilter = oMdlCommon.getProperty("/toDateFilter"),
+				reasonCodeFilter = oMdlCommon.getProperty("/reasonCodeFilter"),
+				pageNo = oMdlCommon.getProperty("/pageNo");
+			if (fromDateFilter > toDateFilter) {
+				oThisController.showMessage("Invalid date range", "E", function () {
+					//error
+				});
+				return;
+			}
+			var oHeader = {
+				"Content-Type": "application/json",
+				"Accept": "application/json"
+			};
+			var oPayload = {
+				"orderId": "",
+				"fromDate": fromDateFilter,
+				"toDate": toDateFilter,
+				"status": statusFilter,
+				"originName": originFilter,
+				"destinationName": destinationFilter,
+				"reasonCode": reasonCodeFilter,
+				"pageNumber": pageNo,
+				"noOfEntry": "",
+				"userId": oMdlCommon.getProperty("/userDetails/id")
+
+			};
+			oThisController.fnProcessDataRequest(sUrl, "POST", oHeader, false, function (oXHR, status) {
+				try {
+					if (oXHR.responseJSON.premiumFreightOrderDetailsList) {
+						oMdlCommon.setProperty("/countOfRecords", oXHR.responseJSON.count);
+						oMdlCommon.setProperty("/aPremfreightorders", []);
+						oMdlCommon.setProperty("/aTaskDetails", []);
+						var aPremfreightorders = oMdlCommon.getProperty("/aPremfreightorders");
+						var aTaskDetails = oMdlCommon.getProperty("/aTaskDetails");
+						var count = oMdlCommon.getProperty("/countOfRecords");
+						for (var i = 0; i < oXHR.responseJSON.premiumFreightOrderDetailsList.length; i++) {
+							aPremfreightorders[i] = oXHR.responseJSON.premiumFreightOrderDetailsList[i].premiumFreightDto1;
+							aTaskDetails[i] = oXHR.responseJSON.premiumFreightOrderDetailsList[i].taskDetailsDto;
+							if (oMdlCommon.getProperty("/aCockpitRoles")[0] === "LCH_Planner") {
+								aPremfreightorders[i].enablecarriermode = false;
+								if (aPremfreightorders[i].bpNumber && aPremfreightorders[i].carrierMode) {
+									aPremfreightorders[i].selectedCarriermode = aPremfreightorders[i].carrierMode;
+									aPremfreightorders[i].selectedCarrier = aPremfreightorders[i].bpNumber;
+									aPremfreightorders[i].enablecarrier = false;
+
+								} else {
+									aPremfreightorders[i].selectedCarrier = "";
+									aPremfreightorders[i].selectedCarriermode = "";
+								}
+							}
+						}
+						oMdlCommon.refresh();
+						oThisController.fnButtonVisibility(count);
+
+					}
+
+				} catch (e) {
+					// console.log(e);
+				}
+			}, oPayload);
+			if (bShowBusy) {
+				oThisController.closeBusyDialog();
+			}
+
+		},
+
+		fnFilterTest: function () {
+			var oThisController = this;
+			var oMdlCommon = this.getModel("mCommon");
+			oMdlCommon.setProperty("/originFilter", "");
+			oMdlCommon.setProperty("/destinationFilter", "");
+			oMdlCommon.setProperty("/statusFilter", "");
+			oMdlCommon.setProperty("/fromDateFilter", null);
+			oMdlCommon.setProperty("/toDateFilter", null);
+			oMdlCommon.setProperty("/reasonCodeFilter", "");
+			oThisController.fnPremfreightstable();
+		},
+
+		fnButtonVisibility: function (count) {
+			var oThisController = this;
+			var oMdlCommon = this.getModel("mCommon");
+			var pageNo = oMdlCommon.getProperty("/pageNo");
+			pageNo = Number(pageNo);
+			var lastPageNo = Number(Math.ceil(count / 10));
+			oMdlCommon.setProperty("/lastPageNo", lastPageNo);
+			if (pageNo <= lastPageNo) {
+				if (pageNo === 1 && pageNo !== lastPageNo) {
+					oMdlCommon.setProperty("/enable/firstPage", false);
+					oMdlCommon.setProperty("/enable/previousPage", false);
+					oMdlCommon.setProperty("/enable/nextPage", true);
+					oMdlCommon.setProperty("/enable/lastPage", true);
+
+				} else if (pageNo !== 1 && pageNo === lastPageNo) {
+					oMdlCommon.setProperty("/enable/firstPage", true);
+					oMdlCommon.setProperty("/enable/previousPage", true);
+					oMdlCommon.setProperty("/enable/nextPage", false);
+					oMdlCommon.setProperty("/enable/lastPage", false);
+
+				} else if (pageNo === 1 && pageNo === lastPageNo) {
+					oMdlCommon.setProperty("/enable/firstPage", false);
+					oMdlCommon.setProperty("/enable/previousPage", false);
+					oMdlCommon.setProperty("/enable/nextPage", false);
+					oMdlCommon.setProperty("/enable/lastPage", false);
+
+				} else {
+					oMdlCommon.setProperty("/enable/firstPage", true);
+					oMdlCommon.setProperty("/enable/previousPage", true);
+					oMdlCommon.setProperty("/enable/nextPage", true);
+					oMdlCommon.setProperty("/enable/lastPage", true);
+
+				}
+			}
+
+		},
+
+		fnPagination: function (select) {
+
+			var oThisController = this;
+			var oMdlCommon = this.getModel("mCommon");
+			var count = oMdlCommon.getProperty("/countOfRecords");
+			var pageNo = oMdlCommon.getProperty("/pageNo"),
+				lastPageNo = Number(Math.ceil(count / 10));
+			oMdlCommon.setProperty("/lastPageNo", lastPageNo);
+			pageNo = Number(pageNo);
+			if (pageNo <= lastPageNo) {
+				switch (select) {
+				case 1:
+					//first
+					pageNo = 1;
+					break;
+				case 2:
+					//prev
+					if (pageNo !== 1) {
+						pageNo = pageNo - 1;
+					}
+					break;
+				case 3:
+					//next
+					if (pageNo !== lastPageNo) {
+						pageNo = pageNo + 1;
+					}
+					break;
+				case 4:
+					//last
+					pageNo = lastPageNo;
+					break;
+				case 5:
+					//jump
+					pageNo = pageNo;
+
+					break;
+				}
+				oMdlCommon.setProperty("/pageNo", pageNo);
+				oMdlCommon.refresh();
+
+				oThisController.fnPremfreightstable();
+
+			} else {
+				pageNo = lastPageNo;
+				oMdlCommon.setProperty("/pageNo", pageNo);
+				oMdlCommon.refresh();
+
+				oThisController.fnPremfreightstable();
+
+			}
 		}
 
 		/*	fnSetUserInterFace: function (sAction) {

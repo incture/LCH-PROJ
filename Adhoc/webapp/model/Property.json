@@ -166,6 +166,8 @@
 		"Locno": "US02",
 		"LocDesc": "US02"
 	}],
+	
+	"oPart" : {},
 
 	"aPackageType": [{
 		"key": "ZSTR",
@@ -361,7 +363,7 @@
 
 	"newFU": {
 		"adhocType": "",
-		"adhocOrderId": "",
+		"orderId": "",
 		"businessDivision": "",
 		"charge": false,
 		"countryOrigin": "US",
@@ -426,7 +428,7 @@
 
 	"aFUColumnBackup": [{
 		"preferenceId": "",
-		"columnName": "adhocOrderId",
+		"columnName": "orderId",
 		"isVisible": true,
 		"isMandatory": true,
 		"isEditable": false,
@@ -522,15 +524,15 @@
 		"sequence": 12
 	}, {
 		"preferenceId": "",
-		"columnName": "originAddress",
+		"columnName": "originName",
 		"isVisible": true,
-		"isMandatory": false,
+		"isMandatory": true,
 		"isEditable": true,
 		"sequenceHistory": 13,
 		"sequence": 13
 	}, {
 		"preferenceId": "",
-		"columnName": "originCity",
+		"columnName": "originAddress",
 		"isVisible": true,
 		"isMandatory": false,
 		"isEditable": true,
@@ -538,33 +540,33 @@
 		"sequence": 14
 	}, {
 		"preferenceId": "",
+		"columnName": "originCity",
+		"isVisible": true,
+		"isMandatory": false,
+		"isEditable": true,
+		"sequenceHistory": 15,
+		"sequence": 15
+	}, {
+		"preferenceId": "",
 		"columnName": "originState",
 		"isVisible": true,
 		"isMandatory": true,
 		"isEditable": true,
-		"sequenceHistory": 15,
-		"sequence": 15
+		"sequenceHistory": 16,
+		"sequence": 16
 	}, {
 		"preferenceId": "",
 		"columnName": "originZip",
 		"isVisible": true,
 		"isMandatory": false,
 		"isEditable": true,
-		"sequenceHistory": 16,
-		"sequence": 16
+		"sequenceHistory": 17,
+		"sequence": 17
 	}, {
 		"preferenceId": "",
 		"columnName": "packageType",
 		"isVisible": true,
 		"isMandatory": true,
-		"isEditable": true,
-		"sequenceHistory": 17,
-		"sequence": 17
-	}, {
-		"preferenceId": "",
-		"columnName": "partNum",
-		"isVisible": true,
-		"isMandatory": false,
 		"isEditable": true,
 		"sequenceHistory": 18,
 		"sequence": 18
@@ -582,7 +584,7 @@
 		"isVisible": true,
 		"isMandatory": true,
 		"isEditable": false,
-		"sequenceHistory": 20,
+		"sequenceHistory":20,
 		"sequence": 20
 	}, {
 		"preferenceId": "",
@@ -592,22 +594,14 @@
 		"isEditable": false,
 		"sequenceHistory": 21,
 		"sequence": 21
-	}, {
-		"preferenceId": "",
-		"columnName": "weight",
-		"isVisible": true,
-		"isMandatory": true,
-		"isEditable": false,
-		"sequenceHistory": 22,
-		"sequence": 22
-	}, {
+	},  {
 		"preferenceId": "",
 		"columnName": "copy",
 		"isVisible": true,
 		"isMandatory": true,
 		"isEditable": false,
-		"sequenceHistory": 23,
-		"sequence": 23
+		"sequenceHistory": 22,
+		"sequence": 22
 	}]
 
 }
