@@ -16,7 +16,7 @@ import com.incture.lch.repository.YardAdminRulesRepository;
 import com.incture.lch.service.YardAdminRulesService;
 
 @Service
-@Transactional()
+@Transactional
 public class YardAdminRulesServiceImpl implements YardAdminRulesService {
 	
 	@Autowired

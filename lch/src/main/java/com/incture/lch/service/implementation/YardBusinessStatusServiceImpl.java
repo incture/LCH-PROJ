@@ -12,7 +12,7 @@ import com.incture.lch.repository.YardBusinessStatusRepository;
 import com.incture.lch.service.YardBusinessStatusService;
 
 @Service
-@Transactional()
+@Transactional
 public class YardBusinessStatusServiceImpl implements YardBusinessStatusService {
 
 	@Autowired

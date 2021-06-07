@@ -406,6 +406,7 @@ public class YardManagementHistoryDto {
 	public void setAdhocType(String adhocType) {
 		this.adhocType = adhocType;
 	}
+
 	
 	
 

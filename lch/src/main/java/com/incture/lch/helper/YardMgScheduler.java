@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import com.incture.lch.dto.YardAdminRulesDto;
 import com.incture.lch.dto.YardManagementDto;
@@ -42,11 +41,11 @@ public class YardMgScheduler {
 	@Autowired
 	YardAdminRulesService yardAdminRulesService;
 
-	@Autowired
-	ServiceUtil util;
+	
+	
 	
 	@SuppressWarnings("static-access")
-	@Scheduled(cron = "0 0/15 * * * ?")
+	//@Scheduled(cron = "0 0/15 * * * ?")
 	public void cronJobForPremiumFo() {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
@@ -163,7 +162,7 @@ public class YardMgScheduler {
 	@SuppressWarnings("static-access")
 	public boolean checkExistingRecord(List<YardManagementDto> existingYMRecords, YardManagementDto ymOdata) {
 		boolean flag = false;
-		String freight = util.removeLeadingZeros(ymOdata.getFreightOrderNo());
+		String freight = ServiceUtil.removeLeadingZeros(ymOdata.getFreightOrderNo());
 		for(YardManagementDto ymExistingRecord : existingYMRecords) {
 			if (freight.equalsIgnoreCase(ymExistingRecord.getFreightOrderNo())) {
 				flag = true;

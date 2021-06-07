@@ -27,7 +27,7 @@ import com.incture.lch.service.YardManagementService;
 import com.incture.lch.util.ServiceUtil;
 
 @Service
-@Transactional()
+@Transactional
 public class YardManagementServiceImpl implements YardManagementService {
 
 	@Autowired
@@ -71,20 +71,21 @@ public class YardManagementServiceImpl implements YardManagementService {
 	public List<YardManagementDto> getYardManagementDetail(YardManagementFilterDto filterDto) {
 		List<YardManagementDto> modified = new ArrayList<>();
 		List<YardManagementDto> list = yardManagementRepository.getYardManagementDetail(filterDto);
-		if ((filterDto.getFromDate() != null && !(filterDto.getFromDate().equals("")))
+		/*if ((filterDto.getFromDate() != null && !(filterDto.getFromDate().equals("")))
 				&& (filterDto.getToDate() != null) && !(filterDto.getToDate().equals(""))) {
 				Date from = ServiceUtil.convertStringToDateForYard(filterDto.getFromDate());
+				System.err.println();
 	        	Date to = ServiceUtil.convertStringToDateForYard(filterDto.getToDate());
 	        	for(YardManagementDto obj : list) {
-	        		if(obj.getPlannedShipDate() != null && !(obj.getPlannedShipDate().equalsIgnoreCase("0")) 
-	        				&& !(obj.getPlannedShipDate().equalsIgnoreCase("0"))) {
+	        		if(obj.getUpdatedDate() != null && !(obj.getUpdatedDate().equalsIgnoreCase("0")) 
+	        				&& !(obj.getUpdatedDate().equalsIgnoreCase("0"))) {
 //	        			if ((filterDto.getFromDate()).compareTo(obj.getPlannedShipDate()) <= 0
 //								&& (filterDto.getToDate()).compareTo(obj.getPlannedShipDate()) >= 0)
 //	        			{
-//	        				modified.add(obj);
+//	        				modified.add(obj);  
 //	        			}
-		        		 if (from.compareTo(ServiceUtil.convert(obj.getPlannedShipDate())) <= 0 && 
-		        				 to.compareTo(ServiceUtil.convert(obj.getPlannedShipDate())) >= 0) {
+		        		 if (from.compareTo(ServiceUtil.convert(obj.getUpdatedDate())) <= 0 && 
+		        				 to.compareTo(ServiceUtil.convert(obj.getUpdatedDate())) >= 0) {
 		        			 modified.add(obj);
 		         		} 
 	        		}
@@ -94,7 +95,8 @@ public class YardManagementServiceImpl implements YardManagementService {
 			return list;
 		}
 
-		return modified;
+		return modified;*/
+		return list;
 	}
 
 	@Override
@@ -109,24 +111,24 @@ public class YardManagementServiceImpl implements YardManagementService {
 		Map<String, List<YardStatusDto>> statusList = yardStatusDtos.stream()
 				.collect(Collectors.groupingBy(YardStatusDto::getGroupOrKpi));
 		
-	//	LOGGER.error("status list :"+statusList);
+		LOGGER.error("status list :"+statusList);
 		
 		for (Map.Entry<String, List<YardStatusDto>> entry : statusList.entrySet()) {
 			
-			//LOGGER.error("entry : "+entry.getValue().toString());
+			LOGGER.error("entry : "+entry.getValue().toString());
 			YardManagementKpiDto dto = new YardManagementKpiDto();
 
 			List<String> listStatusId = entry.getValue().stream().map(YardStatusDto::getStatusId)
 					.collect(Collectors.toList());
-		//	LOGGER.error("List status id :"+listStatusId);
+			LOGGER.error("List status id :"+listStatusId);
 			filter.setStatusList(listStatusId);
 			
-		//	LOGGER.error("filter :"+filter.toString());
+			LOGGER.error("filter :"+filter.toString());
 		
 			dto = yardManagementRepository.getYardManagementKpi(filter);
 			dto.setGroupOrKpi(entry.getKey());
 			
-		//	LOGGER.error("dto :"+dto.toString());
+			LOGGER.error("dto :"+dto.toString());
 			
 			
 			kpiList.add(dto);

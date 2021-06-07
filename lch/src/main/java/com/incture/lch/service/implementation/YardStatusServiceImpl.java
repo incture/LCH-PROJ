@@ -11,7 +11,7 @@ import com.incture.lch.repository.YardStatusRepository;
 import com.incture.lch.service.YardStatusService;
 
 @Service
-@Transactional()
+@Transactional
 public class YardStatusServiceImpl implements YardStatusService {
 
 	@Autowired

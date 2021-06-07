@@ -38,16 +38,18 @@ import com.incture.lch.util.ServiceUtil;
 public class WorkflowInvoker implements WorkflowInvokerLocal {
 
 	private final Logger MYLOGGER = LoggerFactory.getLogger(this.getClass());
-/*
-	private String workflow_rest_url;
-	private String url;
-	private String clientid;
-	private String clientsecret;*/
-	private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
+
+
+	/*private static String workflow_rest_url = "https://api.workflow-sap.cfapps.eu10.hana.ondemand.com/workflow-service/rest";
 	private static String url = "https://hrapps.authentication.eu10.hana.ondemand.com";
 	private static String clientid = "sb-clone-100d9392-d07e-4ed1-be50-9c2b4ea8a187!b19391|workflow!b10150";
 	private static String clientsecret = "3569cf5b-aa9e-4a6d-8e16-3e36cb51b6d7$o94E7npqq7EFVQDXb5tLGF1oLR4t_ir4v4no13_Vwcg=";
-	/*
+	*/
+	private String workflow_rest_url;
+	private String url;
+	private String clientid;
+	private String clientsecret;
+
 	public WorkflowInvoker() {
 		try {
 			JSONObject jsonObj = new JSONObject(System.getenv("VCAP_SERVICES"));
@@ -73,7 +75,7 @@ public class WorkflowInvoker implements WorkflowInvokerLocal {
 			MYLOGGER.error("[WorkflowInvoker] reading environmental variables failed:" + e.getMessage());
 		}
 	}
-*/	@Override
+	@Override
 	public JSONObject triggerWorkflow(String input) throws ClientProtocolException, IOException, JSONException {
 
 		MYLOGGER.error("Ravi: Input" + input);

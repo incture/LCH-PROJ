@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.incture.lch.dto.RoleDto;
 import com.incture.lch.entity.LchRole;
+import com.incture.lch.entity.PremiumRole;
 
 @Repository
 
@@ -70,5 +71,17 @@ public class RoleDao {
 		tx.commit();
 		session.close();
 		return "Success";
+	}
+
+
+	public List<PremiumRole> getPlannerDetails()
+	{
+		Session session = sessionFactory.openSession();
+		Transaction tx= session.beginTransaction();
+		Criteria criteria=session.createCriteria(PremiumRole.class);
+		criteria.add(Restrictions.eq("role", "LCH_Planner"));
+		List<PremiumRole> planners= criteria.list();
+		return planners;
+		
 	}
 }

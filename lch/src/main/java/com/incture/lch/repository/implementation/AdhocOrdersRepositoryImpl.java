@@ -620,7 +620,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			shipDetDto.setShipperName(AdhocOrderDto.getShipperName());
 			shipDetDto.setShipperZip(AdhocOrderDto.getOriginZip());
 			shipDetDto.setShipperContact(AdhocOrderDto.getShippingContact());
-			shipDetDto.setBpNumber(ServiceUtil.generateRandomDigits(16));
+			shipDetDto.setBpNumber(ServiceUtil.generateRandomDigits(6));
 			shipDetDto.setOnetimeLocId(ServiceUtil.getAlphaNumericString(16));
 			session.save(lkShipperDetailsDao.importShipperDetails(shipDetDto));
 		}
@@ -633,7 +633,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			shipDetDto2.setShipperName(AdhocOrderDto.getDestinationName());
 			shipDetDto2.setShipperZip(AdhocOrderDto.getDestinationZip());
 			shipDetDto2.setShipperContact(AdhocOrderDto.getDestinationAddress());
-			shipDetDto2.setBpNumber(ServiceUtil.generateRandomDigits(16));
+			shipDetDto2.setBpNumber(ServiceUtil.generateRandomDigits(6));
 			shipDetDto2.setOnetimeLocId(ServiceUtil.getAlphaNumericString(16));
 			session.save(lkShipperDetailsDao.importShipperDetails(shipDetDto2));
 		}
@@ -702,11 +702,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			adhocOrders.setPendingWith(pendingWith.substring(0, pendingWith.length() - 1));
 			adhocOrders.setStatus("Pending At Planner");
 			session.saveOrUpdate(adhocOrders);
-			/*			
-			PremiumWorkflowApprovalTaskDto premiumWorkflowDto = new PremiumWorkflowApprovalTaskDto();
-			premiumWorkflowDto=exportToPremiumWorkflowDto(workflowDto);
-			wfService.triggerPremiumWorkflow(premiumWorkflowDto);
-			LOGGER.info("Premium Workflow Started");*/
+			
 			
 
 		}
@@ -746,7 +742,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			shipDetDto.setShipperName(AdhocOrderDto.getShipperName());
 			shipDetDto.setShipperZip(AdhocOrderDto.getOriginZip());
 			shipDetDto.setShipperContact(AdhocOrderDto.getShippingContact());
-			shipDetDto.setBpNumber(ServiceUtil.generateRandomDigits(16));
+			shipDetDto.setBpNumber(ServiceUtil.generateRandomDigits(6));
 			shipDetDto.setOnetimeLocId(ServiceUtil.getAlphaNumericString(16));
 			session.save(lkShipperDetailsDao.importShipperDetails(shipDetDto));
 		}
@@ -759,7 +755,7 @@ public class AdhocOrdersRepositoryImpl implements AdhocOrdersRepository {
 			shipDetDto2.setShipperName(AdhocOrderDto.getDestinationName());
 			shipDetDto2.setShipperZip(AdhocOrderDto.getDestinationZip());
 			shipDetDto2.setShipperContact(AdhocOrderDto.getDestinationAddress());
-			shipDetDto2.setBpNumber(ServiceUtil.generateRandomDigits(16));
+			shipDetDto2.setBpNumber(ServiceUtil.generateRandomDigits(6));
 			shipDetDto2.setOnetimeLocId(ServiceUtil.getAlphaNumericString(16));
 			session.save(lkShipperDetailsDao.importShipperDetails(shipDetDto2));
 		}

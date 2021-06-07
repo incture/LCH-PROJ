@@ -7,6 +7,7 @@ import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.dto.YardManagementDto;
 import com.incture.lch.dto.YardManagementFilterDto;
 import com.incture.lch.dto.YardManagementHistoryDto;
+import com.incture.lch.entity.CarrierDetails;
 
 public interface YardManagementHistoryRepository {
 
@@ -17,5 +18,6 @@ public interface YardManagementHistoryRepository {
 	public List<YardManagementHistoryDto> getYardManagementHistory(YardManagementFilterDto yardManagementFilterDto);
 	
 	public List<Map<String, Object>> inYarddayscount(List<String> foNums);
-	
+	public List<CarrierDetails> sendCarrierEmail(String bpNumber);
+
 }

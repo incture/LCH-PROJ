@@ -15,7 +15,7 @@ import com.incture.lch.repository.YardManagementHistoryRepository;
 import com.incture.lch.service.YardManagementHistoryService;
 
 @Service
-@Transactional()
+@Transactional
 public class YardManagementHistoryServiceImpl implements YardManagementHistoryService {
 
 	@Autowired

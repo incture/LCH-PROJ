@@ -1,45 +1,83 @@
 package com.incture.lch.repository.implementation;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Random;
 import java.util.stream.Collectors;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.transaction.Transactional;
+
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
+import com.incture.lch.dao.YardDestinationDetailsDao;
 import com.incture.lch.dto.ResponseDto;
+import com.incture.lch.dto.YardAdminRulesDto;
+import com.incture.lch.dto.YardDestinationDetailsDto;
+import com.incture.lch.dto.YardMailDto;
 import com.incture.lch.dto.YardManagementDto;
 import com.incture.lch.dto.YardManagementFilterDto;
 import com.incture.lch.dto.YardManagementKpiDto;
 import com.incture.lch.dto.YardStatusDto;
+import com.incture.lch.entity.AdhocOrders;
+import com.incture.lch.entity.PremiumFreightChargeDetails;
+import com.incture.lch.entity.YardDestinationDetails;
 import com.incture.lch.entity.YardManagement;
+import com.incture.lch.entity.YardRole;
 import com.incture.lch.repository.YardManagementHistoryRepository;
 import com.incture.lch.repository.YardManagementRepository;
 import com.incture.lch.repository.YardStatusRepository;
+import com.incture.lch.service.YardAdminRulesService;
 import com.incture.lch.service.YardManagementHistoryService;
 import com.incture.lch.util.ServiceUtil;
 
 @Repository
+@Transactional
 public class YardManagementRepositoryImpl implements YardManagementRepository {
 
 	@Autowired
 	YardManagementHistoryRepository yardManagementHistoryRepository;
+	@Autowired
+	private YardAdminRulesService yardAdminRules;
 
 	@Autowired
 	YardStatusRepository yardStatusRepository;
 
-	
+	@Autowired
+	YardDestinationDetailsDao destinationDets;
+
 	@Autowired
 	YardManagementHistoryService history;
 
 	@Autowired
-	//@Qualifier("sessiondb")
+	// @Qualifier("sessiondb")
 	private SessionFactory sessionFactory;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(YardManagementRepositoryImpl.class);
@@ -324,6 +362,7 @@ public class YardManagementRepositoryImpl implements YardManagementRepository {
 					for (String pendingUser : pendingUsers) {
 						pendingWith += "(y.pendingWith LIKE :pendingWith) OR";
 					}
+					System.err.println("Entered the Pending With condition +");
 
 					pendingWith = pendingWith.substring(0, pendingWith.lastIndexOf("OR"));
 					pendingWith += ")";
@@ -363,7 +402,12 @@ public class YardManagementRepositoryImpl implements YardManagementRepository {
 				queryString.append(" AND y.yardLocation=:yardLocation");
 			}
 
-			queryString.append(" ORDER BY y.plannedShipDate  DESC");
+			if ((filterDto.getFromDate() != null && !(filterDto.getFromDate().equals("")))
+					&& (filterDto.getToDate() != null)
+					&& !(filterDto.getToDate().equals(""))) {
+				queryString.append(" AND y.updatedDate BETWEEN :fromDate AND :toDate");
+			}
+			// queryString.append(" ORDER BY y.plannedShipDate DESC");
 			Query query = sessionFactory.getCurrentSession().createQuery(queryString.toString());
 			if (filterDto != null && filterDto.getPendingWith() != null) {
 				if (filterDto.getPendingWith().size() > 0) {
@@ -404,6 +448,21 @@ public class YardManagementRepositoryImpl implements YardManagementRepository {
 			if (filterDto.getYardLocation() != null && !(filterDto.getYardLocation().equals(""))) {
 				query.setParameter("yardLocation", filterDto.getYardLocation());
 			}
+			if ((filterDto.getFromDate() != null && !(filterDto.getFromDate().equals("")))
+					&& (filterDto.getToDate() != null)
+					&& !(filterDto.getToDate().equals(""))) {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				try {
+					Date d1 = (Date) sdf.parse(filterDto.getFromDate());
+					Date d2 = (Date) sdf.parse(filterDto.getToDate());
+					query.setParameter("fromDate", d1);
+					query.setParameter("toDate", d2);
+				} catch (ParseException e) {
+					LOGGER.error("Exception On Date format:" + e.getMessage());
+				}
+
+			}
+			System.err.println("The Query strin is " + queryString.toString());
 			LOGGER.error("filter query : " + queryString.toString());
 
 			LOGGER.error("query " + query.toString());
@@ -417,9 +476,11 @@ public class YardManagementRepositoryImpl implements YardManagementRepository {
 
 			}
 
-			if (listStatusId.size() > 0) {
-				responseList = yardManagementHistoryRepository.inYarddayscount(listStatusId);
-			}
+			// Unknown Purpose
+			/*
+			 * if (listStatusId.size() > 0) { responseList =
+			 * yardManagementHistoryRepository.inYarddayscount(listStatusId); }
+			 */
 
 			for (YardManagement yard : objectsList) {
 				YardManagementDto dto = new YardManagementDto();
@@ -477,7 +538,7 @@ public class YardManagementRepositoryImpl implements YardManagementRepository {
 	@Override
 	public ResponseDto updateYardManagement(YardManagementDto yardManagementDto) {
 		ResponseDto responseDto = new ResponseDto();
-		YardManagement yardManagement=updateYardManagementDto(yardManagementDto, yardManagementDto.getId());
+		YardManagement yardManagement = updateYardManagementDto(yardManagementDto, yardManagementDto.getId());
 		sessionFactory.getCurrentSession().update(yardManagement);
 		yardManagementHistoryRepository.addYardManagementHistoryFromYard(exportYardManagement(yardManagement));
 		responseDto.setCode("00");
@@ -506,7 +567,9 @@ public class YardManagementRepositoryImpl implements YardManagementRepository {
 		List<YardManagementDto> yardManagementDtos = new ArrayList<>();
 		List<String> listStatusId = new ArrayList<>();
 		List<Map<String, Object>> responseList = null;
-
+		for (String s : dto.getStatusList()) {
+			System.err.println("The status List is " + s);
+		}
 		StringBuilder queryString = new StringBuilder();
 		queryString.append("SELECT ym FROM YardManagement ym where ym.status in (:status) and (");
 		if (dto.getPendingWith().size() > 0) {
@@ -528,6 +591,9 @@ public class YardManagementRepositoryImpl implements YardManagementRepository {
 		}
 		try {
 			Query query = sessionFactory.getCurrentSession().createQuery(queryString.toString());
+			for (String s : dto.getStatusList()) {
+				System.err.println("The status List is " + s);
+			}
 			query.setParameterList("status", dto.getStatusList());
 			if (dto.getPendingWith().size() > 0) {
 				List<String> pendingUsers = new ArrayList<String>();
@@ -549,10 +615,13 @@ public class YardManagementRepositoryImpl implements YardManagementRepository {
 				// listStatusId.add(ym.getStatus());
 				// }
 			}
-			if (listStatusId.size() > 0) {
-				responseList = yardManagementHistoryRepository.inYarddayscount(listStatusId);
-				LOGGER.error("392 response list " + responseList);
-			}
+
+			// Purpose Unknown
+			/*
+			 * if (listStatusId.size() > 0) { responseList =
+			 * yardManagementHistoryRepository.inYarddayscount(listStatusId);
+			 * LOGGER.error("392 response list " + responseList); }
+			 */
 			for (YardManagement yard : yardManagements) {
 				YardManagementDto yardManagementDto = new YardManagementDto();
 				yardManagementDto = exportYardManagement(yard);
@@ -612,4 +681,176 @@ public class YardManagementRepositoryImpl implements YardManagementRepository {
 
 		return dtoList;
 	}
+
+	@Scheduled(cron = " 0 0 6,19 * * *")
+	// @Scheduled(fixedDelay=120000)
+	public void cronJobToPopulateYardTable() {
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		List<PremiumFreightChargeDetails> premiumDetails = new ArrayList<PremiumFreightChargeDetails>();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+		Criteria criteria = session.createCriteria(PremiumFreightChargeDetails.class);
+		premiumDetails = criteria.list();
+
+		List<YardManagementDto> yardDtos = createYardDetails(premiumDetails);
+
+		// receiving the existing records in the YM Table
+		List<YardManagementDto> existingYMRecords = getAllYardManagements();
+		List<YardManagementDto> newYMRecords = new ArrayList<>();
+
+		// Existing Yard Business Rule from Rule Table
+		List<YardAdminRulesDto> yardRuleRecords = yardAdminRules.getYardAdminRules();
+		YardAdminRulesDto defaultAdminRuleDto = new YardAdminRulesDto();
+		String pendingWith;
+		for (YardManagementDto ymOdata : yardDtos) {
+
+			boolean defaultEntry = true;
+
+			boolean flag = checkExistingRecord(existingYMRecords, ymOdata);
+
+			if (!flag) {
+				for (YardAdminRulesDto yardAdminRulesDto : yardRuleRecords) {
+					if (yardAdminRulesDto.getDestinationId().equalsIgnoreCase(ymOdata.getDestId())) {
+						defaultEntry = false;
+						pendingWith = yardAdminRulesDto.getYardAdmin() + "," + yardAdminRulesDto.getMaterialHandler()
+								+ "," + yardAdminRulesDto.getSecurityGuard() + ","
+								+ yardAdminRulesDto.getTransportManager() + "," + yardAdminRulesDto.getInternalUser()
+								+ "," + yardAdminRulesDto.getEx();
+						LOGGER.error("PendingWith" + pendingWith);
+						List<String> myList = new ArrayList<String>(Arrays.asList(pendingWith.split(",")));
+						System.out.println(myList);
+						ymOdata.setDestId(yardAdminRulesDto.getDestinationId());
+						ymOdata.setYardLocation(yardAdminRulesDto.getYardLocation());
+						ymOdata.setPendingWith(pendingWith);
+					}
+				}
+				if (defaultEntry) {
+					pendingWith = defaultAdminRuleDto.getYardAdmin() + "," + defaultAdminRuleDto.getMaterialHandler()
+							+ "," + defaultAdminRuleDto.getSecurityGuard() + ","
+							+ defaultAdminRuleDto.getTransportManager() + "," + defaultAdminRuleDto.getInternalUser()
+							+ "," + defaultAdminRuleDto.getEx();
+					List<String> myList = new ArrayList<String>(Arrays.asList(pendingWith.split(",")));
+					LOGGER.error("PendingWith in default entry" + pendingWith);
+					System.out.println(myList);
+					ymOdata.setDestId(defaultAdminRuleDto.getDestinationId());
+					ymOdata.setYardLocation(defaultAdminRuleDto.getYardLocation());
+					ymOdata.setPendingWith(pendingWith);
+				}
+				newYMRecords.add(ymOdata);
+			}
+
+		}
+		LOGGER.error("yard new records count " + newYMRecords.size());
+
+		System.err.println("The total records to be pushed are: " + newYMRecords.size());
+		for (YardManagementDto dto : newYMRecords) {
+			addYardManagement(dto);
+
+		}
+		/*
+		 * for (YardManagementDto dto : newYMRecords) {
+		 * history.addYardManagementHistoryFromYard(dto); }
+		 */
+
+		LocalDateTime now = LocalDateTime.now();
+		System.err.println("The Scheduling Task Ends Here at:" + now);
+		LOGGER.error("schedling---END for Yard details " + dtf.format(now));
+
+		session.flush();
+		session.clear();
+		tx.commit();
+		session.close();
+		System.err.println("The Scheduling Task Ends Here at:" + now);
+
+	}
+
+	public boolean checkExistingRecord(List<YardManagementDto> existingYMRecords, YardManagementDto ymOdata) {
+		boolean flag = false;
+		// String freight =
+		// util.removeLeadingZeros(ymOdata.getFreightOrderNo());
+		for (YardManagementDto ymExistingRecord : existingYMRecords) {
+			if (ymOdata.getFreightOrderNo().equalsIgnoreCase(ymExistingRecord.getFreightOrderNo())) {
+				flag = true;
+				break;
+			}
+		}
+		return flag;
+	}
+
+	private List<YardManagementDto> createYardDetails(List<PremiumFreightChargeDetails> premiumDetails) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		List<YardManagementDto> yardDtos = new ArrayList<YardManagementDto>();
+		for (PremiumFreightChargeDetails p : premiumDetails) {
+			// Querying the Adhoc Table based on the Premium Charge Details
+			// orderId
+			Criteria criteria_adhoc = session.createCriteria(AdhocOrders.class);
+			criteria_adhoc.add(Restrictions.eq("fwoNum", p.getOrderId()));
+			// Only one order will be in the adhocOrder
+			List<AdhocOrders> adhocOrders = criteria_adhoc.list();
+			for (AdhocOrders adOrders : adhocOrders) {
+				YardManagementDto dto = new YardManagementDto();
+				// adding value from adhoc
+				if (adOrders.getStatus().equalsIgnoreCase("COMPLETED")) {
+					dto.setStatus("At Gate");
+				} else {
+					dto.setStatus("Not Arrived");
+				}
+				dto.setFreightOrderNo(adOrders.getFwoNum());
+				dto.setCreatedDate(ServiceUtil.convertDateToString(adOrders.getCreatedDate()));
+				dto.setCreatedBy(adOrders.getCreatedBy());
+				dto.setUpdatedDate(ServiceUtil.convertDateToString(adOrders.getUpdatedDate()));
+				dto.setUpdatedBy(adOrders.getUpdatedBy());
+				dto.setQty(ServiceUtil.convertIntegerToString(adOrders.getQuantity()));
+				dto.setWeight(ServiceUtil.convertBigDecimalToString(adOrders.getWeight()));
+				dto.setAdhocType(adOrders.getAdhocType());
+				dto.setPlannedShipDate(ServiceUtil.convertDateToString(adOrders.getShipDate()));
+				// adding value from premium
+				dto.setSupplier(p.getOriginName());
+				dto.setSupplierAddress(p.getOriginAddress());
+				dto.setCarrier(p.getBpNumber());
+				dto.setCarrierName(p.getCarrierDetails());
+				dto.setCarrierDesc(p.getCarrierScac());
+
+				// Initially it is pending with Security Guard
+				/*
+				 * Criteria criteria_role =
+				 * session.createCriteria(YardRole.class); StringBuilder
+				 * pendingWith= new StringBuilder();
+				 * criteria_role.add(Restrictions.eq("role","LCH_SECURITY_GUARD"
+				 * ));
+				 * 
+				 * List<YardRole> yardRole = criteria_role.list(); for (YardRole
+				 * Yrole : yardRole) { pendingWith.append(Yrole.getUserId());
+				 * pendingWith.append(","); }
+				 * dto.setPendingWith(pendingWith.substring(0,
+				 * pendingWith.length() - 1));
+				 */
+				dto.setIsPpKit(false);
+				dto.setPendingWith("LCH_YARD_ADMIN,LCH_SECURITY_GUARD,LCH_MATERIAL_HANDLER");
+				dto.setRole("LCH_SECURITY_GUARD");
+				List<YardDestinationDetailsDto> yardDestinationIds = destinationDets.getYardDestinationDetails();
+				Random rand = new Random();
+				YardDestinationDetailsDto randomDestination = yardDestinationIds
+						.get(rand.nextInt(yardDestinationIds.size()));
+
+				dto.setDestId(randomDestination.getDestId());
+				dto.setDestDesc(randomDestination.getDestinationDesc());
+				yardDtos.add(dto);
+			}
+
+			// make list of records from Charge Table
+			// Also to fetch certain details from Adhoc OrderTable
+			// Make list of records from the Yard Details Table
+			// Set the values of the Yard as Charge Details and some value from
+			// adhoc table
+		}
+		session.flush();
+		session.clear();
+		tx.commit();
+		session.close();
+		return yardDtos;
+	}
+
 }

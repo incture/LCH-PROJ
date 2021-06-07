@@ -20,6 +20,7 @@ import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.dto.YardManagementDto;
 import com.incture.lch.dto.YardManagementFilterDto;
 import com.incture.lch.dto.YardManagementHistoryDto;
+import com.incture.lch.entity.CarrierDetails;
 import com.incture.lch.entity.YardManagementHistory;
 import com.incture.lch.repository.YardManagementHistoryRepository;
 import com.incture.lch.util.ServiceUtil;
@@ -263,7 +264,7 @@ public class YardManagementHistoryRepositoryImpl implements YardManagementHistor
 				queryString.append(" AND y.updatedDate BETWEEN :fromDate AND :toDate");
 			}
 
-			queryString.append(" ORDER BY y.plannedShipDate  DESC");
+			//queryString.append(" ORDER BY y.plannedShipDate  DESC");
 			Query query = sessionFactory.getCurrentSession().createQuery(queryString.toString());
 			if (yardManagementFilterDto != null && yardManagementFilterDto.getPendingWith() != null) {
 				if (yardManagementFilterDto.getPendingWith().size() > 0) {
@@ -360,4 +361,18 @@ public class YardManagementHistoryRepositoryImpl implements YardManagementHistor
 
 	}
 
+	public List<CarrierDetails> sendCarrierEmail(String bpNumber)
+	{
+		List<CarrierDetails> carrierDetails = new ArrayList<CarrierDetails>();
+		StringBuilder queryString = new StringBuilder();
+
+		queryString.append("SELECT c FROM CarrierDetails c WHERE c.bpNumber=:bpNum");
+		Query query = sessionFactory.getCurrentSession().createQuery(queryString.toString());
+        query.setParameter("bpNum", bpNumber);
+
+        carrierDetails=query.list();
+        return carrierDetails;
+	}
+	
+	
 }

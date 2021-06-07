@@ -9,7 +9,7 @@ import com.incture.lch.dto.YardManagementDto;
 import com.incture.lch.repository.YardSlts4Repository;
 import com.incture.lch.service.YardManagementSlts4Service;
 @Service
-@Transactional()
+@Transactional
 public class YardManagementSlts4ServiceImpl implements YardManagementSlts4Service
 {
 	@Autowired

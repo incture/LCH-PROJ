@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.incture.lch.dao.YardDestinationDetailsDao;
 import com.incture.lch.dto.ResponseDto;
 import com.incture.lch.dto.SecurityGuardKpiDto;
+import com.incture.lch.dto.YardDestinationDetailsDto;
 import com.incture.lch.dto.YardManagementDto;
 import com.incture.lch.dto.YardManagementFilterDto;
 import com.incture.lch.dto.YardManagementKpiDto;
@@ -33,6 +35,8 @@ public class YardManagementController {
 	@Autowired
 	YardManagementSlts4Service yardManagementSlts4Service;
 	
+	@Autowired
+	private YardDestinationDetailsDao destinationDao;
 	@RequestMapping(value = "/addYardManagement", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
 	public ResponseDto addYardManagement(@RequestBody YardManagementRequestDto yardManagementDto) {
@@ -82,4 +86,12 @@ public class YardManagementController {
 	public ResponseDto downloadYardDetails(@RequestBody List<YardManagementDto> yardManagementDto) {
 		return yardManagementService.downloadYardDetails(yardManagementDto);
 	}
+	
+	@RequestMapping(value = "/getYardDestinationDetails", method = RequestMethod.GET, consumes = { "application/json" })
+	@ResponseBody
+	public List<YardDestinationDetailsDto> getYardDestinationDetails() {
+		return destinationDao.getYardDestinationDetails();
+	}
+	
+	
 }

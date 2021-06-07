@@ -27,6 +27,7 @@ public class YardManagementDto {
 	
 	private String updatedDate;
 	
+	
 	private String supplier;
 	
 	private String supplierAddress;
@@ -477,8 +478,6 @@ public class YardManagementDto {
 				+ agingCount + ", adhocType=" + adhocType + "]";
 	}
 
-
-	
 	
 	
 

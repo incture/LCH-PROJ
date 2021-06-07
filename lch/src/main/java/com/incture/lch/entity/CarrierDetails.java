@@ -40,7 +40,8 @@ public class CarrierDetails
 	@Column(name="CARRIER_RATE_PER_KM")
 	private String carrierRatePerKM;
 	
-	
+	@Column(name="CARRIER_EMAIL")
+	private String carrierEmail;
 	public String getId() {
 		return id;
 	}
@@ -95,6 +96,14 @@ public class CarrierDetails
 
 	public void setCarrierMode(String carrierMode) {
 		this.carrierMode = carrierMode;
+	}
+
+	public String getCarrierEmail() {
+		return carrierEmail;
+	}
+
+	public void setCarrierEmail(String carrierEmail) {
+		this.carrierEmail = carrierEmail;
 	}
 	
 	

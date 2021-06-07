@@ -17,6 +17,8 @@ import com.incture.lch.dao.YardRoleDao;
 import com.incture.lch.dto.PremiumRoleDto;
 import com.incture.lch.dto.RoleDto;
 import com.incture.lch.dto.YardRoleDto;
+import com.incture.lch.entity.LchRole;
+import com.incture.lch.entity.PremiumRole;
 
 @RestController
 @CrossOrigin
@@ -81,4 +83,12 @@ public class RoleController
 		System.out.println(roleDtos);
 		return yardRoleDao.addYardRole(roleDtos);
 	}
+	
+	@RequestMapping(value="/getPlanners", method = RequestMethod.GET)
+	@ResponseBody
+	public List<PremiumRole> getPlannerDetails()
+	{
+		return roledao.getPlannerDetails();
+	}
+
 }

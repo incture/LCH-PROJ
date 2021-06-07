@@ -2,7 +2,6 @@ package com.incture.lch.entity;
 
 import java.util.Date;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,125 +17,124 @@ public class YardManagementHistory {
 
 	@Id
 	@Column(name = "HISTORY_ID", nullable = false)
-	@GeneratedValue(strategy= GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long historyId;
-	
+
 	@Column(name = "FREIGHT_ORDER")
 	private String freightOrderNo;
-	
+
 	@Column(name = "CREATED_BY")
 	private String createdBy;
-	
+
 	@Column(name = "CREATED_DATE")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdDate;
-	
+
 	@Column(name = "UPDATED_BY")
 	private String updatedBy;
-	
+
 	@Column(name = "UPDATED_DATE")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updatedDate;
-	
+
 	@Column(name = "TRAILER")
 	private String trailer;
-	
+
 	@Column(name = "CARRIER")
 	private String carrier;
-	
+
 	@Column(name = "CARRIER_NAME")
 	private String carrierName;
-	
+
 	@Column(name = "CARRIER_DESC")
 	private String carrierDesc;
-	
 	@Column(name = "SUPPLIER")
 	private String supplier;
-	
+
 	@Column(name = "SHIPPER_ADDRESS")
 	private String supplierAddress;
-	
+
 	@Column(name = "ARRIVAL")
 	private String arrival;
-	
+
 	@Column(name = "LOCATION")
 	private String location;
-	
+
 	@Column(name = "STATUS")
 	private String status;
-	
+
 	@Column(name = "LINE_SEQ")
 	private String lineSeq;
-	
+
 	@Column(name = "COMMODITIES")
 	private String commodities;
-	
+
 	@Column(name = "PRIORITY")
 	private String priority;
-	
+
 	@Column(name = "BOL")
 	private String bol;
-	
+
 	@Column(name = "DEST_ID")
 	private String destId;
-	
+
 	@Column(name = "DEST_DESC")
 	private String destDesc;
-	
+
 	@Column(name = "PLANNED_SHIP_DATE")
 	private String plannedShipDate;
-	
+
 	@Column(name = "HANDLING_UNIT")
 	private String handlingUnit;
-	
+
 	@Column(name = "COMMENTS")
 	private String comments;
-	
+
 	@Column(name = "PRO_NO")
 	private String proNo;
-	
+
 	@Column(name = "PICK_NO")
 	private String pickNo;
-	
+
 	@Column(name = "REFERENCE_NO")
 	private String referenceNo;
-	
+
 	@Column(name = "WEIGHT")
 	private String weight;
-	
+
 	@Column(name = "QTY")
 	private String qty;
-	
+
 	@Column(name = "PENDING_WITH")
 	private String pendingWith;
-	
+
 	@Column(name = "YARD_ID")
 	private String yardId;
-	
+
 	@Column(name = "YARD_LOCATION")
 	private String yardLocation;
-	
+
 	@Column(name = "SEAL_NO")
 	private String sealNo;
-	
+
 	@Column(name = "LICENCE_PLATE_NO")
 	private String licencePlateNo;
-	
+
 	@Column(name = "ROLE")
 	private String role;
-	
+
 	@Column(name = "PP_KIT")
 	private String ppKit;
-	
+
 	@Column(name = "SECURITY_COMMENTS")
 	private String securityComments;
-	
+
 	@Column(name = "SECURITY_LOCATION")
 	private String securityLocation;
-	
+
 	@Column(name = "FU_COUNT")
 	private String fuCount;
-	
+
 	@Column(name = "ADHOC_TYPE")
 	private String adhocType;
 
@@ -364,8 +362,6 @@ public class YardManagementHistory {
 		this.qty = qty;
 	}
 
-	
-
 	public String getCarrierName() {
 		return carrierName;
 	}
@@ -461,7 +457,5 @@ public class YardManagementHistory {
 	public void setAdhocType(String adhocType) {
 		this.adhocType = adhocType;
 	}
-	
-	
-	
+
 }
